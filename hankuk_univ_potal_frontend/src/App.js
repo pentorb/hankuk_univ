@@ -1,4 +1,5 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import Dashboard from './component/Dashboard';
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from './config/theme';
