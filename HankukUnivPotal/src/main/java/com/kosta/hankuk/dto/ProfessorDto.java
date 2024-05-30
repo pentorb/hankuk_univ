@@ -1,0 +1,57 @@
+package com.kosta.hankuk.dto;
+
+import java.sql.Date;
+
+import com.kosta.hankuk.entity.Major;
+import com.kosta.hankuk.entity.Professor;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+public class ProfessorDto {
+	private String profNo;
+	private String password;
+	private String name;
+	private String gender;
+	private String profile;
+	private String position;
+	private String addr;
+	private String detailAddr;
+	private String postCode;
+	private Date birthday;
+	private String tel;
+	private String email;
+	private String emailDo;
+	private Date joinDt;
+	private String majCd;
+	
+	public Professor toProfessor() {
+		return Professor.builder()
+				.profNo(profNo)
+				.password(password)
+				.name(name)
+				.gender(gender)
+				.profile(profile)
+				.position(position)
+				.addr(addr)
+				.detailAddr(detailAddr)
+				.postCode(postCode)
+				.birthday(birthday)
+				.tel(tel)
+				.email(email)
+				.emailDo(emailDo)
+				.joinDt(joinDt)
+				.major(Major.builder().majCd(majCd).build())
+				.build();
+	}
+}
