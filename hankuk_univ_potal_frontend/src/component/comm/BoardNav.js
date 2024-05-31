@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Header from './Header';
+import Main from './Main';
+import BoardList from './BoardList';
 
 function BoardNav() {
     const [activeKey, setActiveKey] = useState('/TotalBoardlist');
@@ -43,11 +46,12 @@ function BoardNav() {
 
     return (
         <div style={{ width: '1300px', height: 'auto', margin: '0 auto' }}>
+            <Header />
             <Navbar style={{ backgroundColor: "var(--maincolor)", height: '85px', width: '1300px', margin: '0 auto' }} data-bs-theme="dark">
                 <Container style={{ margin: '0 305px', textAlign: 'center' }}>
                     <Nav activeKey={activeKey} onSelect={handleSelect}>
-                        <Nav.Link eventKey="/Main" href="/Main" style={activeKey === '/Main' ? { ...linkStyle, ...activeLinkStyle } : linkStyle}>Home</Nav.Link>
-                        <Nav.Link eventKey="#features" href="#features" style={activeKey === '#features' ? { ...linkStyle, ...activeLinkStyle } : linkStyle}>마이포탈</Nav.Link>
+                        <Nav.Link eventKey="/Main" href="/" style={activeKey === '/Main' ? { ...linkStyle, ...activeLinkStyle } : linkStyle}>Home</Nav.Link>
+                        <Nav.Link eventKey="/student-dashboard" href="/student-dashboard" style={activeKey === '#features' ? { ...linkStyle, ...activeLinkStyle } : linkStyle}>마이포탈</Nav.Link>
                         <Nav.Link eventKey="/TotalBoardlist" href="/TotalBoardlist" style={activeKey === '/TotalBoardlist' ? { ...linkStyle, ...activeLinkStyle } : linkStyle}>통합게시판</Nav.Link>
                     </Nav>
                 </Container>

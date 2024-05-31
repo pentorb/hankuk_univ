@@ -1,20 +1,20 @@
 @font-face {
-    font - family: 'Pretendard-Regular';
+    font-family: 'Pretendard-Regular';
     src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font - weight: 400;
-    font - style: normal;
+    font-weight: 400;
+    font-style: normal;
 }
 
 @font-face {
-    font - family: 'ChosunLo';
+    font-family: 'ChosunLo';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunLo.woff') format('woff');
-    font - weight: normal;
-    font - style: normal;
+    font-weight: normal;
+    font-style: normal;
 }
   
   .App {
-    font - family: 'pretendard-Regular';
-    text - align: center;
+    font-family: 'pretendard-Regular';
+    text-align: center;
 }
   
   :root {

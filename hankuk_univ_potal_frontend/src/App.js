@@ -6,16 +6,21 @@ import StaffDashboard from './component/staff/StaffDashboard';
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from './config/theme';
 import Main from './component/comm/Main';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import BoardNav from './component/comm/BoardNav';
+
+
 
 function App() {
   return (
-    <Routes>
-      <Route exect path='/' element={<Main />} />
-      <ThemeProvider theme={theme}>
-        <StudentDashboard />
-      </ThemeProvider>
-    </Routes>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Main />} />
+        <Route exact path='/TotalBoardlist' element={<BoardNav />} />
+        <Route path="/student-dashboard" element={<ThemeProvider theme={theme}><StudentDashboard /></ThemeProvider>} />
+      </Routes>
+
+    </Router>
   );
 }
 

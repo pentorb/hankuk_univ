@@ -1,0 +1,68 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ChosunLo';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunLo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+  
+  .App {
+    font-family: 'pretendard-Regular';
+    text-align: center;
+}
+  
+  :root {
+    --maincolor : #1F3468;
+    --maincolor2: #8F99B3;
+    --maincolor3: #A5AEC3;
+    --maincolor4: #BBC2D1;
+    --maincolor5: #D2D6E1;
+    --maincolor6: #E8EAF0;
+    --subcolor: #B0A27E;
+    --subcolor2: #D7D0BE;
+    --subcolor3: #DFDACB;
+    --subcolor4: #E7E3D8;
+    --subcolor5: #EFECE5;
+    --subcolor6: #F7F6F2;
+}
+  
+  .toc_bnt{
+    background-color: var(--maincolor);
+    color: white;
+    border: 0.5px solid white;
+    width: 100px;
+    height: 100px;
+    font-size: 10px;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    text-decoration: none;
+}
+
+a:hover {
+    font-weight: 700;
+}
+#miniNavTop{
+    display: 'flex';
+    width: '1300px';
+    height: '85px';
+    margin: '0 auto';
+}
+  
+    
+  .miniNav{
+    width: 145px;
+    height: 45px;
+    border: '1px solid black';
+    border-radius: 0;
+}
+  .miniNav:active{
+    background-color: #1F3468;
+    color: white;
+}
