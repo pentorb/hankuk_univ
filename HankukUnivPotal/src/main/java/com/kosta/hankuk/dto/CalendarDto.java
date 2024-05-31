@@ -1,50 +1,34 @@
-package com.kosta.hankuk.entity;
+package com.kosta.hankuk.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-import org.hibernate.annotations.DynamicInsert;
-
-import com.kosta.hankuk.dto.CalendarDto;
+import com.kosta.hankuk.entity.Calendar;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
-@Entity
-@DynamicInsert
-public class Calendar {
-	@Id
+public class CalendarDto {
 	private String calNo;
-	@Column
 	private String title;
-	@Column
 	private String calStartDt;
-	@Column
 	private String calEndDt;
-	@Column
-	private Integer allDay;
-	@Column
-	private String textColor;
-	@Column
-	private String bgColor;
-	@Column
-	private String bColor;
-	@Column
 	private String div;
-	@Column
+	private Integer allDay;
+	private String textColor;
+	private String bgColor;
+	private String bColor;
 	private String writer;
 	
-	public CalendarDto toCalendarDto() {
-		return CalendarDto.builder()
+	public Calendar Calendar() {
+		return Calendar.builder()
 				.calNo(calNo)
 				.title(title)
 				.calStartDt(calStartDt)
@@ -57,4 +41,5 @@ public class Calendar {
 				.writer(writer)
 				.build();
 	}
+	
 }
