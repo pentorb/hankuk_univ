@@ -1,0 +1,30 @@
+package com.kosta.hankuk.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kosta.hankuk.dto.LectureDto;
+import com.kosta.hankuk.service.ProfService;
+
+@RestController
+public class ProfController {
+	@Autowired
+	private ProfService profService;
+	
+	@PostMapping("/lectureWrite")
+	public ResponseEntity<Integer> lectureWrite(@RequestBody LectureDto lectureDto) {
+		try {
+			Integer lecNo = profService.lectureWrite(lectureDto);
+			return new ResponseEntity<Integer>(lecNo, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+}

@@ -1,0 +1,9 @@
+package com.kosta.hankuk.service;
+
+import com.kosta.hankuk.dto.LectureDto;
+
+public interface ProfService {
+
+	Integer lectureWrite(LectureDto lectureDto) throws Exception;
+	
+}

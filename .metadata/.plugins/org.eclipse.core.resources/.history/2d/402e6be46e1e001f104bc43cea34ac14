@@ -1,0 +1,11 @@
+package com.kosta.hankuk;
+
+
+@SpringBootTest
+class HankukUnivPotalApplicationTests {
+
+//	@Test
+	void contextLoads() {
+	}
+
+}

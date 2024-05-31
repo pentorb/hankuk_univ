@@ -1,0 +1,16 @@
+package com.kosta.hankuk.service;
+
+import java.util.List;
+
+import com.kosta.hankuk.dto.LectureDto;
+import com.kosta.hankuk.util.PageInfo;
+
+public interface ProfService {
+	
+	List<LectureDto> lectureListByPage(PageInfo pageInfo, String year, String div);
+	
+	Integer lectureWrite(LectureDto lectureDto) throws Exception;
+
+	
+	
+}

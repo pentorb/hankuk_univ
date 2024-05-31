@@ -1,0 +1,24 @@
+package com.kosta.hankuk.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kosta.hankuk.dto.LectureDto;
+
+@RestController
+public class ProfController {
+	
+	@PostMapping("/boardWrite")
+	public ResponseEntity<Integer> boardWrite(@ResponseBody LectureDto lectureDto) {
+		try {
+			Integer boardNum=boardService.boardWrite(subject, content, writer, files);
+			return new ResponseEntity<Integer>(boardNum, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+	}
+}
