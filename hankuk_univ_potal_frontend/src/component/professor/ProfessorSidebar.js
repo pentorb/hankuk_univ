@@ -16,7 +16,7 @@ import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
 
-export default function StudentSidebar() {
+export default function ProfessorSidebar() {
   const [firstOpen, setFirstOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [thirdOpen, setThirdOpen] = useState(false);
