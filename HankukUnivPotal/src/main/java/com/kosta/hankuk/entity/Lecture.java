@@ -49,6 +49,10 @@ public class Lecture {
 	private String status;
 	@Column
 	private Boolean isScoreChk;
+	@Column
+	private Integer year;
+	@Column
+	private String semester;
 	
 	// 과목코드
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -77,8 +81,14 @@ public class Lecture {
 				.lecRoom(lecRoom)
 				.status(status)
 				.isScoreChk(isScoreChk)
+				.year(year)
+				.semester(semester)
 				.subCd(subject.getSubCd())
+				.subName(subject.getName())
 				.profNo(professor.getProfNo())
+				.profName(professor.getName())
+				.email(professor.getEmail())
+				.tel(professor.getTel())
 				.build();
 	}
 	

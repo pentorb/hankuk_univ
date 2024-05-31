@@ -1,89 +1,89 @@
 .Dropdown{
-    width: 202px;
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.57);
-    text-align: center;
-  }
-  .Button_Lecture{
-    width: 120px; height: 50px;
-    font-size: 24px;
-    color: white;
-    border-radius: 10px;
-    background-color: #1F3468;
-    margin: 0 10px 0 10px;
-  }
-  .container_body{
-    width: 1050px;
-  }
-  .table_body{
-    width: 1042px;
-    background-color: rgba(73, 82, 169, 0.1);
-    border-radius: 36px;
-    padding: 28px 36.5px 28px 36.5px;
-    margin-top: 22px;
-  }
-  .thead{
-    display: inline-block;
-    color: #403E98;
-    font-size: 23px;
-    font-weight: 900;
-    padding-bottom: 18.5px;
-    margin-top: 22px;
-  }
-  .table_tr{
-    background-color: white;
-    border: solid 0.1px;
-    border-color: #C0C0C0;
-    border-radius: 10px;
-    height: 100px;
-    padding: 36px 0 36px 0;
-    margin: 7.5px 0 7.5px 0;
-  }
-  .table_tr:hover{
-    border-color: #403E98;
-    cursor: pointer;
-  }
-  .table_td{
-    display: inline-block;
-    font-size: 23px;
-  
-  }
-  
-  
-  
-  .Lecture_Write_body{
-    width: 970px;
-  }
-  .Button_Lecture_Write{
-    width: 120px; height: 50px;
-    font-size: 24px;
-    color: white;
-    border-radius: 10px;
-    background-color: #1F3468;
-    margin-left: 20px;
-  }
-  .Lecture_Write_header{
-    margin-right: 874px;
-    font-size: 24px;
-  }
-  .Lecture_Write_FormGroup{
-    display: inline-block;
-  }
-  .right{
-    float: right;
-  }
-  .left{
-    float: left;
-  }
-  .Lecture_Write_Label{
-    font-size: 24px;
-    margin-right: 20px;
-  }
-  .Lecture_Write_Input{
-    display: inline-block;
-    font-size: 24px;
-    width: 322px; height: 54px;
-    background-color: rgba(194, 194, 194, 0.25);
-    border-radius: 5px;
-  }
-  
+  width: 202px;
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.57);
+  text-align: center;
+}
+.Button_Lecture{
+  width: 120px; height: 50px;
+  font-size: 24px;
+  color: white;
+  border-radius: 10px;
+  background-color: #1F3468;
+  margin: 0 10px 0 10px;
+}
+.container_body{
+  width: 1050px;
+}
+.table_body{
+  width: 1042px;
+  background-color: rgba(73, 82, 169, 0.1);
+  border-radius: 36px;
+  padding: 28px 36.5px 28px 36.5px;
+  margin-top: 22px;
+}
+.thead{
+  display: inline-block;
+  color: #403E98;
+  font-size: 23px;
+  font-weight: 900;
+  padding-bottom: 18.5px;
+  margin-top: 22px;
+}
+.table_tr{
+  background-color: white;
+  border: solid 0.1px;
+  border-color: #C0C0C0;
+  border-radius: 10px;
+  height: 100px;
+  padding: 36px 0 36px 0;
+  margin: 7.5px 0 7.5px 0;
+}
+.table_tr:hover{
+  border-color: #403E98;
+  cursor: pointer;
+}
+.table_td{
+  display: inline-block;
+  font-size: 23px;
+
+}
+
+
+
+.Lecture_Write_body{
+  width: 970px;
+}
+.Button_Lecture_Write{
+  width: 120px; height: 50px;
+  font-size: 24px;
+  color: white;
+  border-radius: 10px;
+  background-color: #1F3468;
+  margin-left: 20px;
+}
+.Lecture_Write_header{
+  margin-right: 874px;
+  font-size: 24px;
+  font-weight: 900;
+}
+.Lecture_Write_FormGroup{
+  display: inline-block;
+}
+.right{
+  float: right;
+}
+.left{
+  float: left;
+}
+.Lecture_Write_Label{
+  font-size: 24px;
+  margin-right: 20px;
+}
+.Lecture_Write_Input{
+  display: inline-block;
+  font-size: 24px;
+  width: 322px; height: 54px;
+  background-color: rgba(194, 194, 194, 0.25);
+  border-radius: 5px;
+}

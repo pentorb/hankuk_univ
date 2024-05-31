@@ -28,8 +28,15 @@ public class LectureDto {
 	private String lecRoom;
 	private String status;
 	private Boolean isScoreChk;
+	private Integer year;
+	private String semester;
 	private String subCd;
 	private String profNo;
+	private String profName;
+	private String email;
+	private String tel;
+	private String subName;
+	
 	
 	public Lecture toLecture() {
 		return Lecture.builder()
@@ -43,6 +50,8 @@ public class LectureDto {
 				.lecRoom(lecRoom)
 				.status(status)
 				.isScoreChk(isScoreChk)
+				.year(year)
+				.semester(semester)
 				.subject(Subject.builder().subCd(subCd).build())
 				.professor(Professor.builder().profNo(profNo).build())
 				.build();

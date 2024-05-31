@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './prof.css';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 
 const LectureList = ({ direction, ...args }) => {
+    const [year, setYear] = useState(0);
+    const [div, setDiv] = useState("");
+    const [lectureList, setLectureList] = useState([]);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownOpen1, setDropdownOpen1] = useState(false);
     const toggle = () => setDropdownOpen((prevState) => !prevState);
     const toggle1 = () => setDropdownOpen1((prevState) => !prevState);
+
+    useEffect(() => {
+        // let profNo = JSON.parse(sessionStorage.getItem("prof"));
+        submit(1);
+    },[])
+
+    const submit = (page) => {
+        // console.log(url);
+        // axios.get(`${url}/lectureList?profNo=${profNo}&year=${year}&div=${div}`)
+        //     .then(res => {
+        //         setLectureList([...res.data])
+        //     })
+        //     .catch(err => {
+
+        //     })
+    }
     return (
         <div className='container_body'>
             <div >
@@ -50,16 +70,7 @@ const LectureList = ({ direction, ...args }) => {
                     <div className='table_td' style={{ marginLeft: '150px', marginRight: '100px' }}>과목</div>
                     <div className='table_td' style={{ marginLeft: '150px', marginRight: '100px' }}>상태</div>
                 </div>
-
-                <div className='table_tr'>
-                    <div className='table_td td1' style={{ marginLeft: '50px', marginRight: '50px' }}>개설년도</div>
-                    <div className='table_td' style={{ marginLeft: '20px', marginRight: '90px' }}>학기</div>
-                    <div className='table_td' style={{ marginLeft: '150px', marginRight: '100px' }}>과목</div>
-                    <div className='table_td' style={{ marginLeft: '150px', marginRight: '100px' }}>상태</div>
-                </div>
-
-
-
+                
             </div>
         </div>
     )
