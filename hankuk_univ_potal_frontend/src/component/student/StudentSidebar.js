@@ -15,6 +15,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
+import { Typography } from '@mui/material';
 
 export default function StudentSidebar() {
   const [firstOpen, setFirstOpen] = useState(false);
@@ -37,21 +38,21 @@ export default function StudentSidebar() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={4} sx={{backgroundColor:"#435480", height:"100vh"}}>
+        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh" }}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
-            <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label="계정" id={1 === activeTab ? "active" : ""}
-            onClick={() => setActiveTab(1)} sx={{color: "white"}} />
-            <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label="마이페이지" id={2 === activeTab ? "active" : ""}
-            onClick={() => setActiveTab(2)} sx={{color: "white", paddingLeft:0, paddingRight:0}}/>
-            <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label="과목" id={3 === activeTab ? "active" : ""}
-            onClick={() => setActiveTab(3)} sx={{color: "white"}}/>
-            <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label="캘린더" id={4 === activeTab ? "active" : ""}
-            onClick={() => setActiveTab(4)} sx={{color: "white"}}/>
-            <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label="쪽지" id={5 === activeTab ? "active" : ""}
-            onClick={() => setActiveTab(5)} sx={{color: "white"}}/>
+            <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(1)} sx={{ color: "white" }} />
+            <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>마이페이지</Typography>} id={2 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(2)} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
+            <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>과목</Typography>} id={3 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(3)} sx={{ color: "white" }} />
+            <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>캘린더</Typography>} id={4 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(4)} sx={{ color: "white" }} />
+            <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>쪽지</Typography>} id={5 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(5)} sx={{ color: "white" }} />
           </Tabs>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={8} backgroundColor={0 === activeTab ? "#DDE1E8" : "#FFFFFF"}>
           {activeTab === 1 &&
             <>
               <ListItemButton onClick={handleFirstClick}>
@@ -132,7 +133,7 @@ export default function StudentSidebar() {
                 <ListItemText primary="3번째 메뉴" />
               </ListItemButton>
             </>}
-            {activeTab === 4 &&
+          {activeTab === 4 &&
             <>
               <ListItemButton>
                 <ListItemText primary="4번째 메뉴" />
@@ -144,7 +145,7 @@ export default function StudentSidebar() {
                 <ListItemText primary="4번째 메뉴" />
               </ListItemButton>
             </>}
-            {activeTab === 5 &&
+          {activeTab === 5 &&
             <>
               <ListItemButton>
                 <ListItemText primary="5번째 메뉴" />
