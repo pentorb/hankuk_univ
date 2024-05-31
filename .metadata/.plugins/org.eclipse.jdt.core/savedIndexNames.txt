@@ -89,7 +89,6 @@ INDEX VERSION 1.131+C:\hhj\hankuk_univ_workspace\hankuk_univ\.metadata\.plugins\
 206100036.index
 111396502.index
 853745586.index
-2457491551.index
 4235391273.index
 15966749.index
 1800391750.index
