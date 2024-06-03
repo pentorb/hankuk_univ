@@ -40,7 +40,7 @@ public class Lesson {
 	private String videoFile;
 
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="lecCd")
+	@JoinColumn(name="lecNo")
 	private Lecture lecture;
 	
 	@OneToMany(mappedBy="lesson", fetch=FetchType.LAZY)

@@ -10,8 +10,6 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.kosta.hankuk.dto.MessagerDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,30 +22,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Messager {
-	@Id
+public class Files {
+	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer msgNo;
+	private Integer fileNo;
 	@Column
-	private String sendId;
+	private String directory;
 	@Column
-	private String recvId;
+	private String name;
 	@Column
-	private String title;
+	private long size;
 	@Column
-	private String content;
-	@Column
-	@CreationTimestamp 
-	private Date writeDt;
+	private String contenttype;
 	
-	public MessagerDto toMessagerDto() {
-		return MessagerDto.builder()
-					.msgNo(msgNo)
-					.sendId(sendId)
-					.recvId(recvId)
-					.title(title)
-					.content(content)
-					.writeDt(writeDt)
-					.build();
-	}
+	@Column
+	@CreationTimestamp
+	private Date uploadDt;
 }

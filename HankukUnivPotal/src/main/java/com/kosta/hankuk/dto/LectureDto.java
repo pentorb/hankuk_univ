@@ -20,7 +20,7 @@ import lombok.ToString;
 public class LectureDto {
 	private String lecNo;
 	private Integer credit;
-	private String div;
+	private String sect;
 	private String time1;
 	private String time2;
 	private Integer numOfStd;
@@ -42,7 +42,7 @@ public class LectureDto {
 		return Lecture.builder()
 				.lecNo(lecNo)
 				.credit(credit)
-				.div(div)
+				.sect(sect)
 				.time1(time1)
 				.time2(time2)
 				.numOfStd(numOfStd)

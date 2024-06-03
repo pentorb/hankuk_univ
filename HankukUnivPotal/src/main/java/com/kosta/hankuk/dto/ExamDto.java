@@ -20,7 +20,7 @@ import lombok.ToString;
 @Builder
 public class ExamDto {
 	private Integer examNo;
-	private String div;
+	private String sect;
 	private Date startDt;
 	private Date EndDt;
 	private Integer Qnum;
@@ -30,7 +30,7 @@ public class ExamDto {
 	public Exam toExam() {
 		return Exam.builder()
 				.examNo(examNo)
-				.div(div)
+				.sect(sect)
 				.startDt(startDt)
 				.EndDt(EndDt)
 				.Qnum(Qnum)

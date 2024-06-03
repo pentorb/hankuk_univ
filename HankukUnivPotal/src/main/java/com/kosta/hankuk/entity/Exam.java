@@ -42,7 +42,7 @@ public class Exam {
 	private Integer examNo;
 	
 	@Column
-	private String div;
+	private String sect;
 	@Column
 	private Date startDt;
 	@Column
@@ -67,7 +67,7 @@ public class Exam {
 	public ExamDto toExamDto() {
 		return ExamDto.builder()
 				.examNo(examNo)
-				.div(div)
+				.sect(sect)
 				.startDt(startDt)
 				.EndDt(EndDt)
 				.Qnum(Qnum)

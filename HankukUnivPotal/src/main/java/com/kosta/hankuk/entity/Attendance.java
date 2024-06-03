@@ -50,7 +50,7 @@ public class Attendance {
 	private Lesson lesson;
 	
 	@Column
-	@ColumnDefault("AT01")
+	@ColumnDefault("'AT01'")
 	private String status;
 	
 	public AttendanceDto toAttendanceDto() {

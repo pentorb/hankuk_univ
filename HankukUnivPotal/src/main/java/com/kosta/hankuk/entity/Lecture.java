@@ -10,8 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.kosta.hankuk.dto.LectureDto;
 
@@ -21,19 +23,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
+@DynamicInsert
 public class Lecture {
 	@Id
 	private String lecNo;
 	@Column
 	private Integer credit;
 	@Column
-	private String div;
+	private String sect;
 	@Column
 	private String time1;
 	@Column
@@ -45,7 +48,7 @@ public class Lecture {
 	@Column
 	private String lecRoom;
 	@Column
-	@ColumnDefault("REQ")
+	@ColumnDefault("'REQ'")
 	private String status;
 	@Column
 	private Boolean isScoreChk;
@@ -53,7 +56,7 @@ public class Lecture {
 	private Integer year;
 	@Column
 	private String semester;
-	
+
 	// 과목코드
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="subCd")
@@ -68,12 +71,14 @@ public class Lecture {
 	@OneToMany(mappedBy="lecture", fetch=FetchType.LAZY)
 	private List<Lesson> lessonList = new ArrayList<>();
 	
+	@OneToMany(mappedBy="lecture", fetch=FetchType.LAZY)
+	private List<LectureByStd> lectureList = new ArrayList<>();	
 	
 	public LectureDto toLectureDto() {
 		return LectureDto.builder()
 				.lecNo(lecNo)
 				.credit(credit)
-				.div(div)
+				.sect(sect)
 				.time1(time1)
 				.time2(time2)
 				.numOfStd(numOfStd)
@@ -91,5 +96,4 @@ public class Lecture {
 				.tel(professor.getTel())
 				.build();
 	}
-	
 }

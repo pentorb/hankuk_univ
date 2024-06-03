@@ -56,7 +56,7 @@ public class Absence {
 	private String type;
 	
 	@Column
-	@ColumnDefault("NEW")
+	@ColumnDefault("'NEW'")
 	private String status;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

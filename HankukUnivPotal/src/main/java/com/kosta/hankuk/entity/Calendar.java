@@ -39,7 +39,7 @@ public class Calendar {
 	@Column
 	private String bColor;
 	@Column
-	private String div;
+	private String type;
 	@Column
 	private String writer;
 	
@@ -53,7 +53,7 @@ public class Calendar {
 				.textColor(textColor)
 				.bgColor(bgColor)
 				.bColor(bColor)
-				.div(div)
+				.type(type)
 				.writer(writer)
 				.build();
 	}

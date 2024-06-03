@@ -1,6 +1,8 @@
 package com.kosta.hankuk.dto;
 
-import com.kosta.hankuk.entity.LeaveAndReturn;
+import java.sql.Date;
+
+import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.Student;
 
 import lombok.AllArgsConstructor;
@@ -16,20 +18,24 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-public class LeaveAndReturnDto {
-	private Integer larNo;
+public class HuehakDto {
+	private Integer leaveNo;
 	private String stdNo;
+	private String rejResult;
+	private Date appDt;
 	private String status;
+	private String sect;
 	private String type;
-	private String appSem;
 	
-	public LeaveAndReturn toLeaveAndReturn() {
-		return LeaveAndReturn.builder()
-				.larNo(larNo)
+	public Huehak toLeave() {
+		return Huehak.builder()
+				.leaveNo(leaveNo)
 				.student(Student.builder().stdNo(stdNo).build())
+				.rejResult(rejResult)
+				.appDt(appDt)
 				.status(status)
+				.sect(sect)
 				.type(type)
-				.appSem(appSem)
 				.build();
 	}
 }

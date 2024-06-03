@@ -17,16 +17,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class LectureByStd {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String lbsNo;
+	private Integer lbsNo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="lecNo")

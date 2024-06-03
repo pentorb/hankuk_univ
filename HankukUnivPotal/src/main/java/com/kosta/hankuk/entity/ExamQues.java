@@ -57,7 +57,7 @@ public class ExamQues {
 	private String choice4;
 	
 	// 학생들이 제출한 답안지 리스트
-	@OneToMany(mappedBy="examques", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="examQues", fetch=FetchType.EAGER)
 	private List<ExamQuesSub> eqsList = new ArrayList<>(); 
 	
 	public ExamQuesDto toExamQuesDto() {

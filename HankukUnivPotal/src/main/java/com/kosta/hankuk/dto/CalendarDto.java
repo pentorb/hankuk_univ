@@ -20,7 +20,7 @@ public class CalendarDto {
 	private String title;
 	private String calStartDt;
 	private String calEndDt;
-	private String div;
+	private String type;
 	private Integer allDay;
 	private String textColor;
 	private String bgColor;
@@ -37,7 +37,7 @@ public class CalendarDto {
 				.textColor(textColor)
 				.bgColor(bgColor)
 				.bColor(bColor)
-				.div(div)
+				.type(type)
 				.writer(writer)
 				.build();
 	}

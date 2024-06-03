@@ -34,7 +34,7 @@ public class Appeal {
 	private Integer appNo;
 	
 	@Column
-	@ColumnDefault("NEW")
+	@ColumnDefault("'NEW'")
 	private String status;
 	
 	@Column

@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class LectureByStdDto {
-	private String lbsNo;
+	private Integer lbsNo;
 	private String lecNo;
 	private String stdNo;
 	private String grade;

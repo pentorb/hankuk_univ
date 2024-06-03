@@ -61,7 +61,7 @@ public class Student {
 	private String emailDo;
 	
 	@Column
-	@ColumnDefault("S1")
+	@ColumnDefault("'S1'")
 	private String status;
 	
 	@Column
@@ -110,6 +110,7 @@ public class Student {
 	// 이의 신청 리스트 
 	@OneToMany(mappedBy="student", fetch=FetchType.LAZY)
 	private List<Appeal> appList = new ArrayList<>();
+	
 	
 	public StudentDto toStudentDto() {
 		return StudentDto.builder()

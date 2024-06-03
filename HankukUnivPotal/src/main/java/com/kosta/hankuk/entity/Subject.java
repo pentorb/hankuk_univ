@@ -1,11 +1,15 @@
 package com.kosta.hankuk.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.kosta.hankuk.dto.SubjectDto;
 
@@ -34,6 +38,9 @@ public class Subject {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="majCd")
 	private Major major;
+	
+	@OneToMany(mappedBy="subject", fetch=FetchType.LAZY)
+	private List<Lecture> lectureList = new ArrayList<>();
 	
 	public SubjectDto toSubjectDto() {
 		return SubjectDto.builder()
