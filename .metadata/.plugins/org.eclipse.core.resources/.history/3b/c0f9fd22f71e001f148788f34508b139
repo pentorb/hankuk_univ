@@ -1,5 +1,0 @@
-package com.kosta.hankuk.service;
-
-public interface ProfService {
-
-}
