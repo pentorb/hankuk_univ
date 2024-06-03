@@ -29,7 +29,7 @@ import lombok.Setter;
 public class HuehakAndBokhak {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer larNo;
+	private Integer habNo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="stdNo")
@@ -46,7 +46,7 @@ public class HuehakAndBokhak {
 	
 	public HuehakAndBokhakDto toLeaveAndReturnDto() {
 		return HuehakAndBokhakDto.builder()
-				.larNo(larNo)
+				.habNo(habNo)
 				.stdNo(student.getStdNo())
 				.status(status)
 				.type(type)

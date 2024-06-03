@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class HuehakDto {
-	private Integer leaveNo;
+	private Integer hueNo;
 	private String stdNo;
 	private String rejResult;
 	private Date appDt;
@@ -29,7 +29,7 @@ public class HuehakDto {
 	
 	public Huehak toLeave() {
 		return Huehak.builder()
-				.leaveNo(leaveNo)
+				.hueNo(hueNo)
 				.student(Student.builder().stdNo(stdNo).build())
 				.rejResult(rejResult)
 				.appDt(appDt)

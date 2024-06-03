@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class HuehakAndBokhakDto {
-	private Integer larNo;
+	private Integer habNo;
 	private String stdNo;
 	private String status;
 	private String type;
@@ -25,7 +25,7 @@ public class HuehakAndBokhakDto {
 	
 	public HuehakAndBokhak toLeaveAndReturn() {
 		return HuehakAndBokhak.builder()
-				.larNo(larNo)
+				.habNo(habNo)
 				.student(Student.builder().stdNo(stdNo).build())
 				.status(status)
 				.type(type)

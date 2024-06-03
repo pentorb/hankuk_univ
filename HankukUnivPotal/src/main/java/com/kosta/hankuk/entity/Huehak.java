@@ -37,7 +37,7 @@ import lombok.Setter;
 public class Huehak {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer leaveNo;
+	private Integer hueNo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="stdNo")
@@ -62,7 +62,7 @@ public class Huehak {
 	
 	public HuehakDto toLeaveDto() {
 		return HuehakDto.builder()
-				.leaveNo(leaveNo)
+				.hueNo(hueNo)
 				.stdNo(student.getStdNo())
 				.rejResult(rejResult)
 				.appDt(appDt)
