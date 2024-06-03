@@ -87,3 +87,133 @@
   background-color: rgba(194, 194, 194, 0.25);
   border-radius: 5px;
 }
+
+
+.Homework_body{
+  width: 1042px; height: 600px;
+  background-color: rgba(151, 152, 156, 0.1);
+  padding: 50px 0;
+  border-radius: 20px;
+}
+.Homework_Form{
+  width: 860px;
+  margin: 0 auto;
+}
+.Homework_FormGrop{
+  display: inline-block;
+}
+.Homework_Write_Label{
+  font-size: 24px;
+  margin-right: 0px;
+}
+.Homework_Write_Input{
+  display: inline-block;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 15px;
+}
+.Button_Homework_Write{
+  float: right;
+  width: 120px; height: 50px;
+  font-size: 24px;
+  color: white;
+  border-radius: 10px;
+  background-color: #1F3468;
+  margin-left: 20px;
+}
+
+
+
+
+.HomeworkSubmitList_body{
+  width: 1042px;
+}
+.HomeworkSubmitList_Title{
+  font-size: 28px;
+  font-weight: 900;
+}
+.HomeworkSubmitList_Div_Table{
+  margin: 0 auto;
+  width: 1002px;
+}
+.HomeworkSubmitList_Table{
+  margin-top: 20px;
+}
+.HomeworkSubmitList_Table>thead{
+  font-size: 24px;
+}
+.HomeworkSubmitList_Table>tbody{
+  font-size: 20px;
+}
+.HomeworkSubmitList_Div_Button{
+  text-align: right;
+}
+.HomeworkSubmitList_Button{
+  width: 120px; height: 50px;
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  border-radius: 10px;
+  background-color: #1F3468;
+  margin-left: 20px;
+}
+.HomeworkSubmitList_Input{
+  width: 80px;
+}
+
+
+
+
+.ExamQuestionForm_Body{
+  width: 1042px;
+}
+.ExamQuestionForm_Body > label { 
+  font-size: 20px;
+}
+.ExamQuestionForm_Input{
+  width: 200px;
+  display: inline-block;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.ExamQuestionForm_Collapse{
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 10px 0;
+}
+.ExamQuestionForm_For_Div{
+  background-color: rgba(194, 194, 194, 0.25);
+  border-radius: 10px;
+  margin: 20px auto;
+  padding: 20px 30px 20px 30px;
+}
+.ExamQuestionForm_For_Div > Label {
+  margin: 0px 10px 0 0;
+}
+.ExamQuestionForm_For_Input {
+  display: inline-block;
+  width: 800px;
+  margin-bottom: 5px;
+}
+.ExamQuestionForm_For_Input_Answer{
+  display: inline-block;
+  width: 50px;
+}
+.ExamQuestionForm_Button{
+  margin-left: 210.5px;
+  width: 150px; height: 50px;
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  border-radius: 10px;
+  background-color: #1F3468;
+}
+.ExamQuestionForm_Div_Button{
+  float: right;
+  width: 150px; height: 50px;
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  border-radius: 10px;
+  background-color: #1F3468;
+}
