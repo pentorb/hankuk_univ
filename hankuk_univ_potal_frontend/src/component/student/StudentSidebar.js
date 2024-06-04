@@ -98,7 +98,7 @@ export default function StudentSidebar() {
               </ListItemButton>
               <Collapse in={secondOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <Link to="/my-potal/check-grade">
+                  <Link to="/my-potal/check-grade" style={{textDecoration: "none", color:"black"}}>
                     <ListItemButton sx={{ pl: 4 }}>
                       <ListItemText primary="전체성적" />
                     </ListItemButton>
@@ -137,14 +137,14 @@ export default function StudentSidebar() {
             </>}
           {activeTab === 4 &&
             <>
-              <Link to="/my-potal/calendar">
+              <Link to="/my-potal/calendar" style={{textDecoration:"none", color:"black"}}>
                 <ListItemButton>
-                  <ListItemText primary="일정 조회" />
+                  <ListItemText primary="일정 조회"/>
                 </ListItemButton>
               </Link>
-              <Link to="/my-potal/insert-calendar">
+              <Link to="/my-potal/insert-calendar" style={{textDecoration: "none", color:"black"}}>
                 <ListItemButton>
-                  <ListItemText primary="일정 등록" />
+                  <ListItemText primary="일정 등록"/>
                 </ListItemButton>
               </Link>
             </>}
