@@ -11,9 +11,12 @@
     font-weight: normal;
     font-style: normal;
 }
-  
-  .App {
-    font-family: 'pretendard-Regular';
+
+* {
+  font-family : 'Pretendard-Regular'
+}
+.App {
+    font-family: 'Pretendard-Regular';
     text-align: center;
 }
   
