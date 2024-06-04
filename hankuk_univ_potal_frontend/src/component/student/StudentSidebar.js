@@ -15,6 +15,7 @@ import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function StudentSidebar() {
   const [firstOpen, setFirstOpen] = useState(false);
@@ -37,7 +38,7 @@ export default function StudentSidebar() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh" }}>
+        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "140vh" }}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
             <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(1)} sx={{ color: "white" }} />
@@ -97,9 +98,11 @@ export default function StudentSidebar() {
               </ListItemButton>
               <Collapse in={secondOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="전체성적" />
-                  </ListItemButton>
+                  <Link to="/my-potal/check-grade">
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemText primary="전체성적" />
+                    </ListItemButton>
+                  </Link>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="이의신청 내역" />
                   </ListItemButton>
@@ -134,15 +137,16 @@ export default function StudentSidebar() {
             </>}
           {activeTab === 4 &&
             <>
-              <ListItemButton>
-                <ListItemText primary="4번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="4번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="4번째 메뉴" />
-              </ListItemButton>
+              <Link to="/my-potal/calendar">
+                <ListItemButton>
+                  <ListItemText primary="일정 조회" />
+                </ListItemButton>
+              </Link>
+              <Link to="/my-potal/insert-calendar">
+                <ListItemButton>
+                  <ListItemText primary="일정 등록" />
+                </ListItemButton>
+              </Link>
             </>}
           {activeTab === 5 &&
             <>
