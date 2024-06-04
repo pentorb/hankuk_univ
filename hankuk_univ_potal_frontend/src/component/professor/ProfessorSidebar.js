@@ -15,6 +15,7 @@ import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function ProfessorSidebar() {
   const [firstOpen, setFirstOpen] = useState(false);
@@ -74,63 +75,19 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 2 &&
             <>
-              <ListItemButton onClick={handleFirstClick}>
-                <ListItemText primary="학적" />
-                {firstOpen ? <ExpandLess /> : <ExpandMore />}
+              <Link to="/my-potal/lectureList">
+              <ListItemButton>
+                <ListItemText primary="강의계획서" />
               </ListItemButton>
-              <Collapse in={firstOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="상세보기" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="휴학신청" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="복학신청" />
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton onClick={handleSecondClick}>
-                <ListItemText primary="성적" />
-                {secondOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={secondOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="전체성적" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="이의신청 내역" />
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton onClick={handleThirdClick}>
-                <ListItemText primary="졸업" />
-                {thirdOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={thirdOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="전체학기 성적조회" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="학점이수 현황" />
-                  </ListItemButton>
-                </List>
-              </Collapse>
+              </Link>
             </>}
           {activeTab === 3 &&
             <>
+              <Link to="/my-potal/examQuestionForm">
               <ListItemButton>
-                <ListItemText primary="3번째 메뉴" />
+                <ListItemText primary="시험출제" />
               </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
+              </Link>
             </>}
           {activeTab === 4 &&
             <>

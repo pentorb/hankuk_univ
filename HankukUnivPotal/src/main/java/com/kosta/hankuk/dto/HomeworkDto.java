@@ -26,7 +26,9 @@ public class HomeworkDto {
 	private String title;
 	private String content;
 	private String files;
+	private String lecNo;
 	private Integer lessonNo;
+	private Integer week;
 	
 	public Homework toHomework() {
 		return Homework.builder()

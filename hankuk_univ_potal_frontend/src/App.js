@@ -8,7 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 import BoardNav from './component/comm/BoardNav';
 
 function App() {
-  const userType = "student";
+  const userType = "professor";
 
   return (
     <Routes>

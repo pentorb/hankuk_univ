@@ -49,6 +49,10 @@ public class Homework {
 	private String files;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="lecNo")
+	private Lecture lecture;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="lessonNo")
 	private Lesson lesson;
 	
@@ -60,7 +64,9 @@ public class Homework {
 				.title(title)
 				.content(content)
 				.files(files)
+				.lecNo(lecture.getLecNo())
 				.lessonNo(lesson.getLessonNo())
+				.week(lesson.getWeek())
 				.build();
 	}
 	
