@@ -2,6 +2,8 @@ package com.kosta.hankuk.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -23,38 +25,39 @@ import lombok.Setter;
 @DynamicInsert
 public class Calendar {
 	@Id
-	private String calNo;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer calNo;
 	@Column
 	private String title;
 	@Column
-	private String calStartDt;
+	private String content;
 	@Column
-	private String calEndDt;
+	private String start;
 	@Column
-	private Integer allDay;
+	private String end;
 	@Column
-	private String textColor;
+	private String place;
 	@Column
 	private String bgColor;
 	@Column
-	private String bColor;
-	@Column
-	private String type;
+	private String groupId;
 	@Column
 	private String writer;
+	@Column
+	private Boolean allDay;
 	
 	public CalendarDto toCalendarDto() {
 		return CalendarDto.builder()
 				.calNo(calNo)
 				.title(title)
-				.calStartDt(calStartDt)
-				.calEndDt(calEndDt)
-				.allDay(allDay)
-				.textColor(textColor)
+				.start(start)
+				.end(end)
 				.bgColor(bgColor)
-				.bColor(bColor)
-				.type(type)
+				.groupId(groupId)
 				.writer(writer)
+				.place(place)
+				.allDay(allDay)
+				.content(content)
 				.build();
 	}
 }

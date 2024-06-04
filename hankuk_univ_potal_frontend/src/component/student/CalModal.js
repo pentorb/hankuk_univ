@@ -7,8 +7,6 @@ import Bookmark from '@mui/icons-material/Bookmark';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const ModalTest = props => {
-
-
     const categori = {
         display: "flex",
         margin: "10px",
@@ -19,7 +17,7 @@ const ModalTest = props => {
 
     const text = { display: "flex", alignItems: "center", fontSize: "large" }
 
-    const { open, close, header, date, content, type, place } = props
+    const { open, close, header, start, end, content, type, place } = props
 
     return (
         <div className={open ? "openModal modal" : "modal"}>
@@ -45,7 +43,7 @@ const ModalTest = props => {
                                 <div style={categori}><EventNoteIcon />&nbsp;일시</div>
                             </Grid>
                             <Grid item xs={9} style={text}>
-                                {date}
+                                {start} {end}
                             </Grid>
 
 

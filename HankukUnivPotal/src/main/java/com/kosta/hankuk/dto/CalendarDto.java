@@ -16,29 +16,29 @@ import lombok.ToString;
 @ToString
 @Builder
 public class CalendarDto {
-	private String calNo;
+	private Integer calNo;
 	private String title;
-	private String calStartDt;
-	private String calEndDt;
-	private String type;
-	private Integer allDay;
-	private String textColor;
+	private String content;
+	private String end;
+	private String start;
+	private String groupId;
 	private String bgColor;
-	private String bColor;
 	private String writer;
+	private String place;
+	private Boolean allDay;
 	
-	public Calendar Calendar() {
+	public Calendar toCalendar() {
 		return Calendar.builder()
 				.calNo(calNo)
 				.title(title)
-				.calStartDt(calStartDt)
-				.calEndDt(calEndDt)
-				.allDay(allDay)
-				.textColor(textColor)
+				.start(start)
+				.end(end)
 				.bgColor(bgColor)
-				.bColor(bColor)
-				.type(type)
+				.groupId(groupId)
 				.writer(writer)
+				.place(place)
+				.allDay(allDay)
+				.content(content)
 				.build();
 	}
 	
