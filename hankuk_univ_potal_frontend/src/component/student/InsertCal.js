@@ -9,7 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Radio from '@mui/material/Radio';
 import * as React from 'react';
-import { Input } from 'reactstrap';
+import { Input, Label } from 'reactstrap';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 
@@ -23,7 +23,7 @@ const InsertCal = () => {
         color: "#4952A9"
     }
 
-    const [selectedValue, setSelectedValue] = React.useState('allday');
+    const [selectedValue, setSelectedValue] = React.useState('0');
     const [formValues, setFormValues] = React.useState({
         calStartDt: null,
         calEndDt: null,
@@ -82,17 +82,17 @@ const InsertCal = () => {
                                 <Grid item xs={10} style={{ justifyContent: 'column', display: 'flex', alignItems: 'center' }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} >
                                         <DemoContainer components={['DatePicker', 'DatePicker']} >
-                                            <DatePicker 
-                                                label="시작 일자" 
-                                                value={formValues.calStartDt} 
-                                                onChange={(newValue) => handleDateChange('calStartDt', newValue)} 
-                                                style={{ backgroundColor: '#E5E5E8' }} 
-                                                id="calStartDt" 
-                                                name="calStartDt" 
+                                            <DatePicker
+                                                label="시작 일자"
+                                                value={formValues.calStartDt}
+                                                onChange={(newValue) => handleDateChange('calStartDt', newValue)}
+                                                style={{ backgroundColor: '#E5E5E8' }}
+                                                id="calStartDt"
+                                                name="calStartDt"
                                             />
                                             <DatePicker
                                                 label="종료 일자"
-                                                value={formValues.calEndDt} 
+                                                value={formValues.calEndDt}
                                                 onChange={(newValue) => handleDateChange('calEndDt', newValue)}
                                                 id="calEndDt"
                                                 name="calEndDt"
@@ -100,14 +100,7 @@ const InsertCal = () => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <Radio
-                                        checked={selectedValue === 'allday'}
-                                        onChange={handleChange}
-                                        value="allday"
-                                        id="allDay"
-                                        name="allDay"
-                                        inputProps={{ 'aria-label': 'A' }}
-                                    /> 하루종일
+                                    <Input type="checkbox" value="1" id="allDay" name="allDay" onChange={handleChange} />&nbsp;&nbsp;하루 종일
                                 </Grid>
                             </div>
                             <div style={{ justifyContent: 'column', display: 'flex', alignItems: 'center', paddingBottom: '50px' }}>
