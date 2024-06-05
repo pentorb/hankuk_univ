@@ -28,8 +28,9 @@ public class HuehakDto {
 	private String reason;
 	private String type;
 	private String files;
+	private String hueSem;
 	
-	public Huehak toLeave() {
+	public Huehak toHuehak() {
 		return Huehak.builder()
 				.hueNo(hueNo)
 				.student(Student.builder().stdNo(stdNo).build())
@@ -40,6 +41,7 @@ public class HuehakDto {
 				.reason(reason)
 				.type(type)
 				.files(files)
+				.hueSem(hueSem)
 				.build();
 	}
 }

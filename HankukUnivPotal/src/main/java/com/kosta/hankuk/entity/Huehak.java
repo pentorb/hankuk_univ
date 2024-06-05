@@ -66,7 +66,11 @@ public class Huehak {
 	@Column // 첨부파일
 	private String files;
 	
-	public HuehakDto toLeaveDto() {
+	@Column // 휴학학기 
+	private String hueSem;
+	
+	
+	public HuehakDto toHuehakDto() {
 		return HuehakDto.builder()
 				.hueNo(hueNo)
 				.stdNo(student.getStdNo())
@@ -77,6 +81,7 @@ public class Huehak {
 				.reason(reason)
 				.type(type)
 				.files(files)
+				.hueSem(hueSem)
 				.build();
 	}
 }
