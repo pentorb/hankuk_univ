@@ -60,6 +60,9 @@ public class Huehak {
 	@Column // 어떤 휴학 유형인지
 	private String type;
 	
+	@Column // 휴학 사유
+	private String reason;
+	
 	public HuehakDto toLeaveDto() {
 		return HuehakDto.builder()
 				.hueNo(hueNo)
@@ -68,6 +71,7 @@ public class Huehak {
 				.appDt(appDt)
 				.status(status)
 				.sect(sect)
+				.reason(reason)
 				.type(type)
 				.build();
 	}

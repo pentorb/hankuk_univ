@@ -25,6 +25,7 @@ public class HuehakDto {
 	private Date appDt;
 	private String status;
 	private String sect;
+	private String reason;
 	private String type;
 	
 	public Huehak toLeave() {
@@ -35,6 +36,7 @@ public class HuehakDto {
 				.appDt(appDt)
 				.status(status)
 				.sect(sect)
+				.reason(reason)
 				.type(type)
 				.build();
 	}
