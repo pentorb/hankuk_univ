@@ -8,5 +8,10 @@ export const theme = createTheme({
     secondColor: {
       main: "#B0A27E"
     }
+  },
+
+  typography: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize:18
   }
 });
