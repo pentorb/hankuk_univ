@@ -7,7 +7,6 @@ import ListItemText from '@mui/material/ListItemText';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -40,43 +39,26 @@ export default function StudentSidebar() {
       <Grid container spacing={2}>
         <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "140vh" }}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
-            <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(1)} sx={{ color: "white" }} />
-            <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>마이페이지</Typography>} id={2 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(2)} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
-            <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>과목</Typography>} id={3 === activeTab ? "active" : ""}
+            <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>마이페이지</Typography>} id={1 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(1)} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
+            <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>과목</Typography>} id={2 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(2)} sx={{ color: "white" }} />
+            <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>캘린더</Typography>} id={3 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(3)} sx={{ color: "white" }} />
-            <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>캘린더</Typography>} id={4 === activeTab ? "active" : ""}
+            <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>쪽지</Typography>} id={4 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(4)} sx={{ color: "white" }} />
-            <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>쪽지</Typography>} id={5 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(5)} sx={{ color: "white" }} />
           </Tabs>
         </Grid>
-        <Grid item xs={8} backgroundColor={0 === activeTab ? "#DDE1E8" : "#FFFFFF"}>
-          
-          {activeTab === 1 &&
+        <Grid item xs={8} backgroundColor={"#FFFFFF"}>          
+          {activeTab === 0 &&
             <>
-              <ListItemButton onClick={handleFirstClick}>
-                <ListItemText primary="학적" />
-                {firstOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={firstOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="상세보기" />
-                  </ListItemButton>
-                <Link to="/my-potal/regHuehak" style={{textDecoration: "none", color:"black"}}>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="휴학신청" />
-                  </ListItemButton>
-                </Link>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="복학신청" />
-                  </ListItemButton>
-                </List>
-              </Collapse>
+              <Link to="/my-potal/" style={{textDecoration: "none", color:"black"}}>
+                <ListItemButton>
+                  <ListItemText primary="대시보드" />
+                </ListItemButton>
+              </Link>
             </>}
-          {activeTab === 2 &&
+          {activeTab === 1 &&
             <>
               <ListItemButton onClick={handleFirstClick}>
                 <ListItemText primary="학적" />
@@ -126,7 +108,7 @@ export default function StudentSidebar() {
                 </List>
               </Collapse>
             </>}
-          {activeTab === 3 &&
+          {activeTab === 2 &&
             <>
               <ListItemButton>
                 <ListItemText primary="3번째 메뉴" />
@@ -138,7 +120,7 @@ export default function StudentSidebar() {
                 <ListItemText primary="3번째 메뉴" />
               </ListItemButton>
             </>}
-          {activeTab === 4 &&
+          {activeTab === 3 &&
             <>
               <Link to="/my-potal/calendar" style={{textDecoration:"none", color:"black"}}>
                 <ListItemButton>
@@ -151,7 +133,7 @@ export default function StudentSidebar() {
                 </ListItemButton>
               </Link>
             </>}
-          {activeTab === 5 &&
+          {activeTab === 4 &&
             <>
               <ListItemButton>
                 <ListItemText primary="5번째 메뉴" />
