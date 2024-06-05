@@ -6,9 +6,12 @@ import StopRoundedIcon from '@mui/icons-material/StopRounded';
 import { Table, Input, Button } from 'reactstrap';
 import '../student/css/Huehak.css';
 import Swal from "sweetalert2";
+import axios from 'axios';
+import { useNavigate } from 'react-router';
+import React from 'react';
 
 const HuehakInsert = () => {
-
+    const navigate = useNavigate();
     const text = {
         display: "flex",
         margin: "10px",
@@ -22,10 +25,52 @@ const HuehakInsert = () => {
         Swal.fire({
             title: "휴학 신청을 완료하시겠습니까?",
             text: "한 번 제출된 휴학신청은 철회할 수 없습니다.",
-            icon:'warning',
-            showCancelButton: false,
-            confirmButtonText: "확인",
-        })
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText:"취소",
+            confirmButtonText: "확인"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              submit(e);
+            }
+          });
+    }
+
+    const [formValues, setFormValues] = React.useState({
+        name: '',
+        stdNo: '',
+        type: '',
+        year: '',
+        sem: '',
+        files: '',
+        reason: ''
+    });
+
+    const dataChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues({ ...formValues, [name]: value });
+    }
+
+
+    const submit = (e) => {
+        const formData = new FormData();
+        formData.append("name", formValues.name);
+        formData.append("stdNo", formValues.stdNo);
+        formData.append("type", formValues.type);
+        formData.append("hueSem", formValues.year + formValues.sem);
+        formData.append("files", formValues.files);
+        formData.append("reason", formValues.reason);
+
+        axios.post('http://localhost:8090/hueInsert', formData)
+            .then(res => {
+                console.log(res.data);
+                navigate('/my-potal/regHuehak')
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     return (
@@ -71,84 +116,93 @@ const HuehakInsert = () => {
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>신청정보입력</b></span>
                         </div>
-
-                        <div style={{ display: 'flex', padding: '10px' }}>
-                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={text} className="col-3">이름</div>
-                                <div className="col-6">
-                                    <Input type="text" id="name" name="name"
-                                        placeholder='이름'
-                                    //    onChange={handleInputChange}
-                                    />
+                        <form onSubmit={submit}>
+                            <div style={{ display: 'flex', padding: '10px' }}>
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-4">이름</div>
+                                    <div className="col-6">
+                                        <Input type="text" id="name" name="name"
+                                            placeholder='이름'
+                                            onChange={dataChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-4">학번</div>
+                                    <div className="col-6">
+                                        <Input type="text" id="stdNo" name="stdNo"
+                                            placeholder='학번'
+                                            onChange={dataChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-4">유형</div>
+                                    <div className="col-6">
+                                        <Input type="select" id="type" name="type"
+                                            onChange={dataChange}>
+                                            <option>---선택하세요---</option>
+                                            <option value="o">일반 휴학</option>
+                                            <option value="m">군 휴학</option>
+                                            <option value="p">출산, 임신 휴학</option>
+                                            <option value="s">창업 휴학</option>
+                                            <option value="i">질병 휴학</option>
+                                        </Input>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={text} className="col-3">학번</div>
-                                <div className="col-6">
-                                    <Input type="text" id="stdNo" name="stdNo"
-                                        placeholder='학번'
-                                    //    onChange={handleInputChange}
-                                    />
+
+                            <div style={{ display: 'flex', padding: '10px' }}>
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-4">휴학년도</div>
+                                    <div className="col-6">
+                                        <Input type="text" id="year" name="year"
+                                            placeholder='2024'
+                                            onChange={dataChange}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-4">휴학학기</div>
+                                    <div className="col-6">
+                                        <Input type="select" id="sem" name="sem"
+                                            onChange={dataChange}>
+                                            <option>학기 선택</option>
+                                            <option value="01">1학기</option>
+                                            <option value="02">2학기</option>
+                                        </Input>
+                                    </div>
+                                </div>
+
+
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-4">첨부자료</div>
+                                    <div className="col-6">
+                                        <Input type="file" id="files" name="files"
+                                            style={{ width: '100%' }}
+                                            onChange={dataChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={text} className="col-4">휴학신청학기</div>
-                                <div className="col-6">
-                                    <Input type="text" id="stdNo" name="stdNo"
-                                        placeholder='2024년 2학기'
-                                    //    onChange={handleInputChange}
-                                    />
+
+                            <div style={{ padding: '10px' }}>
+                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-3">휴학 사유</div>
+                                </div>
+                                <div style={{ padding: '5px 0px 0px 15px' }}>
+                                    <Input type="textarea" id="reason" name="reason"
+                                        placeholder='휴학 사유를 상세히 입력해주세요.'
+                                        style={{ width: '98%', height: '250px' }}
+                                        onChange={dataChange} />
                                 </div>
                             </div>
-                        </div>
 
-                        <div style={{ display: 'flex', padding: '10px' }}>
-                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={text} className="col-3">유형</div>
-                                <div className="col-6">
-                                    <Input type="select" id="type" name="type"
-                                    //    onChange={handleInputChange}
-                                    >
-                                        <option>---선택하세요---</option>
-                                        <option value="o">일반 휴학</option>
-                                        <option value="m">군 휴학</option>
-                                        <option value="p">출산, 임신 휴학</option>
-                                        <option value="s">창업 휴학</option>
-                                        <option value="i">질병 휴학</option>
-                                    </Input>
-                                </div>
+                            <div className="col-12" style={{ padding: '10px 30px 0px', display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button style={{ backgroundColor: '#1F3468' }} onClick={alert}>휴학 신청</Button>
                             </div>
-                            {/* <div className="col-2"></div> */}
-
-                            <div className="col-8" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={text} className="col-4">첨부자료</div>
-                                <div className="col-7">
-                                    <Input
-                                        id="exampleFile"
-                                        name="file"
-                                        type="file"
-                                        style={{width:'100%'}}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ padding: '10px' }}>
-                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={text} className="col-3">휴학 사유</div>
-                            </div>
-                            <div style={{ padding: '5px 0px 0px 15px' }}>
-                                <Input type="textarea" id="reason" name="reason"
-                                    placeholder='휴학 사유를 상세히 입력해주세요.'
-                                    style={{ width: '98%', height: '250px' }}
-                                ></Input>
-                            </div>
-                        </div>
-
-                        <div className="col-12" style={{padding:'10px 30px 0px', display:'flex', justifyContent:'flex-end'}}>
-                            <Button style={{backgroundColor:'#1F3468'}} onClick={alert}>휴학 신청</Button>
-                        </div>
-
+                        </form>
                     </Grid>
                     <Grid item xs={1}></Grid>
                 </Grid>
