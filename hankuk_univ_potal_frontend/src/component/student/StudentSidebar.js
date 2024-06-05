@@ -53,6 +53,7 @@ export default function StudentSidebar() {
           </Tabs>
         </Grid>
         <Grid item xs={8} backgroundColor={0 === activeTab ? "#DDE1E8" : "#FFFFFF"}>
+          
           {activeTab === 1 &&
             <>
               <ListItemButton onClick={handleFirstClick}>
@@ -64,9 +65,11 @@ export default function StudentSidebar() {
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="상세보기" />
                   </ListItemButton>
+                <Link to="/my-potal/regHuehak" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="휴학신청" />
                   </ListItemButton>
+                </Link>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="복학신청" />
                   </ListItemButton>

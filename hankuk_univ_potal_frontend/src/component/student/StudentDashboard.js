@@ -7,6 +7,7 @@ import Grade from './Grade';
 import InsertCal from './InsertCal';
 import Calendar from './Calendar';
 import StudentMain from './StudentMain';
+import HuehakInsert from './HuehakInsert';
 
 const StudentDashboard = () => {
     return (
@@ -21,6 +22,7 @@ const StudentDashboard = () => {
                     </Grid>
                     <Grid item xs={10} sx={{ backgroundColor: "#DDE1E8" }}>                        
                         <Routes>
+                            <Route path="/regHuehak" element={<HuehakInsert/>}></Route>
                             <Route path="/" element={<StudentMain/>}></Route>
                             <Route path="/check-grade" element={<Grade/>}></Route>
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
