@@ -63,6 +63,9 @@ public class Huehak {
 	@Column // 휴학 사유
 	private String reason;
 	
+	@Column // 첨부파일
+	private String files;
+	
 	public HuehakDto toLeaveDto() {
 		return HuehakDto.builder()
 				.hueNo(hueNo)
@@ -73,6 +76,7 @@ public class Huehak {
 				.sect(sect)
 				.reason(reason)
 				.type(type)
+				.files(files)
 				.build();
 	}
 }

@@ -27,6 +27,7 @@ public class HuehakDto {
 	private String sect;
 	private String reason;
 	private String type;
+	private String files;
 	
 	public Huehak toLeave() {
 		return Huehak.builder()
@@ -38,6 +39,7 @@ public class HuehakDto {
 				.sect(sect)
 				.reason(reason)
 				.type(type)
+				.files(files)
 				.build();
 	}
 }
