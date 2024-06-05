@@ -1,12 +1,12 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import NavigationBar from '../NavigationBar';
 import ProfessorSidebar from './ProfessorSidebar';
 import { Routes, Route } from 'react-router-dom';
 import LectureList from './LectureList';
 import ExamQuestionForm from './ExamQuestionForm';
 import LectureWrite from './LectureWrite';
 import LectureModify from './LectureModify';
+import Header from '../comm/Header';
 
 const ProfessorDashboard = () => {
     return (
@@ -14,7 +14,7 @@ const ProfessorDashboard = () => {
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2} >
                     <Grid item xs={12}>
-                        <NavigationBar />
+                        <Header />
                     </Grid>
                     <Grid item xs={2}>
                         <ProfessorSidebar />

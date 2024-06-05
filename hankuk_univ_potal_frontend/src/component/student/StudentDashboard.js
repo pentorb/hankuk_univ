@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import {Routes, Route} from 'react-router-dom';
-import NavigationBar from '../NavigationBar';
 import StudentSidebar from './StudentSidebar';
 import Grade from './Grade';
 import InsertCal from './InsertCal';
 import Calendar from './Calendar';
 import StudentMain from './StudentMain';
 import HuehakInsert from './HuehakInsert';
+import Header from '../comm/Header';
 
 const StudentDashboard = () => {
     return (
@@ -15,7 +15,7 @@ const StudentDashboard = () => {
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2} >
                     <Grid item xs={12}>
-                        <NavigationBar />
+                        <Header />
                     </Grid>
                     <Grid item xs={2}>
                         <StudentSidebar />

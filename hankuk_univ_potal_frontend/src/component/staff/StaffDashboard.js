@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import NavigationBar from '../NavigationBar';
 import StaffSidebar from './StaffSidebar';
 import Example from './Example';
+import Header from '../comm/Header';
 
 const StaffDashboard = () => {
     return (
@@ -10,7 +10,7 @@ const StaffDashboard = () => {
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2} >
                     <Grid item xs={12}>
-                        <NavigationBar />
+                        <Header />
                     </Grid>
                     <Grid item xs={2}>
                         <StaffSidebar />
