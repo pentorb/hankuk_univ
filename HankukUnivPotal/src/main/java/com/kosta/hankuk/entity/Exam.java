@@ -69,8 +69,8 @@ public class Exam {
 				.examNo(examNo)
 				.sect(sect)
 				.startDt(startDt)
-				.EndDt(EndDt)
-				.Qnum(Qnum)
+				.endDt(EndDt)
+				.qnum(Qnum)
 				.type(type)
 				.lecNo(lecture.getLecNo())
 				.build();

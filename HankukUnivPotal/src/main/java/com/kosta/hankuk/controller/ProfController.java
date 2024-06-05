@@ -1,6 +1,8 @@
 package com.kosta.hankuk.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kosta.hankuk.dto.ExamDto;
+import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.service.ProfService;
@@ -110,15 +114,27 @@ public class ProfController {
 		}
 	}
 	
-	@PostMapping("/examWrite")
-	public ResponseEntity<Integer> examWrite(@ModelAttribute ExamDto examDto
-			) {
+	@PostMapping("/examQuestionWrite")
+	public ResponseEntity<String> examQuestionWrite(@RequestBody Map<String, Object> param) {
+		System.out.println(param);
+		Map<String, Object> examParam = (Map<String, Object>)param.get("exam");
+		List<Map<String, Object>> questionMapList = (List<Map<String, Object>>)param.get("questionList");
+		ObjectMapper objectMapper = new ObjectMapper();
+		ExamDto examDto = objectMapper.convertValue(examParam, ExamDto.class);
+		
+		List<ExamQuesDto> questionList = new ArrayList<>();
+		for (Map<String, Object> questionMap : questionMapList) {
+			ExamQuesDto questionDto = objectMapper.convertValue(questionMap, ExamQuesDto.class);
+			questionList.add(questionDto);
+		}
+		
+		
 		try {
-			Integer examNo = profService.examWrite(examDto);
-			return new ResponseEntity<Integer>(examNo,HttpStatus.OK);
+			profService.examAndQuestionWrite(examDto,questionList);
+			return new ResponseEntity<String>("true",HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

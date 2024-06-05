@@ -13,7 +13,7 @@ const ExamQuestionForm = (args) => {
     const [questionType, setQuesType] = useState("객관식");
 
     const [exam, setExam] = useState({
-        startDt:'', EndDt:'', sect:'중간고사', type:'객관식', Qnum:0
+        startDt:'', endDt:'', sect:'중간고사', type:'객관식', qnum:0, lecNo:'CSCS01'
     })
 
     // private Integer examNo;
@@ -53,34 +53,12 @@ const ExamQuestionForm = (args) => {
     };
 
     const submit = () => {
-        const formData = new FormData();
-        formData.append("lecNo", "CSCS01");
-        formData.append("startDt", exam.startDt);
-        formData.append("EndDt", exam.EndDt);
-        formData.append("sect", exam.sect);
-        formData.append("type", exam.type);
-        formData.append("Qnum", exam.Qnum);
-
         console.log(questionList);
-        
-        axios.post(`${url}/examWrite`,{exam:exam, questionList:questionList})
+        console.log(exam);
+        axios.post(`${url}/examQuestionWrite`,{exam:exam, questionList:questionList})
             .then(res=>{
                 console.log(res)
-                if(res.data!=null){
-                    const questionFormData = new FormData();
-                    
-
-                    
-                    axios.post(`${url}/questionWrite`,formData)
-                        .then(res1=>{
-                            console.log(res1)
-                            
-                        })
-                        .catch(err1=>{
-                            console.log(err1)
-                        })
-                    }
-                })
+            })
             .catch(err=>{
                 console.log(err)
             })
@@ -223,14 +201,14 @@ const ExamQuestionForm = (args) => {
                     <Label
 
                         className=""
-                        for="EndDt"
+                        for="endDt"
                     >
                         &nbsp;마감일&nbsp;
                     </Label>
                     <Input
                         className="ExamQuestionForm_Input"
-                        id="EndDt"
-                        name="EndDt"
+                        id="endDt"
+                        name="endDt"
                         placeholder=""
                         type="date"
                         onChange={changeValue}
@@ -264,8 +242,8 @@ const ExamQuestionForm = (args) => {
                     </Input>&nbsp;&nbsp;&nbsp;
                     <Input
                         className="ExamQuestionForm_Input"
-                        id="Qnum"
-                        name="Qnum"
+                        id="qnum"
+                        name="qnum"
                         type="text"
                         placeholder="문항수 입력(숫자만)"
                         onChange={(e) => {

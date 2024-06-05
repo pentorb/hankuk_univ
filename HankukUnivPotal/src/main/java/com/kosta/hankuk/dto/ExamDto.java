@@ -22,8 +22,8 @@ public class ExamDto {
 	private Integer examNo;
 	private String sect;
 	private String startDt;
-	private String EndDt;
-	private Integer Qnum;
+	private String endDt;
+	private Integer qnum;
 	private String type;
 	private String lecNo;
 	
@@ -32,8 +32,8 @@ public class ExamDto {
 				.examNo(examNo)
 				.sect(sect)
 				.startDt(startDt)
-				.EndDt(EndDt)
-				.Qnum(Qnum)
+				.EndDt(endDt)
+				.Qnum(qnum)
 				.type(type)
 				.lecture(Lecture.builder().lecNo(lecNo).build())
 				.build();

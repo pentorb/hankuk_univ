@@ -7,10 +7,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.kosta.hankuk.dto.ExamDto;
+import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.entity.Exam;
 import com.kosta.hankuk.entity.Lecture;
+import com.kosta.hankuk.repository.ExamQuesRepository;
 import com.kosta.hankuk.repository.ExamRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 
@@ -22,6 +24,7 @@ public class ProfServiceImpl implements ProfService{
 	
 	private final LectureRepository lectureRepository;
 	private final ExamRepository examRepository;
+	private final ExamQuesRepository examQuesRepository;
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -84,11 +87,19 @@ public class ProfServiceImpl implements ProfService{
 	}
 
 	@Override
-	public Integer examWrite(ExamDto examDto) throws Exception {
+	public void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception {
 		examRepository.save(examDto.toExam());
+		
 		Optional<Exam> oExam = examRepository.findByLecture_lecNoAndSect(examDto.getLecNo(), examDto.getSect());
-		return oExam.get().getExamNo();
+		
+		for (ExamQuesDto examQuesDto : questionDtoList) {
+			examQuesDto.setExamNo(oExam.get().getExamNo());
+			examQuesRepository.save(examQuesDto.toExamQues());
+		}
+		
 	}
+
+	
 
 	
 

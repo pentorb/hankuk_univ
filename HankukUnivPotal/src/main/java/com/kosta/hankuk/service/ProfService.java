@@ -3,6 +3,7 @@ package com.kosta.hankuk.service;
 import java.util.List;
 
 import com.kosta.hankuk.dto.ExamDto;
+import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
 
@@ -22,7 +23,7 @@ public interface ProfService {
 
 	void homeworkModify(HomeworkDto homeworkDto) throws Exception;
 
-	Integer examWrite(ExamDto examDto) throws Exception;
+	void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception;
 
 	
 
