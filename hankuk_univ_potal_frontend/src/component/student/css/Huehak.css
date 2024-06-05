@@ -1,0 +1,21 @@
+.table {
+    padding: 10px;
+    border-color: gray;
+}
+
+.table th {
+    background-color: #1F3468;
+    color: #ffffff;
+}
+
+.table td,
+.table th {
+    padding: 15px;
+    /* 간격을 늘리기 위해 패딩 값을 조정합니다 */
+}
+
+.categori {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
