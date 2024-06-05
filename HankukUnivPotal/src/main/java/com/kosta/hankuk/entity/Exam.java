@@ -44,9 +44,9 @@ public class Exam {
 	@Column
 	private String sect;
 	@Column
-	private Date startDt;
+	private String startDt;
 	@Column
-	private Date EndDt;
+	private String EndDt;
 	@Column
 	private Integer Qnum;
 	@Column

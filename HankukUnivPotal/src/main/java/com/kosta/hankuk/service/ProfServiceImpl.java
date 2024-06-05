@@ -2,12 +2,16 @@ package com.kosta.hankuk.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
+import com.kosta.hankuk.entity.Exam;
 import com.kosta.hankuk.entity.Lecture;
+import com.kosta.hankuk.repository.ExamRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class ProfServiceImpl implements ProfService{
 	
 	private final LectureRepository lectureRepository;
-	
+	private final ExamRepository examRepository;
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -48,6 +52,20 @@ public class ProfServiceImpl implements ProfService{
 	}
 
 	@Override
+	public String lectureModify(LectureDto lectureDto) throws Exception {
+		Lecture lecture = lectureRepository.findById(lectureDto.getLecNo()).get();
+		System.out.println(lecture);
+		lecture.setSemester(lectureDto.getSemester());
+		lecture.setCredit(lectureDto.getCredit());
+		lecture.setSect(lectureDto.getSect());
+		lecture.setTime1(lectureDto.getTime1());
+		lecture.setTime2(lectureDto.getTime2());
+		System.out.println(lecture);
+		lectureRepository.save(lecture);
+		return null;
+	}
+	
+	@Override
 	public void homeworkWrite(HomeworkDto homeworkDto) throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -64,6 +82,15 @@ public class ProfServiceImpl implements ProfService{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Integer examWrite(ExamDto examDto) throws Exception {
+		examRepository.save(examDto.toExam());
+		Optional<Exam> oExam = examRepository.findByLecture_lecNoAndSect(examDto.getLecNo(), examDto.getSect());
+		return oExam.get().getExamNo();
+	}
+
+	
 
 	
 

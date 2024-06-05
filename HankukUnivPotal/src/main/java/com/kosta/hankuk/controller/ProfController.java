@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.service.ProfService;
@@ -63,6 +64,19 @@ public class ProfController {
 			return new ResponseEntity<LectureDto>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/lectureModify")
+	public ResponseEntity<String> lectureModify(@ModelAttribute LectureDto lectureDto) {
+		try {
+			System.out.println(lectureDto);
+			String lecNo = profService.lectureModify(lectureDto);
+			return new ResponseEntity<String>(lecNo, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/homeworkWrite")
 	public ResponseEntity<String> homeworkWrite(@RequestBody HomeworkDto homeworkDto) {
 		try {
@@ -97,19 +111,14 @@ public class ProfController {
 	}
 	
 	@PostMapping("/examWrite")
-	public ResponseEntity<String> examWrite(@RequestParam("startDt") String startDt,
-			@RequestParam("endDt") String endDt,
-			@RequestParam("sect") String sect,
-			@RequestParam("type") String type,
-			@RequestParam("qNum") Integer qNum,
-			@RequestParam("lecNo") String lecNo
+	public ResponseEntity<Integer> examWrite(@ModelAttribute ExamDto examDto
 			) {
 		try {
-			
-			return new ResponseEntity<String>("true",HttpStatus.OK);
+			Integer examNo = profService.examWrite(examDto);
+			return new ResponseEntity<Integer>(examNo,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

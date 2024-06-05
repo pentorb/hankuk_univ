@@ -4,7 +4,7 @@ import { Grid, Paper, Typography } from "@mui/material";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
 import axios from "axios";
-import {url} from './config';
+import {url} from '../../config/config';
 import { useState } from "react";
 import { useNavigate } from "react-router";
 const LectureWrite = () => {
@@ -34,7 +34,7 @@ const LectureWrite = () => {
         axios.post(`${url}/lectureWrite`,formData)
             .then(res=>{
                 console.log(res)
-                navigate('/my-potal/');
+                navigate('/my-potal/lectureList');
             })
             .catch(err=>{
                 console.log(err)
@@ -43,15 +43,15 @@ const LectureWrite = () => {
 
     return (
         <Grid item xs={12}>
-            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>성적조회</b></Typography>
+            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의계획서</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 성적 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>성적조회</b></Typography>
+                    <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 강의계획서 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>작성</b></Typography>
                 </Typography>
                 <div className="Lecture_Write_body">
-                    <div style={{ marginLeft: "690px" }}>
+                    <div style={{ marginLeft: "736px" }}>
                         <Button
-                            onClick={()=>navigate('/my-potal/')}
+                            onClick={()=>navigate('/my-potal/lectureList')}
                             className='Button_Lecture_Write'
                         >
                             목록
@@ -63,11 +63,11 @@ const LectureWrite = () => {
                             신청
                         </Button>
                     </div>
-                    <div>
+                    <div className="Lecture_Write_Container">
                         <div>
                             <div className="Lecture_Write_header">강의정보</div>
                             <Form>
-                                <div style={{ width: "970px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -109,7 +109,7 @@ const LectureWrite = () => {
                                         </Input>
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "970px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -171,13 +171,13 @@ const LectureWrite = () => {
                                         </Input>
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "970px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="credit">
                                             학점
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="credit"
@@ -212,13 +212,13 @@ const LectureWrite = () => {
                                         </Input>
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "970px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             style={{ fontSize: "24px", marginRight: "4px" }}
                                             // className="Lecture_Write_Label"
                                             for="time1">
-                                            1차시시간
+                                            1차시시간&nbsp;
                                         </Label>
                                         <Input
                                             className="Lecture_Write_Input"
@@ -245,7 +245,7 @@ const LectureWrite = () => {
                                     </FormGroup>
                                 </div>
                                 <div className="Lecture_Write_header">교수정보</div>
-                                <div style={{ width: "970px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -276,13 +276,13 @@ const LectureWrite = () => {
                                         />
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "970px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="email">
                                             이메일
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="email"
@@ -307,10 +307,10 @@ const LectureWrite = () => {
                                         />
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "970px", height: "50px" }}
+                                <div style={{ width: "959px", height: "50px" }}
                                     className="Lecture_Write_header">강의계획서 첨부</div>
-
-                                <FormGroup >
+                                
+                                <FormGroup style={{ width: "959px"}}>
                                     <Label
 
                                         className="Lecture_Write_Label"

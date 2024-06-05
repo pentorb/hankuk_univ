@@ -14,7 +14,7 @@
 }
 .container_body{
   width: 1050px;
-  margin: 30px auto 100px;
+  margin: 30px auto 60px;
 }
 .table_body{
   width: 1042px;
@@ -59,16 +59,22 @@
 
 
 .Lecture_Write_body{
-  width: 970px;
-  margin: 25px auto 100px;
+  width: 1042px;
+  margin: 41px auto 100px;
 }
 .Button_Lecture_Write{
   width: 120px; height: 50px;
-  font-size: 24px;
+  font-size: 20px;
   color: white;
   border-radius: 10px;
   background-color: #1F3468;
   margin-left: 20px;
+}
+.Lecture_Write_Container{
+  background-color: rgba(194, 194, 194, 0.25);
+  border-radius: 36px;
+  margin-top: 30px;
+  padding: 40px 0 40px 36.5px;
 }
 .Lecture_Write_header{
   margin-right: 874px;
@@ -92,8 +98,7 @@
   display: inline-block;
   font-size: 24px;
   width: 322px; height: 54px;
-  background-color: rgba(194, 194, 194, 0.25);
-  border-radius: 5px;
+  border-radius: 20px;
 }
 
 
@@ -174,7 +179,7 @@
 
 .ExamQuestionForm_Body{
   width: 1042px;
-  margin: 0 auto;
+  margin: 40px auto;
 }
 .ExamQuestionForm_Body > label { 
   font-size: 20px;
@@ -209,7 +214,7 @@
   width: 50px;
 }
 .ExamQuestionForm_Button{
-  margin-left: 210.5px;
+  margin-left: 227px;
   width: 150px; height: 50px;
   font-size: 20px;
   font-weight: 900;

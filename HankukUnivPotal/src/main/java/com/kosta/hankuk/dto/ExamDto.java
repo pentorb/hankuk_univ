@@ -21,8 +21,8 @@ import lombok.ToString;
 public class ExamDto {
 	private Integer examNo;
 	private String sect;
-	private Date startDt;
-	private Date EndDt;
+	private String startDt;
+	private String EndDt;
 	private Integer Qnum;
 	private String type;
 	private String lecNo;

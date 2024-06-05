@@ -5,7 +5,7 @@ import { Grid, Paper, Typography } from '@mui/material';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router';
-import { url } from './config';
+import { url } from '../../config/config';
 import axios from 'axios';
 
 const LectureList = ({ direction, ...args }) => {
@@ -34,7 +34,7 @@ const LectureList = ({ direction, ...args }) => {
         let questions = [];
             for (let i = 0; i < lectureList.length; i++) {
                 questions.push(
-                    <div className='table_tr' onClick={()=>navigate(`/my-potal/lectureModify/${lectureList[i].lecNo}`)}>
+                    <div key={i} className='table_tr' onClick={()=>navigate(`/my-potal/lectureModify/${lectureList[i].lecNo}`)}>
                             <div className='table_td td1' style={{ marginLeft: '70px', marginRight: '50px' }}>{lectureList[i].year}</div>
                             <div className='table_td' style={{ marginLeft: '34px', marginRight: '50px' }}>{lectureList[i].semester}</div>
                             <div className='table_td' style={{ marginLeft: '150px', marginRight: '100px' }}>{lectureList[i].subName}</div>
@@ -46,10 +46,10 @@ const LectureList = ({ direction, ...args }) => {
     }
     return (
         <Grid item xs={12}>
-            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>성적조회</b></Typography>
+            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의계획서</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 성적 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>성적조회</b></Typography>
+                    <HomeIcon /> 마이페이지  <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>강의계획서</b></Typography>
                 </Typography>
                 <div className='container_body'>
                     
