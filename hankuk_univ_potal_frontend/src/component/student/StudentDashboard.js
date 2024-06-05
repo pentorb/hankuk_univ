@@ -6,6 +6,7 @@ import StudentSidebar from './StudentSidebar';
 import Grade from './Grade';
 import InsertCal from './InsertCal';
 import Calendar from './Calendar';
+import StudentMain from './StudentMain';
 
 const StudentDashboard = () => {
     return (
@@ -20,11 +21,13 @@ const StudentDashboard = () => {
                     </Grid>
                     <Grid item xs={10} sx={{ backgroundColor: "#DDE1E8" }}>                        
                         <Routes>
+                            <Route path="/" element={<StudentMain/>}></Route>
                             <Route path="/check-grade" element={<Grade/>}></Route>
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
                         </Routes>
-                    </Grid>                    
+                    </Grid>
+                   
                 </Grid>
             </Box>
         </>
