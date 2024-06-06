@@ -16,6 +16,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.kosta.hankuk.dto.ProfessorDto;
+import com.kosta.hankuk.dto.UserDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @DynamicInsert
-public class Professor {
+public class Professor implements User{
 	@Id
 	private String profNo;
 	
@@ -74,7 +75,7 @@ public class Professor {
 	@OneToMany(mappedBy="professor", fetch=FetchType.LAZY)
 	private List<Lecture> lectList = new ArrayList<>();
 	
-	public ProfessorDto toProfessor() {
+	public ProfessorDto toProfessorDto() {
 		return ProfessorDto.builder()
 				.profNo(profNo)
 				.password(password)
@@ -92,5 +93,25 @@ public class Professor {
 				.joinDt(joinDt)
 				.majCd(major.getMajCd())
 				.build();
+	}
+	
+	@Override
+	public String getId() {
+		return profNo;
+	}
+	
+	@Override
+	public String getPassword() {
+		return password;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public void setPassword(String enteredPassword) {
+		this.password = enteredPassword;
 	}
 }

@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-public class ProfessorDto {
+public class ProfessorDto implements UserDto {
 	private String profNo;
 	private String password;
 	private String name;

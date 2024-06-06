@@ -26,7 +26,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @DynamicInsert
-public class Staff {
+public class Staff implements User {
 	@Id
 	private String stfNo;
 	@Column
@@ -49,5 +49,25 @@ public class Staff {
 				.profile(profile)
 				.tel(tel)
 				.build();
+	}
+	
+	@Override
+	public String getId() {
+		return stfNo;
+	}
+	
+	@Override
+	public String getPassword() {
+		return password;
+	}
+	
+	@Override
+	public String getName() {
+		return dept;
+	}
+	
+	@Override
+	public void setPassword(String enteredPassword) {
+		this.password = enteredPassword;
 	}
 }

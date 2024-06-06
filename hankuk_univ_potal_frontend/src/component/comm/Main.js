@@ -1,5 +1,41 @@
+import { Paper } from "@mui/material";
 import Toc from "./Toc";
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { tokenAtom } from '../../atoms';
+import { useAtom } from 'jotai';
+import { useNavigate } from 'react-router-dom';
+import { url } from '../../config/config';
+
 const Main = () => {
+    const [member, setMember] = useState({
+        stdNo: '', profNo: '', stfNo: '', dept: '', name: '', position: '', joinDt: '', tel: '', addr: '', detailAddr: '', postCode: '', gender: '', birthday: '', email: '', emailDo: '', status: '', profile: '', finCredit: '', finSem: '', majCd: ''
+    })
+    const [token, setToken] = useAtom(tokenAtom);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(token);
+        axios.get(`${url}/user`,
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
+        )
+            .then(res => {
+                console.log(res);
+                if (res.headers.authorization != null) {
+                    setToken(JSON.parse(res.headers.authorization));
+                    // navigate("/");
+                } else {
+                    setMember({ ...res.data })
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [])
+
     return (
         <div style={{ width: '1300px', height: '1200px', margin: "0 auto", position: 'relative' }}>
             <div style={{ width: "1300px", height: "532px", margin: "0 auto", position: 'relative', backgroundImage: 'url(/images/background.jpg)' }}>

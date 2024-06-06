@@ -32,7 +32,7 @@ import lombok.Setter;
 @Entity
 @DynamicInsert
 @Table(name="STUDENT")
-public class Student {
+public class Student implements User {
 	@Id
 	private String stdNo;
 	
@@ -133,4 +133,36 @@ public class Student {
 				.majCd(major.getMajCd())
 				.build();
 	}
+
+
+	@Override
+	public String getId() {
+		return stdNo;
+	}
+	
+	@Override
+	public String getPassword() {
+		return password;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public void setPassword(String enteredPassword) {
+		this.password = enteredPassword;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Student [stdNo=" + stdNo + ", password=" + password + ", name=" + name + ", tel=" + tel + ", addr="
+				+ addr + ", detailAddr=" + detailAddr + ", postCode=" + postCode + ", gender=" + gender + ", birthday="
+				+ birthday + ", email=" + email + ", emailDo=" + emailDo + ", status=" + status + ", profile=" + profile
+				+ ", finCredit=" + finCredit + ", finSem=" + finSem + "]";
+	}
+	
+	
 }

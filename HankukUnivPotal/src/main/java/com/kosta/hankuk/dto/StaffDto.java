@@ -15,7 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-public class StaffDto {
+public class StaffDto implements UserDto {
 	private String stfNo;
 	private String password;
 	private String dept;

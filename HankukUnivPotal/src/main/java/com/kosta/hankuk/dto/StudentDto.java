@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-public class StudentDto {
+public class StudentDto implements UserDto {
 	private String stdNo;
 	private String password;
 	private String name;
