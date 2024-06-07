@@ -114,7 +114,7 @@ public class Student implements User {
 	
 	public StudentDto toStudentDto() {
 		return StudentDto.builder()
-				.stdNo(stdNo)
+				.id(stdNo)
 				.password(password)
 				.name(name)
 				.tel(tel)

@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class ProfessorDto implements UserDto {
-	private String profNo;
+	private String id;
 	private String password;
 	private String name;
 	private String gender;
@@ -37,7 +37,7 @@ public class ProfessorDto implements UserDto {
 	
 	public Professor toProfessor() {
 		return Professor.builder()
-				.profNo(profNo)
+				.profNo(id)
 				.password(password)
 				.name(name)
 				.gender(gender)

@@ -77,7 +77,7 @@ public class Professor implements User{
 	
 	public ProfessorDto toProfessorDto() {
 		return ProfessorDto.builder()
-				.profNo(profNo)
+				.id(profNo)
 				.password(password)
 				.name(name)
 				.gender(gender)

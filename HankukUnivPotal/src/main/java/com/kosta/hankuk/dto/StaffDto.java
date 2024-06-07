@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class StaffDto implements UserDto {
-	private String stfNo;
+	private String id;
 	private String password;
 	private String dept;
 	private String profile;
@@ -24,7 +24,7 @@ public class StaffDto implements UserDto {
 	
 	public Staff toStaff() {
 		return Staff.builder()
-				.stfNo(stfNo)
+				.stfNo(id)
 				.password(password)
 				.dept(dept)
 				.profile(profile)

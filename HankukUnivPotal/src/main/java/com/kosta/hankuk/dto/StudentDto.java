@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class StudentDto implements UserDto {
-	private String stdNo;
+	private String id;
 	private String password;
 	private String name;
 	private String tel;
@@ -40,7 +40,7 @@ public class StudentDto implements UserDto {
 	
 	public Student toStudent() {
 		return Student.builder()
-				.stdNo(stdNo)
+				.stdNo(id)
 				.password(password)
 				.name(name)
 				.tel(tel)

@@ -43,7 +43,7 @@ public class Staff implements User {
 	
 	public StaffDto toStaffDto() {
 		return StaffDto.builder()
-				.stfNo(stfNo)
+				.id(stfNo)
 				.password(password)
 				.dept(dept)
 				.profile(profile)
