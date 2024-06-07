@@ -1,11 +1,9 @@
-import { Paper } from "@mui/material";
 import Toc from "./Toc";
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { tokenAtom } from '../../atoms';
 import { useAtom } from 'jotai';
-import { useNavigate } from 'react-router-dom';
 import { url } from '../../config/config';
 
 const Main = () => {
@@ -13,7 +11,6 @@ const Main = () => {
         stdNo: '', profNo: '', stfNo: '', dept: '', name: '', position: '', joinDt: '', tel: '', addr: '', detailAddr: '', postCode: '', gender: '', birthday: '', email: '', emailDo: '', status: '', profile: '', finCredit: '', finSem: '', majCd: ''
     })
     const [token, setToken] = useAtom(tokenAtom);
-    const navigate = useNavigate();
 
     useEffect(() => {
         console.log(token);
@@ -26,7 +23,6 @@ const Main = () => {
                 console.log(res);
                 if (res.headers.authorization != null) {
                     setToken(JSON.parse(res.headers.authorization));
-                    // navigate("/");
                 } else {
                     setMember({ ...res.data })
                 }
@@ -54,7 +50,7 @@ const Main = () => {
                             끝없는 도전으로 새로운 길을 개척하는 힘
                         </div>
                     </div>
-                    <a href="/로그인" style={{
+                    <Link to="/login" style={{
                         position: 'absolute',
                         borderRadius: '50px',
                         backgroundColor: 'var(--subcolor)',
@@ -67,10 +63,9 @@ const Main = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-
                     }}>
                         <div style={{ fontSize: "25px", fontWeight: '700' }}>로그인(Login)</div>
-                    </a>
+                    </Link>
                 </div>
                 <div style={{
                     position: 'absolute',

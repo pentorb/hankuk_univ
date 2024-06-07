@@ -1,5 +1,5 @@
 import Toc from "./Toc";
-const Main = () => {
+const AccessedMain = () => {
     return (
         <div style={{ width: '1300px', height: '1200px', margin: "0 auto", position: 'relative' }}>
             <div style={{ display: 'flex', position: 'relative', zIndex: 2, marginLeft: '20px' }}> {/* 수정된 부분 */}
@@ -59,4 +59,4 @@ const Main = () => {
     );
 }
 
-export default Main;
+export default AccessedMain;

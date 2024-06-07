@@ -30,7 +30,7 @@ export default function Login() {
             .then(res=> {
                 console.log(res);
                 setToken(JSON.parse(res.headers.authorization));
-                navigate("/");
+                navigate("/main");
             })
             .catch(err=> {
                 console.log(err);

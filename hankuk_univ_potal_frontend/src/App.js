@@ -6,23 +6,19 @@ import StaffDashboard from './component/staff/StaffDashboard';
 import Main from './component/comm/Main';
 import { Routes, Route } from 'react-router-dom';
 import BoardNav from './component/comm/BoardNav';
+import Login from './component/comm/Login';
+import AccessedMain from './component/comm/AccessedMain';
 
 function App() {
-  const userType = "professor";
-
   return (
     <Routes>
       <Route exact path="/" element={<Main />} />
+      <Route exact path="/login" element={<Login />} />
+      <Route exact path="/main" element={<AccessedMain />} />
       <Route exact path='/TotalBoardlist' element={<BoardNav />} />
-      {userType === "student" &&
-        <Route exact path="/my-potal/*" element={<StudentDashboard />}></Route>
-      }
-      {userType === "professor" &&
-        <Route exact path="/my-potal/*" element={<ProfessorDashboard />}></Route>
-      }
-      {userType === "staff" &&
-        <Route exact path="/my-potal/*" element={<StaffDashboard />}></Route>
-      }      
+      <Route exact path="/professor/*" element={<ProfessorDashboard />} />
+      <Route exact path="/staff/*" element={<StaffDashboard />} />
+      <Route exact path="/student/*" element={<StudentDashboard />} />
     </Routes>
   );
 }

@@ -75,7 +75,7 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 2 &&
             <>
-              <Link to="/my-potal/lectureList">
+              <Link to="/professor/lectureList">
               <ListItemButton>
                 <ListItemText primary="강의계획서" />
               </ListItemButton>
@@ -83,7 +83,7 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 3 &&
             <>
-              <Link to="/my-potal/examQuestionForm">
+              <Link to="/professor/examQuestionForm">
               <ListItemButton>
                 <ListItemText primary="시험출제" />
               </ListItemButton>
