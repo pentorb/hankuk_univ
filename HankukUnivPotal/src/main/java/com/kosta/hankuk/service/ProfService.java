@@ -17,6 +17,8 @@ public interface ProfService {
 	
 	String lectureModify(LectureDto lectureDto) throws Exception;
 	
+	List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception;
+
 	void homeworkWrite(HomeworkDto homeworkDto) throws Exception;
 
 	HomeworkDto homeworkSelectOne(Integer homeworkNo) throws Exception;
@@ -24,6 +26,7 @@ public interface ProfService {
 	void homeworkModify(HomeworkDto homeworkDto) throws Exception;
 
 	void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception;
+
 
 	
 

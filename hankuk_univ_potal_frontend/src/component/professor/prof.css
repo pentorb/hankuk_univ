@@ -102,6 +102,63 @@
 }
 
 
+
+.LectDashboard_body{
+  width: 1138px;
+  margin: 0 auto;
+}
+.Contents_header{
+
+}
+.LectDashboard_Card{
+  width: 286px;
+  display: inline-block;
+  margin: 20px 46px;
+}
+.LectDashboard_Card_BackColor{
+  background-color: coral;
+  width: 286px; height: 100px;
+  border: #C0C0C0 0.5px;
+  
+  border-radius: 3px;
+}
+.LectDashboard_CardBody{
+  width: 286px;
+}
+.LectDashboard_CardText {
+  margin: 0;  
+}
+
+
+
+
+
+
+.Contents_Body{
+  margin: 0 auto;
+  width: 1300px;
+}
+.Contents_Top_Buttons{
+  cursor: pointer;
+  width: 56px; height: 56px;
+  margin: 10px 15px;
+  padding: 5px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: 900;
+  display: inline-block;
+  border: solid 5px;
+  border-color: #1F3468;
+}
+
+
+
+
+
+
+
+
+
 .Homework_body{
   width: 1042px; height: 600px;
   background-color: rgba(151, 152, 156, 0.1);

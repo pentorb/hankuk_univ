@@ -75,18 +75,42 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 2 &&
             <>
+<<<<<<< Updated upstream
               <Link to="/professor/lectureList">
               <ListItemButton>
                 <ListItemText primary="강의계획서" />
               </ListItemButton>
+=======
+              <Link to="/my-potal/lectureDashboard" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="강의대시보드" />
+                </ListItemButton>
+              </Link>
+              <Link to="/my-potal/lectureList" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="강의계획서" />
+                </ListItemButton>
+>>>>>>> Stashed changes
               </Link>
             </>}
           {activeTab === 3 &&
             <>
+<<<<<<< Updated upstream
               <Link to="/professor/examQuestionForm">
               <ListItemButton>
                 <ListItemText primary="시험출제" />
               </ListItemButton>
+=======
+              <Link to="/my-potal/contents" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="강의콘텐츠" />
+                </ListItemButton>
+              </Link>
+              <Link to="/my-potal/examQuestionForm" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="시험출제" />
+                </ListItemButton>
+>>>>>>> Stashed changes
               </Link>
             </>}
           {activeTab === 4 &&

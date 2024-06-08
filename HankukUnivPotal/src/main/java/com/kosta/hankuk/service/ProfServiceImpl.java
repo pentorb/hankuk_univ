@@ -69,6 +69,18 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
+	public List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception {
+		
+		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatus(profNo, year, "REQ");
+		
+		List<LectureDto> lectureDtoList = new ArrayList<LectureDto>();
+		for (Lecture lecture : lectureList) {
+			lectureDtoList.add(lecture.toLectureDto());
+		}
+		return lectureDtoList;
+	}
+	
+	@Override
 	public void homeworkWrite(HomeworkDto homeworkDto) throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -98,6 +110,8 @@ public class ProfServiceImpl implements ProfService{
 		}
 		
 	}
+
+	
 
 	
 

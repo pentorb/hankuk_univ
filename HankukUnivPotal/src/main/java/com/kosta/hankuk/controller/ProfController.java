@@ -81,6 +81,22 @@ public class ProfController {
 		}
 	}
 	
+	@GetMapping("/lectureDashboard")
+	public ResponseEntity<List<LectureDto>> lectureList(
+			@RequestParam(name = "profNo", required = false) String profNo,
+			@RequestParam(name = "year", required = false) String year) {
+		try {
+			System.out.println(profNo);
+			System.out.println(year);
+			List<LectureDto> lectureList = profService.lectureDashboard(profNo, Integer.parseInt(year));
+			System.out.println(lectureList);
+			return new ResponseEntity<List<LectureDto>>(lectureList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<LectureDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/homeworkWrite")
 	public ResponseEntity<String> homeworkWrite(@RequestBody HomeworkDto homeworkDto) {
 		try {
