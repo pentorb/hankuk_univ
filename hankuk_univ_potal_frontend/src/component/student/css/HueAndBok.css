@@ -1,0 +1,67 @@
+.t {
+    color:grey;
+    padding-bottom: 10px;
+    align-items: center;
+    display: flex;
+}
+
+.categori {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.box {
+    padding: 30px 30px 15px;
+    font-size: larger;
+    border: 3px solid rgb(192, 202, 229);
+    border-radius: 16px;
+    margin:20px 50px 40px;;
+}
+
+.title {
+    display: flex;
+    margin: 10px;
+    font-weight: bold;
+    font-size: larger;
+    text-align: left;
+}
+
+.sem {
+    color:grey;
+    padding: 0px 30px 20px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.semCg{
+    margin: 0px;
+    color: #403E98;
+    font-weight: 600;
+}
+
+.selBox{
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+.table {
+    padding: 10px;
+    border-color: gray;
+}
+
+.table th {
+    background-color: #1F3468;
+    color: #ffffff;
+}
+
+.table td{
+    background-color: #EAECF1;
+}
+
+.table td,
+.table th {
+    padding: 15px;
+    /* 간격을 늘리기 위해 패딩 값을 조정합니다 */
+}

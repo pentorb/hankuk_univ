@@ -4,7 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
 import { Table, Input, Button } from 'reactstrap';
-import '../student/css/Huehak.css';
+import '../student/css/HueAndBok.css';
 import Swal from "sweetalert2";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
