@@ -35,7 +35,9 @@ public class StudentDto implements UserDto {
 	private String profile;
 	private Integer finCredit;
 	private Integer finSem;
-	private String profNo;;
+	private String profNo;
+	private String profName;
+	private String majName;
 	private String majCd;
 	
 	public Student toStudent() {

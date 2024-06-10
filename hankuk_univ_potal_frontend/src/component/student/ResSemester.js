@@ -111,7 +111,6 @@ const ResSemester = () => {
                                         <th>처리 상태</th>
                                     </tr>
                                 </thead>
-                                
                                 <tbody>
                                     {huebok.filter(hue => hue.sect === 'H').map(hue => (
                                         <tr key={hue.hueNo}>
@@ -123,18 +122,6 @@ const ResSemester = () => {
                                         </tr>
                                     ))}
                                 </tbody>
-
-                                {/* <tbody>
-                                    {huebok.map(hue => (
-                                        <tr key={hue.hueNo}>
-                                            <td scope="row">{hue.hueNo}</td>
-                                            <td>{typeMap[hue.type] || hue.type}</td>
-                                            <td>{hue.appDt}</td>
-                                            <td>{hue.hueSem}</td>
-                                            <td>{statusMap[hue.status] || hue.status}</td>
-                                        </tr>
-                                    ))}
-                                </tbody> */}
                             </Table>
                         </div>
 
@@ -153,21 +140,23 @@ const ResSemester = () => {
                             <Table className="table" bordered>
                                 <thead>
                                     <tr>
-                                        <th>학부(과)</th>
-                                        <th>학년</th>
-                                        <th>학적 상태</th>
-                                        <th>지도교수</th>
-                                        <th>학생 연락처</th>
+                                        <th>복학 번호</th>
+                                        <th>복학 유형</th>
+                                        <th>복학 신청 일자</th>
+                                        <th>복학 학기</th>
+                                        <th>처리 상태</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">컴퓨터공학과</td>
-                                        <td>3</td>
-                                        <td>재학</td>
-                                        <td>정재형</td>
-                                        <td>010-5984-5968</td>
-                                    </tr>
+                                    {huebok.filter(hue => hue.sect === 'H').map(hue => (
+                                        <tr key={hue.hueNo}>
+                                            <td scope="row">{hue.hueNo}</td>
+                                            <td>{typeMap[hue.type] || hue.type}</td>
+                                            <td>{hue.appDt}</td>
+                                            <td>{hue.hueSem}</td>
+                                            <td>{statusMap[hue.status] || hue.status}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
                         </div>
