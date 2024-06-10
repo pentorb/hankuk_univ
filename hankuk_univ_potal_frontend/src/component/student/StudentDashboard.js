@@ -7,6 +7,8 @@ import InsertCal from './InsertCal';
 import Calendar from './Calendar';
 import StudentMain from './StudentMain';
 import HuehakInsert from './HuehakInsert';
+import BokhakInsert from './BokhakInsert';
+import ResSemester from './ResSemester';
 import Header from '../comm/Header';
 
 const StudentDashboard = () => {
@@ -23,6 +25,8 @@ const StudentDashboard = () => {
                     <Grid item xs={10} sx={{ backgroundColor: "#DDE1E8" }}>                        
                         <Routes>
                             <Route path="/regHuehak" element={<HuehakInsert/>}></Route>
+                            <Route path="/regBokhak" element={<BokhakInsert/>}></Route>
+                            <Route path="/resSemester" element={<ResSemester/>}></Route>
                             <Route path="/" element={<StudentMain/>}></Route>
                             <Route path="/check-grade" element={<Grade/>}></Route>
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
