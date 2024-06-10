@@ -10,12 +10,13 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import axios from 'axios';
 import { url } from '../../config/config';
-import {useSetAtom} from 'jotai';
-import { tokenAtom } from '../../atoms';
+import { useSetAtom} from 'jotai';
+import { tokenAtom, memberAtom } from '../../atoms';
 
 export default function Login() {
     const [member, setMember] = useState({username:'', password:''})
     const setToken = useSetAtom(tokenAtom)
+    const setMemberAtom = useSetAtom(memberAtom)
     const navigate = useNavigate();
 
     const changeValue = (e) => {
@@ -30,7 +31,15 @@ export default function Login() {
             .then(res=> {
                 console.log(res);
                 setToken(JSON.parse(res.headers.authorization));
-                navigate("/main");
+                axios.get(`${url}/user`, {headers: { Authorization: res.headers.authorization }})
+                .then(res => {
+                        console.log(res.data)
+                        setMemberAtom(res.data)
+                        navigate("/main");
+                })
+                .catch(err => {
+                    console.log(err);
+                });                
             })
             .catch(err=> {
                 console.log(err);

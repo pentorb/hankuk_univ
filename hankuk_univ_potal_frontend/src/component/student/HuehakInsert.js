@@ -8,10 +8,16 @@ import '../student/css/HueAndBok.css';
 import Swal from "sweetalert2";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { useAtom, useAtomValue } from 'jotai/react';
+import { url } from '../../config/config';
+import { tokenAtom, memberAtom } from '../../atoms';
 import React from 'react';
 
 const HuehakInsert = () => {
     const navigate = useNavigate();
+    const member = useAtomValue(memberAtom);
+    const token = useAtomValue(tokenAtom);
+
     const text = {
         display: "flex",
         margin: "10px",
@@ -29,18 +35,18 @@ const HuehakInsert = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            cancelButtonText:"취소",
+            cancelButtonText: "취소",
             confirmButtonText: "확인"
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-              submit(e);
+                submit(e);
             }
-          });
+        });
     }
 
     const [formValues, setFormValues] = React.useState({
-        name: '',
-        stdNo: '',
+        // name: '',
+        stdNo: member.id,
         type: '',
         year: '',
         sem: '',
@@ -53,20 +59,21 @@ const HuehakInsert = () => {
         setFormValues({ ...formValues, [name]: value });
     }
 
-
     const submit = (e) => {
         const formData = new FormData();
-        formData.append("name", formValues.name);
-        formData.append("stdNo", formValues.stdNo);
+        // formData.append("name", formValues.name);
+        formData.append("stdNo", member.id);
         formData.append("type", formValues.type);
         formData.append("hueSem", formValues.year + formValues.sem);
         formData.append("files", formValues.files);
         formData.append("reason", formValues.reason);
 
-        axios.post('http://localhost:8090/hueInsert', formData)
+        axios.post(`${url}/hueInsert`, formData, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
             .then(res => {
                 console.log(res.data);
-                navigate('/my-potal/regHuehak')
+                navigate('/student/resSemester')
             })
             .catch(err => {
                 console.log(err)
@@ -102,11 +109,11 @@ const HuehakInsert = () => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td scope="row">컴퓨터공학과</td>
+                                        <td scope="row">{member.majName}</td>
                                         <td>3</td>
-                                        <td>재학</td>
-                                        <td>정재형</td>
-                                        <td>010-5984-5968</td>
+                                        <td>{member.status}</td>
+                                        <td>{member.profName}</td>
+                                        <td>{member.tel}</td>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -122,7 +129,8 @@ const HuehakInsert = () => {
                                     <div style={text} className="col-4">이름</div>
                                     <div className="col-6">
                                         <Input type="text" id="name" name="name"
-                                            placeholder='이름'
+                                            placeholder={member.name}
+                                            disabled
                                             onChange={dataChange}
                                         />
                                     </div>
@@ -131,7 +139,8 @@ const HuehakInsert = () => {
                                     <div style={text} className="col-4">학번</div>
                                     <div className="col-6">
                                         <Input type="text" id="stdNo" name="stdNo"
-                                            placeholder='학번'
+                                            placeholder={member.id}
+                                            disabled
                                             onChange={dataChange}
                                         />
                                     </div>
@@ -143,10 +152,16 @@ const HuehakInsert = () => {
                                             onChange={dataChange}>
                                             <option>---선택하세요---</option>
                                             <option value="o">일반 휴학</option>
-                                            <option value="m">군 휴학</option>
+                                            {member.gender !== 'F' ?
+                                                (<>
+                                                    <option value="m">군 휴학</option>
+                                                </>
+                                                ) : (<></>)
+                                            }
                                             <option value="p">출산, 임신 휴학</option>
                                             <option value="s">창업 휴학</option>
                                             <option value="i">질병 휴학</option>
+                                            <option value="k">육아 복학</option>
                                         </Input>
                                     </div>
                                 </div>

@@ -74,7 +74,7 @@ const Main = () => {
                     width: '100px',
                     height: '400px'
                 }}>
-                    <Toc />
+                    {/* <Toc /> */}
                 </div>
                 <span style={{ display: 'flex' }}>
                     <div style={{ width: '450px', height: '450px', borderRadius: '15px 15px 0 0', backgroundColor: "var(--maincolor)", marginTop: "120px", marginLeft: '60px' }}>

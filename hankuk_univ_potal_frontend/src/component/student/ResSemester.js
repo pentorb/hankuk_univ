@@ -3,16 +3,46 @@ import { Paper, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
-import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { Table, Input, Button } from 'reactstrap';
 import '../student/css/HueAndBok.css';
-import Swal from "sweetalert2";
 import axios from 'axios';
-import { useNavigate } from 'react-router';
 import React from 'react';
+import { useEffect, useState } from "react";
+import { useAtom, useAtomValue } from 'jotai/react';
+import { url } from '../../config/config';
+import { tokenAtom, memberAtom } from '../../atoms';
 
 const ResSemester = () => {
+    const [huebok, setHuebok] = useState([]);
+    const token = useAtomValue(tokenAtom);
+    const member = useAtomValue(memberAtom);
+    
+    const typeMap = {
+        p: '출산, 임신 휴학',
+        k: '육아 휴학',
+        o: '일반 휴학',
+        m: '군 휴학',
+        s: '창업 휴학',
+        i: '질병 휴학'
+    };
+    
+    const statusMap = {
+        REQ: '신청',
+        REJ: '반려',
+        APP: '승인'
+    };
+    
 
+    useEffect(() => {
+        console.log(token);
+        if(token.access_token==='') return
+
+        axios.get(`${url}/hueListByStdNo?stdNo=${member.id}`, { headers: { Authorization: JSON.stringify(token) } })
+            .then(res => {
+                console.log(res.data);
+                setHuebok([...res.data])
+            });
+    }, [token]);
 
     return (
         <Grid item xs={12}>
@@ -34,11 +64,15 @@ const ResSemester = () => {
                             <div style={{ display: 'flex' }}>
                                 <div className="col-6">
                                     <div className="sem"><p className="semCg">- 일반 휴학</p><div>8</div></div>
-                                    <div className="sem"><p className="semCg">- 임신 출산 휴학</p><div>8</div></div>
+                                    <div className="sem"><p className="semCg">- 임신 출산 휴학</p>
+                                        {member.gender !== 'M' ? (<><div>8</div></>) : (<><div>해당 없음</div></>)}
+                                    </div>
                                     <div className="sem"><p className="semCg">- 질병 휴학</p><div>8</div></div>
                                 </div>
                                 <div className="col-6">
-                                    <div className="sem"><p className="semCg">- 군 휴학</p><div>8</div></div>
+                                    <div className="sem"><p className="semCg">- 군 휴학</p>
+                                        {member.gender !== 'F' ? (<><div>8</div></>) : (<><div>해당 없음</div></>)}
+                                    </div>
                                     <div className="sem"><p className="semCg">- 육아 휴학</p><div>8</div></div>
                                     <div className="sem"><p className="semCg">- 창업 휴학</p><div>8</div></div>
                                 </div>
@@ -49,38 +83,58 @@ const ResSemester = () => {
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>휴학 신청 현황</b></span>
                         </div>
-                        <div style={{ padding: '10px 10px 50px', textAlign: 'center', fontSize: 'larger' }}>
-                            <div style={{display:'flex', justifyContent:'flex-end'}}>
+                        <div style={{ padding: '0px 50px 30px', textAlign: 'center', fontSize: 'larger' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Input type="select" className="selBox">
-                                    <option>구분</option>
-                                    <option>구분</option>
-                                    <option>구분</option>
+                                    <option>처리 현황</option>
+                                    <option value="REQ">신청</option>
+                                    <option value="REJ">반려</option>
+                                    <option value="APP">완료</option>
                                 </Input>&nbsp;&nbsp;&nbsp;
-                                <Input type="select" className="selBox">
-                                    <option>상태</option>
-                                    <option>신청</option>
-                                    <option>완료</option>
+                                <Input type="select" className="selBox" id="type" name="type">
+                                    <option>구분</option>
+                                    <option value="o">일반 휴학</option>
+                                    {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}
+                                    <option value="p">출산, 임신 휴학</option>
+                                    <option value="s">창업 휴학</option>
+                                    <option value="i">질병 휴학</option>
+                                    <option value="k">육아 복학</option>
                                 </Input>
                             </div>
                             <Table className="table" bordered>
                                 <thead>
                                     <tr>
-                                        <th>학부(과)</th>
-                                        <th>학년</th>
-                                        <th>학적 상태</th>
-                                        <th>지도교수</th>
-                                        <th>학생 연락처</th>
+                                        <th>휴학 번호</th>
+                                        <th>휴학 유형</th>
+                                        <th>휴학 신청 일자</th>
+                                        <th>휴학 학기</th>
+                                        <th>처리 상태</th>
                                     </tr>
                                 </thead>
+                                
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">컴퓨터공학과</td>
-                                        <td>3</td>
-                                        <td>재학</td>
-                                        <td>정재형</td>
-                                        <td>010-5984-5968</td>
-                                    </tr>
+                                    {huebok.filter(hue => hue.sect === 'H').map(hue => (
+                                        <tr key={hue.hueNo}>
+                                            <td scope="row">{hue.hueNo}</td>
+                                            <td>{typeMap[hue.type] || hue.type}</td>
+                                            <td>{hue.appDt}</td>
+                                            <td>{hue.hueSem}</td>
+                                            <td>{statusMap[hue.status] || hue.status}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
+
+                                {/* <tbody>
+                                    {huebok.map(hue => (
+                                        <tr key={hue.hueNo}>
+                                            <td scope="row">{hue.hueNo}</td>
+                                            <td>{typeMap[hue.type] || hue.type}</td>
+                                            <td>{hue.appDt}</td>
+                                            <td>{hue.hueSem}</td>
+                                            <td>{statusMap[hue.status] || hue.status}</td>
+                                        </tr>
+                                    ))}
+                                </tbody> */}
                             </Table>
                         </div>
 
@@ -88,13 +142,8 @@ const ResSemester = () => {
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>복학 신청 현황</b></span>
                         </div>
-                        <div style={{ padding: '10px 10px 50px', textAlign: 'center', fontSize: 'larger' }}>
-                        <div style={{display:'flex', justifyContent:'flex-end'}}>
-                                <Input type="select" className="selBox">
-                                    <option>구분</option>
-                                    <option>구분</option>
-                                    <option>구분</option>
-                                </Input>&nbsp;&nbsp;&nbsp;
+                        <div style={{ padding: '0px 50px 30px', textAlign: 'center', fontSize: 'larger' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Input type="select" className="selBox">
                                     <option>상태</option>
                                     <option>신청</option>
