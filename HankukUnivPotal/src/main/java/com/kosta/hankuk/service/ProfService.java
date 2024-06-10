@@ -6,6 +6,7 @@ import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
+import com.kosta.hankuk.dto.LessonDataDto;
 
 public interface ProfService {
 	
@@ -18,6 +19,10 @@ public interface ProfService {
 	String lectureModify(LectureDto lectureDto) throws Exception;
 	
 	List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception;
+	
+	List<LessonDataDto> lessonDataList(String lecNo) throws Exception;
+
+	List<HomeworkDto> homeworkList(String lecNo) throws Exception;
 
 	void homeworkWrite(HomeworkDto homeworkDto) throws Exception;
 
@@ -26,6 +31,8 @@ public interface ProfService {
 	void homeworkModify(HomeworkDto homeworkDto) throws Exception;
 
 	void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception;
+
+	
 
 
 	

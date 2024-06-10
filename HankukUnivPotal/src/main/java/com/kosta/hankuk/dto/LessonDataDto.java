@@ -22,6 +22,8 @@ public class LessonDataDto {
 	private String content;
 	private String file;
 	private Integer lessonNo;
+	private Integer week;
+	private Integer lessonCnt;
 
 	public LessonData toLessonData() {
 		return LessonData.builder()

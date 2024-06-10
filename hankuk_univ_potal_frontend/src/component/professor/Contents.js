@@ -5,10 +5,19 @@ import { Button, Card, CardBody, Collapse } from "reactstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
+import { useAtom } from "jotai";
+import { tokenAtom } from "../../atoms";
+import { useParams } from "react-router";
 
 const Contents = () => {
+    const [token, setToken] = useAtom(tokenAtom);
+    const { lecNo } = useParams();
+    const [lessonDataList, setLessonDataList] = useState([]);
+    const [homeworkList, setHomeworkList] = useState([]);
     const [lessonList, setLessonList] = useState([]);
     const [openIndexes, setOpenIndexes] = useState([]);
+
+    
 
     const toggle = (index) => {
         setOpenIndexes((prevState) => {
@@ -21,24 +30,33 @@ const Contents = () => {
     };
 
     useEffect(() => {
+        
         const fetchLessons = async () => {
             try {
-                const response = await axios.get(`${url}/contents/lecNo=`);
+                const response = await axios.get(`${url}/contents?lecNo=${lecNo}`,
+                {
+                    headers: { Authorization: JSON.stringify(token) }
+                }
+                );
                 // Assuming response.data is an array of lessons
-                setLessonList(response.data);
+                console.log(response.data);
+                setLessonDataList(response.data.lessonDataList);
+                setHomeworkList(response.data.homeworkList);
+                let mockData = [];
+                for (let index = 0; index < 15; index++) {
+                    mockData.push({ week: index + 1, });
+                }
+                setLessonList(mockData);
             } catch (error) {
                 console.error("Error fetching lessons", error);
                 // Mock data in case of error
-                let mockData = [];
-                for (let index = 0; index < 15; index++) {
-                    mockData.push({ week: index + 1, content: `Content for week ${index + 1}` });
-                }
-                setLessonList(mockData);
+                
             }
         };
 
         fetchLessons();
     }, []);
+
 
     return (
         <Grid item xs={12}>
@@ -69,6 +87,7 @@ const Contents = () => {
                             <Collapse isOpen={openIndexes.includes(i)}>
                                 <Card>
                                     <CardBody>
+                                        <Button onClick={(i)=>navigator(`/homeworkWrite/${i+1}`)}>과제등록</Button>
                                         {lesson.content}
                                     </CardBody>
                                 </Card>

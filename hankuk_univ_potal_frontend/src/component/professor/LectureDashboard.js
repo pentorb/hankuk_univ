@@ -6,9 +6,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
+import { useAtom } from "jotai";
+import { tokenAtom } from "../../atoms";
 
 const LectureDashboard = () => {
-    const [profNo, setProfNo] = useState("1001");
+    const [token, setToken] = useAtom(tokenAtom);
+
+    const [profNo, setProfNo] = useState("P1001");
 
     // private String lecNo;
 	// private Integer credit;
@@ -39,7 +43,11 @@ const LectureDashboard = () => {
         const date = new Date();
         const year = date.getFullYear();
         console.log(year);
-        axios.get(`${url}/lectureDashboard?profNo=${profNo}&year=${year}`)
+        axios.get(`${url}/lectureDashboard?profNo=${profNo}&year=${year}`,
+        {
+            headers: { Authorization: JSON.stringify(token) }
+        }
+        )
             .then(res => {
                 console.log(res);
                 setLectureList([...res.data])
@@ -48,6 +56,13 @@ const LectureDashboard = () => {
                 console.log(err);
             })
     }, [])
+
+    const contents = (index) => {
+        lectureList.map((lecture, i) =>
+            i === index ? navigate(`/professor/contents/${lecture.lecNo}`) : null
+        );
+        
+    }
 
     return (
         <Grid item xs={12}>
@@ -59,16 +74,13 @@ const LectureDashboard = () => {
                 <Grid >
                     <div className="LectDashboard_body">
                             {lectureList.map((lecture, i) => (
-                                <Card
+                                <Card key={i}
                                     className="LectDashboard_Card"
-                                    // style={{
-                                    //     width: '286px' 
-                                    // }}
+                                    onClick={()=>contents(i)}
                                 >
                                     <Label className="LectDashboard_Card_BackColor"/>
                                     
-                                    <CardBody className="LectDashboard_CardBody">  
-                                        <CardTitle tag="h5">
+                                    <CardBody className="LectDashboard_CardBody">                                        <CardTitle tag="h5">
                                             {lecture.subName}
                                         </CardTitle>
                                         

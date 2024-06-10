@@ -75,12 +75,12 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 2 &&
             <>
-              <Link to="/my-potal/lectureDashboard" style={{ textDecoration: "none", color: 'black' }}>
+              <Link to="/professor/lectureDashboard" style={{ textDecoration: "none", color: 'black' }}>
                 <ListItemButton>
                   <ListItemText primary="강의대시보드" />
                 </ListItemButton>
               </Link>
-              <Link to="/my-potal/lectureList" style={{ textDecoration: "none", color: 'black' }}>
+              <Link to="/professor/lectureList" style={{ textDecoration: "none", color: 'black' }}>
                 <ListItemButton>
                   <ListItemText primary="강의계획서" />
                 </ListItemButton>
@@ -88,12 +88,12 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 3 &&
             <>
-              <Link to="/my-potal/contents" style={{ textDecoration: "none", color: 'black' }}>
+              <Link to="/professor/contents" style={{ textDecoration: "none", color: 'black' }}>
                 <ListItemButton>
                   <ListItemText primary="강의콘텐츠" />
                 </ListItemButton>
               </Link>
-              <Link to="/my-potal/examQuestionForm" style={{ textDecoration: "none", color: 'black' }}>
+              <Link to="/professor/examQuestionForm" style={{ textDecoration: "none", color: 'black' }}>
                 <ListItemButton>
                   <ListItemText primary="시험출제" />
                 </ListItemButton>

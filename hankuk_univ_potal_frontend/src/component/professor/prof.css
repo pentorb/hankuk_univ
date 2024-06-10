@@ -114,6 +114,7 @@
   width: 286px;
   display: inline-block;
   margin: 20px 46px;
+  cursor: pointer;
 }
 .LectDashboard_Card_BackColor{
   background-color: coral;

@@ -7,11 +7,14 @@ import axios from "axios";
 import {url} from '../../config/config';
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useAtom } from "jotai";
+import { tokenAtom } from "../../atoms";
 const LectureWrite = () => {
-    
+    const [token, setToken] = useAtom(tokenAtom);
+
     const [lecture, setLecture] = useState(
         {
-            lecNo:'CSCS04',year:0,semester:'',subCd:'',credit:0,
+            lecNo:'CSCS05',year:0,semester:'',subCd:'',credit:0,
             sect:'',time1:'',time2:'',profNo:''
         })
     const navigate=useNavigate();
@@ -31,10 +34,14 @@ const LectureWrite = () => {
         formData.append("time1", lecture.time1);
         formData.append("time2", lecture.time2);
         formData.append("profNo", lecture.profNo);
-        axios.post(`${url}/lectureWrite`,formData)
+        axios.post(`${url}/lectureWrite`,formData, 
+        {
+            headers: { Authorization: JSON.stringify(token) }
+        }
+        )
             .then(res=>{
                 console.log(res)
-                navigate('/my-potal/lectureList');
+                navigate('/professor/lectureList');
             })
             .catch(err=>{
                 console.log(err)
@@ -51,7 +58,7 @@ const LectureWrite = () => {
                 <div className="Lecture_Write_body">
                     <div style={{ marginLeft: "736px" }}>
                         <Button
-                            onClick={()=>navigate('/my-potal/lectureList')}
+                            onClick={()=>navigate('/professor/lectureList')}
                             className='Button_Lecture_Write'
                         >
                             목록

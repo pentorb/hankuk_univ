@@ -10,11 +10,16 @@ import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
+import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.entity.Exam;
+import com.kosta.hankuk.entity.Homework;
 import com.kosta.hankuk.entity.Lecture;
+import com.kosta.hankuk.entity.LessonData;
 import com.kosta.hankuk.repository.ExamQuesRepository;
 import com.kosta.hankuk.repository.ExamRepository;
+import com.kosta.hankuk.repository.HomeworkRepository;
 import com.kosta.hankuk.repository.LectureRepository;
+import com.kosta.hankuk.repository.LessonDataRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +30,8 @@ public class ProfServiceImpl implements ProfService{
 	private final LectureRepository lectureRepository;
 	private final ExamRepository examRepository;
 	private final ExamQuesRepository examQuesRepository;
+	private final LessonDataRepository lessonDataRepository;
+	private final HomeworkRepository homeworkRepository;
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -81,6 +88,26 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
+	public List<LessonDataDto> lessonDataList(String lecNo) throws Exception {
+		List<LessonData> lessonDataList = lessonDataRepository.findByLesson_Lecture_lecNo(lecNo);
+		List<LessonDataDto> lessonDataDtoList = new ArrayList<LessonDataDto>();
+		for (LessonData lessonData : lessonDataList) {
+			lessonDataDtoList.add(lessonData.toLessonDataDto());
+		}
+		return lessonDataDtoList;
+	}
+
+	@Override
+	public List<HomeworkDto> homeworkList(String lecNo) throws Exception {
+		List<Homework> homeworkList = homeworkRepository.findByLesson_Lecture_lecNo(lecNo);
+		List<HomeworkDto> homeworkDtoList = new ArrayList<HomeworkDto>();
+		for (Homework Homework : homeworkList) {
+			homeworkDtoList.add(Homework.toHomeworkDto());
+		}
+		return homeworkDtoList;
+	}
+	
+	@Override
 	public void homeworkWrite(HomeworkDto homeworkDto) throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -110,6 +137,8 @@ public class ProfServiceImpl implements ProfService{
 		}
 		
 	}
+
+	
 
 	
 

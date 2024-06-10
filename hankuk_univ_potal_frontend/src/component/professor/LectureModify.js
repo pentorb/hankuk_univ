@@ -7,15 +7,23 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
+import { useAtom } from "jotai";
+import { tokenAtom } from "../../atoms";
 
 const LectureModify = () => {
+    const [token, setToken] = useAtom(tokenAtom);
+
     const { lecNo } = useParams();
     const [lecture, setLecture] = useState({});
 
     const navigate=useNavigate();
 
     useEffect(() => {
-        axios.get(`${url}/lectureDetail/${lecNo}`)
+        axios.get(`${url}/lectureDetail/${lecNo}`,
+        {
+            headers: { Authorization: JSON.stringify(token) }
+        }
+        )
             .then(res => {
                 console.log(res);
                 setLecture(res.data);
@@ -39,7 +47,7 @@ const LectureModify = () => {
         axios.post(`${url}/lectureModify`,formData)
             .then(res=>{
                 console.log(res)
-                navigate('/my-potal/lectureList');
+                navigate('/professor/lectureList');
             })
             .catch(err=>{
                 console.log(err)
@@ -62,7 +70,7 @@ const LectureModify = () => {
                 <div className="Lecture_Write_body">
                     <div style={{ marginLeft: "736px" }}>
                         <Button
-                            onClick={()=>navigate('/my-potal/lectureList')}
+                            onClick={()=>navigate('/professor/lectureList')}
                             className='Button_Lecture_Write'
                         >
                             목록

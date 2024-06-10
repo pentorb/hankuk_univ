@@ -15,7 +15,7 @@ import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import './css/studentSidebar.css';
+// import './css/studentSidebar.css';
 
 export default function StudentSidebar() {
   const [selectedIndex, setSelectedIndex] = useState(0);

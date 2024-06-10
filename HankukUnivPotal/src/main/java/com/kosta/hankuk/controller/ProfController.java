@@ -1,6 +1,7 @@
 package com.kosta.hankuk.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +98,21 @@ public class ProfController {
 		}
 	}
 	
+	
+	
+	@GetMapping("/contents")
+	public ResponseEntity<Map<String, Object>> contents(
+			@RequestParam(name = "lecNo", required = false) String lecNo){
+		try {
+			Map<String, Object> contents = new HashMap<String, Object>();
+			contents.put("lessonDataList", profService.lessonDataList(lecNo));
+			contents.put("homeworkList", profService.homeworkList(lecNo));
+			return new ResponseEntity<Map<String, Object>>(contents, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
 	@PostMapping("/homeworkWrite")
 	public ResponseEntity<String> homeworkWrite(@RequestBody HomeworkDto homeworkDto) {
 		try {

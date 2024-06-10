@@ -48,6 +48,8 @@ public class LessonData {
 				.content(content)
 				.file(file)
 				.lessonNo(lesson.getLessonNo())
+				.week(lesson.getWeek())
+				.lessonCnt(lesson.getLessonCnt())
 				.build();
 	}
 }
