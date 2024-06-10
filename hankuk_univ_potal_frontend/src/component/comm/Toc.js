@@ -23,8 +23,6 @@ const Toc = () => {
                 console.log(res);
                 if (res.headers.authorization != null) {
                     setToken(JSON.parse(res.headers.authorization));
-                    console.log(member);
-
                 } else {
                     setMember({ ...res.data });
                 }
