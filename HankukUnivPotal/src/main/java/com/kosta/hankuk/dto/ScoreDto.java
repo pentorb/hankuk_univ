@@ -21,7 +21,7 @@ public class ScoreDto {
 	private String stdNo;
 	private Integer getCredit;
 	private Integer rank;
-	private Integer score;
+	private Double score;
 	
 	public Score score() {
 		return Score.builder()

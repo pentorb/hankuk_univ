@@ -55,7 +55,7 @@ public class Lecture {
 	@Column
 	private Integer year;
 	@Column
-	private String semester;
+	private Integer semester;
 
 	// 과목코드
 	@ManyToOne(fetch=FetchType.EAGER)

@@ -29,7 +29,7 @@ public class LectureDto {
 	private String status;
 	private Boolean isScoreChk;
 	private Integer year;
-	private String semester;
+	private Integer semester;
 	private String subCd;
 	private String profNo;
 	private String profName;

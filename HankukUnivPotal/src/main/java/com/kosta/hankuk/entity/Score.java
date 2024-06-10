@@ -40,7 +40,11 @@ public class Score {
 	@Column
 	private Integer rank;
 	@Column
-	private Integer score;
+	private Double score;
+	@Column
+	private Integer year;
+	@Column
+	private Integer semester;
 	
 	private ScoreDto toScoreDto() {
 		return ScoreDto.builder()
