@@ -72,17 +72,21 @@ export default function StudentSidebar() {
               </ListItemButton>
               <Collapse in={firstOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
+                  <Link to="/student/resSemester"  style={{textDecoration:"none", color:'black'}}>
                   <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)}>
                     <ListItemText primary="상세보기" />
                   </ListItemButton>
+                  </Link>
                   <Link to="/student/regHuehak" style={{textDecoration:"none", color:'black'}}>
                   <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 2} onClick={(e) => handleListItemClick(e, 2)}>
                     <ListItemText primary="휴학신청" />
                   </ListItemButton>
                   </Link>
+                  <Link to="/student/regBokhak" style={{textDecoration:"none", color:'black'}}>
                   <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 3} onClick={(e) => handleListItemClick(e, 3)}>
                     <ListItemText primary="복학신청" />
                   </ListItemButton>
+                  </Link>
                 </List>
               </Collapse>
               <ListItemButton onClick={handleSecondClick}>
