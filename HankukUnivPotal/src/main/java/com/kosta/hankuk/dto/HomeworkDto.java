@@ -3,6 +3,7 @@ package com.kosta.hankuk.dto;
 import java.sql.Date;
 
 import com.kosta.hankuk.entity.Homework;
+import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.Lesson;
 
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class HomeworkDto {
 	private String lecNo;
 	private Integer lessonNo;
 	private Integer week;
+	private Integer lessonCnt;
 	
 	public Homework toHomework() {
 		return Homework.builder()
@@ -38,6 +40,7 @@ public class HomeworkDto {
 				.title(title)
 				.content(content)
 				.files(files)
+				.lecture(Lecture.builder().lecNo(lecNo).build())
 				.lesson(Lesson.builder().lessonNo(lessonNo).build())
 				.build();
 	}

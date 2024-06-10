@@ -26,7 +26,7 @@ public interface ProfService {
 
 	void homeworkWrite(HomeworkDto homeworkDto) throws Exception;
 
-	HomeworkDto homeworkSelectOne(Integer homeworkNo) throws Exception;
+	HomeworkDto homeworkSelectOne(Integer hwNo) throws Exception;
 
 	void homeworkModify(HomeworkDto homeworkDto) throws Exception;
 

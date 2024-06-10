@@ -283,7 +283,6 @@ const LectureModify = () => {
                                             name="email"
                                             type="email"
                                             onChange={changeValue}
-                                            value={lecture.email}
                                         />
                                     </FormGroup>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -299,7 +298,6 @@ const LectureModify = () => {
                                             name="tel"
                                             type="tel"
                                             onChange={changeValue}
-                                            value={lecture.tel}
                                         />
                                     </FormGroup>
                                 </div>
