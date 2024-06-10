@@ -129,8 +129,8 @@ public class Student implements User {
 				.profile(profile)
 				.finCredit(finCredit)
 				.finSem(finSem)
-				.profNo(professor.getProfNo())
-				.majCd(major.getMajCd())
+				.profName(professor.getName())
+				.majName(major.getName())
 				.build();
 	}
 

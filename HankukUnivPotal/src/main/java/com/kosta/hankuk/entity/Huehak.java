@@ -55,6 +55,7 @@ public class Huehak {
 	private String status;
 	
 	@Column // 휴학인지 복학인지
+	@ColumnDefault("'H'")
 	private String sect;
 	
 	@Column // 어떤 휴학 유형인지
