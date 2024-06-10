@@ -20,6 +20,7 @@ import com.kosta.hankuk.repository.ExamRepository;
 import com.kosta.hankuk.repository.HomeworkRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.LessonDataRepository;
+import com.kosta.hankuk.repository.LessonRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +33,7 @@ public class ProfServiceImpl implements ProfService{
 	private final ExamQuesRepository examQuesRepository;
 	private final LessonDataRepository lessonDataRepository;
 	private final HomeworkRepository homeworkRepository;
+	private final LessonRepository lessonRepository;
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -109,20 +111,19 @@ public class ProfServiceImpl implements ProfService{
 	
 	@Override
 	public void homeworkWrite(HomeworkDto homeworkDto) throws Exception {
-		// TODO Auto-generated method stub
-		
+		homeworkDto.setLessonNo(lessonRepository.findByLecture_lecNoAndWeekAndLessonCnt(
+				homeworkDto.getLecNo(), homeworkDto.getWeek(), homeworkDto.getLessonCnt()).get().getLessonNo());
+		homeworkRepository.save(homeworkDto.toHomework());
 	}
 
 	@Override
-	public HomeworkDto homeworkSelectOne(Integer homeworkNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public HomeworkDto homeworkSelectOne(Integer hwNo) throws Exception {
+		return homeworkRepository.findById(hwNo).get().toHomeworkDto();
 	}
 
 	@Override
 	public void homeworkModify(HomeworkDto homeworkDto) throws Exception {
-		// TODO Auto-generated method stub
-		
+		homeworkRepository.save(homeworkDto.toHomework());
 	}
 
 	@Override

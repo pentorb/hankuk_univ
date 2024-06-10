@@ -113,9 +113,15 @@ public class ProfController {
 			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 	@PostMapping("/homeworkWrite")
-	public ResponseEntity<String> homeworkWrite(@RequestBody HomeworkDto homeworkDto) {
+	public ResponseEntity<String> homeworkWrite(@RequestBody Map<String, Object> param) {
 		try {
+			System.out.println(param);
+			Map<String, Object> homeworkParam = (Map<String, Object>)param.get("homework");
+			ObjectMapper objectMapper = new ObjectMapper();
+			HomeworkDto homeworkDto = objectMapper.convertValue(homeworkParam, HomeworkDto.class);
+			System.out.println(homeworkDto);
 			profService.homeworkWrite(homeworkDto);
 			return new ResponseEntity<String>("과제가 등록되었습니다", HttpStatus.OK);
 		} catch (Exception e) {
@@ -124,10 +130,11 @@ public class ProfController {
 		}
 	}
 	
-	@GetMapping("/homeworkModifyForm/{homeworkNo}")
-	public ResponseEntity<HomeworkDto> homeworkModifyForm(@PathVariable Integer homeworkNo){
+	@GetMapping("/homeworkDetail/{hwNo}")
+	public ResponseEntity<HomeworkDto> homeworkModifyForm(@PathVariable Integer hwNo){
 		try {
-			HomeworkDto homeworkDto = profService.homeworkSelectOne(homeworkNo);
+			System.out.println(hwNo);
+			HomeworkDto homeworkDto = profService.homeworkSelectOne(hwNo);
 			return new ResponseEntity<HomeworkDto>(homeworkDto, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -136,8 +143,12 @@ public class ProfController {
 	}
 	
 	@PostMapping("/homeworkModify")
-	public ResponseEntity<String> homeworkModify(@RequestBody HomeworkDto homeworkDto){
+	public ResponseEntity<String> homeworkModify(@RequestBody Map<String, Object> param){
 		try {
+			System.out.println(param);
+			Map<String, Object> homeworkParam = (Map<String, Object>)param.get("homework");
+			ObjectMapper objectMapper = new ObjectMapper();
+			HomeworkDto homeworkDto = objectMapper.convertValue(homeworkParam, HomeworkDto.class);
 			profService.homeworkModify(homeworkDto);
 			return new ResponseEntity<String>("과제가 수정되었습니다", HttpStatus.OK);
 		} catch (Exception e) {

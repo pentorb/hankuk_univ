@@ -7,7 +7,7 @@ import axios from "axios";
 import { url } from "../../config/config";
 import { useAtom } from "jotai";
 import { tokenAtom } from "../../atoms";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 const Contents = () => {
     const [token, setToken] = useAtom(tokenAtom);
@@ -17,7 +17,7 @@ const Contents = () => {
     const [lessonList, setLessonList] = useState([]);
     const [openIndexes, setOpenIndexes] = useState([]);
 
-    
+    const navigate = useNavigate();
 
     const toggle = (index) => {
         setOpenIndexes((prevState) => {
@@ -30,13 +30,13 @@ const Contents = () => {
     };
 
     useEffect(() => {
-        
+
         const fetchLessons = async () => {
             try {
                 const response = await axios.get(`${url}/contents?lecNo=${lecNo}`,
-                {
-                    headers: { Authorization: JSON.stringify(token) }
-                }
+                    {
+                        headers: { Authorization: JSON.stringify(token) }
+                    }
                 );
                 // Assuming response.data is an array of lessons
                 console.log(response.data);
@@ -44,17 +44,31 @@ const Contents = () => {
                 setHomeworkList(response.data.homeworkList);
                 let mockData = [];
                 for (let index = 0; index < 15; index++) {
-                    mockData.push({ week: index + 1, });
+                    let lessonData = [];
+                    let homeworkData = [];
+                    response.data.lessonDataList.forEach(data => {
+                        if (data.week === index + 1) {
+                            lessonData.push(data);
+                        }
+                    })
+                    response.data.homeworkList.forEach(homework => {
+                        if (homework.week === index + 1) {
+                            homeworkData.push(homework);
+                        }
+                    })
+                    mockData.push({ week: index + 1, lessonData: lessonData, homework: homeworkData });
                 }
                 setLessonList(mockData);
+                console.log(lessonList);
             } catch (error) {
                 console.error("Error fetching lessons", error);
                 // Mock data in case of error
-                
+
             }
         };
 
         fetchLessons();
+
     }, []);
 
 
@@ -69,14 +83,15 @@ const Contents = () => {
                 </Typography>
                 <div className="Contents_Body">
                     {lessonList.map((lesson, i) => (
-                            <div key={i} onClick={() => toggle(i)}
-                                className="Contents_Top_Buttons"
-                                style={{ backgroundColor: openIndexes.includes(i) ? '#1F3468' : 'white',
-                                        color: openIndexes.includes(i) ? 'white' : '#1F3468'
-                                 }}>
-                                {i+1}
-                            </div>
-                            
+                        <div key={i} onClick={() => toggle(i)}
+                            className="Contents_Top_Buttons"
+                            style={{
+                                backgroundColor: openIndexes.includes(i) ? '#1F3468' : 'white',
+                                color: openIndexes.includes(i) ? 'white' : '#1F3468'
+                            }}>
+                            {i + 1}
+                        </div>
+
                     ))}
                     {lessonList.map((lesson, i) => (
                         <div key={i}>
@@ -87,8 +102,38 @@ const Contents = () => {
                             <Collapse isOpen={openIndexes.includes(i)}>
                                 <Card>
                                     <CardBody>
-                                        <Button onClick={(i)=>navigator(`/homeworkWrite/${i+1}`)}>과제등록</Button>
-                                        {lesson.content}
+                                        <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecNo}`)}>강의자료등록</Button>
+                                        <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecNo}`)}>과제등록</Button>
+                                        <div>1차시</div><hr />
+                                        {lesson.lessonData.map((data) => {
+                                            console.log(data);
+                                            if (data.lessonCnt === 1) {
+                                                return (
+                                                    <div className="Contents_Divs">
+                                                        ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                        <Button className="Contents_Divs_Button">강의자료보기</Button>
+                                                    </div>
+                                                )
+                                            }
+                                            return null;
+                                        })}
+                                        {lesson.homework.map((data) => {
+                                            console.log(data);
+                                            if (data.lessonCnt === 1) {
+                                                return (
+                                                    <div className="Contents_Divs">
+                                                        ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                        <Button
+                                                            className="Contents_Divs_Button"
+                                                            onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
+                                                            과제보기
+                                                        </Button>
+                                                    </div>
+                                                )
+                                            }
+                                            return null;
+                                        })}
+                                        <div>2차시</div><hr />
                                     </CardBody>
                                 </Card>
                             </Collapse>

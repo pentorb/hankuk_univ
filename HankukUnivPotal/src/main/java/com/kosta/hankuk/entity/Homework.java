@@ -59,6 +59,7 @@ public class Homework {
 	public HomeworkDto toHomeworkDto() {
 		return HomeworkDto.builder()
 				.hwNo(hwNo)
+				.regDt(regDt)
 				.startDt(startDt)
 				.endDt(endDt)
 				.title(title)
@@ -67,6 +68,7 @@ public class Homework {
 				.lecNo(lecture.getLecNo())
 				.lessonNo(lesson.getLessonNo())
 				.week(lesson.getWeek())
+				.lessonCnt(lesson.getLessonCnt())
 				.build();
 	}
 	

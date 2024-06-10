@@ -15,13 +15,14 @@ import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ProfessorSidebar() {
   const [firstOpen, setFirstOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [thirdOpen, setThirdOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
 
   const handleFirstClick = () => {
     setFirstOpen(!firstOpen);

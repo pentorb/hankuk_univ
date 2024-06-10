@@ -14,7 +14,7 @@ const LectureWrite = () => {
 
     const [lecture, setLecture] = useState(
         {
-            lecNo:'CSCS05',year:0,semester:'',subCd:'',credit:0,
+            lecNo:'CSEM01',year:0,semester:'',subCd:'',credit:0,
             sect:'',time1:'',time2:'',profNo:''
         })
     const navigate=useNavigate();
@@ -137,7 +137,7 @@ const LectureWrite = () => {
                                                 CSCS
                                             </option>
                                             <option>
-                                                2
+                                                CSEM
                                             </option>
                                             <option>
                                                 3
@@ -170,7 +170,7 @@ const LectureWrite = () => {
                                                 컴퓨터과학
                                             </option>
                                             <option>
-                                                컴퓨터수학
+                                                공업수학
                                             </option>
                                             <option>
                                                 게이밍이론
