@@ -10,6 +10,7 @@ import HuehakInsert from './HuehakInsert';
 import BokhakInsert from './BokhakInsert';
 import ResSemester from './ResSemester';
 import Header from '../comm/Header';
+import AllmyGrades from './AllmyGrades';
 
 const StudentDashboard = () => {
     return (
@@ -31,6 +32,7 @@ const StudentDashboard = () => {
                             <Route path="/check-grade" element={<Grade/>}></Route>
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
+                            <Route path="/my-grade" element={<AllmyGrades/>}></Route>
                         </Routes>
                     </Grid>
                    

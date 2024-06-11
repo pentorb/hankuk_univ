@@ -111,9 +111,11 @@ export default function StudentSidebar() {
               </ListItemButton>
               <Collapse in={thirdOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
+                  <Link to="/student/my-grade" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 6} onClick={(e) => handleListItemClick(e, 6)}>
                     <ListItemText primary="전체학기 성적조회" />
                   </ListItemButton>
+                  </Link>
                   <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 7} onClick={(e) => handleListItemClick(e, 7)}>
                     <ListItemText primary="학점이수 현황" />
                   </ListItemButton>
