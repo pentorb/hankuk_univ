@@ -9,3 +9,37 @@
     margin-bottom: 0px;
     margin-right: 30px;
 }
+
+.miniCard{
+    border-radius: 16px;
+    background-color: rgb(233, 234, 243);
+    /* height: 300px; */
+    padding: 20px 50px;
+    height:650px;
+    overflow-y: scroll;
+    margin-bottom: 30px;
+}
+
+.type {
+    font-size: 23px;
+    font-weight: 600;
+    /* padding-right: 30px; */
+    color:#403E98;
+    display: flex;
+    justify-content: center
+}
+
+.list {
+    display: flex;
+    padding: 30px 0px;
+    background-color: white;
+    border-radius: 16px;
+    border: 1.3px solid lightgrey;
+    margin-bottom: 20px;
+}
+
+.con {
+    font-size: 22px;
+    display: flex;
+    justify-content: center
+}
