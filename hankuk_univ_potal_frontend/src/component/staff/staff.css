@@ -1,0 +1,113 @@
+.container {
+  width: 80%;
+  height: 100%;
+}
+
+h1 {
+  text-align: left;
+}
+
+.search-section {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar label, .search-bar select, .search-bar button {
+  margin-right: 10px;
+}
+
+.searchname{
+  font-size: 20px;
+  border-radius: 4px;
+  border:none;
+}
+.searchbutton{
+  width:70px;
+  height: 30px;
+  font-size: 20px;
+  border-radius: 4px;
+  border:none;
+  background-color: #1F3468;
+  color:white;
+}
+.actions {
+  display: flex;
+  justify-content: right;
+}
+
+.actions2{
+  display: flex;
+  justify-content: center;
+}
+.actions button {
+  padding: 5px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  justify-content: right;
+}
+.actions2 button {
+  padding: 5px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  justify-content: center;
+
+}
+
+.search-select{
+  border:none;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.search-box{
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.search-box td:first-child {
+  background-color: #D9D9D9;
+  width: 160px;
+  height: 55px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.result-box {
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+}
+
+.result-box tr{
+  border-bottom: 1px solid #D9D9D9;
+}
+
+.result-box tr, .result-box td{
+  padding: 10px 0;
+}
+
+.result-box thead th, .result-box tbody td { 
+  padding: 10px 0;
+}
+
+.resultdiv{
+  border: 1px solid #D9D9D9;
+  border-radius: 15px;
+}
+.upload-section{
+  text-align: right;
+}
+
+.AccountForm{
+  border-collapse: separate;
+  border-spacing: 10px 10px;
+}

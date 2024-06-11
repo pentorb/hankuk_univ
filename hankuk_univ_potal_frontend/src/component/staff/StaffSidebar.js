@@ -6,7 +6,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
+import ClassIcon from '@mui/icons-material/Class';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -15,6 +15,8 @@ import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+
 
 export default function StaffSidebar() {
   const [firstOpen, setFirstOpen] = useState(false);
@@ -39,12 +41,12 @@ export default function StaffSidebar() {
       <Grid container spacing={2}>
         <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh" }}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
-            <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
+            <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(1)} sx={{ color: "white" }} />
-            <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>마이페이지</Typography>} id={2 === activeTab ? "active" : ""}
+            <Tab icon={<ClassIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>학사 운영</Typography>} id={2 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(2)} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
-            <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>과목</Typography>} id={3 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(3)} sx={{ color: "white" }} />
+            <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>학생 지원</Typography>} id={3 === activeTab ? "active" : ""}
+              onClick={() => setActiveTab(3)} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
             <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>캘린더</Typography>} id={4 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(4)} sx={{ color: "white" }} />
             <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>쪽지</Typography>} id={5 === activeTab ? "active" : ""}
@@ -97,9 +99,11 @@ export default function StaffSidebar() {
               </ListItemButton>
               <Collapse in={secondOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="전체성적" />
-                  </ListItemButton>
+                  <Link to="/staff/AccountManagement">
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemText primary="전체성적" />
+                    </ListItemButton>
+                  </Link>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="이의신청 내역" />
                   </ListItemButton>
