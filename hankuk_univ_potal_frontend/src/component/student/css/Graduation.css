@@ -1,0 +1,11 @@
+.selText{
+    font-size: larger;
+    font-weight: 600;
+    padding-right: 30px;
+}
+
+.selBox{
+    /* width: 250px; */
+    margin-bottom: 0px;
+    margin-right: 30px;
+}
