@@ -18,9 +18,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router';
-import { useAtom } from 'jotai/react';
+import { useAtom, useAtomValue } from 'jotai/react';
 import { url } from '../../config/config';
-import { tokenAtom } from '../../atoms';
+import { tokenAtom, memberAtom } from '../../atoms';
 
 const renderEventContent = (eventInfo) => {
     return (
@@ -31,11 +31,9 @@ const renderEventContent = (eventInfo) => {
 };
 
 const StudentMain = () => {
+    const [member, setMember] = useAtom(memberAtom);
     const [events, setEvents] = useState([]);
-    const [member, setMember] = useState({
-        stdNo: '', dept: '', name: '', position: '', joinDt: '', tel: '', addr: '', detailAddr: '', postCode: '', gender: '', birthday: '', email: '', emailDo: '', status: '', profile: '', finCredit: '', finSem: '', majCd: ''
-    })
-    const [token, setToken] = useAtom(tokenAtom);
+    const token = useAtomValue(tokenAtom);
     const navigate = useNavigate();
 
     const daycheck = (info) => {
@@ -52,30 +50,26 @@ const StudentMain = () => {
         };
     }
 
+    // 이수 학기로 학년 구하기 
+    const finSem = (finSem) => {
+        const grade = Math.floor((finSem - 1) / 2 + 1);
+        return `${grade}학년`;
+    }
+
+    const statusMap = {
+        S1: '재학',
+        S2: '휴학',
+        S3: '자퇴',
+        S99: '퇴학'
+    };
+
     const logout = () => {
         setMember(member)
         navigate("/")
     }
 
     useEffect(() => {
-        axios.get(`${url}/user`,
-            {
-                headers: { Authorization: JSON.stringify(token) }
-            }
-        )
-            .then(res => {
-                console.log(res);
-                if (res.headers.authorization != null) {
-                    setToken(JSON.parse(res.headers.authorization));
-                } else {
-                    setMember({ ...res.data })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
-
-        axios.get('http://localhost:8090/calendar')
+        axios.get(`${url}/calendar?id=${member.id}`)
             .then(res => {
                 const formattedEvents = res.data.map(event => {
                     return {
@@ -98,220 +92,219 @@ const StudentMain = () => {
 
 
 
-return (
-    <Grid item xs={12}>
-        <Grid item xs={1}></Grid>
+    return (
+        <Grid item xs={12}>
+            <Grid item xs={1}></Grid>
 
-        <Grid item xs={11}>
-            <div className="firstBox">
-                <Grid item xs={12}>
-                    <div className="info_back">
-                        <AccountCircleIcon className="info" style={{ height: '150px', width: '150px' }} />
-                    </div>
-                </Grid>
-                <Grid container spacing={2} style={{ position: 'absolute', top: '60px', display: 'flex', justifyContent: 'center' }}>
-                    <Grid item xs={4} style={{ paddingTop: '0px' }}>
-                        <div>
-                            <div style={{ textAlign: 'center', marginBottom: '15px' }}><h5><b>오늘의 학식</b></h5></div>
-                            <div className='horDiv' style={{ height: '70px' }}>
-                                <div className='col-2'><WbTwilightIcon />&nbsp;조식</div>
-                                <div className='col-10'>브레드, 쌀시리얼&우유, 삶은 계란, 토마토채소샐러드, 후르츠칵테일</div>
+            <Grid item xs={11}>
+                <div className="firstBox">
+                    <Grid item xs={12}>
+                        <div className="info_back">
+                            <AccountCircleIcon className="info" style={{ height: '150px', width: '150px' }} />
+                        </div>
+                    </Grid>
+                    <Grid container spacing={2} style={{ position: 'absolute', top: '60px', display: 'flex', justifyContent: 'center' }}>
+                        <Grid item xs={4} style={{ paddingTop: '0px' }}>
+                            <div>
+                                <div style={{ textAlign: 'center', marginBottom: '15px' }}><h5><b>오늘의 학식</b></h5></div>
+                                <div className='horDiv' style={{ height: '70px' }}>
+                                    <div className='col-2'><WbTwilightIcon />&nbsp;조식</div>
+                                    <div className='col-10'>브레드, 쌀시리얼&우유, 삶은 계란, 토마토채소샐러드, 후르츠칵테일</div>
+                                </div>
+                                <div className='horDiv' style={{ height: '70px' }}>
+                                    <div className='col-2' style={{ backgroundColor: "rgb(187 193 233 / 70%)" }}><LightModeIcon />&nbsp;중식</div>
+                                    <div className='col-10'>쌀밥, 시금치된장국, 파채돈까스, 알감자새송이조림, 무말랭이무침, 배추김치</div>
+                                </div>
+                                <div className='horDiv' style={{ height: '70px' }}>
+                                    <div className='col-2' style={{ backgroundColor: "#bbc1e9" }}><DarkModeIcon />&nbsp;석식</div>
+                                    <div className='col-10'>쌀밥, 만두국, 가자미구이, 비엔나김치볶음, <br />깻잎지무침, 깍두기</div>
+                                </div>
                             </div>
-                            <div className='horDiv' style={{ height: '70px' }}>
-                                <div className='col-2' style={{ backgroundColor: "rgb(187 193 233 / 70%)" }}><LightModeIcon />&nbsp;중식</div>
-                                <div className='col-10'>쌀밥, 시금치된장국, 파채돈까스, 알감자새송이조림, 무말랭이무침, 배추김치</div>
+                        </Grid>
+                        <Grid item xs={3} style={{ textAlign: 'center', marginTop: '45px' }}>
+                            <div style={{ paddingBottom: '15px' }}><h4><b>{member.name}</b> 님, 환영합니다.</h4></div>
+                            <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | {finSem(member.finSem)} | {statusMap[member.status] || member.status}</h5></div>
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} /></div>&nbsp;&nbsp;&nbsp;
+                                <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={logout} /></div>
                             </div>
-                            <div className='horDiv' style={{ height: '70px' }}>
-                                <div className='col-2' style={{ backgroundColor: "#bbc1e9" }}><DarkModeIcon />&nbsp;석식</div>
-                                <div className='col-10'>쌀밥, 만두국, 가자미구이, 비엔나김치볶음, <br />깻잎지무침, 깍두기</div>
+                        </Grid>
+                        <Grid item xs={4} style={{ textAlign: 'center' }}>
+                            {/* 투두리스트  */}
+                            <div className="todoBox">
+                                <div style={{ display: 'flex', alignItems: 'center', paddingTop: '15px' }}>
+                                    <BoltIcon style={{ height: '50px', width: '50px', color: '#403E98' }} /> <h4 style={{ marginBottom: '0px', fontWeight: '700' }}>To Do List</h4>
+                                </div>
+                                <div style={{ paddingTop: '10px' }}>
+                                    <List style={{ fontSize: 'larger', textAlign: 'left' }}>
+                                        <li style={{ paddingBottom: '5px' }}>
+                                            게임프로그래밍 기말대체과제 제출
+                                        </li>
+                                        <li style={{ paddingBottom: '5px' }}>
+                                            6시 반 헬스장 갔다오기
+                                        </li>
+                                        <li style={{ paddingBottom: '5px' }}>
+                                            자바의 정석 챕터 3 요약
+                                        </li>
+                                        <li style={{ paddingBottom: '5px' }}>
+                                            휴학 신청하기
+                                        </li>
+                                    </List>
+                                </div>
+                            </div>
+                        </Grid>
+                    </Grid>
+                </div>
+
+                <Grid container spacing={2}>
+                    {/* 캘린더  */}
+                    <Grid item xs={6}>
+                        <div className="secBox">
+                            <div className="header">
+                                <h3 onClick={() => { navigate('/student/calendar') }}><b>SCHEDULE</b></h3>
+                                <span style={{ color: '#999696' }}><i>누르면 일정 조회 화면으로 이동합니다.</i></span>
+                            </div>
+                            <div >
+                                <FullCalendar
+                                    headerToolbar={{
+                                        left: "",
+                                        center: "title",
+                                        right: "",
+                                    }}
+                                    defaultView="dayGridMonth"
+                                    locale={'ko'}
+                                    dayCellContent={daycheck}
+                                    plugins={[dayGridPlugin, interactionPlugin]}
+                                    events={events}
+                                    eventContent={renderEventContent}
+                                    dayMaxEventRows={true}
+                                    dayMaxEvents={2}
+                                    contentHeight={400}
+                                />
                             </div>
                         </div>
                     </Grid>
-                    <Grid item xs={3} style={{ textAlign: 'center', marginTop: '45px' }}>
-                        <div style={{ paddingBottom: '15px' }}><h4><b>{member.name}</b> 님, 환영합니다.</h4></div>
-                        <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | 3학년 | 재학</h5></div>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} /></div>&nbsp;&nbsp;&nbsp;
-                            <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={logout} /></div>
+
+
+                    {/* 내 강의리스트  */}
+                    <Grid item xs={6}>
+                        <div className="secBox">
+                            <div className="header">
+                                <h3 onClick={() => { navigate('/my-potal/calendar') }}><b>나의 강의</b></h3>
+                                <span style={{ color: '#999696' }}><i>누르면 해당 강의로 이동합니다.</i></span>
+                            </div>
+                            <div style={{ display: 'flex', fontFamily: 'Pretendard-Regular', paddingBottom: '15px' }}>
+                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            height="100"
+                                            image="../../image/blue.jpg"
+                                            alt="bobo"
+                                        />
+                                        <CardContent>
+                                            <h5><b>게임프로그래밍</b></h5>
+                                            <div style={{ color: "#a7a2a2" }}>
+                                                2024년도 2학기 <br />
+                                                공과대학 502호
+                                            </div>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            height="100"
+                                            image="src/image/gosim.jpg"
+                                            alt="bobo"
+                                        />
+                                        <CardContent>
+                                            <h5><b>게임프로그래밍</b></h5>
+                                            <div style={{ color: "#a7a2a2" }}>
+                                                2024년도 2학기 <br />
+                                                공과대학 502호
+                                            </div>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            height="100"
+                                            image="src/image/gosim.jpg"
+                                            alt="bobo"
+                                        />
+                                        <CardContent>
+                                            <h5><b>게임프로그래밍</b></h5>
+                                            <div style={{ color: "#a7a2a2" }}>
+                                                2024년도 2학기 <br />
+                                                공과대학 502호
+                                            </div>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </div>
+                            <div style={{ display: 'flex', fontFamily: 'Pretendard-Regular' }}>
+                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            height="100"
+                                            image="src/image/gosim.jpg"
+                                            alt="bobo"
+                                        />
+                                        <CardContent>
+                                            <h5><b>게임프로그래밍</b></h5>
+                                            <div style={{ color: "#a7a2a2" }}>
+                                                2024년도 2학기 <br />
+                                                공과대학 502호
+                                            </div>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            height="100"
+                                            image="src/image/gosim.jpg"
+                                            alt="bobo"
+                                        />
+                                        <CardContent>
+                                            <h5><b>게임프로그래밍</b></h5>
+                                            <div style={{ color: "#a7a2a2" }}>
+                                                2024년도 2학기 <br />
+                                                공과대학 502호
+                                            </div>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            height="100"
+                                            image="src/image/gosim.jpg"
+                                            alt="bobo"
+                                        />
+                                        <CardContent>
+                                            <h5><b>게임프로그래밍</b></h5>
+                                            <div style={{ color: "#a7a2a2" }}>
+                                                2024년도 2학기 <br />
+                                                공과대학 502호
+                                            </div>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </div>
                         </div>
                     </Grid>
-                    <Grid item xs={4} style={{ textAlign: 'center' }}>
-                        {/* 투두리스트  */}
-                        <div className="todoBox">
-                            <div style={{ display: 'flex', alignItems: 'center', paddingTop: '15px' }}>
-                                <BoltIcon style={{ height: '50px', width: '50px', color: '#403E98' }} /> <h4 style={{ marginBottom: '0px', fontWeight: '700' }}>To Do List</h4>
-                            </div>
-                            <div style={{ paddingTop: '10px' }}>
-                                <List style={{ fontSize: 'larger', textAlign: 'left' }}>
-                                    <li style={{ paddingBottom: '5px' }}>
-                                        게임프로그래밍 기말대체과제 제출
-                                    </li>
-                                    <li style={{ paddingBottom: '5px' }}>
-                                        6시 반 헬스장 갔다오기
-                                    </li>
-                                    <li style={{ paddingBottom: '5px' }}>
-                                        자바의 정석 챕터 3 요약
-                                    </li>
-                                    <li style={{ paddingBottom: '5px' }}>
-                                        휴학 신청하기
-                                    </li>
-                                </List>
-                            </div>
-                        </div>
-                    </Grid>
-                </Grid>
-            </div>
-
-            <Grid container spacing={2}>
-                {/* 캘린더  */}
-                <Grid item xs={6}>
-                    <div className="secBox">
-                        <div className="header">
-                            <h3 onClick={() => { navigate('/my-potal/calendar') }}><b>SCHEDULE</b></h3>
-                            <span style={{ color: '#999696' }}><i>누르면 일정 조회 화면으로 이동합니다.</i></span>
-                        </div>
-                        <div >
-                            <FullCalendar
-                                headerToolbar={{
-                                    left: "",
-                                    center: "title",
-                                    right: "",
-                                }}
-                                defaultView="dayGridMonth"
-                                locale={'ko'}
-                                dayCellContent={daycheck}
-                                plugins={[dayGridPlugin, interactionPlugin]}
-                                events={events}
-                                eventContent={renderEventContent}
-                                dayMaxEventRows={true}
-                                dayMaxEvents={2}
-                                contentHeight={400}
-                            />
-                        </div>
-                    </div>
-                </Grid>
-
-
-                {/* 내 강의리스트  */}
-                <Grid item xs={6}>
-                    <div className="secBox">
-                        <div className="header">
-                            <h3 onClick={() => { navigate('/my-potal/calendar') }}><b>나의 강의</b></h3>
-                            <span style={{ color: '#999696' }}><i>누르면 해당 강의로 이동합니다.</i></span>
-                        </div>
-                        <div style={{ display: 'flex', fontFamily: 'Pretendard-Regular', paddingBottom: '15px' }}>
-                            <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="100"
-                                        image="../../image/blue.jpg"
-                                        alt="bobo"
-                                    />
-                                    <CardContent>
-                                        <h5><b>게임프로그래밍</b></h5>
-                                        <div style={{ color: "#a7a2a2" }}>
-                                            2024년도 2학기 <br />
-                                            공과대학 502호
-                                        </div>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                            <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="100"
-                                        image="src/image/gosim.jpg"
-                                        alt="bobo"
-                                    />
-                                    <CardContent>
-                                        <h5><b>게임프로그래밍</b></h5>
-                                        <div style={{ color: "#a7a2a2" }}>
-                                            2024년도 2학기 <br />
-                                            공과대학 502호
-                                        </div>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                            <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="100"
-                                        image="src/image/gosim.jpg"
-                                        alt="bobo"
-                                    />
-                                    <CardContent>
-                                        <h5><b>게임프로그래밍</b></h5>
-                                        <div style={{ color: "#a7a2a2" }}>
-                                            2024년도 2학기 <br />
-                                            공과대학 502호
-                                        </div>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </div>
-                        <div style={{ display: 'flex', fontFamily: 'Pretendard-Regular' }}>
-                            <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="100"
-                                        image="src/image/gosim.jpg"
-                                        alt="bobo"
-                                    />
-                                    <CardContent>
-                                        <h5><b>게임프로그래밍</b></h5>
-                                        <div style={{ color: "#a7a2a2" }}>
-                                            2024년도 2학기 <br />
-                                            공과대학 502호
-                                        </div>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                            <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="100"
-                                        image="src/image/gosim.jpg"
-                                        alt="bobo"
-                                    />
-                                    <CardContent>
-                                        <h5><b>게임프로그래밍</b></h5>
-                                        <div style={{ color: "#a7a2a2" }}>
-                                            2024년도 2학기 <br />
-                                            공과대학 502호
-                                        </div>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                            <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="100"
-                                        image="src/image/gosim.jpg"
-                                        alt="bobo"
-                                    />
-                                    <CardContent>
-                                        <h5><b>게임프로그래밍</b></h5>
-                                        <div style={{ color: "#a7a2a2" }}>
-                                            2024년도 2학기 <br />
-                                            공과대학 502호
-                                        </div>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </div>
-                    </div>
                 </Grid>
             </Grid>
-
         </Grid>
-    </Grid>
-)
+    )
 }
 
 export default StudentMain;
