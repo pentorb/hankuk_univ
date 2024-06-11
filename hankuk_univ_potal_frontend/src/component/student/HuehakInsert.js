@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid';
 import { Paper, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import HuehakInfo from '../student/HuehakInfo';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
 import { Table, Input, Button } from 'reactstrap';
 import '../student/css/HueAndBok.css';
@@ -18,6 +19,7 @@ const HuehakInsert = () => {
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
 
+    console.log(member);
     const text = {
         display: "flex",
         margin: "10px",
@@ -25,6 +27,13 @@ const HuehakInsert = () => {
         fontSize: "larger",
         textAlign: "left"
     }
+
+    const statusMap = {
+        S1: '재학',
+        S2: '휴학',
+        S3: '자퇴',
+        S99: '퇴학'
+    };
 
     const alert = (e) => {
         e.preventDefault();
@@ -80,10 +89,16 @@ const HuehakInsert = () => {
             })
     }
 
+    // 이수 학기로 학년 구하기 
+    const finSem = (finSem) => {
+        const grade = Math.floor((finSem-1) / 2 + 1);
+        return `${grade}학년`;
+    }
+
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>휴학 신청</b></Typography>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "110vh", width: 1400, margin: "0 auto", borderRadius: 5 }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
                     <HomeIcon /> 학적 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>휴학 신청
                     </b></Typography>
@@ -94,26 +109,40 @@ const HuehakInsert = () => {
                     <Grid item xs={10} >
                         <div className="categori">
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
+                            <span style={{ fontSize: 'x-large' }}><b>휴학 시 유의 사항</b></span>
+                        </div>
+                        <div className='box' style={{ overflowY: 'scroll', height:'300px' }}>
+                            <div>
+                                <HuehakInfo/>
+                            </div>
+                        </div>
+
+                        <div className="categori">
+                            <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>학적기초정보</b></span>
                         </div>
-                        <div style={{ padding: '10px 10px 50px', textAlign: 'center', fontSize: 'larger' }}>
+                        <div style={{ padding: '10px 50px 30px', textAlign: 'center', fontSize: 'larger' }}>
                             <Table className="table" bordered>
                                 <thead>
                                     <tr>
+                                        <th>학번</th>
+                                        <th>이름</th>
                                         <th>학부(과)</th>
                                         <th>학년</th>
                                         <th>학적 상태</th>
-                                        <th>지도교수</th>
                                         <th>학생 연락처</th>
+                                        <th>지도교수</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td scope="row">{member.majName}</td>
-                                        <td>3</td>
-                                        <td>{member.status}</td>
-                                        <td>{member.profName}</td>
+                                        <td scope="row">{member.id}</td>
+                                        <td>{member.name}</td>
+                                        <td>{member.majName}</td>
+                                        <td>{finSem(member.finSem)}</td>
+                                        <td>{statusMap[member.status] || member.status}</td>
                                         <td>{member.tel}</td>
+                                        <td>{member.profName}</td>
                                     </tr>
                                 </tbody>
                             </Table>

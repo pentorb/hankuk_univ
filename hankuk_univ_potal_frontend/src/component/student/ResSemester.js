@@ -47,7 +47,7 @@ const ResSemester = () => {
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>잔여학기 조회</b></Typography>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "110vh", width: 1400, margin: "0 auto", borderRadius: 5 }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
                     <HomeIcon /> 학적 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>잔여학기 조회
                     </b></Typography>
@@ -148,7 +148,7 @@ const ResSemester = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {huebok.filter(hue => hue.sect === 'H').map(hue => (
+                                    {huebok.filter(hue => hue.sect === 'B').map(hue => (
                                         <tr key={hue.hueNo}>
                                             <td scope="row">{hue.hueNo}</td>
                                             <td>{typeMap[hue.type] || hue.type}</td>

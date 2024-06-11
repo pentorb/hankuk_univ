@@ -3,21 +3,19 @@ import { Paper, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
-import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { Table, Input, Button } from 'reactstrap';
 import '../student/css/HueAndBok.css';
 import Swal from "sweetalert2";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { useAtom, useAtomValue } from 'jotai/react';
+import { useAtomValue } from 'jotai/react';
 import { url } from '../../config/config';
 import { memberAtom, tokenAtom } from '../../atoms';
-import React from 'react';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import BokInfo from '../student/BokInfo';
 
 
-
-const HuehakInsert = () => {
+const BokhakInsert = () => {
     const navigate = useNavigate();
     const [huebok, setHuebok] = useState([]);
     const token = useAtomValue(tokenAtom);
@@ -101,19 +99,11 @@ const HuehakInsert = () => {
             });
     }, [token]);
 
-    const handleRowClick = (hue) => {
-        // Update form values with clicked row data
-        setFormValues({
-            ...formValues,
-            type: hue.type, 
-            sect: 'B'
-        });
-    };
 
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>복학 신청</b></Typography>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "110vh", width: 1400, margin: "0 auto", borderRadius: 5 }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
                     <HomeIcon /> 학적 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>복학 신청
                     </b></Typography>
@@ -124,15 +114,11 @@ const HuehakInsert = () => {
                     <Grid item xs={10} >
                         <div className="categori">
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
-                            <span style={{ fontSize: 'x-large' }}><b>복학 안내</b></span>
+                            <span style={{ fontSize: 'x-large' }}><b>복학 시 유의 사항</b></span>
                         </div>
-                        <div className='box'>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <div className="t"><ArrowDropDownRoundedIcon /> 복학은 복학 신청기간 내에만 가능합니다.</div>
-                                <div className="t"><ArrowDropDownRoundedIcon /> 수강신청 관련은 각 학과 조교에게 문의 바랍니다.</div>
-                                <div className="t"><ArrowDropDownRoundedIcon /> 수강신청 정정 또는 기간 내 수강신청을 못했을 경우 개강  후 정정기간을 이용하여 수정하십시오.</div>
-                                <div className="t"><ArrowDropDownRoundedIcon /> 복학신청이 완료되면 수강신청 및 등록사항을 반드시 확인하십시오.</div>
-                                <div className="t"><ArrowDropDownRoundedIcon /> <span style={{ color: 'red' }}>복학접수 후 등록금을 납부하지 않고 휴학한 학생은 등록금 고지서를 출력하여 등록기간 내에 등록금을 납부하시오. </span></div>
+                        <div className='box' style={{overflowY:'scroll', height:'300px'}}>
+                            <div>
+                                <BokInfo/>
                             </div>
                         </div>
 
@@ -140,30 +126,7 @@ const HuehakInsert = () => {
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>휴학 신청 내역</b></span>
                         </div>
-                        <div style={{ padding: '10px 50px 30px', textAlign: 'center', fontSize: 'larger' }}>
-                            <Table className="table" bordered>
-                                <thead>
-                                    <tr>
-                                        <th>휴학 번호</th>
-                                        <th>휴학 유형</th>
-                                        <th>휴학 신청 일자</th>
-                                        <th>휴학 학기</th>
-                                        <th>처리 상태</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {huebok.filter(hue => hue.sect === 'H').map(hue => (
-                                        <tr key={hue.hueNo} onClick={()=>handleRowClick(hue)}>
-                                            <td scope="row">{hue.hueNo}</td>
-                                            <td>{typeMap[hue.type] || hue.type}</td>
-                                            <td>{hue.appDt}</td>
-                                            <td>{hue.hueSem}</td>
-                                            <td>{statusMap[hue.status] || hue.status}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                        </div>
+                        
                         <form onSubmit={submit}>
                             <div style={{ display: 'flex', padding: '10px' }}>
                                 <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
@@ -267,4 +230,4 @@ const HuehakInsert = () => {
     )
 }
 
-export default HuehakInsert;
+export default BokhakInsert;
