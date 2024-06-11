@@ -140,6 +140,7 @@ public class Student implements User {
 		return stdNo;
 	}
 	
+	
 	@Override
 	public String getPassword() {
 		return password;

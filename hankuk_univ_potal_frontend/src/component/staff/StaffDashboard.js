@@ -1,8 +1,10 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import {Routes, Route} from 'react-router-dom';
 import StaffSidebar from './StaffSidebar';
-import Example from './Example';
+import AccountManagement from'./AccountManagement'
 import Header from '../comm/Header';
+
 
 const StaffDashboard = () => {
     return (
@@ -16,8 +18,11 @@ const StaffDashboard = () => {
                         <StaffSidebar />
                     </Grid>
                     <Grid item xs={10} sx={{ backgroundColor: "#DDE1E8" }}>
-                        {/* Your component here */}
-                        <Example/>
+                        <Routes>
+                            <Route path="/AccountManagement" element={<AccountManagement/>}></Route>
+                        </Routes>
+                    
+
                     </Grid>
                 </Grid>
             </Box>
