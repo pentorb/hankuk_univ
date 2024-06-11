@@ -1,36 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { tokenAtom } from '../../atoms';
-import { useAtom } from 'jotai';
-import { url } from '../../config/config';
+import { memberAtom } from '../../atoms';
+import { useAtomValue } from 'jotai';
 
 const Toc = () => {
-    const [member, setMember] = useState({
-        id: '', dept: '', name: '', position: '', joinDt: '', tel: '', addr: '', detailAddr: '', postCode: '', gender: '', birthday: '', email: '', emailDo: '', status: '', profile: '', finCredit: '', finSem: '', majCd: ''
-    })
-    const [token, setToken] = useAtom(tokenAtom);
+    const member = useAtomValue(memberAtom);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        console.log(token);
-        axios.get(`${url}/user`,
-            {
-                headers: { Authorization: JSON.stringify(token) }
-            }
-        )
-            .then(res => {
-                console.log(res);
-                if (res.headers.authorization != null) {
-                    setToken(JSON.parse(res.headers.authorization));
-                } else {
-                    setMember({ ...res.data });
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, [])
 
     const goPotal = () => {
         if (member.id.substring(0, 1) === "P") {
