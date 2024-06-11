@@ -5,6 +5,6 @@ import java.util.List;
 import com.kosta.hankuk.dto.CalendarDto;
 
 public interface CalendarService {
-	List<CalendarDto> calList() throws Exception;
+	List<CalendarDto> calListByWriter(String id) throws Exception;
 	void calInsert(CalendarDto calDto) throws Exception;
 }

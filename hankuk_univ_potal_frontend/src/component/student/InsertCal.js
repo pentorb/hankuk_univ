@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import { Paper, Typography } from '@mui/material';
+import Swal from "sweetalert2";
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -11,8 +12,14 @@ import { Input } from 'reactstrap';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { useAtomValue } from 'jotai';
+import { memberAtom, tokenAtom } from '../../atoms';
 
 const InsertCal = () => {
+    const navigate = useNavigate();
+    const member = useAtomValue(memberAtom);
+    const token = useAtomValue(tokenAtom);
+
     const categori = {
         display: "flex",
         margin: "10px",
@@ -21,7 +28,6 @@ const InsertCal = () => {
         textAlign: "left",
         color: "#4952A9"
     }
-    const navigate = useNavigate();
 
     const [formValues, setFormValues] = React.useState({
         start: null,
@@ -79,6 +85,23 @@ const InsertCal = () => {
         });
     }
 
+    const alert = (e) => {
+        e.preventDefault();
+        Swal.fire({
+            title: "일정 등록을 완료하시겠습니까?",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "취소",
+            confirmButtonText: "확인"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                submit(e);
+            }
+        });
+    }
+
     const submit = (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -89,12 +112,13 @@ const InsertCal = () => {
         formData.append("content", formValues.memo);
         formData.append("bgColor", formValues.bgColor);
         formData.append("place", formValues.place);
-        formData.append("allDay", formValues.allDay)
+        formData.append("allDay", formValues.allDay);
+        formData.append("writer", member.id);
 
-        axios.post('http://localhost:8090/calInsert', formData)
+        axios.post('http://localhost:8090/calInsert', formData, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
                 console.log(res.data);
-                navigate('/my-potal/calendar')
+                navigate('/student/calendar')
             })
             .catch(err => {
                 console.log(err)
@@ -104,7 +128,7 @@ const InsertCal = () => {
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>일정 등록</b></Typography>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "100vh", width: 1400, margin: "0 auto", borderRadius: 5 }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
                     <HomeIcon /> 일정 관리 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>일정등록</b></Typography>
                 </Typography>
@@ -205,7 +229,7 @@ const InsertCal = () => {
                                 </Grid>
                             </div>
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                                <Button type="submit" style={{ backgroundColor: '#1F3468' }}><b>일정 등록</b></Button>
+                                <Button onClick={alert} style={{ backgroundColor: '#1F3468' }}><b>일정 등록</b></Button>
                             </div>
                         </Grid>
                         <Grid item xs={1}></Grid>

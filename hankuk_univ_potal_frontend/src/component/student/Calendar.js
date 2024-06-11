@@ -8,10 +8,13 @@ import './css/FullCalendar.css';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import Grid from '@mui/material/Grid';
+import { url } from '../../config/config';
 import { Paper, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useNavigate } from "react-router";
+import { useAtomValue } from "jotai";
+import { memberAtom, tokenAtom } from "../../atoms";
 
 const renderEventContent = (eventInfo) => {
     return (
@@ -25,6 +28,8 @@ const ModalCalendar = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [events, setEvents] = useState([]);
+    const member = useAtomValue(memberAtom);
+    const token = useAtomValue(tokenAtom);
     const navigate = useNavigate();
 
     const handleEventClick = (arg) => {
@@ -37,11 +42,12 @@ const ModalCalendar = () => {
         setModalOpen(false);
     };
 
-
     useEffect(() => {
-        axios.get(`http://localhost:8090/calendar`)
+        console.log(token);
+        if(token.access_token==='') return
+
+        axios.get(`${url}/calendar?id=${member.id}`, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
-                
                 const getGroupName = (groupId) => {
                     switch (groupId) {
                         case 'S':
@@ -96,7 +102,7 @@ const ModalCalendar = () => {
             .catch(error => {
                 console.error('Error fetching events:', error);
             });
-    }, []);
+    }, [token]);
 
     // '일' 제거 해주는 함수 
     const daycheck = (info) => {
@@ -116,7 +122,7 @@ const ModalCalendar = () => {
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>일정 조회</b></Typography>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "110vh", width: 1400, margin: "0 auto", borderRadius: 5 }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
                     <HomeIcon /> 일정 관리 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>일정 조회</b></Typography>
                 </Typography>
@@ -124,9 +130,9 @@ const ModalCalendar = () => {
                 <Grid item xs={2}></Grid>
                 
                 <Grid item xs={8} >
-                    <div style={{ height: 800}} className="App">
+                    <div style={{ marginBottom:'30px'}} className="App">
                     <div style={{ display: "flex", justifyContent: "flex-end", padding: "0px 0px 30px 50px" }}>
-                        <Button variant="contained" style={{ backgroundColor: '#1F3468' }} onClick={()=>{navigate('/my-potal/insert-calendar')}} >일정 등록</Button>
+                        <Button variant="contained" style={{ backgroundColor: '#1F3468' }} onClick={()=>{navigate('/student/insert-calendar')}} >일정 등록</Button>
                     </div>
                     <FullCalendar
                          headerToolbar={{
@@ -138,10 +144,6 @@ const ModalCalendar = () => {
                         locale={'ko'}
                         dayCellContent={daycheck}
                         plugins={[dayGridPlugin, interactionPlugin]}
-                        // events={[
-                        //     { title: '개어렵다', date: '2024-06-15', content: '밥먹기', place: '대운동장', type: '학업' },
-                        //     { title: '최프 발표', date: '2024-06-28', content: '최프 발표', place: 'kosta', type: '학업' }
-                        // ]}
                         events={events}
                         eventClick={handleEventClick}
                         eventContent={renderEventContent}

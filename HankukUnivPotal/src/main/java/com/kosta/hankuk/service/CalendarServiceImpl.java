@@ -25,9 +25,9 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 	
 	@Override
-	public List<CalendarDto> calList() throws Exception {
+	public List<CalendarDto> calListByWriter(String id) throws Exception {
 		List<CalendarDto> list = new ArrayList<>();
-		for (Calendar cal : calRes.findAll()) {
+		for (Calendar cal : calRes.findByWriter(id)) {
 			list.add(cal.toCalendarDto());
 		}
 		return list;

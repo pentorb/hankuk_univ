@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,9 +36,10 @@ public class CalendarController {
 	
 
 	@GetMapping("/calendar")
-	public ResponseEntity<List<CalendarDto>> allCalList() {
+	public ResponseEntity<List<CalendarDto>> allCalList(@RequestParam("id") String id) {
 		try {
-			List<CalendarDto> calDtoList = calService.calList();
+//			System.out.println(id);
+			List<CalendarDto> calDtoList = calService.calListByWriter(id);
 			//System.out.println(calDtoList);
 			return new ResponseEntity<List<CalendarDto>>(calDtoList, HttpStatus.OK);
 		} catch(Exception e) {
