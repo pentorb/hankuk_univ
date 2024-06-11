@@ -21,6 +21,7 @@ import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
 import com.kosta.hankuk.dto.LectureDto;
+import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.service.ProfService;
 
 
@@ -150,6 +151,49 @@ public class ProfController {
 			ObjectMapper objectMapper = new ObjectMapper();
 			HomeworkDto homeworkDto = objectMapper.convertValue(homeworkParam, HomeworkDto.class);
 			profService.homeworkModify(homeworkDto);
+			return new ResponseEntity<String>("과제가 수정되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/lessonDataWrite")
+	public ResponseEntity<String> lessonDataWrite(@RequestBody Map<String, Object> param) {
+		try {
+			System.out.println(param);
+			Map<String, Object> lessonDataParam = (Map<String, Object>)param.get("lessonData");
+			ObjectMapper objectMapper = new ObjectMapper();
+			LessonDataDto lessonDataDto = objectMapper.convertValue(lessonDataParam, LessonDataDto.class);
+			System.out.println(lessonDataDto);
+			profService.lessonDataWrite(lessonDataDto);
+			return new ResponseEntity<String>("강의자료가 등록되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/lessonDataDetail/{ldNo}")
+	public ResponseEntity<LessonDataDto> lessonDataDetail(@PathVariable Integer ldNo){
+		try {
+			System.out.println(ldNo);
+			LessonDataDto lessonDataDto = profService.lessonDataSelectOne(ldNo);
+			return new ResponseEntity<LessonDataDto>(lessonDataDto, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<LessonDataDto>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/lessonDataModify")
+	public ResponseEntity<String> lessonDataModify(@RequestBody Map<String, Object> param){
+		try {
+			System.out.println(param);
+			Map<String, Object> lessonDataParam = (Map<String, Object>)param.get("lessonData");
+			ObjectMapper objectMapper = new ObjectMapper();
+			LessonDataDto lessonDataDto = objectMapper.convertValue(lessonDataParam, LessonDataDto.class);
+			profService.lessonDataModify(lessonDataDto);
 			return new ResponseEntity<String>("과제가 수정되었습니다", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

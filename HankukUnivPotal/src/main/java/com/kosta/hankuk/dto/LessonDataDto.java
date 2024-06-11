@@ -22,6 +22,7 @@ public class LessonDataDto {
 	private String content;
 	private String file;
 	private Integer lessonNo;
+	private String lecNo;
 	private Integer week;
 	private Integer lessonCnt;
 

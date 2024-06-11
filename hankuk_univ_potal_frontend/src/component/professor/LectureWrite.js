@@ -1,10 +1,11 @@
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import './prof.css'
-import { Grid, Paper, Typography } from "@mui/material";
+import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import axios from "axios";
-import {url} from '../../config/config';
+import { url } from '../../config/config';
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAtom } from "jotai";
@@ -14,13 +15,13 @@ const LectureWrite = () => {
 
     const [lecture, setLecture] = useState(
         {
-            lecNo:'CSEM01',year:0,semester:'',subCd:'',credit:0,
-            sect:'',time1:'',time2:'',profNo:''
+            lecNo: 'CSEM01', year: 0, semester: '', subCd: '', credit: 0,
+            sect: '', time1: '', time2: '', profNo: ''
         })
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const changeValue = (e) => {
-        setLecture({...lecture, [e.target.name]:e.target.value})
+        setLecture({ ...lecture, [e.target.name]: e.target.value })
     }
 
     const submit = () => {
@@ -34,16 +35,16 @@ const LectureWrite = () => {
         formData.append("time1", lecture.time1);
         formData.append("time2", lecture.time2);
         formData.append("profNo", lecture.profNo);
-        axios.post(`${url}/lectureWrite`,formData, 
-        {
-            headers: { Authorization: JSON.stringify(token) }
-        }
+        axios.post(`${url}/lectureWrite`, formData,
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
         )
-            .then(res=>{
+            .then(res => {
                 console.log(res)
                 navigate('/professor/lectureList');
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err)
             })
     }
@@ -52,13 +53,27 @@ const LectureWrite = () => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의계획서</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 강의계획서 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>작성</b></Typography>
-                </Typography>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/professor/">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            마이페이지
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/lectureList">
+                            강의계획
+                        </Link>
+                        <Link underline="hover" color="#4952A9">
+                            <b>계획서 작성</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
+                
                 <div className="Lecture_Write_body">
                     <div style={{ marginLeft: "736px" }}>
                         <Button
-                            onClick={()=>navigate('/professor/lectureList')}
+                            onClick={() => navigate('/professor/lectureList')}
                             className='Button_Lecture_Write'
                         >
                             목록
@@ -107,10 +122,10 @@ const LectureWrite = () => {
                                             <option>
                                                 학기선택
                                             </option>
-                                            <option>
+                                            <option value={1}>
                                                 1학기
                                             </option>
-                                            <option>
+                                            <option value={2}>
                                                 2학기
                                             </option>
                                         </Input>
@@ -316,8 +331,8 @@ const LectureWrite = () => {
                                 </div>
                                 <div style={{ width: "959px", height: "50px" }}
                                     className="Lecture_Write_header">강의계획서 첨부</div>
-                                
-                                <FormGroup style={{ width: "959px"}}>
+
+                                <FormGroup style={{ width: "959px" }}>
                                     <Label
 
                                         className="Lecture_Write_Label"

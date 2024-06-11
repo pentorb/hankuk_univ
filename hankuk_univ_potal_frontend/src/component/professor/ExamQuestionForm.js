@@ -1,35 +1,42 @@
 import { useState } from "react";
 import { Button, Card, CardBody, Collapse, Input, Label } from "reactstrap";
 import './prof.css';
-import { Grid, Paper, Typography } from "@mui/material";
+import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import axios from "axios";
 import { url } from "../../config/config";
+import { useAtom, useAtomValue } from "jotai";
+import { lectureAtom, tokenAtom } from "../../atoms";
 
 const ExamQuestionForm = (args) => {
+    const [token, setToken] = useAtom(tokenAtom);
+
     const [isOpen, setIsOpen] = useState(false);
+    const lecture = useAtomValue(lectureAtom);
+
     const [questionCnt, setQuesCnt] = useState(0);
     const [questionType, setQuesType] = useState("객관식");
 
     const [exam, setExam] = useState({
-        startDt:'', endDt:'', sect:'중간고사', type:'객관식', qnum:0, lecNo:'CSCS01'
+        startDt: '', endDt: '', sect: '중간고사', type: '객관식', qnum: 0, lecNo: lecture.lecNo
     })
 
-    const [question, setQuestion] = useState({examNo:0,quesNo:0,question:'',choice1:'',choice2:'',choice3:'',choice4:'',answer:''});
+    const [question, setQuestion] = useState({ examNo: 0, quesNo: 0, question: '', choice1: '', choice2: '', choice3: '', choice4: '', answer: '' });
     const [questionList, setQuestionList] = useState([]);
-    
+
     const toggle = (question_cnt) => {
         setIsOpen(!isOpen);
     }
 
     const changeValue = (e) => {
-        setExam({...exam, [e.target.name]:e.target.value})
+        setExam({ ...exam, [e.target.name]: e.target.value })
     }
 
-    const changeQstForm = (examCnt)  => {
+    const changeQstForm = (examCnt) => {
         let qlist = [];
-        for(let i=0; i<examCnt; i++) {
+        for (let i = 0; i < examCnt; i++) {
             qlist.push(question);
         }
         setQuestionList([...qlist]);
@@ -45,11 +52,15 @@ const ExamQuestionForm = (args) => {
     const submit = () => {
         console.log(questionList);
         console.log(exam);
-        axios.post(`${url}/examQuestionWrite`,{exam:exam, questionList:questionList})
-            .then(res=>{
+        axios.post(`${url}/examQuestionWrite`, { exam: exam, questionList: questionList },
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
+        )
+            .then(res => {
                 console.log(res)
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err)
             })
     }
@@ -58,9 +69,23 @@ const ExamQuestionForm = (args) => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>시험출제</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 과목  <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>시험출제</b></Typography>
-                </Typography>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/professor/">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/lectureDashboard">
+                            과목
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            {lecture.subName}
+                        </Link>
+                        <Link underline="hover" color="#4952A9">
+                            <b>시험출제</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
+                
                 <div className="ExamQuestionForm_Body">
                     <Label
 
@@ -116,7 +141,7 @@ const ExamQuestionForm = (args) => {
                             setQuesType(e.target.value);
                             changeValue(e);
                             changeQstForm(exam.Qnum);
-                        }} 
+                        }}
                     >
                         <option value="객관식">객관식</option>
                         <option value="주관식">주관식</option>
@@ -145,9 +170,9 @@ const ExamQuestionForm = (args) => {
                         <Card className="ExamQuestionForm_Collapse">
                             <CardBody className="ExamQuestionForm_Collapse">
                                 {/* {QuestionList()} */}
-                                
-                                {questionType==='객관식' &&
-                                    
+
+                                {questionType === '객관식' &&
+
                                     questionList.map((ques, i) => (
                                         <div key={i} className="ExamQuestionForm_For_Div">
                                             <Label
@@ -160,12 +185,12 @@ const ExamQuestionForm = (args) => {
                                                 type="text"
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
-                                                placeholder={`${i + 1}번 문제를 입력하세요`} 
+                                                placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.quesNo=i+1;
+                                                    ques.quesNo = i + 1;
                                                     handleInputChange(i, e.target.value)
-                                                    
-                                                }}/>
+
+                                                }} />
                                             <br />
                                             <Label
                                                 for={`question-${i}`}>
@@ -176,10 +201,10 @@ const ExamQuestionForm = (args) => {
                                                 type="text"
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
-                                                placeholder={`${i + 1}번 문제를 입력하세요`} 
-                                                onChange={(e)=>{
+                                                placeholder={`${i + 1}번 문제를 입력하세요`}
+                                                onChange={(e) => {
                                                     ques.choice1 = e.target.value;
-                                                }}/>
+                                                }} />
                                             <br />
                                             <Label for={`question-${i}`}>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.
@@ -190,7 +215,7 @@ const ExamQuestionForm = (args) => {
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
-                                                onChange={(e)=>{
+                                                onChange={(e) => {
                                                     ques.choice2 = e.target.value;
                                                 }} />
                                             <br />
@@ -203,7 +228,7 @@ const ExamQuestionForm = (args) => {
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
-                                                onChange={(e)=>{
+                                                onChange={(e) => {
                                                     ques.choice3 = e.target.value;
                                                 }} />
                                             <br />
@@ -216,7 +241,7 @@ const ExamQuestionForm = (args) => {
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
-                                                onChange={(e)=>{
+                                                onChange={(e) => {
                                                     ques.choice4 = e.target.value;
                                                 }} />
                                             <Label for={`question-${i}`}>
@@ -228,16 +253,16 @@ const ExamQuestionForm = (args) => {
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
-                                                onChange={(e)=>{
+                                                onChange={(e) => {
                                                     ques.answer = e.target.value;
                                                 }} />
                                         </div>)
-                            
+
                                     )
-                                    
+
                                 }
-                                {questionType.trim()==='주관식' &&
-                                    questionList.map((ques,i)=>(
+                                {questionType.trim() === '주관식' &&
+                                    questionList.map((ques, i) => (
                                         <div key={i} className="ExamQuestionForm_For_Div">
                                             <Label for={`question-${i}`}>
                                                 {i + 1}번문제
@@ -248,10 +273,10 @@ const ExamQuestionForm = (args) => {
                                                 name={`question-${i}`}
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.quesNo=i+1;
+                                                    ques.quesNo = i + 1;
                                                     handleInputChange(i, e.target.value)
-                                                    
-                                                }}/>
+
+                                                }} />
                                             <Label for={`question-${i}`}>
                                                 정답
                                             </Label>
@@ -260,21 +285,21 @@ const ExamQuestionForm = (args) => {
                                                 id={`question-${i}`}
                                                 name={`question-${i}`}
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
-                                                onChange={(e)=>{
+                                                onChange={(e) => {
                                                     ques.answer = e.target.value;
                                                 }} />
-                    
+
                                         </div>)
                                     )
                                 }
-                                
+
                             </CardBody>
                             <Button
-                className='ExamQuestionForm_Div_Button'
-                onClick={submit}
-            >
-                등록
-            </Button>
+                                className='ExamQuestionForm_Div_Button'
+                                onClick={submit}
+                            >
+                                등록
+                            </Button>
                         </Card>
                     </Collapse>
                 </div>

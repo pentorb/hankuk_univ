@@ -111,7 +111,8 @@ public class StaffServiceImpl implements StaffService {
         if (name != null && !name.isEmpty()) {
             return studentRepository.findByNameContaining(name);
         } else if (colleage != null && major != null) {
-            return studentRepository.findByColleageAndMajor(colleage, major);
+//            return studentRepository.findByColleageAndMajor(colleage, major);
+        	return null;
         } else if (major != null) {
             return studentRepository.findByMajor(major);
         }
@@ -123,7 +124,9 @@ public class StaffServiceImpl implements StaffService {
         if (name != null && !name.isEmpty()) {
             return professorRepository.findByNameContaining(name);
         } else if (colleage != null && major != null) {
-            return professorRepository.findByColleageAndMajor(colleage, major);
+        	
+            //return professorRepository.findByColleageAndMajor(colleage, major);
+        	return null;
         } else if (major != null) {
             return professorRepository.findByMajor(major);
         }
@@ -139,9 +142,10 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public List<String> getMajorsByColleage(String colCd) {
-       return majorRepository.findByColleageId(colCd).stream()
-                              .map(Major::getName)
-                              .collect(Collectors.toList());
+//       return majorRepository.findByColleageId(colCd).stream()
+//                              .map(Major::getName)
+//                              .collect(Collectors.toList());
+    	return null;
     }
 
     @Override
@@ -161,16 +165,16 @@ public class StaffServiceImpl implements StaffService {
 
                 if ("student".equalsIgnoreCase(category)) {
                     Student student = new Student();
-                    student.setId(generateUniqueStudentId());
+                    student.setStdNo(generateUniqueStudentId());
                     student.setName(name);
-                    student.setMajor(major);
+                    //student.setMajor(major);
                     student.setPassword("1234"); // 기본 비밀번호 설정
                     students.add(student);
                 } else if ("professor".equalsIgnoreCase(category)) {
                     Professor professor = new Professor();
-                    professor.setId(generateUniqueProfessorId());
+                    professor.setProfNo(generateUniqueProfessorId());
                     professor.setName(name);
-                    professor.setMajor(major);
+                    //professor.setMajor(major);
                     professor.setPassword("1234"); // 기본 비밀번호 설정
                     professors.add(professor);
                 }

@@ -125,6 +125,23 @@ public class ProfServiceImpl implements ProfService{
 	public void homeworkModify(HomeworkDto homeworkDto) throws Exception {
 		homeworkRepository.save(homeworkDto.toHomework());
 	}
+	
+	@Override
+	public void lessonDataWrite(LessonDataDto lessonDataDto) throws Exception {
+		lessonDataDto.setLessonNo(lessonRepository.findByLecture_lecNoAndWeekAndLessonCnt(
+				lessonDataDto.getLecNo(), lessonDataDto.getWeek(), lessonDataDto.getLessonCnt()).get().getLessonNo());
+		lessonDataRepository.save(lessonDataDto.toLessonData());
+	}
+
+	@Override
+	public LessonDataDto lessonDataSelectOne(Integer ldNo) throws Exception {
+		return lessonDataRepository.findById(ldNo).get().toLessonDataDto();
+	}
+
+	@Override
+	public void lessonDataModify(LessonDataDto lessonDataDto) throws Exception {
+		lessonDataRepository.save(lessonDataDto.toLessonData());
+	}
 
 	@Override
 	public void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception {
@@ -138,6 +155,8 @@ public class ProfServiceImpl implements ProfService{
 		}
 		
 	}
+
+	
 
 	
 

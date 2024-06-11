@@ -24,8 +24,8 @@ public class UserRepository{
 		String id = username;
 		if(identification.equals("P")) {
 			System.out.println(identification);
-			User user = professorRepository.findById(id).get();
-			System.out.println(user.getPassword());
+//			User user = professorRepository.findById(id).get();
+//			System.out.println(user.getPassword());
 			return professorRepository.findById(id).get();
 		} else if(identification.equals("S")) {
 			System.out.println(identification);

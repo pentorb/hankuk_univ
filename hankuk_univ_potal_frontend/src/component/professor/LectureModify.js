@@ -1,9 +1,10 @@
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import './prof.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Grid, Paper, Typography } from "@mui/material";
+import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
@@ -64,9 +65,23 @@ const LectureModify = () => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의계획서</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4} variant="h7">
-                <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 강의계획서 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>조회 및 수정</b></Typography>
-                </Typography>
+            <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/professor/">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            마이페이지
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/lectureList">
+                            강의계획
+                        </Link>
+                        <Link underline="hover" color="#4952A9">
+                            <b>계획서 상세 및 수정</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
+                
                 <div className="Lecture_Write_body">
                     <div style={{ marginLeft: "736px" }}>
                         <Button

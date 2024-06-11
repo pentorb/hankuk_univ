@@ -2,38 +2,39 @@ import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import './prof.css';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { url } from "../../config/config";
-import { useAtom } from "jotai";
-import { tokenAtom } from "../../atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { lectureAtom, tokenAtom } from "../../atoms";
 const LessonDataWrite = () => {
     const [token, setToken] = useAtom(tokenAtom);
-
+    const lecture = useAtomValue(lectureAtom);
     const { lecNo, week } = useParams();
-    const [homework, setHomework] = useState({
-        title:'',week:week,startDt:'',endDt:'',content:'',lecNo:lecNo,lessonCnt:0
+    const [lessonData, setLessonData] = useState({
+        title: '', week: week, content: '', lecNo: lecNo, lessonCnt: 0
     });
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const changeValue = (e) => {
-        setHomework({...homework, [e.target.name]:e.target.value})
+        setLessonData({ ...lessonData, [e.target.name]: e.target.value })
     }
     const submit = () => {
-        console.log(homework);
-        axios.post(`${url}/homeworkWrite`,{homework:homework},
-        {
-            headers: { Authorization: JSON.stringify(token) }
-        }
+        console.log(lessonData);
+        axios.post(`${url}/lessonDataWrite`, { lessonData: lessonData },
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
         )
-            .then(res=>{
+            .then(res => {
                 console.log(res)
-                navigate(`/professor/contents/${lecNo}`)
+                navigate(`/professor/contents`)
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err)
             })
     }
@@ -43,9 +44,26 @@ const LessonDataWrite = () => {
                 <b>강의자료올리기</b>
             </Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 과목  <KeyboardDoubleArrowRightIcon /> 강의콘텐츠  <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>강의자료올리기</b></Typography>
-                </Typography>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/professor/">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/lectureDashboard">
+                            과목
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            {lecture.subName}
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/contents">
+                            강의콘텐츠
+                        </Link>
+                        <Link underline="hover" color="#4952A9">
+                            <b>{week}주차 강의자료올리기</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
+                
                 <div className="Homework_body">
                     <div className="Homework_Form">
                         <Form>
@@ -105,44 +123,7 @@ const LessonDataWrite = () => {
                                     />
                                 </FormGroup>
                             </div>
-                            <div style={{ width: "860px" }}>
-                                <FormGroup className="Homework_FormGrop " style={{ marginRight: '13px' }}>
-                                    <Label
 
-                                        className="Homework_Write_Label"
-                                        for="startDt"
-                                    >
-                                        시작&nbsp;&nbsp;&nbsp;
-                                    </Label>
-                                    <Input
-                                        style={{ width: '350px' }}
-                                        className="Homework_Write_Input"
-                                        id="startDt"
-                                        name="startDt"
-                                        placeholder=""
-                                        type="date"
-                                        onChange={changeValue}
-                                    />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                </FormGroup>
-                                <FormGroup className="Homework_FormGrop ">
-                                    <Label
-
-                                        className="Homework_Write_Label"
-                                        for="endDt"
-                                    >
-                                        마감&nbsp;&nbsp;&nbsp;
-                                    </Label>
-                                    <Input
-                                        style={{ width: '350px' }}
-                                        className="Homework_Write_Input"
-                                        id="endDt"
-                                        name="endDt"
-                                        placeholder=""
-                                        type="date"
-                                        onChange={changeValue}
-                                    />
-                                </FormGroup>
-                            </div>
                             <FormGroup className="Homework_FormGrop ">
                                 <Label
 

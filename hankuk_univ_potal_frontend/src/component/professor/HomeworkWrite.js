@@ -2,15 +2,17 @@ import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import './prof.css';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { url } from "../../config/config";
-import { useAtom } from "jotai";
-import { tokenAtom } from "../../atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { lectureAtom, tokenAtom } from "../../atoms";
 const HomeworkWrite = () => {
     const [token, setToken] = useAtom(tokenAtom);
+    const lecture = useAtomValue(lectureAtom);
 
     const { lecNo, week } = useParams();
     const [homework, setHomework] = useState({
@@ -31,7 +33,7 @@ const HomeworkWrite = () => {
         )
             .then(res=>{
                 console.log(res)
-                navigate(`/professor/contents/${lecNo}`)
+                navigate(`/professor/contents`)
             })
             .catch(err=>{
                 console.log(err)
@@ -43,9 +45,26 @@ const HomeworkWrite = () => {
                 <b>과제등록</b>
             </Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 과목  <KeyboardDoubleArrowRightIcon /> 강의콘텐츠  <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>과제등록</b></Typography>
-                </Typography>
+            <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/professor/">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/lectureDashboard">
+                            과목
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            {lecture.subName}
+                        </Link>
+                        <Link color="inherit" underline='none' href="/professor/contents">
+                            강의콘텐츠
+                        </Link>
+                        <Link underline="hover" color="#4952A9">
+                            <b>{week}주차 과제등록</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
+                
                 <div className="Homework_body">
                     <div className="Homework_Form">
                         <Form>

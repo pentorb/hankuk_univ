@@ -11,11 +11,11 @@ import { useNavigate, useParams } from "react-router";
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
 
-const HomeworkModify = () => {
+const LessonDataModify = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
 
-    const {hwNo} = useParams();
+    const {ldNo} = useParams();
     // private Integer hwNo;
 	// private Date regDt;
 	// private Date startDt;
@@ -27,20 +27,20 @@ const HomeworkModify = () => {
 	// private Integer lessonNo;
 	// private Integer week;
 	// private Integer lessonCnt;
-    const [homework, setHomework] = useState({
-        hwNo:hwNo,title:'',week:0,startDt:'',endDt:'',content:'',lecNo:'',lessonCnt:0
+    const [lessonData, setLessonData] = useState({
+        ldNo:ldNo,title:'',week:0,content:'',lecNo:'',lessonCnt:0
     });
     const navigate=useNavigate();
 
     useEffect(() => {
-        axios.get(`${url}/homeworkDetail/${hwNo}`,
+        axios.get(`${url}/lessonDataDetail/${ldNo}`,
         {
             headers: { Authorization: JSON.stringify(token) }
         }
         )
             .then(res => {
                 console.log(res);
-                setHomework(res.data);
+                setLessonData(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -48,14 +48,14 @@ const HomeworkModify = () => {
     },[token])
 
     const submit = () => {
-        axios.post(`${url}/homeworkModify`,{homework:homework},
+        axios.post(`${url}/lessonDataModify`,{lessonData:lessonData},
         {
             headers: { Authorization: JSON.stringify(token) }
         }
         )
             .then(res=>{
                 console.log(res)
-                navigate(`/professor/contents/${homework.lecNo}`);
+                navigate(`/professor/contents`);
             })
             .catch(err=>{
                 console.log(err)
@@ -63,10 +63,9 @@ const HomeworkModify = () => {
     }
 
     const changeValue = (e) => {
-        setHomework({...homework, [e.target.name]:e.target.value})
+        setLessonData({...lessonData, [e.target.name]:e.target.value})
     }
 
-    console.log(homework)
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom>
@@ -88,7 +87,7 @@ const HomeworkModify = () => {
                             강의콘텐츠
                         </Link>
                         <Link underline="hover" color="#4952A9">
-                            <b>{homework.week}주차 과제</b>
+                            <b>{lessonData.week}주차 강의자료</b>
                         </Link>
                     </Breadcrumbs>
                 </div>
@@ -111,7 +110,7 @@ const HomeworkModify = () => {
                                     name="title"
                                     placeholder=""
                                     type="text"
-                                    value={homework.title}
+                                    value={lessonData.title}
                                     onChange={changeValue}
                                 />
                             </FormGroup>
@@ -131,7 +130,7 @@ const HomeworkModify = () => {
                                         name="week"
                                         placeholder=""
                                         type="text"
-                                        disabled value={homework.week}
+                                        disabled value={lessonData.week}
                                     />
                                 </FormGroup>
                                 <FormGroup className="Homework_FormGrop">
@@ -149,50 +148,11 @@ const HomeworkModify = () => {
                                         name="lessonCnt"
                                         placeholder=""
                                         type="text"
-                                        disabled value={homework.lessonCnt}
+                                        disabled value={lessonData.lessonCnt}
                                     />
                                 </FormGroup>
                             </div>
-                            <div style={{ width: "860px" }}>
-                                <FormGroup className="Homework_FormGrop " style={{ marginRight: '13px' }}>
-                                    <Label
-
-                                        className="Homework_Write_Label"
-                                        for="startDt"
-                                    >
-                                        시작&nbsp;&nbsp;&nbsp;
-                                    </Label>
-                                    <Input
-                                        style={{ width: '350px' }}
-                                        className="Homework_Write_Input"
-                                        id="startDt"
-                                        name="startDt"
-                                        placeholder=""
-                                        type="date"
-                                        value={homework.startDt}
-                                        onChange={changeValue}
-                                    />
-                                </FormGroup>
-                                <FormGroup className="Homework_FormGrop ">
-                                    <Label
-
-                                        className="Homework_Write_Label"
-                                        for="endDt"
-                                    >
-                                        마감&nbsp;&nbsp;&nbsp;
-                                    </Label>
-                                    <Input
-                                        style={{ width: '350px' }}
-                                        className="Homework_Write_Input"
-                                        id="endDt"
-                                        name="endDt"
-                                        placeholder=""
-                                        type="date"
-                                        value={homework.endDt}
-                                        onChange={changeValue}
-                                    />
-                                </FormGroup>
-                            </div>
+                            
                             <FormGroup className="Homework_FormGrop ">
                                 <Label
 
@@ -211,7 +171,7 @@ const HomeworkModify = () => {
                                     name="content"
                                     placeholder=""
                                     type="textarea"
-                                    value={homework.content}
+                                    value={lessonData.content}
                                     onChange={changeValue}
                                 />
                             </FormGroup>
@@ -234,4 +194,4 @@ const HomeworkModify = () => {
         </Grid>
     )
 }
-export default HomeworkModify;
+export default LessonDataModify;

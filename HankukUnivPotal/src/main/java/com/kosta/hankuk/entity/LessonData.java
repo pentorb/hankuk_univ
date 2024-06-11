@@ -48,6 +48,7 @@ public class LessonData {
 				.content(content)
 				.file(file)
 				.lessonNo(lesson.getLessonNo())
+				.lecNo(lesson.getLecture().getLecNo())
 				.week(lesson.getWeek())
 				.lessonCnt(lesson.getLessonCnt())
 				.build();

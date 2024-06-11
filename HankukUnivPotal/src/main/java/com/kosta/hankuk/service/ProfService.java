@@ -30,7 +30,15 @@ public interface ProfService {
 
 	void homeworkModify(HomeworkDto homeworkDto) throws Exception;
 
+	void lessonDataWrite(LessonDataDto lessonDataDto) throws Exception;
+
+	LessonDataDto lessonDataSelectOne(Integer ldNo) throws Exception;
+
+	void lessonDataModify(LessonDataDto lessonDataDto) throws Exception;
+	
 	void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception;
+
+	
 
 	
 
