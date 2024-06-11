@@ -1,0 +1,95 @@
+.newsBox{
+    width: 475px;
+    height: 150px;
+    background-color: var(--maincolor6);
+    border-radius: 30px 0px;
+}
+
+.loginBtn{
+    position: absolute;
+    border-radius: 50px;
+    background-color: var(--subcolor);
+    color: white;
+    left: 60px;
+    bottom: 100px;
+    width: 450px;
+    height: 70px;
+    text-decoration-line: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-container{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+
+.main-image{
+    background-image: url(/public/images/background.jpg);
+    background-repeat: repeat-y;
+    background-size: cover;
+    filter: blur(4px);
+    width: 105%;
+    height: 105%;
+}
+
+.body{
+    width: 100%;
+    max-width: 1700px;
+    height: 1500px;
+    margin: 0px auto;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.65);
+}
+
+.secimage{
+    height: 532px;
+    margin: 0px auto;
+    position: relative;
+    background-image: url(/public/images/background.jpg);
+    background-size: 100% 160%;
+}
+
+.slogan{
+    font-size: 32px;
+    font-weight: 900;
+    color: white;
+    /* display: flex; */
+    margin-top: 240px;
+    margin-left: 60px;
+}
+
+.tocDiv{
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    width: 100px;
+    height: 400px;
+}
+
+.calDiv{
+    width: 800px;
+    height: 600px;
+    border-radius: 15px 15px 0px 0px;
+    background-color: var(--maincolor);
+    margin-top: 120px;
+    margin-left: 60px;
+}
+
+.ttt{
+    font-size: 32px;
+    font-weight: bolder;
+    /* padding: 30px 0px 20px; */
+    display: flex;
+    margin-left: 60px;
+}
