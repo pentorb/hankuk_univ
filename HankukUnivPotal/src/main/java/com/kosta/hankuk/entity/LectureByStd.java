@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.kosta.hankuk.dto.LectureByStdDto;
 
 import lombok.AllArgsConstructor;
@@ -39,7 +41,7 @@ public class LectureByStd {
 	@Column
 	private String grade;
 	
-	@Column // 드랍여부
+	@Column(columnDefinition = "boolean default false")
 	private Boolean isDrop;
 	
 	public LectureByStdDto toLectureByStdDto() {
