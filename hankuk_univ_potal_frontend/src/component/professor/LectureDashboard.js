@@ -6,12 +6,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
-import { useAtom } from "jotai";
-import { tokenAtom } from "../../atoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { lectureAtom, tokenAtom } from "../../atoms";
 
 const LectureDashboard = () => {
     const [token, setToken] = useAtom(tokenAtom);
-
+    const setLectureAtom = useSetAtom(lectureAtom);
+    const lectureValue=useAtomValue(lectureAtom);
     const [profNo, setProfNo] = useState("P1001");
 
     // private String lecNo;
@@ -55,13 +56,13 @@ const LectureDashboard = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [token])
 
     const contents = (index) => {
-        lectureList.map((lecture, i) =>
-            i === index ? navigate(`/professor/contents/${lecture.lecNo}`) : null
-        );
-        
+        const selectedLecture = lectureList[index];
+        setLectureAtom({ ...selectedLecture });
+        console.log(selectedLecture);
+        navigate(`/professor/contents`)
     }
 
     return (

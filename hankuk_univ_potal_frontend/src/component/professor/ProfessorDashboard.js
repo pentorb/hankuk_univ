@@ -12,6 +12,7 @@ import Contents from './Contents';
 import LectureDashboard from './LectureDashboard';
 import HomeworkWrite from './HomeworkWrite';
 import HomeworkModify from './HomeworkModify';
+import LessonDataWrite from './LessonDataWrite';
 
 
 const ProfessorDashboard = () => {
@@ -33,9 +34,10 @@ const ProfessorDashboard = () => {
                             <Route path="/lectureWrite" element={<LectureWrite/>}></Route>
                             <Route path="/lectureModify/:lecNo" element={<LectureModify/>}></Route>
                             <Route path="/lectureDashboard" element={<LectureDashboard/>}></Route>
-                            <Route path="/contents/:lecNo" element={<Contents/>}></Route>
+                            <Route path="/contents" element={<Contents/>}></Route>
                             <Route path="/homeworkWrite/:week/:lecNo" element={<HomeworkWrite/>}></Route>
                             <Route path="/homeworkModify/:hwNo" element={<HomeworkModify/>}></Route>
+                            <Route path="/lessonDataWrite/:week/:lecNo" element={<LessonDataWrite/>}></Route>
                             <Route path="/examQuestionForm" element={<ExamQuestionForm/>}></Route>
                             {/* <Route path="/insert-calendar" element={< />}></Route>
                             <Route path="/calendar" element={<Calendar />}></Route> */}

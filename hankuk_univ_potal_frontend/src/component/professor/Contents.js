@@ -5,13 +5,14 @@ import { Button, Card, CardBody, Collapse } from "reactstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
-import { useAtom } from "jotai";
-import { tokenAtom } from "../../atoms";
-import { useNavigate, useParams } from "react-router";
+import { useAtom, useAtomValue } from "jotai";
+import { lectureAtom, tokenAtom } from "../../atoms";
+import { useLocation, useNavigate, useParams } from "react-router";
 
 const Contents = () => {
     const [token, setToken] = useAtom(tokenAtom);
-    const { lecNo } = useParams();
+    const lecture = useAtomValue(lectureAtom);
+    
     const [lessonDataList, setLessonDataList] = useState([]);
     const [homeworkList, setHomeworkList] = useState([]);
     const [lessonList, setLessonList] = useState([]);
@@ -30,10 +31,10 @@ const Contents = () => {
     };
 
     useEffect(() => {
-
+        console.log(lecture)
         const fetchLessons = async () => {
             try {
-                const response = await axios.get(`${url}/contents?lecNo=${lecNo}`,
+                const response = await axios.get(`${url}/contents?lecNo=${lecture.lecNo}`,
                     {
                         headers: { Authorization: JSON.stringify(token) }
                     }
@@ -69,7 +70,7 @@ const Contents = () => {
 
         fetchLessons();
 
-    }, []);
+    }, [token,lecture]);
 
 
     return (
@@ -79,7 +80,7 @@ const Contents = () => {
             </Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <Typography ml={5} mt={3} mb={4} variant="h7">
-                    <HomeIcon /> 과목  <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>강의콘텐츠</b></Typography>
+                    <HomeIcon /> 과목  <KeyboardDoubleArrowRightIcon /> {lecture.subName}  <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>강의콘텐츠</b></Typography>
                 </Typography>
                 <div className="Contents_Body">
                     {lessonList.map((lesson, i) => (
@@ -102,14 +103,14 @@ const Contents = () => {
                             <Collapse isOpen={openIndexes.includes(i)}>
                                 <Card>
                                     <CardBody>
-                                        <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecNo}`)}>강의자료등록</Button>
-                                        <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecNo}`)}>과제등록</Button>
+                                        <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}>강의자료등록</Button>
+                                        <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}>과제등록</Button>
                                         <div>1차시</div><hr />
-                                        {lesson.lessonData.map((data) => {
+                                        {lesson.lessonData.map((data,i) => {
                                             console.log(data);
                                             if (data.lessonCnt === 1) {
                                                 return (
-                                                    <div className="Contents_Divs">
+                                                    <div key={i} className="Contents_Divs">
                                                         ↳<div className="Contents_Divs_Title">{data.title}</div>
                                                         <Button className="Contents_Divs_Button">강의자료보기</Button>
                                                     </div>
@@ -117,11 +118,11 @@ const Contents = () => {
                                             }
                                             return null;
                                         })}
-                                        {lesson.homework.map((data) => {
+                                        {lesson.homework.map((data,i) => {
                                             console.log(data);
                                             if (data.lessonCnt === 1) {
                                                 return (
-                                                    <div className="Contents_Divs">
+                                                    <div key={i} className="Contents_Divs">
                                                         ↳<div className="Contents_Divs_Title">{data.title}</div>
                                                         <Button
                                                             className="Contents_Divs_Button"

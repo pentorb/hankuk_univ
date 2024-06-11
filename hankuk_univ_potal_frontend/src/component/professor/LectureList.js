@@ -24,7 +24,7 @@ const LectureList = ({ direction, ...args }) => {
 
         // let profNo = JSON.parse(sessionStorage.getItem("prof"));
         submit(1);
-    }, [])
+    }, [token])
 
     const submit = (page) => {
         axios.get(`${url}/lectureList?profNo=P1001&year=${year}&div=${div}`,

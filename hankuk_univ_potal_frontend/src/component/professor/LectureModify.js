@@ -32,7 +32,7 @@ const LectureModify = () => {
             .catch(err => {
                 console.log(err);
             })
-    },[])
+    },[token])
 
     const submit = () => {
         const formData = new FormData();

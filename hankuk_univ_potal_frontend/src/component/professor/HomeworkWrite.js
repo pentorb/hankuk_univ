@@ -3,7 +3,7 @@ import './prof.css';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { url } from "../../config/config";

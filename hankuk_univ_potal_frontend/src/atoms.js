@@ -1,13 +1,21 @@
 import {atomWithStorage, createJSONStorage} from 'jotai/utils';
 
 export const initMember = {id:'', name:'', password:''};
-
+export const initLecture = {lecNo: '', credit: 0, sect: '', time1: '', time2: '',
+    numOfStd: 0, files: '', lecRoom: '',  status: '', isScoreChk: null, year: 0,  semester: '',
+    subCd: '', profNo: '', profName: '', email: '', tel: '', subName: ''}
 // 공유할 데이터를 분리하여 선언
 export const memberAtom = atomWithStorage(
     'member', // 이름
     initMember, // 초기값
     createJSONStorage(()=>sessionStorage),
 );
+
+export const lectureAtom = atomWithStorage(
+    'lecture',
+    initLecture,
+    createJSONStorage(()=>sessionStorage),
+)
 
 export const tokenAtom = atomWithStorage(
     'token',

@@ -18,6 +18,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router';
+import { url } from '../../config/config';
 
 const renderEventContent = (eventInfo) => {
     return (
@@ -46,7 +47,7 @@ const ProfMain = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8090/calendar`)
+        axios.get(`${url}/calendar`)
             .then(res => {
                 const formattedEvents = res.data.map(event => {
                     return {
