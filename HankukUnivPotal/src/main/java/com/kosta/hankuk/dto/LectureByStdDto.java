@@ -23,6 +23,7 @@ public class LectureByStdDto {
 	private String stdNo;
 	private String grade;
 	private Boolean isDrop;
+	private String subName;
 	
 	public LectureByStd toLectureByStd() {
 		return LectureByStd.builder()

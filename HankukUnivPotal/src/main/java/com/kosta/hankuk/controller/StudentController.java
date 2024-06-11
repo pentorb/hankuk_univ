@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kosta.hankuk.dto.HuehakDto;
+import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.service.StudentService;
 
 @RestController
@@ -60,6 +61,19 @@ public class StudentController {
 		}	catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/allGrades") // 학번으로 학생 수강 리스트 
+	public ResponseEntity<Map<String, Object>> lbsListByStdNo(@RequestParam("stdNo") String stdNo, @RequestParam("year") Integer year, @RequestParam("semester") Integer semester){
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> lbsDtoList = stdService.checkGrade(stdNo, year, semester);
+			res.put("gradeList", lbsDtoList);
+			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

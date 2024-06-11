@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kosta.hankuk.dto.HuehakDto;
+import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.LectureByStd;
@@ -45,11 +46,12 @@ public class StudentServiceImpl implements StudentService {
 		hueRes.save(huehak);
 	}
 
-	@Override
-	public String stdByMajCd(StudentDto stdDto) throws Exception {
-		return mres.findById(stdDto.getMajCd()).get().getName();
-	}
+//	@Override
+//	public String stdByMajCd(StudentDto stdDto) throws Exception {
+//		return mres.findById(stdDto.getMajCd()).get().getName();
+//	}
 
+	// 학번으로 휴학 신청 내역 
 	@Override
 	public List<HuehakDto> hueListByStdNo(String stdNo) throws Exception {
 		List<Huehak> hueList = hueRes.findByStudent_StdNo(stdNo);
@@ -110,4 +112,19 @@ public class StudentServiceImpl implements StudentService {
 		map.put("point", point);
 		return map;
 	}
+
+	@Override // 학생이 수강하는 강의 리스트 (학기별)
+	public List<LectureByStdDto> lecListByStdNo(String stdNo, Integer year, Integer semester) throws Exception {
+	    List<LectureByStd> lbsList = lectureByStdRepository.findByStudent_stdNoAndLecture_yearAndLecture_semester(stdNo, year, semester);
+	    List<LectureByStdDto> lbsDtoList = new ArrayList<>();
+
+	    for (LectureByStd lbs : lbsList) {
+	        LectureByStdDto lbsDto = lbs.toLectureByStdDto();
+	        String subName = lbs.getLecture().getSubject().getName();
+	        lbsDto.setSubName(subName);
+	        lbsDtoList.add(lbsDto);
+	    }
+	    return lbsDtoList;
+	}
+
 }
