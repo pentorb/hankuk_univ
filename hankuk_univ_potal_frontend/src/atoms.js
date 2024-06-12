@@ -22,3 +22,8 @@ export const tokenAtom = atomWithStorage(
     {access_token:'', refresh_token:''},
     createJSONStorage(() => sessionStorage),
 );
+
+export const lectureNumberAtom = atomWithStorage(
+    'lectureNumber',
+    createJSONStorage(()=>sessionStorage),
+)

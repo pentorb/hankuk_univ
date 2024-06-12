@@ -3,6 +3,9 @@ package com.kosta.hankuk.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.StudentDto;
@@ -18,4 +21,7 @@ public interface StudentService {
 	
 	List<Map<String, Object>> checkGrade(String stdNo, Integer year, Integer semester) throws Exception;
 	Map<String, Object> checkScore(String stdNo, Integer year, Integer semester) throws Exception;
+	Map<String, Object> loadLectureInformation(String stdNo, String lecNo) throws Exception;
+	Integer makeAppeal(String stdNo, String lecNo, String content, MultipartFile file) throws Exception;
+	AppealDto appealDetail(Integer appNo) throws Exception;	
 }

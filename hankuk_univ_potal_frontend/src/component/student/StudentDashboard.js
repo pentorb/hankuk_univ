@@ -11,6 +11,7 @@ import BokhakInsert from './BokhakInsert';
 import ResSemester from './ResSemester';
 import Header from '../comm/Header';
 import AllmyGrades from './AllmyGrades';
+import Appeal from './Appeal';
 
 const StudentDashboard = () => {
     return (
@@ -30,6 +31,7 @@ const StudentDashboard = () => {
                             <Route path="/resSemester" element={<ResSemester/>}></Route>
                             <Route path="/" element={<StudentMain/>}></Route>
                             <Route path="/check-grade" element={<Grade/>}></Route>
+                            <Route path="/make-appeal" element={<Appeal/>}></Route>
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
                             <Route path="/my-grade" element={<AllmyGrades/>}></Route>

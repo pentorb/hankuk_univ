@@ -10,25 +10,37 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom } from '../../atoms';
-import { useAtomValue } from 'jotai';
+import { tokenAtom, memberAtom, lectureNumberAtom } from '../../atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
+import { useNavigate } from 'react-router';
 
 
 const Grade = () => {
-    const [semester, setSemester] = useState();
-    const [year, setYear] = useState();
+    const [semester, setSemester] = useState(1);
+    const [year, setYear] = useState(1);
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
     const [gradeList, setGradeList] = useState([]);
+    const navigate = useNavigate();
+    const setLectureNumber = useSetAtom(lectureNumberAtom);
     const [score, setScore] = useState({majorCredit:'', semesterCredit:'', rank:'', studentCount:'', point:'', score:''});
     
+    useEffect(() => {
+        checkGrade();
+    }, [])
+
     const checkGrade = () => {
-        const gradeUrl = `${url}/grade?stdNo=${member.id}&year=${year}&semester=${semester}`;
+        let formData = new FormData();
+        formData.append("stdNo", member.id);
+        formData.append("year", year);
+        formData.append("semester", semester);
+
+        const gradeUrl = `${url}/grade`;
         console.log(gradeUrl);
-        axios.get(gradeUrl, {
+        axios.post(gradeUrl, formData, {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
@@ -37,6 +49,8 @@ const Grade = () => {
             })
             .catch(err => {
                 console.log(err);
+                setGradeList(null)
+                setScore(null)
             })
     }
 
@@ -81,7 +95,6 @@ const Grade = () => {
                     <Grid item xs={1} />
                     <Grid item xs={12} sx={{ height: 50 }} />
                 </Grid>
-                {score.semesterCredit > 0 &&
                     <Grid container>
                         <Grid item xs={1} />
                         <Grid item xs={10}>
@@ -95,14 +108,23 @@ const Grade = () => {
                                             <TableCell align="center" sx={{ color: "white" }}>석차</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell align="center">{score.semesterCredit}</TableCell>
-                                            <TableCell align="center">{score.majorCredit}</TableCell>
-                                            <TableCell align="center">{score.point}</TableCell>
-                                            <TableCell align="center">{score.rank} / {score.studentCount}</TableCell>
-                                        </TableRow>
-                                    </TableBody>
+                                    {score !== null &&
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell align="center">{score.semesterCredit}</TableCell>
+                                                <TableCell align="center">{score.majorCredit}</TableCell>
+                                                <TableCell align="center">{score.point}</TableCell>
+                                                <TableCell align="center">{score.rank} / {score.studentCount}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    }
+                                    {score === null &&
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell align="center" colSpan={4}>데이터가 없습니다</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    }
                                 </Table>
                             </TableContainer>
                         </Grid>
@@ -121,26 +143,33 @@ const Grade = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {gradeList.map(grade => (!grade.isDrop &&
-                                            <TableRow key={grade.subjectName}>
-                                                <TableCell align="center">{grade.subjectName}</TableCell>
+                                        {gradeList !== null && (gradeList.map(grade => (!grade.isDrop &&
+                                            <TableRow key={grade.lectureName}>
+                                                <TableCell align="center">{grade.lectureName}</TableCell>
                                                 <TableCell align="center">{grade.professorName}</TableCell>
                                                 <TableCell align="center">{grade.grade}</TableCell>
                                                 <TableCell align="center">
-                                                    <Button variant="contained" size="medium" sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3 }}>이의신청</Button>
+                                                    <Button variant="contained"
+                                                    size="medium"
+                                                    onClick={()=>{setLectureNumber(grade.lectureNumber); navigate("/student/make-appeal")}}
+                                                    sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3 }}>이의신청</Button>
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Button variant="contained" size="medium" sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3 }}>학점포기</Button>
                                                 </TableCell>
                                             </TableRow>
-                                        ))}                                    
+                                        )))}
+                                        {gradeList === null &&
+                                            <TableRow>
+                                                <TableCell align="center" colSpan={5}>데이터가 없습니다</TableCell>
+                                            </TableRow>
+                                        }
                                     </TableBody>
                                 </Table>
                             </TableContainer>
                         </Grid>
                         <Grid item xs={1} />
                     </Grid>
-                }
                 {/* ------Your content end------! */}
                 <br/>
             </Paper>

@@ -9,10 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.service.StudentService;
@@ -48,7 +51,7 @@ public class StudentController {
 		}
 	}
 	
-	@GetMapping("/grade")
+	@PostMapping("/grade")
 	public ResponseEntity<Map<String, Object>> checkGrade(@RequestParam(name="stdNo")String stdNo,
 			@RequestParam(name="year") Integer year, @RequestParam(name="semester") Integer semester){		
 		try {
@@ -77,4 +80,33 @@ public class StudentController {
 			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/load-appeal-information")
+	public ResponseEntity<Map<String, Object>> loadAppealInformation(@RequestParam(name="stdNo")String stdNo,
+			@RequestParam(name="lectureNumber") String lectureNumber){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			Map<String, Object> appealInformation = stdService.loadLectureInformation(stdNo, lectureNumber);
+			res.put("appealInformation", appealInformation);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/appeal")
+	public ResponseEntity<Integer> makeAppeal(@RequestParam("stdNo") String stdNo,
+			@RequestParam("lecNo") String lecNo,
+			@RequestParam("content") String content,
+			@RequestParam(name="files", required=false) MultipartFile files){
+		try {
+			Integer appNo = stdService.makeAppeal(stdNo, lecNo, content, files);
+			return new ResponseEntity<Integer>(appNo, HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }
