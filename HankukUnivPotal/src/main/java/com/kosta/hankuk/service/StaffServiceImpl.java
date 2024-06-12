@@ -324,7 +324,15 @@ public class StaffServiceImpl implements StaffService {
                 String tel = row.getCell(2).getStringCellValue();
                 String gender = row.getCell(3).getStringCellValue();
                 
-                Major major = majorRepository.findByName(majorName).orElse(null);
+                String majCd = majorRepository.findByName(majorName)
+                        .map(Major::getMajCd)
+                        .orElse(null);
+
+               Major major = null;
+               if (majCd != null) {
+            	   major = new Major();
+            	   major.setMajCd(majCd);
+               }
 
                 if ("student".equalsIgnoreCase(category)) {
                     Student student = new Student();
