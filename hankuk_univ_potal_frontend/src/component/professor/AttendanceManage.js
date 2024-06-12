@@ -3,7 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
-import { Input, Table} from "reactstrap";
+import { Input, Table } from "reactstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
@@ -11,7 +11,7 @@ const AttendanceManage = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
     const [lessonList, setLessonList] = useState([]);
-    const [attendanceList, setAttendanceList] = useState([{},{},{}]);
+    const [attendanceList, setAttendanceList] = useState([]);
     useEffect(() => {
         const fetchLessons = async () => {
             try {
@@ -26,22 +26,9 @@ const AttendanceManage = () => {
 
                 let mockData = [];
                 for (let index = 0; index < 15; index++) {
-                    let lessonData = [];
-                    let homeworkData = [];
-                    // response.data.lessonDataList.forEach(data => {
-                    //     if (data.week === index + 1) {
-                    //         lessonData.push(data);
-                    //     }
-                    // })
-                    // response.data.homeworkList.forEach(homework => {
-                    //     if (homework.week === index + 1) {
-                    //         homeworkData.push(homework);
-                    //     }
-                    // })
-                    mockData.push({ week: index + 1, lessonData: lessonData, homework: homeworkData });
+                    mockData.push({ week: index + 1, attendanceList: attendanceList });
                 }
                 setLessonList(mockData);
-                console.log(lessonList);
             } catch (error) {
                 console.error("Error fetching lessons", error);
                 // Mock data in case of error
@@ -53,6 +40,19 @@ const AttendanceManage = () => {
 
     }, [token, lecture]);
 
+
+    const handleStatusChange = (e, attIndex, weekIndex, offset) => {
+        const newStatus = e.target.value;
+        const updatedAttendanceList = attendanceList.map((att, i) => {
+            if (i === attIndex) {
+                const newStatusArray = att.status.split('');
+                newStatusArray[weekIndex + offset] = newStatus === '출석' ? '1' : newStatus === '지각' ? '2' : '3';
+                return { ...att, status: newStatusArray.join('') };
+            }
+            return att;
+        });
+        setAttendanceList(updatedAttendanceList);
+    };
 
     return (
         <Grid item xs={12}>
@@ -80,41 +80,56 @@ const AttendanceManage = () => {
 
                     </div>
                     <div className="AttendManage_Table">
-                    <Table bordered hover>
-                        <thead >
-                            <tr >
-                                <th className="AttendManage_Table_thead">
-                                    학생\주차
-                                </th>
-                                {lessonList.map((lesson, i) => {
-                                    return (
-                                        <th className="AttendManage_Table_thead" key={i} >{i + 1}주차</th>
-                                    )
-                                })}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {attendanceList.map((att, i) => (
-                                    <tr key={i} className="AttendManage_Table_td">
-                                        <th  className="AttendManage_Table_thead">
+                        <Table bordered hover>
+                            <thead >
+                                <tr >
+                                    <th className="AttendManage_Table_thead">
+                                        학생\주차
+                                    </th>
+                                    {lessonList.map((lesson, i) => {
+                                        return (
+                                            <th className="AttendManage_Table_thead" key={i} >{i + 1}주차</th>
+                                        )
+                                    })}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {attendanceList && lessonList && attendanceList.map((att, index) => (
+                                    <tr key={index} className="AttendManage_Table_td">
+                                        <th className="AttendManage_Table_thead">
                                             {att.stdName}
                                         </th>
-                                        {lessonList.map((j) => (
-                                                <td className="AttendManage_Table_td">
-                                                    <select type="" className="AttendManage_Select">
-                                                        <option>-</option>
-                                                        <option>출석</option>
-                                                        <option style={{color:'blue'}}>지각</option>
-                                                        <option style={{color:'red'}}>결석</option>
-                                                    </select>
-                                                </td>
-                                            )
+                                        {lessonList.map((less, i) => (
+                                            <td key={i} className="AttendManage_Table_td">
+                                                <select
+                                                    value={att.status.substr(i, 1) === '1' ? '출석' : att.status.substr(i, 1) === '2' ? '지각' : '결석'}
+                                                    style={att.status.substr(i, 1) === '1' ? {color:'black'} : att.status.substr(i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
+                                                    onChange={(e) => handleStatusChange(e, index, i, 0)}
+                                                    className="AttendManage_Select"
+                                                >
+                                                    <option value="출석" style={{color:'black'}}>출석</option>
+                                                    <option value="지각" style={{ color: 'blue' }}>지각</option>
+                                                    <option value="결석" style={{ color: 'red' }}>결석</option>
+                                                </select>
+                                                /
+                                                <select
+                                                    value={att.status.substr(15+i, 1) === '1' ? '출석' : att.status.substr(15+i, 1) === '2' ? '지각' : '결석'}
+                                                    style={att.status.substr(15+i, 1) === '1' ? {color:'black'} : att.status.substr(15+i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
+                                                    onChange={(e) => handleStatusChange(e, index, i, 0)}
+                                                    className="AttendManage_Select"
+                                                >
+                                                    <option value="출석" style={{color:'black'}}>출석</option>
+                                                    <option value="지각" style={{ color: 'blue' }}>지각</option>
+                                                    <option value="결석" style={{ color: 'red' }}>결석</option>
+                                                </select>
+                                            </td>
+                                        )
                                         )}
                                     </tr>
                                 )
-                            )}
-                        </tbody>
-                    </Table>
+                                )}
+                            </tbody>
+                        </Table>
                     </div>
                 </div>
 
