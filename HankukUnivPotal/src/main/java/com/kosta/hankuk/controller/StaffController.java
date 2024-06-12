@@ -3,6 +3,7 @@ package com.kosta.hankuk.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
@@ -98,5 +100,16 @@ public class StaffController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to upload data: " + e.getMessage());
         }
+    }
+    
+    @PostMapping
+    public ResponseEntity<List<HuehakDto>> allHueList() {
+    	try {
+//    		List<HuehakDto> hueDtoList = staffService.allhueList();
+    		return new ResponseEntity<List<HuehakDto>>(HttpStatus.OK);
+    	} catch(Exception e) {
+    		e.printStackTrace();
+			return new ResponseEntity<List<HuehakDto>>(HttpStatus.BAD_REQUEST);
+    	}
     }
 }
