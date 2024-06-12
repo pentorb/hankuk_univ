@@ -143,7 +143,7 @@ const ExamQuestionForm = (args) => {
                             changeQstForm(exam.Qnum);
                         }}
                     >
-                        <option value="객관식">객관식</option>
+                        <option selected value="객관식">객관식</option>
                         <option value="주관식">주관식</option>
                     </Input>&nbsp;&nbsp;&nbsp;
                     <Input
