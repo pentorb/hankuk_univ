@@ -15,7 +15,6 @@ import axios from 'axios';
 const AllmyGrades = () => {
     const token = useAtomValue(tokenAtom);
     const member = useAtomValue(memberAtom);
-    // const [grades, setGrades] = useState([]);
     const [lecList, setLecList] = useState([]);
     const [courYear, setCourYear] = useState(1);
     const [semester, setSemester] = useState(2);
