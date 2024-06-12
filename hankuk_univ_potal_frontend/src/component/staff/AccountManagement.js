@@ -11,6 +11,8 @@ import { url } from "../../config/config";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import {tokenAtom} from "../../atoms";
+import {useAtomValue} from 'jotai';
 
 const AccountManagement = () => {
   const [students, setStudents] = useState([]);
@@ -21,36 +23,40 @@ const AccountManagement = () => {
   const [formData, setFormData] = useState({
     category: '',
     id: '',
-    college: '',
+    colleage: '',
     major: '',
     name: '',
     password: '1234',
   });
-  const [colleges, setColleges] = useState([]);
+  const [colleages, setColleages] = useState([]);
   const [majors, setMajors] = useState([]);
   const [searchCategory, setSearchCategory] = useState('student');
   const [editMode, setEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const token = useAtomValue(tokenAtom);
 
   useEffect(() => {
-    fetchColleges();
-  }, []);
+    fetchcolleages();
+  }, [token]);
 
-  const fetchColleges = async () => {
+  const fetchcolleages = async () => {
     try {
-      const response = await axios.get(`${url}/collegesSearchList`);
-      setColleges(response.data);
+      const response = await axios.get(`${url}/colleagesSearchList`,
+        {headers: {"Authorization": JSON.stringify(token)}}
+      );
+      setColleages(response.data);
     } catch (error) {
-      console.error("Error fetching colleges:", error);
+      console.error("Error fetching colleages:", error);
     }
   };
 
-  const fetchMajors = async (collegeName) => {
+  const fetchMajors = async (colleageName) => {
     try {
-      const response = await axios.get(`${url}/majorsByCollege`, {
+      const response = await axios.get(`${url}/majorsBycolleage`, {
         params: {
-          colCd: collegeName,
-        }
+          colCd: colleageName,
+        },
+        headers: {"Authorization": JSON.stringify(token)}
       });
       setMajors(response.data);
     } catch (error) {
@@ -64,16 +70,17 @@ const AccountManagement = () => {
         const response = await axios.get(`${url}/searchStudents`, {
           params: {
             name: searchType === 'name' ? searchInput : null,
-            college: searchType === 'major' ? formData.college : null,
+            colleage: searchType === 'major' ? formData.colleage : null,
             major: searchType === 'major' ? formData.major : null,
-          }
+          },
+          headers: {"Authorization": JSON.stringify(token)}
         });
         setStudents(response.data);
       } else if (searchCategory === 'professor') {
         const response = await axios.get(`${url}/searchProfessors`, {
           params: {
             name: searchType === 'name' ? searchInput : null,
-            college: searchType === 'major' ? formData.college : null,
+            colleage: searchType === 'major' ? formData.colleage : null,
             major: searchType === 'major' ? formData.major : null,
           }
         });
@@ -89,6 +96,7 @@ const AccountManagement = () => {
   };
 
   const handleFileChange = async (e) => {
+    console.log(token)
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("category", searchCategory);
@@ -97,7 +105,8 @@ const AccountManagement = () => {
     try {
       const response = await axios.post(`${url}/uploadExcel`, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
+          "Authorization": JSON.stringify(token)  
         }
       });
       alert("Data uploaded successfully");
@@ -124,7 +133,7 @@ const AccountManagement = () => {
       }
     }
   };
-  
+
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -140,10 +149,10 @@ const AccountManagement = () => {
 
     try {
       if (formData.category === 'student') {
-        await axios.post(`${url}/registerStudent`, formData);
+        await axios.post(`${url}/registerStudent`, formData,{"Authorization": JSON.stringify(token)});
         alert("학생이 성공적으로 등록되었습니다.");
       } else if (formData.category === 'professor') {
-        await axios.post(`${url}/registerProfessor`, formData);
+        await axios.post(`${url}/registerProfessor`, formData,{"Authorization": JSON.stringify(token)});
         alert("교수가 성공적으로 등록되었습니다.");
       }
     } catch (error) {
@@ -159,11 +168,11 @@ const AccountManagement = () => {
       ...formData,
       [name]: value,
     });
-  
-    if (name === 'college') {
+
+    if (name === 'colleage') {
       fetchMajors(value);
     }
-  
+
     if (name === 'category') {
       if (value === 'student') {
         await generateStudentId();
@@ -172,33 +181,37 @@ const AccountManagement = () => {
       }
     }
   };
-  
+
 
 
   const generateStudentId = async () => {
     try {
-      const response = await axios.get(`${url}/createStudentId`);
+      const response = await axios.get(`${url}/createStudentId`, {
+        headers: {"Authorization": JSON.stringify(token)}
+      });
       setFormData((prevData) => ({
         ...prevData,
-          id: response.data, 
+        id: response.data,
       }));
     } catch (error) {
       console.error("Error generating student ID:", error);
     }
   };
-  
+
   const generateProfessorId = async () => {
     try {
-      const response = await axios.get(`${url}/createProfessorId`);
+      const response = await axios.get(`${url}/createProfessorId`,{
+        headers: {"Authorization": JSON.stringify(token)}
+      });
       setFormData((prevData) => ({
         ...prevData,
-          id: response.data,
+        id: response.data,
       }));
     } catch (error) {
       console.error("Error generating professor ID:", error);
     }
   };
-  
+
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -223,10 +236,10 @@ const AccountManagement = () => {
   const handleDelete = async () => {
     try {
       if (searchCategory === 'student') {
-        await axios.post(`${url}/deleteStudents`, selectedIds);
+        await axios.post(`${url}/deleteStudents`, selectedIds,{"Authorization": JSON.stringify(token)});
         setStudents(students.filter(student => !selectedIds.includes(student.id)));
       } else if (searchCategory === 'professor') {
-        await axios.post(`${url}/deleteProfessors`, selectedIds);
+        await axios.post(`${url}/deleteProfessors`, selectedIds,{"Authorization": JSON.stringify(token)});
         setProfessors(professors.filter(professor => !selectedIds.includes(professor.id)));
       }
       alert("삭제가 완료되었습니다.");
@@ -244,9 +257,9 @@ const AccountManagement = () => {
   const handleSave = async () => {
     try {
       if (searchCategory === 'student') {
-        await axios.post(`${url}/updateStudents`, students.filter(student => selectedIds.includes(student.id)));
+        await axios.post(`${url}/updateStudents`, students.filter(student => selectedIds.includes(student.id)),{"Authorization": JSON.stringify(token)});
       } else if (searchCategory === 'professor') {
-        await axios.post(`${url}/updateProfessors`, professors.filter(professor => selectedIds.includes(professor.id)));
+        await axios.post(`${url}/updateProfessors`, professors.filter(professor => selectedIds.includes(professor.id)),{"Authorization": JSON.stringify(token)});
       }
       alert("수정이 완료되었습니다.");
       setEditMode(false);
@@ -296,7 +309,7 @@ const AccountManagement = () => {
                   <tr>
                     <td>구분</td>
                     <td>
-                      <select name="searchCategory" value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} className="search-select" fullWidth>
+                      <select name="searchCategory" value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} className="search-select">
                         <option value="student">학생</option>
                         <option value="professor">교수</option>
                       </select>
@@ -305,21 +318,21 @@ const AccountManagement = () => {
                   <tr>
                     <td>검색</td>
                     <td>
-                      <select onChange={handleSearchTypeChange} className="search-select" defaultValue="major" fullWidth>
+                      <select onChange={handleSearchTypeChange} className="search-select" defaultValue="major" >
                         <option value="major">전공별</option>
                         <option value="name">이름별</option>
                       </select>
                       {searchType === 'major' ? (
                         <>
-                          <Select value={formData.college} onChange={handleInputChange} name="college">
-                            {colleges.map((college) => (
-                              <MenuItem key={college} value={college}>{college}</MenuItem>
+                          <Select value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '120px', marginRight: '5px' }}>
+                            {colleages.map((colleage) => (
+                              <MenuItem key={colleage.colCd} value={colleage.colCd} >{colleage.name}</MenuItem>
                             ))}
                           </Select>
-                          <Select value={formData.major} onChange={handleInputChange} name="major" >
-                            {majors.map((major) => (
-                              <MenuItem key={major} value={major}>{major}</MenuItem>
-                            ))}
+                          <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '230px' }}>
+                          {majors.map((major) => (
+                            <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                          ))}
                           </Select>
                         </>
                       ) : (
@@ -462,9 +475,9 @@ const AccountManagement = () => {
               </tr>
               <tr>
                 <th><label>소속</label></th>
-                <Select name="college" value={formData.college} onChange={handleInputChange} style={{ width: '100%', height: '30px' }}>
-                  {colleges.map((college) => (
-                    <MenuItem key={college} value={college}>{college}</MenuItem>
+                <Select name="colleage" value={formData.colleage} onChange={handleInputChange} style={{ width: '100%', height: '30px' }}>
+                  {colleages.map((colleage) => (
+                    <MenuItem key={colleage} value={colleage}>{colleage}</MenuItem>
                   ))}
                 </Select>
                 <Select name="major" value={formData.major} onChange={handleInputChange} style={{ width: '100%', height: '30px' }}>

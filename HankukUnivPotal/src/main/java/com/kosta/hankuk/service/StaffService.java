@@ -1,9 +1,13 @@
 package com.kosta.hankuk.service;
 
 import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
-import com.kosta.hankuk.entity.Student;
+
+import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.entity.Professor;
+import com.kosta.hankuk.entity.Student;
 
 public interface StaffService {
 
@@ -22,8 +26,8 @@ public interface StaffService {
     List<Student> searchStudents(String name, String colleage, String major);
     List<Professor> searchProfessors(String name, String colleage, String major);
 
-    List<String> getAllColleges();
-    List<String> getMajorsByColleage(String colCd);
+    List<ColleageDto> getAllColleages();
+    List<MajorDto> getMajorsByColleage(String colCd);
 
     void saveDataFromExcel(String category, MultipartFile file) throws Exception;
 }
