@@ -1,6 +1,6 @@
 import { Typography, Paper, Button, Grid } from '@mui/material';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { tokenAtom, memberAtom, lectureNumberAtom } from '../../atoms';
@@ -9,6 +9,9 @@ import { url } from '../../config/config';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+
 
 const FormGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -74,9 +77,25 @@ const Appeal = () => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>이의신청</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4}>
-                    <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 성적 <KeyboardDoubleArrowRightIcon /> 성적조회 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>이의신청</b></Typography>
-                </Typography>
+                <div id="breadCrumb" style={{ margin:'24px 40px 32px'}}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/student">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            마이페이지
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            성적
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            성적조회
+                        </Link>
+                        <Link color="#4952A9" underline='none'>
+                            <b>이의신청</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
                 <hr />
                 {/* ------Your content start------! */}
                 <Grid container spacing={3}>

@@ -5,8 +5,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -16,6 +16,8 @@ import { tokenAtom, memberAtom, lectureNumberAtom } from '../../atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 
 const Grade = () => {
@@ -58,9 +60,22 @@ const Grade = () => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>성적조회</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <Typography ml={5} mt={3} mb={4}>
-                    <HomeIcon /> 마이페이지 <KeyboardDoubleArrowRightIcon /> 성적 <KeyboardDoubleArrowRightIcon /> <Typography sx={{ display: "inline", color: "#4952A9" }}><b>성적조회</b></Typography>
-                </Typography>
+                <div id="breadCrumb" style={{ margin:'24px 40px 32px'}}>
+                    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="none" color="inherit" href="/student">
+                            <HomeIcon />
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            마이페이지
+                        </Link>
+                        <Link color="inherit" underline='none'>
+                            성적
+                        </Link>
+                        <Link color="#4952A9" underline='none'>
+                            <b>성적조회</b>
+                        </Link>
+                    </Breadcrumbs>
+                </div>
                 {/* ------Your content start------! */}
                 <Grid container>
                     <Grid item xs={12} sx={{ height: 50 }} />
