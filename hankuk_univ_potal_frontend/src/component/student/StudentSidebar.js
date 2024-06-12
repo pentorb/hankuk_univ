@@ -116,9 +116,11 @@ export default function StudentSidebar() {
                     <ListItemText primary="전체학기 성적조회" />
                   </ListItemButton>
                   </Link>
+                  <Link to="/student/credits" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 7} onClick={(e) => handleListItemClick(e, 7)}>
                     <ListItemText primary="학점이수 현황" />
                   </ListItemButton>
+                  </Link>
                 </List>
               </Collapse>
             </>}
