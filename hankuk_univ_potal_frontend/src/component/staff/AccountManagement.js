@@ -329,10 +329,10 @@ const AccountManagement = () => {
                               <MenuItem key={colleage.colCd} value={colleage.colCd} >{colleage.name}</MenuItem>
                             ))}
                           </Select>
-                          <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '200px' }}>
+                          <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '230px' }}>
                           {majors.map((major) => (
-    <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
-  ))}
+                            <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                          ))}
                           </Select>
                         </>
                       ) : (
