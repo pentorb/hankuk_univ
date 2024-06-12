@@ -11,11 +11,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kosta.hankuk.entity.Colleage;
+import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
@@ -34,13 +35,13 @@ public class StaffServiceImpl implements StaffService {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private ColleageRepository collegeRepository;
+    private ColleageRepository colleageRepository;
 
     @Autowired
     private MajorRepository majorRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public String generateUniqueStudentId() {
@@ -134,18 +135,17 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<String> getAllColleges() {
-        return collegeRepository.findAll().stream()
-                                 .map(Colleage::getName)
+    public List<ColleageDto> getAllColleages() {
+        return colleageRepository.findAll().stream()
+                                 .map(colleage -> new ColleageDto(colleage.getColCd(), colleage.getName()))
                                  .collect(Collectors.toList());
     }
 
     @Override
-    public List<String> getMajorsByColleage(String colCd) {
-//       return majorRepository.findByColleageId(colCd).stream()
-//                              .map(Major::getName)
-//                              .collect(Collectors.toList());
-    	return null;
+    public List<MajorDto> getMajorsByColleage(String colCd) {
+        return majorRepository.findByColleageColCd(colCd).stream()
+                              .map(major -> new MajorDto(major.getMajCd(), major.getName(), major.getTel(), major.getReqGenCredit(), major.getReqMajCredit(), major.getGradCredit(), major.getColleage().getColCd()))
+                              .collect(Collectors.toList());
     }
 
     @Override
@@ -158,24 +158,32 @@ public class StaffServiceImpl implements StaffService {
             Sheet sheet = workbook.getSheetAt(0);
 
             for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue; // 헤더 무시
+                if (row.getRowNum() == 0) continue; 
 
                 String name = row.getCell(0).getStringCellValue();
-                String major = row.getCell(2).getStringCellValue();
+                String majorName = row.getCell(1).getStringCellValue();
+                String tel = row.getCell(2).getStringCellValue();
+                String gender = row.getCell(3).getStringCellValue();
+                
+                Major major = majorRepository.findByName(majorName).orElse(null);
 
                 if ("student".equalsIgnoreCase(category)) {
                     Student student = new Student();
                     student.setStdNo(generateUniqueStudentId());
                     student.setName(name);
-                    //student.setMajor(major);
-                    student.setPassword("1234"); // 기본 비밀번호 설정
+                    student.setTel(tel);
+                    student.setGender(gender);
+                    student.setMajor(major);
+                    student.setPassword(passwordEncoder.encode("1234"));
                     students.add(student);
                 } else if ("professor".equalsIgnoreCase(category)) {
                     Professor professor = new Professor();
                     professor.setProfNo(generateUniqueProfessorId());
                     professor.setName(name);
-                    //professor.setMajor(major);
-                    professor.setPassword("1234"); // 기본 비밀번호 설정
+                    professor.setTel(tel);
+                    professor.setGender(gender);
+                    professor.setMajor(major); 
+                    professor.setPassword(passwordEncoder.encode("1234")); 
                     professors.add(professor);
                 }
             }
@@ -187,4 +195,5 @@ public class StaffServiceImpl implements StaffService {
             }
         }
     }
+
 }

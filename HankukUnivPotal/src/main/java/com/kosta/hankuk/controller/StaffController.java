@@ -1,6 +1,7 @@
 package com.kosta.hankuk.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.kosta.hankuk.entity.Student;
+
+import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.entity.Professor;
+import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.service.StaffService;
 
 @RestController
@@ -31,33 +35,34 @@ public class StaffController {
         return ResponseEntity.ok(newProfessorId);
     }
 
-    @GetMapping("/collegesSearchList")
-    public ResponseEntity<List<String>> getCollegesSearchList() {
-        List<String> colleges = staffService.getAllColleges();
-        return ResponseEntity.ok(colleges);
+    @GetMapping("/colleagesSearchList")
+    public ResponseEntity<List<ColleageDto>> getcolleagesSearchList() {
+        List<ColleageDto> colleages = staffService.getAllColleages();
+        return ResponseEntity.ok(colleages);
     }
 
-    @GetMapping("/majorsByCollege")
-    public ResponseEntity<List<String>> getMajorsByCollege(@RequestParam String colCd) {
-        List<String> majors = staffService.getMajorsByColleage(colCd);
+    @GetMapping("/majorsBycolleage")
+    public ResponseEntity<List<MajorDto>> getMajorsByColleage(@RequestParam String colCd) {
+        List<MajorDto> majors = staffService.getMajorsByColleage(colCd);
         return ResponseEntity.ok(majors);
     }
+
 
     @GetMapping("/searchStudents")
     public ResponseEntity<List<Student>> searchStudents(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String college,
+            @RequestParam(required = false) String colleage,
             @RequestParam(required = false) String major) {
-        List<Student> students = staffService.searchStudents(name, college, major);
+        List<Student> students = staffService.searchStudents(name, colleage, major);
         return ResponseEntity.ok(students);
     }
 
     @GetMapping("/searchProfessors")
     public ResponseEntity<List<Professor>> searchProfessors(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String college,
+            @RequestParam(required = false) String colleage,
             @RequestParam(required = false) String major) {
-        List<Professor> professors = staffService.searchProfessors(name, college, major);
+        List<Professor> professors = staffService.searchProfessors(name, colleage, major);
         return ResponseEntity.ok(professors);
     }
 
