@@ -154,6 +154,38 @@ const Contents = () => {
                                             return null;
                                         })}
                                         <div>2차시</div><hr />
+                                        {lesson.lessonData.map((data, i) => {
+                                            console.log(data);
+                                            if (data.lessonCnt === 2) {
+                                                return (
+                                                    <div key={i} className="Contents_Divs">
+                                                        ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                        <Button
+                                                            className="Contents_Divs_Button"
+                                                            onClick={() => navigate(`/professor/lessonDataModify/${data.ldNo}`)}>
+                                                            강의자료보기
+                                                        </Button>
+                                                    </div>
+                                                )
+                                            }
+                                            return null;
+                                        })}
+                                        {lesson.homework.map((data, i) => {
+                                            console.log(data);
+                                            if (data.lessonCnt === 2) {
+                                                return (
+                                                    <div key={i} className="Contents_Divs">
+                                                        ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                        <Button
+                                                            className="Contents_Divs_Button"
+                                                            onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
+                                                            과제보기
+                                                        </Button>
+                                                    </div>
+                                                )
+                                            }
+                                            return null;
+                                        })}
                                     </CardBody>
                                 </Card>
                             </Collapse>
