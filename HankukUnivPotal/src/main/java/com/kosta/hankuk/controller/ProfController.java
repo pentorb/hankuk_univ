@@ -201,6 +201,20 @@ public class ProfController {
 		}
 	}
 	
+	@GetMapping("/attendanceManageDetail")
+	public ResponseEntity<Map<String, Object>> attendanceManageDetail(
+			@RequestParam(name = "lecNo", required = false) String lecNo){
+		try {
+			Map<String, Object> attendanceDetail = new HashMap<String, Object>();
+			attendanceDetail.put("studentListByLec", profService.studentListByLec(lecNo));
+//			contents.put("homeworkList", profService.homeworkList(lecNo));
+			return new ResponseEntity<Map<String, Object>>(attendanceDetail, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/examQuestionWrite")
 	public ResponseEntity<String> examQuestionWrite(@RequestBody Map<String, Object> param) {
 		System.out.println(param);

@@ -94,6 +94,11 @@ export default function ProfessorSidebar() {
                   <ListItemText primary="강의콘텐츠" />
                 </ListItemButton>
               </Link>
+              <Link to="/professor/attendanceManage" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="출결관리" />
+                </ListItemButton>
+              </Link>
               <Link to="/professor/examQuestionForm" style={{ textDecoration: "none", color: 'black' }}>
                 <ListItemButton>
                   <ListItemText primary="시험출제" />

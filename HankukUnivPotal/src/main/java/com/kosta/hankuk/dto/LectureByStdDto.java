@@ -21,6 +21,7 @@ public class LectureByStdDto {
 	private Integer lbsNo;
 	private String lecNo;
 	private String stdNo;
+	private String stdName;
 	private String grade;
 	private Boolean isDrop;
 	private String subName;

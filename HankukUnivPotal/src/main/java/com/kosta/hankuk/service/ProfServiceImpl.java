@@ -9,15 +9,19 @@ import org.springframework.stereotype.Service;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
+import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Exam;
 import com.kosta.hankuk.entity.Homework;
 import com.kosta.hankuk.entity.Lecture;
+import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
 import com.kosta.hankuk.repository.ExamQuesRepository;
 import com.kosta.hankuk.repository.ExamRepository;
 import com.kosta.hankuk.repository.HomeworkRepository;
+import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.LessonDataRepository;
 import com.kosta.hankuk.repository.LessonRepository;
@@ -34,6 +38,7 @@ public class ProfServiceImpl implements ProfService{
 	private final LessonDataRepository lessonDataRepository;
 	private final HomeworkRepository homeworkRepository;
 	private final LessonRepository lessonRepository;
+	private final LectureByStdRepository lectureByStdRepository;
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -144,6 +149,16 @@ public class ProfServiceImpl implements ProfService{
 	}
 
 	@Override
+	public List<LectureByStdDto> studentListByLec(String lecNo) throws Exception {
+		List<LectureByStd> lectureByStdsList = lectureByStdRepository.findByLecture_lecNo(lecNo);
+		List<LectureByStdDto> lectureByStdDtoList = new ArrayList<LectureByStdDto>();
+		for (LectureByStd lectureByStd : lectureByStdsList) {
+			lectureByStdDtoList.add(lectureByStd.toLectureByStdDto());
+		}
+		return lectureByStdDtoList;
+	}
+	
+	@Override
 	public void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception {
 		examRepository.save(examDto.toExam());
 		
@@ -155,6 +170,8 @@ public class ProfServiceImpl implements ProfService{
 		}
 		
 	}
+
+	
 
 	
 

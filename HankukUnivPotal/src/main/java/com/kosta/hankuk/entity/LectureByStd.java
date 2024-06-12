@@ -52,6 +52,7 @@ public class LectureByStd {
 				.lbsNo(lbsNo)
 				.lecNo(lecture.getLecNo())
 				.stdNo(student.getStdNo())
+				.stdName(student.getName())
 				.grade(grade)
 				.isDrop(isDrop)
 				.courYear(courYear)

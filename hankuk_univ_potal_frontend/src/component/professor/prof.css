@@ -245,6 +245,37 @@
 
 
 
+.AttendManage_Body{
+  width: 1200px;
+  margin: 0 auto;
+}
+.AttendManage_Table{
+  overflow-x: scroll;
+}
+.AttendManage_Table_thead{
+  white-space: nowrap;
+  text-align: center;
+  padding: 5px;
+}
+/* .AttendManage_Table > th{
+  background-color: #1F3468;
+  color: #ffffff;
+} */
+.AttendManage_Table_td{
+  padding: 5px;
+}
+.AttendManage_Select{
+  width: 55px;
+  border-radius: 8px;
+  border:none;
+  padding: 2px 2px;
+}
+
+
+
+
+
+
 .ExamQuestionForm_Body{
   width: 1042px;
   margin: 40px auto;

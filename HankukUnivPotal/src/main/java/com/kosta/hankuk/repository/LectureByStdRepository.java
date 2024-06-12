@@ -12,4 +12,6 @@ public interface LectureByStdRepository extends JpaRepository<LectureByStd, Inte
 	
 	// 학생 개인의 수강 리스트 조회 (학년별, 학기별)
 	List<LectureByStd> findByStudent_stdNoAndCourYearAndLecture_semester(String stdNo, Integer courYear, Integer semester);
+	
+	List<LectureByStd> findByLecture_lecNo(String lecNo);
 }
