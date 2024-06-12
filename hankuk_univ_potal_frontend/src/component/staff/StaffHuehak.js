@@ -24,20 +24,20 @@ const statusMap = {
 };
 
 const StaffHuehak = () => {
-    const [huebok, setHuebok] = useState([]);
-    const token = useAtomValue(tokenAtom);
-    const member = useAtomValue(memberAtom);
+    // const [huebok, setHuebok] = useState([]);
+    // const token = useAtomValue(tokenAtom);
+    // const member = useAtomValue(memberAtom);
 
-    useEffect(() => {
-        console.log(token);
-        if(token.access_token==='') return
+    // useEffect(() => {
+    //     console.log(token);
+    //     if(token.access_token==='') return
 
-        axios.get(`${url}/hueListByStdNo`, { headers: { Authorization: JSON.stringify(token) } })
-            .then(res => {
-                console.log(res.data);
-                setHuebok([...res.data])
-            });
-    }, [token]);
+    //     axios.get(`${url}/hueListByStdNo`, { headers: { Authorization: JSON.stringify(token) } })
+    //         .then(res => {
+    //             console.log(res.data);
+    //             setHuebok([...res.data])
+    //         });
+    // }, [token]);
 
     
     return (
@@ -76,7 +76,7 @@ const StaffHuehak = () => {
                                 <Input type="select" className="selBox" id="type" name="type">
                                     <option>구분</option>
                                     <option value="o">일반 휴학</option>
-                                    {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}
+                                    {/* {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''} */}
                                     <option value="p">출산, 임신 휴학</option>
                                     <option value="s">창업 휴학</option>
                                     <option value="i">질병 휴학</option>
@@ -94,13 +94,13 @@ const StaffHuehak = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    {/* <tr>
                                         <td scope="row">{hue.hueNo}</td>
                                         <td>{typeMap[hue.type] || hue.type}</td>
                                         <td>{hue.appDt}</td>
                                         <td>{hue.hueSem}</td>
                                         <td>{statusMap[hue.status] || hue.status}</td>
-                                    </tr>
+                                    </tr> */}
 
                                     {/* {huebok.filter(hue => hue.sect === 'H').map(hue => (
                                         <tr key={hue.hueNo}>
