@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.dto.ProfessorDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
 
@@ -23,8 +25,8 @@ public interface StaffService {
     void updateStudents(List<Student> students);
     void updateProfessors(List<Professor> professors);
 
-    List<Student> searchStudents(String name, String colleage, String major);
-    List<Professor> searchProfessors(String name, String colleage, String major);
+    List<StudentDto> searchStudents(String name, String colleage, String major);
+    List<ProfessorDto> searchProfessors(String name, String colleage, String major);
 
     List<ColleageDto> getAllColleages();
     List<MajorDto> getMajorsByColleage(String colCd);

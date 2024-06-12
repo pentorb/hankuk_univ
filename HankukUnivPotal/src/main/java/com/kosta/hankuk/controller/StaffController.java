@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.dto.ProfessorDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.service.StaffService;
@@ -49,22 +51,21 @@ public class StaffController {
         return ResponseEntity.ok(majors);
     }
 
-
     @GetMapping("/searchStudents")
-    public ResponseEntity<List<Student>> searchStudents(
+    public ResponseEntity<List<StudentDto>> searchStudents(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String colleage,
             @RequestParam(required = false) String major) {
-        List<Student> students = staffService.searchStudents(name, colleage, major);
+        List<StudentDto> students = staffService.searchStudents(name, colleage, major);
         return ResponseEntity.ok(students);
     }
 
     @GetMapping("/searchProfessors")
-    public ResponseEntity<List<Professor>> searchProfessors(
+    public ResponseEntity<List<ProfessorDto>> searchProfessors(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String colleage,
             @RequestParam(required = false) String major) {
-        List<Professor> professors = staffService.searchProfessors(name, colleage, major);
+        List<ProfessorDto> professors = staffService.searchProfessors(name, colleage, major);
         return ResponseEntity.ok(professors);
     }
 

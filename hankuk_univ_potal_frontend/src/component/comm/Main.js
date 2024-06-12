@@ -4,7 +4,7 @@ import '../comm/css/Main.css';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import NoticeBoard from "./NoticeBoard";
+// import NoticeBoard from "./NoticeBoard";
 import NewsCarousel from "./NewsCarousel";
 
 const Main = () => {
