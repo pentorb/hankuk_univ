@@ -114,10 +114,9 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override // 학생이 수강하는 강의 리스트 (학기별)
-	public List<LectureByStdDto> lecListByStdNo(String stdNo, Integer year, Integer semester) throws Exception {
-	    List<LectureByStd> lbsList = lectureByStdRepository.findByStudent_stdNoAndLecture_yearAndLecture_semester(stdNo, year, semester);
+	public List<LectureByStdDto> lecListByStdNo(String stdNo, Integer courYear, Integer semester) throws Exception {
+	    List<LectureByStd> lbsList = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, courYear, semester);
 	    List<LectureByStdDto> lbsDtoList = new ArrayList<>();
-
 	    for (LectureByStd lbs : lbsList) {
 	        LectureByStdDto lbsDto = lbs.toLectureByStdDto();
 	        String subName = lbs.getLecture().getSubject().getName();

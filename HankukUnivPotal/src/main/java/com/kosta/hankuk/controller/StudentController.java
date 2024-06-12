@@ -65,11 +65,12 @@ public class StudentController {
 	}
 	
 	@GetMapping("/allGrades") // 학번으로 학생 수강 리스트 
-	public ResponseEntity<Map<String, Object>> lbsListByStdNo(@RequestParam("stdNo") String stdNo, @RequestParam("year") Integer year, @RequestParam("semester") Integer semester){
+	public ResponseEntity<Map<String, Object>> lbsListByStdNo(@RequestParam("stdNo") String stdNo, @RequestParam("courYear") Integer courYear, @RequestParam("semester") Integer semester){
 		try {
 			Map<String, Object> res = new HashMap<>();
-			List<Map<String, Object>> lbsDtoList = stdService.checkGrade(stdNo, year, semester);
-			res.put("gradeList", lbsDtoList);
+			List<LectureByStdDto> lbsDtoList = stdService.lecListByStdNo(stdNo, courYear, semester);
+			System.out.println(lbsDtoList);
+			res.put("lecList", lbsDtoList);
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
