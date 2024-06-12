@@ -4,6 +4,7 @@ import {Routes, Route} from 'react-router-dom';
 import StaffSidebar from './StaffSidebar';
 import AccountManagement from'./AccountManagement'
 import Header from '../comm/Header';
+import StaffHuehak from './StaffHuehak';
 
 
 const StaffDashboard = () => {
@@ -19,6 +20,7 @@ const StaffDashboard = () => {
                     </Grid>
                     <Grid item xs={10} sx={{ backgroundColor: "#DDE1E8" }}>
                         <Routes>
+                            <Route path="/confirmHuehak" element={<StaffHuehak/>} />
                             <Route path="/AccountManagement" element={<AccountManagement/>}></Route>
                         </Routes>
                     

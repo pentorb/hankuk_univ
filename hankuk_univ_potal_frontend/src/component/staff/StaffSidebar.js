@@ -77,7 +77,7 @@ export default function StaffSidebar() {
           {activeTab === 2 &&
             <>
               <ListItemButton onClick={handleFirstClick}>
-                <ListItemText primary="학적" />
+                <ListItemText primary="학생" />
                 {firstOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse in={firstOpen} timeout="auto" unmountOnExit>
@@ -99,7 +99,7 @@ export default function StaffSidebar() {
               </ListItemButton>
               <Collapse in={secondOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <Link to="/staff/AccountManagement">
+                  <Link to="/staff/AccountManagement" style={{textDecoration: "none", color:"black"}}>
                     <ListItemButton sx={{ pl: 4 }}>
                       <ListItemText primary="전체성적" />
                     </ListItemButton>
@@ -126,15 +126,27 @@ export default function StaffSidebar() {
             </>}
           {activeTab === 3 &&
             <>
-              <ListItemButton>
-                <ListItemText primary="3번째 메뉴" />
+              <ListItemButton onClick={handleFirstClick}>
+                <ListItemText primary="학생 지원" />
+                {firstOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
+              <Collapse in={firstOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link to="/staff/AccountManagement" style={{textDecoration: "none", color:"black"}}>
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemText primary="계정 관리" />
+                  </ListItemButton>
+                  </Link>
+                  <Link to="" style={{textDecoration: "none", color:"black"}}>
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemText primary="휴학 관리" />
+                  </ListItemButton>
+                  </Link>
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemText primary="성적 확정" />
+                  </ListItemButton>
+                </List>
+              </Collapse>
             </>}
           {activeTab === 4 &&
             <>
