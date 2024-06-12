@@ -108,16 +108,16 @@ const StudentMain = () => {
                             <div>
                                 <div style={{ textAlign: 'center', marginBottom: '15px' }}><h5><b>오늘의 학식</b></h5></div>
                                 <div className='horDiv' style={{ height: '70px' }}>
-                                    <div className='col-2'><WbTwilightIcon />&nbsp;조식</div>
-                                    <div className='col-10'>브레드, 쌀시리얼&우유, 삶은 계란, 토마토채소샐러드, 후르츠칵테일</div>
+                                    <div className='col-2 menuT'><WbTwilightIcon />&nbsp;조식</div>
+                                    <div className='col-10 menu'>브레드, 쌀시리얼&우유, 삶은 계란, 토마토채소샐러드, 후르츠칵테일</div>
                                 </div>
                                 <div className='horDiv' style={{ height: '70px' }}>
-                                    <div className='col-2' style={{ backgroundColor: "rgb(187 193 233 / 70%)" }}><LightModeIcon />&nbsp;중식</div>
-                                    <div className='col-10'>쌀밥, 시금치된장국, 파채돈까스, 알감자새송이조림, 무말랭이무침, 배추김치</div>
+                                    <div className='col-2 menuT' style={{ backgroundColor: "rgb(187 193 233 / 70%)" }}><LightModeIcon />&nbsp;중식</div>
+                                    <div className='col-10 menu'>쌀밥, 시금치된장국, 파채돈까스, 알감자새송이조림, 무말랭이무침, 배추김치</div>
                                 </div>
                                 <div className='horDiv' style={{ height: '70px' }}>
-                                    <div className='col-2' style={{ backgroundColor: "#bbc1e9" }}><DarkModeIcon />&nbsp;석식</div>
-                                    <div className='col-10'>쌀밥, 만두국, 가자미구이, 비엔나김치볶음, <br />깻잎지무침, 깍두기</div>
+                                    <div className='col-2 menuT' style={{ backgroundColor: "#bbc1e9" }}><DarkModeIcon />&nbsp;석식</div>
+                                    <div className='col-10 menu'>쌀밥, 만두국, 가자미구이, 비엔나김치볶음, <br />깻잎지무침, 깍두기</div>
                                 </div>
                             </div>
                         </Grid>
