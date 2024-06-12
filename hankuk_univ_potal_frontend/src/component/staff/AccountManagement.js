@@ -368,7 +368,7 @@ const AccountManagement = () => {
                 <thead>
                   <tr>
                     <th><input type="checkbox" onChange={handleSelectAll} /></th>
-                    <th>아이디(학번)</th>
+                    <th>아이디(학번/교번)</th>
                     <th>이름</th>
                     <th>전공</th>
                     <th>이메일</th>
