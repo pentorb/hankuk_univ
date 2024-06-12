@@ -12,6 +12,7 @@ import ResSemester from './ResSemester';
 import Header from '../comm/Header';
 import AllmyGrades from './AllmyGrades';
 import Appeal from './Appeal';
+import CreditsList from './CreditsList';
 
 const StudentDashboard = () => {
     return (
@@ -35,6 +36,7 @@ const StudentDashboard = () => {
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
                             <Route path="/my-grade" element={<AllmyGrades/>}></Route>
+                            <Route path="/credits" element={<CreditsList/>}></Route>
                         </Routes>
                     </Grid>
                    
