@@ -137,7 +137,7 @@ export default function StaffSidebar() {
                     <ListItemText primary="계정 관리" />
                   </ListItemButton>
                   </Link>
-                  <Link to="" style={{textDecoration: "none", color:"black"}}>
+                  <Link to="/staff/confirmHuehak" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="휴학 관리" />
                   </ListItemButton>
