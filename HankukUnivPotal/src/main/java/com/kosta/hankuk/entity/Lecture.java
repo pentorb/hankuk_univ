@@ -67,6 +67,8 @@ public class Lecture {
 	@JoinColumn(name="profNo")
 	private Professor professor;
 	
+	@OneToMany(mappedBy="lecture", fetch=FetchType.LAZY)
+	private List<Attendance> attendanceList = new ArrayList<>();
 	// 수업리스트 
 	@OneToMany(mappedBy="lecture", fetch=FetchType.LAZY)
 	private List<Lesson> lessonList = new ArrayList<>();

@@ -206,8 +206,7 @@ public class ProfController {
 			@RequestParam(name = "lecNo", required = false) String lecNo){
 		try {
 			Map<String, Object> attendanceDetail = new HashMap<String, Object>();
-			attendanceDetail.put("studentListByLec", profService.studentListByLec(lecNo));
-//			contents.put("homeworkList", profService.homeworkList(lecNo));
+			attendanceDetail.put("attendanceList", profService.attendanceList(lecNo));
 			return new ResponseEntity<Map<String, Object>>(attendanceDetail, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

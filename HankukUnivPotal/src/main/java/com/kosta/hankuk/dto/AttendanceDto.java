@@ -1,7 +1,7 @@
 package com.kosta.hankuk.dto;
 
 import com.kosta.hankuk.entity.Attendance;
-import com.kosta.hankuk.entity.Lesson;
+import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.Student;
 
 import lombok.AllArgsConstructor;
@@ -20,14 +20,15 @@ import lombok.ToString;
 public class AttendanceDto {
 	private Integer attNo;
 	private String stdNo;
-	private Integer lessonNo;
+	private String stdName;
+	private String lecNo;
 	private String status;
 	
 	public Attendance toAttendacne() {
 		return Attendance.builder()
 				.attNo(attNo)
 				.student(Student.builder().stdNo(stdNo).build())
-				.lesson(Lesson.builder().lessonNo(lessonNo).build())
+				.lecture(Lecture.builder().lecNo(lecNo).build())
 				.status(status)
 				.build();
 	}

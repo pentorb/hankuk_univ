@@ -46,9 +46,6 @@ public class Lesson {
 	@OneToMany(mappedBy="lesson", fetch=FetchType.LAZY)
 	private List<LessonData> lesDataList = new ArrayList<>();
 	
-	@OneToMany(mappedBy="lesson", fetch=FetchType.LAZY)
-	private List<Attendance> attList = new ArrayList<>();
-	
 	public LessonDto toLessonDto() {
 		return LessonDto.builder()
 				.lessonNo(lessonNo)

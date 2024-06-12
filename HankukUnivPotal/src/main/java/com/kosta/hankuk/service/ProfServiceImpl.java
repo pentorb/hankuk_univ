@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
@@ -13,11 +14,13 @@ import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.entity.Attendance;
 import com.kosta.hankuk.entity.Exam;
 import com.kosta.hankuk.entity.Homework;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
+import com.kosta.hankuk.repository.AttendanceRepository;
 import com.kosta.hankuk.repository.ExamQuesRepository;
 import com.kosta.hankuk.repository.ExamRepository;
 import com.kosta.hankuk.repository.HomeworkRepository;
@@ -39,6 +42,7 @@ public class ProfServiceImpl implements ProfService{
 	private final HomeworkRepository homeworkRepository;
 	private final LessonRepository lessonRepository;
 	private final LectureByStdRepository lectureByStdRepository;
+	private final AttendanceRepository attendanceRepository;
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -149,13 +153,13 @@ public class ProfServiceImpl implements ProfService{
 	}
 
 	@Override
-	public List<LectureByStdDto> studentListByLec(String lecNo) throws Exception {
-		List<LectureByStd> lectureByStdsList = lectureByStdRepository.findByLecture_lecNo(lecNo);
-		List<LectureByStdDto> lectureByStdDtoList = new ArrayList<LectureByStdDto>();
-		for (LectureByStd lectureByStd : lectureByStdsList) {
-			lectureByStdDtoList.add(lectureByStd.toLectureByStdDto());
+	public List<AttendanceDto> attendanceList(String lecNo) throws Exception {
+		List<Attendance> attendanceList = attendanceRepository.findByLecture_lecNo(lecNo);
+		List<AttendanceDto> attendanceDtoList = new ArrayList<AttendanceDto>();
+		for (Attendance attendance : attendanceList) {
+			attendanceDtoList.add(attendance.toAttendanceDto());
 		}
-		return lectureByStdDtoList;
+		return attendanceDtoList;
 	}
 	
 	@Override
@@ -170,6 +174,8 @@ public class ProfServiceImpl implements ProfService{
 		}
 		
 	}
+
+	
 
 	
 

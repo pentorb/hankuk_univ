@@ -11,7 +11,7 @@ const AttendanceManage = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
     const [lessonList, setLessonList] = useState([]);
-    const [studentList, setStudentList] = useState([{},{},{}]);
+    const [attendanceList, setAttendanceList] = useState([{},{},{}]);
     useEffect(() => {
         const fetchLessons = async () => {
             try {
@@ -22,7 +22,7 @@ const AttendanceManage = () => {
                 );
                 // Assuming response.data is an array of lessons
                 console.log(response.data);
-                // setStudentList(response.data.studentList);
+                setAttendanceList(response.data.attendanceList);
 
                 let mockData = [];
                 for (let index = 0; index < 15; index++) {
@@ -94,12 +94,12 @@ const AttendanceManage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {studentList.map((stud, i) => (
-                                    <tr className="AttendManage_Table_td">
+                            {attendanceList.map((att, i) => (
+                                    <tr key={i} className="AttendManage_Table_td">
                                         <th  className="AttendManage_Table_thead">
-                                            홍길동
+                                            {att.stdName}
                                         </th>
-                                        {lessonList.map((i) => (
+                                        {lessonList.map((j) => (
                                                 <td className="AttendManage_Table_td">
                                                     <select type="" className="AttendManage_Select">
                                                         <option>-</option>

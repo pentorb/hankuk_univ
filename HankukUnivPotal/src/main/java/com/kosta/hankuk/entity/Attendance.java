@@ -46,18 +46,19 @@ public class Attendance {
 	private Student student;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="lessonNo")
-	private Lesson lesson;
+	@JoinColumn(name="lecNo")
+	private Lecture lecture;
 	
 	@Column
-	@ColumnDefault("'AT01'")
+	@ColumnDefault("'111111111111111111111111111111'")
 	private String status;
 	
 	public AttendanceDto toAttendanceDto() {
 		return AttendanceDto.builder()
 				.attNo(attNo)
 				.stdNo(student.getStdNo())
-				.lessonNo(lesson.getLessonNo())
+				.stdName(student.getName())
+				.lecNo(lecture.getLecNo())
 				.status(status)
 				.build();
 	}
