@@ -44,6 +44,9 @@ public class LectureByStd {
 	@Column(columnDefinition = "boolean default false")
 	private Boolean isDrop;
 	
+	@Column // 수강 학년
+	private Integer courYear;
+	
 	public LectureByStdDto toLectureByStdDto() {
 		return LectureByStdDto.builder()
 				.lbsNo(lbsNo)
@@ -51,6 +54,7 @@ public class LectureByStd {
 				.stdNo(student.getStdNo())
 				.grade(grade)
 				.isDrop(isDrop)
+				.courYear(courYear)
 				.build();
 	}
 }

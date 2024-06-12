@@ -24,6 +24,7 @@ public class LectureByStdDto {
 	private String grade;
 	private Boolean isDrop;
 	private String subName;
+	private Integer courYear;
 	
 	public LectureByStd toLectureByStd() {
 		return LectureByStd.builder()
@@ -32,6 +33,7 @@ public class LectureByStdDto {
 				.student(Student.builder().stdNo(stdNo).build())
 				.grade(grade)
 				.isDrop(isDrop)
+				.courYear(courYear)
 				.build();
 	}
 }
