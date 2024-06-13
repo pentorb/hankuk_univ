@@ -1,4 +1,4 @@
-.modal {
+/* .modal {
   display: none;
   position: fixed;
   top: 0;
@@ -20,9 +20,9 @@
   max-width: 550px;
   margin: 0 auto;
   border-radius: 25px;
-  background-color: #F1F2F3;
+  background-color: #F1F2F3; */
   /* 팝업이 열릴때 스르륵 열리는 효과 */
-  animation: modal-show 0.3s;
+  /* animation: modal-show 0.3s;
   overflow: hidden;
 }
 
@@ -49,10 +49,10 @@
 
 .modal>section>main {
   padding: 16px;
-  display: flex;
+  display: flex; */
   /* border-bottom: 1px solid #dee2e6; */
   /* border-top: 1px solid #dee2e6; */
-}
+/* }
 
 .modal>section>footer {
   padding: 12px 16px;
@@ -69,10 +69,10 @@
 
 .modal.openModal {
   display: flex;
-  align-items: center;
+  align-items: center; */
   /* 팝업이 열릴때 스르륵 열리는 효과 */
-  animation: modal-bg-show 0.3s;
-}
+  /* animation: modal-bg-show 0.3s;
+} */
 
 .memo {
   width: 90%;
