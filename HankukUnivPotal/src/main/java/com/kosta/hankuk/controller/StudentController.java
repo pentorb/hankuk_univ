@@ -71,7 +71,7 @@ public class StudentController {
 		try {
 			Map<String, Object> res = new HashMap<>();
 			List<LectureByStdDto> lbsDtoList = stdService.lecListByStdNo(stdNo, courYear, semester);
-			System.out.println(lbsDtoList);
+//			System.out.println(lbsDtoList);
 			res.put("lecList", lbsDtoList);
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch(Exception e) {
