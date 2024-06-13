@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom, lectureNumberAtom } from '../../atoms';
+import { tokenAtom, memberAtom, selectedNumberAtom } from '../../atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
@@ -27,7 +27,7 @@ const Grade = () => {
     const token = useAtomValue(tokenAtom);
     const [gradeList, setGradeList] = useState([]);
     const navigate = useNavigate();
-    const setLectureNumber = useSetAtom(lectureNumberAtom);
+    const setSelectedNumber = useSetAtom(selectedNumberAtom);
     const [score, setScore] = useState({majorCredit:'', semesterCredit:'', rank:'', studentCount:'', point:'', score:''});
     
     useEffect(() => {
@@ -166,7 +166,7 @@ const Grade = () => {
                                                 <TableCell align="center">
                                                     <Button variant="contained"
                                                     size="medium"
-                                                    onClick={()=>{setLectureNumber(grade.lectureNumber); navigate("/student/make-appeal")}}
+                                                    onClick={()=>{setSelectedNumber(grade.lectureNumber); navigate("/student/make-appeal")}}
                                                     sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3 }}>이의신청</Button>
                                                 </TableCell>
                                                 <TableCell align="center">

@@ -3,7 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom, lectureNumberAtom } from '../../atoms';
+import { tokenAtom, memberAtom, selectedNumberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -19,7 +19,7 @@ const FormGrid = styled(Grid)(() => ({
 }));
 
 const Appeal = () => {
-    const lectureNumber = useAtomValue(lectureNumberAtom);
+    const lectureNumber = useAtomValue(selectedNumberAtom);
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
     const [information, setInformation] = useState({});

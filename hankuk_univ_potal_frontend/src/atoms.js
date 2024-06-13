@@ -23,7 +23,7 @@ export const tokenAtom = atomWithStorage(
     createJSONStorage(() => sessionStorage),
 );
 
-export const lectureNumberAtom = atomWithStorage(
-    'lectureNumber',
+export const selectedNumberAtom = atomWithStorage(
+    'selectedNumber',
     createJSONStorage(()=>sessionStorage),
 )
