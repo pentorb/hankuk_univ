@@ -2,8 +2,9 @@ import { Typography, Paper, Button, Grid } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { tokenAtom, memberAtom, selectedNumberAtom } from '../../atoms';
+import { tokenAtom, memberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -18,40 +19,37 @@ const FormGrid = styled(Grid)(() => ({
     flexDirection: 'column',
 }));
 
-const Appeal = () => {
-    const lectureNumber = useAtomValue(selectedNumberAtom);
+const AppealDetail = () => {
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
-    const [information, setInformation] = useState({});
-    const [content, setContent] = useState();
+    const [content, setContent] = useState("");
     const [files, setFiles] = useState();
-    const [fileName, setFileName] = useState();
+    const [fileName, setFileName] = useState("");
+    const [appeal, setAppeal] = useState({});
+    const {appNo} = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        let formData = new FormData();
-        formData.append("lectureNumber", lectureNumber);
-        formData.append("stdNo", member.id);
-
-        axios.post(`${url}/load-appeal-information`, formData, {
+        let detailUrl = `${url}/appeal-detail/${appNo}`;
+        axios.get(detailUrl, {
             headers: { Authorization: JSON.stringify(token) }
         })
-            .then(res => {
-                setInformation(res.data.appealInformation);
+            .then(res=> {
+                let resAppeal = res.data.appeal;
+                setAppeal({...resAppeal})
             })
-            .catch(err => {
-                console.log(err);
+            .catch(err=> {
+                console.log(err)
             })
     }, [])
 
-    const makeAppeal = () => {
+    const modifyAppeal = () => {
         let formData = new FormData();
-        formData.append("stdNo", member.id);
-        formData.append("lecNo", lectureNumber);
+        formData.append("appNo", appNo);
         formData.append("content", content);
         formData.append("files", files);
 
-        const appealUrl = `${url}/make-appeal`;
+        const appealUrl = `${url}/modify-appeal`;
         console.log(appealUrl);
         axios.post(appealUrl, formData, {
             headers: { Authorization: JSON.stringify(token) }
@@ -105,12 +103,12 @@ const Appeal = () => {
                     <FormGrid item xs={5} sx={{ display: "block" }}>
                         <Typography sx={{ display: "inline-block", marginLeft:5 }}><b>강의명</b></Typography>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <OutlinedInput value={information.lectureName} sx={{ borderRadius: 5, display: "inline-block", width:400 }} readOnly/>
+                        <OutlinedInput value={appeal.lectureName} sx={{ borderRadius: 5, display: "inline-block", width:400 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={5} sx={{ display: "block" }}>
                         <Typography sx={{ display: "inline-block", marginLeft:5 }}><b>교수명</b></Typography>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <OutlinedInput value={information.professorName} sx={{ borderRadius: 5, display: "inline-block", width:400 }} readOnly/>
+                        <OutlinedInput value={appeal.professorName} sx={{ borderRadius: 5, display: "inline-block", width:400 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 10 }} />
@@ -130,7 +128,7 @@ const Appeal = () => {
                     <FormGrid item xs={1} />
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>내&nbsp;&nbsp;&nbsp;용</b></Typography>
-                        <OutlinedInput onChange={changeContent} sx={{ borderRadius: 5, marginLeft:4, marginRight:5, height:200}} required/>
+                        <OutlinedInput value={content ? content : appeal.content} onChange={changeContent} sx={{ borderRadius: 5, marginLeft:4, marginRight:5, height:200}} required/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 20 }} />
@@ -138,13 +136,13 @@ const Appeal = () => {
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>파일 업로드</b></Typography>
                         <OutlinedInput type="file" id="file" onChange={changeFile} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} hidden/>
-                        <OutlinedInput type="text" value={fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
+                        <OutlinedInput type="text" value={fileName ? fileName : appeal.formerFileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 50 }} />
                 </Grid>
                 <div>
-                    <Button variant="contained" size="large" onClick={makeAppeal} sx={{ float:"right", backgroundColor: "firstColor.main", marginRight:20 }}>신청</Button>
+                    <Button variant="contained" size="large" onClick={modifyAppeal} sx={{ float:"right", backgroundColor: "firstColor.main", marginRight:20 }}>수정</Button>
                     <Button variant="contained" size="large" onClick={() => document.getElementById('file').click()} sx={{ float:"right", backgroundColor: "firstColor.main", marginRight:2 }}>첨부</Button>
                 </div>
                 <br/><br/>
@@ -155,4 +153,4 @@ const Appeal = () => {
     )
 }
 
-export default Appeal;
+export default AppealDetail;

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.entity.Appeal;
@@ -81,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<Map<String, Object>> checkGrade(String stdNo, Integer year, Integer semester) throws Exception {
 		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
-				.findByStudent_stdNoAndLecture_yearAndLecture_semester(stdNo, year, semester);
+				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		for (LectureByStd lectureByStd : lectureByStdGroup) {
@@ -107,7 +106,7 @@ public class StudentServiceImpl implements StudentService {
 		Score score = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
 		Map<String, Object> map = new HashMap<>();
 		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
-				.findByStudent_stdNoAndLecture_yearAndLecture_semester(stdNo, year, semester);
+				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
 
 		Integer semesterCredit = 0;
 		Integer majorCredit = 0;
@@ -175,15 +174,98 @@ public class StudentServiceImpl implements StudentService {
 		appealRepository.save(appeal);
 		return appeal.getAppNo();
 	}
+	
+	public List<Map<String, Object>> checkAppealList(String stdNo, Integer year, Integer semester) throws Exception {
+		List<LectureByStd> lectureByStdGroup = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
+		List<Appeal> appealList = new ArrayList<>();
+
+		for (LectureByStd lectureByStd : lectureByStdGroup) {
+			String lecNo = lectureByStd.getLecture().getLecNo();
+			List<Appeal> appealByOneLecture = appealRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo);
+			if(appealByOneLecture != null) {
+				for(Appeal appeal : appealByOneLecture) appealList.add(appeal);
+			}				
+		}
+		
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+
+		for (Appeal selectedAppeal : appealList) {
+			Integer appNo = selectedAppeal.getAppNo();
+			String lectureName = selectedAppeal.getLecture().getSubject().getName();
+			String professorName = selectedAppeal.getLecture().getProfessor().getName();
+			String grade = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(
+					selectedAppeal.getStudent().getStdNo(), selectedAppeal.getLecture().getLecNo()).getGrade();
+			Integer credit = selectedAppeal.getLecture().getCredit();
+			String reqDt = selectedAppeal.getReqDt();
+			String status = selectedAppeal.getStatus();
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("appNo", appNo);
+			map.put("lectureName", lectureName);
+			map.put("professorName", professorName);
+			map.put("grade", grade);
+			map.put("credit", credit);
+			map.put("reqDt", reqDt);
+			map.put("status", status);
+			mapList.add(map);
+		}
+		
+		
+		return mapList;
+	}
 
 	@Override
-	public AppealDto appealDetail(Integer appNo) throws Exception {
+	public Map<String, Object> appealDetail(Integer appNo) throws Exception {
 		Optional<Appeal> oappeal = appealRepository.findById(appNo);
-		if (oappeal.isEmpty())
-			throw new Exception("글번호 오류");
+		if (oappeal.isEmpty()) throw new Exception("글번호 오류");
 		Appeal appeal = oappeal.get();
+		
+		String lectureNumber = appeal.getLecture().getLecNo();
+		String lectureName = appeal.getLecture().getSubject().getName();
+		String professorName = appeal.getLecture().getProfessor().getName();
+		String grade = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(
+				appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo()).getGrade();
 		appealRepository.save(appeal);
-		return appeal.toAppealDto();
+		
+		String formerFileName = "";
+		Files files = filesRepository.findById(Integer.parseInt(appeal.getFiles())).get();
+		if(files != null) formerFileName = files.getName();
+		
+		String status = appeal.getStatus();
+		String content = appeal.getContent();
+		String answer = appeal.getAnswer();
+		String reqDt = appeal.getReqDt();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("lectureNumber", lectureNumber);
+		map.put("formerFileName", formerFileName);
+		map.put("lectureName", lectureName);
+		map.put("professorName", professorName);
+		map.put("grade", grade);
+		map.put("status", status);
+		map.put("content", content);
+		map.put("answer", answer);
+		map.put("reqDt", reqDt);
+		
+		return map;
+	}
+	
+	@Override
+	public void modifyAppeal(Integer appNo, String content, MultipartFile file) throws Exception {
+		Appeal appeal = appealRepository.findById(appNo).get();
+		if (file != null && !file.isEmpty()) {
+			Files attachedFile = Files.builder().name(file.getOriginalFilename()).directory(uploadPath)
+					.size(file.getSize()).contenttype(file.getContentType()).build();
+			filesRepository.save(attachedFile);
+			File upFile = new File(uploadPath, attachedFile.getFileNo() + "");
+			file.transferTo(upFile);
+			String fileNo = attachedFile.getFileNo() + "";
+			appeal.setFiles(fileNo);
+		}
+		if(content != null && !content.isEmpty()) {
+			appeal.setContent(content);
+		}
+		appealRepository.save(appeal);
 	}
 
 }

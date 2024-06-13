@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.service.StudentService;
@@ -95,7 +94,7 @@ public class StudentController {
 		}
 	}
 	
-	@PostMapping("/appeal")
+	@PostMapping("/make-appeal")
 	public ResponseEntity<Integer> makeAppeal(@RequestParam("stdNo") String stdNo,
 			@RequestParam("lecNo") String lecNo,
 			@RequestParam("content") String content,
@@ -109,4 +108,41 @@ public class StudentController {
 		}
 	}
 	
+	@PostMapping("/appeal")
+	public ResponseEntity<Map<String, Object>> checkAppealList(@RequestParam(name="stdNo")String stdNo,
+			@RequestParam(name="year") Integer year, @RequestParam(name="semester") Integer semester){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> appealList = stdService.checkAppealList(stdNo, year, semester);
+			res.put("appealList", appealList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping({"/appeal-detail/{appNo}"})
+	public ResponseEntity<Map<String, Object>> appealDetail(@PathVariable Integer appNo){
+		try {
+			Map<String, Object> res = new HashMap<>();
+			Map<String, Object> appeal = stdService.appealDetail(appNo);
+			res.put("appeal", appeal);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/modify-appeal")
+	public void modifyAppeal(@RequestParam("appNo") Integer appNo,
+			@RequestParam("content") String content,
+			@RequestParam(name="files", required=false) MultipartFile files){
+		try {
+			stdService.modifyAppeal(appNo, content, files);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

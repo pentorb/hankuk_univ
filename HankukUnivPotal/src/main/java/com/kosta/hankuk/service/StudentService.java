@@ -5,11 +5,8 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
-import com.kosta.hankuk.dto.StudentDto;
-import com.kosta.hankuk.entity.LectureByStd;
 
 public interface StudentService {
 	// 휴학
@@ -23,5 +20,7 @@ public interface StudentService {
 	Map<String, Object> checkScore(String stdNo, Integer year, Integer semester) throws Exception;
 	Map<String, Object> loadLectureInformation(String stdNo, String lecNo) throws Exception;
 	Integer makeAppeal(String stdNo, String lecNo, String content, MultipartFile file) throws Exception;
-	AppealDto appealDetail(Integer appNo) throws Exception;	
+	List<Map<String, Object>> checkAppealList(String stdNo, Integer year, Integer semester) throws Exception;
+	Map<String, Object> appealDetail(Integer appNo) throws Exception;
+	void modifyAppeal(Integer appNo, String content, MultipartFile file) throws Exception;
 }

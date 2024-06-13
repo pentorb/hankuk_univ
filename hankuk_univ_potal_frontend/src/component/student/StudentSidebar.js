@@ -100,9 +100,11 @@ export default function StudentSidebar() {
                       <ListItemText primary="전체성적" />
                     </ListItemButton>
                   </Link>
-                  <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 5} onClick={(e) => handleListItemClick(e, 5)}>
-                    <ListItemText primary="이의신청 내역" />
-                  </ListItemButton>
+                  <Link to="/student/appeal-list" style={{textDecoration: "none", color:"black"}}>
+                    <ListItemButton sx={{ pl: 4 }}  selected={selectedIndex === 5} onClick={(e) => handleListItemClick(e, 5)}>
+                      <ListItemText primary="이의신청 내역" />
+                    </ListItemButton>
+                  </Link>
                 </List>
               </Collapse>
               <ListItemButton onClick={handleThirdClick}>
