@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import com.kosta.hankuk.dto.LectureByStdDto;
 
 import lombok.AllArgsConstructor;
