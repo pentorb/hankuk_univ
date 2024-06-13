@@ -30,6 +30,12 @@ public class HuehakDto {
 	private String files;
 	private String hueSem;
 	
+	
+	// 교직원이 휴학 내역 조회할 때
+	private String stdNm;
+	private String colNm;
+	private String majNm;
+	
 	public Huehak toHuehak() {
 		return Huehak.builder()
 				.hueNo(hueNo)

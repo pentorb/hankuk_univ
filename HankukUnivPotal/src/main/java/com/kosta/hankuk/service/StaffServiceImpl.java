@@ -11,21 +11,31 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.HuehakAndBokhakDto;
+import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.entity.Huehak;
+import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.ColleageRepository;
+import com.kosta.hankuk.repository.HueAndBokRepository;
+import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
+import com.kosta.hankuk.util.PageInfo;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -41,6 +51,12 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private MajorRepository majorRepository;
+    
+    @Autowired
+    private HuehakRepository hueres;
+    
+    @Autowired
+    private HueAndBokRepository hbres;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -363,4 +379,74 @@ public class StaffServiceImpl implements StaffService {
         }
     }
 
+    // 휴학 신청 내역 리스트 (페이징)
+	@Override
+	public List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception {
+		
+		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 10, Sort.by(Sort.Direction.DESC, "hueNo"));
+		Page<Huehak> pages = null;
+		
+		if (type==null || type.trim().equals("")) {
+			pages = hueres.findAll(pageRequest);
+		} else {
+			pages = hueres.findByType(type, pageRequest);
+		}
+		
+		pageInfo.setAllPage(pages.getTotalPages()); // 전체 페이지의 수
+		
+		int startPage = (pageInfo.getCurPage()-1)/1*10+1;
+		int endPage = Math.min(startPage+10-1, pageInfo.getAllPage());
+
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
+		List<HuehakDto> hueDtoList = new ArrayList<HuehakDto>();
+		for (Huehak hue : pages.getContent()) {
+			HuehakDto hbDto = hue.toHuehakDto();
+			
+			String stdNm = hue.getStudent().getName(); // 학생 이름
+			String colNm = hue.getStudent().getMajor().getColleage().getName(); // 단과 이름
+			String majNm = hue.getStudent().getMajor().getName(); // 학과 이름
+			
+			hbDto.setStdNm (stdNm);
+			hbDto.setColNm(colNm);
+			hbDto.setMajNm(majNm);
+			
+			hueDtoList.add(hbDto);
+		}
+		
+		return hueDtoList;
+	}
+
+	// 휴복학 내역 저장
+//	public void huebokInsert(HuehakAndBokhakDto hbDto) throws Exception{
+//		HuehakAndBokhak hb = hbDto.toLeaveAndReturn();
+//		System.out.println();
+//		hbres.save(hb);
+//	}
+	
+	// 휴학 신청 내역 수정 
+	public void huebokModify(HuehakDto hueDto) throws Exception{
+		Huehak huehak = hueres.findById(hueDto.getHueNo()).get();
+
+		huehak.setRejResult(hueDto.getRejResult());
+		huehak.setStatus(hueDto.getStatus());
+		
+		if (hueDto.getStatus() == "APP") { // 승인이면 
+			Student std = studentRepository.findById(hueDto.getStdNo()).get();
+			std.setStatus("S2");
+			studentRepository.save(std);
+			
+			HuehakAndBokhak hb = new HuehakAndBokhak();
+			hb.setStudent(std);
+			hb.setType(hueDto.getType());
+			hb.setAppSem(hueDto.getHueSem());
+			hbres.save(hb);
+
+			System.out.println("하하하ㅏㅎ");
+		} 
+		
+		hueres.save(huehak);
+	}
+	
 }

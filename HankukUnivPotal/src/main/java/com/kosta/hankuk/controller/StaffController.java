@@ -1,11 +1,14 @@
 package com.kosta.hankuk.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
@@ -20,6 +24,7 @@ import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.service.StaffService;
+import com.kosta.hankuk.util.PageInfo;
 
 @RestController
 public class StaffController {
@@ -103,14 +108,31 @@ public class StaffController {
         }
     }
     
-    @PostMapping
-    public ResponseEntity<List<HuehakDto>> allHueList() {
+    @GetMapping("/allHBList")
+    public ResponseEntity<Map<String,Object>> allHueList(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
+    													 @RequestParam(name="type", required = false) String type) {
+    	Map<String,Object> res = new HashMap<>();
     	try {
-//    		List<HuehakDto> hueDtoList = staffService.allhueList();
-    		return new ResponseEntity<List<HuehakDto>>(HttpStatus.OK);
+    		PageInfo pageInfo = PageInfo.builder().curPage(page).build();
+    		List<HuehakDto> hbList = staffService.hbListByPage(pageInfo, type);
+    		res.put("allhbList", hbList);
+    		res.put("pageInfo", pageInfo);
+    		return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
     	} catch(Exception e) {
     		e.printStackTrace();
-			return new ResponseEntity<List<HuehakDto>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
     	}
+    }
+    
+    @PostMapping("/hueStatus")
+    public ResponseEntity<String> huehakModify (@ModelAttribute HuehakDto hueDto) {
+    	try {
+    		staffService.huebokModify(hueDto);
+			System.out.println(hueDto);
+			return new ResponseEntity<String>("휴학상태변경완료", HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
     }
 }
