@@ -13,7 +13,7 @@ import Select from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { tokenAtom, memberAtom } from '../../atoms';
-import { useAtomValue, useSetAtom, selectedNumberAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -133,12 +133,10 @@ const AppealList = () => {
                                                 <TableCell align="center">{appeal.grade}</TableCell>
                                                 <TableCell align="center">{appeal.status === "NEW" ? "신규" : "완료"}</TableCell>
                                                 <TableCell align="center">
-                                                    {/* <Link to={`/student/appeal-detail/${appeal.appNo}`}> */}
-                                                        <Button variant="contained"
-                                                        size="medium"
-                                                        onClick={()=>navigate(`/student/appeal-detail/${appeal.appNo}`)}
-                                                        sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
-                                                    {/* </Link> */}
+                                                    <Button variant="contained"
+                                                    size="medium"
+                                                    onClick={()=>navigate(`/student/appeal-detail/${appeal.appNo}`)}
+                                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
                                                 </TableCell>
                                             </TableRow>
                                         )))}
