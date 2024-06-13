@@ -3,7 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
-import { Input, Table } from "reactstrap";
+import { Button, Input, Table } from "reactstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
@@ -54,6 +54,20 @@ const AttendanceManage = () => {
         setAttendanceList(updatedAttendanceList);
     };
 
+    const modify = () => {
+        axios.post(`${url}/attendanceModify`,{attendanceList:attendanceList},
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
+        )
+        .then((res)=>{
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>출결관리</b></Typography>
@@ -76,8 +90,11 @@ const AttendanceManage = () => {
                 </div>
 
                 <div className="AttendManage_Body">
-                    <div>
-
+                    <div className="AttendManage_Header">
+                        <Button className="AttendManage_Header_Button"
+                                onClick={modify}>
+                            저장
+                        </Button>
                     </div>
                     <div className="AttendManage_Table">
                         <Table bordered hover>
@@ -115,7 +132,7 @@ const AttendanceManage = () => {
                                                 <select
                                                     value={att.status.substr(15+i, 1) === '1' ? '출석' : att.status.substr(15+i, 1) === '2' ? '지각' : '결석'}
                                                     style={att.status.substr(15+i, 1) === '1' ? {color:'black'} : att.status.substr(15+i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
-                                                    onChange={(e) => handleStatusChange(e, index, i, 0)}
+                                                    onChange={(e) => handleStatusChange(e, index, i, 15)}
                                                     className="AttendManage_Select"
                                                 >
                                                     <option value="출석" style={{color:'black'}}>출석</option>

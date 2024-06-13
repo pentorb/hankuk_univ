@@ -247,7 +247,13 @@
 
 .AttendManage_Body{
   width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto 50px;
+}
+.AttendManage_Header{
+  margin: 0 0 20px 1100px;
+}
+.AttendManage_Header_Button{
+  width: 100px;
 }
 .AttendManage_Table{
   overflow-x: scroll;

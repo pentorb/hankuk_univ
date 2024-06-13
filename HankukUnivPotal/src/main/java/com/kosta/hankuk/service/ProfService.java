@@ -39,8 +39,12 @@ public interface ProfService {
 	void lessonDataModify(LessonDataDto lessonDataDto) throws Exception;
 		
 	List<AttendanceDto> attendanceList(String lecNo) throws Exception;
+	
+	void attendanceModify(List<AttendanceDto> attendanceList) throws Exception;
 
 	void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception;
+
+	
 
 
 	

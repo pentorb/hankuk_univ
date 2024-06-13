@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.HomeworkDto;
@@ -211,6 +213,22 @@ public class ProfController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/attendanceModify")
+	public ResponseEntity<String> attendanceModify(@RequestBody Map<String, Object> param) {
+		try {
+			System.out.println(param);
+			List<Map<String, Object>> attendanceListParam = (List<Map<String, Object>>) param.get("attendanceList");			ObjectMapper objectMapper = new ObjectMapper();
+			List<AttendanceDto> attendanceDtoList = objectMapper.convertValue(attendanceListParam,
+					new TypeReference<List<AttendanceDto>>() {
+					});
+			profService.attendanceModify(attendanceDtoList);
+			return new ResponseEntity<String>("과제가 수정되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

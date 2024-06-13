@@ -43,6 +43,7 @@ public class ProfServiceImpl implements ProfService{
 	private final LessonRepository lessonRepository;
 	private final LectureByStdRepository lectureByStdRepository;
 	private final AttendanceRepository attendanceRepository;
+	
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
@@ -163,6 +164,13 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
+	public void attendanceModify(List<AttendanceDto> attendanceDtoList) throws Exception {
+		for (AttendanceDto attendanceDto : attendanceDtoList) {
+			attendanceRepository.save(attendanceDto.toAttendacne());
+		}
+	}
+	
+	@Override
 	public void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception {
 		examRepository.save(examDto.toExam());
 		
@@ -174,6 +182,8 @@ public class ProfServiceImpl implements ProfService{
 		}
 		
 	}
+
+	
 
 	
 
