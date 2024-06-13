@@ -21,7 +21,7 @@ const HuehakInsert = () => {
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
 
-    console.log(member);
+    // console.log(member);
     const text = {
         display: "flex",
         margin: "10px",
