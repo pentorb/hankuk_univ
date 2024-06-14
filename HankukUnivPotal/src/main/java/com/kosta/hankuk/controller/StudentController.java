@@ -145,4 +145,17 @@ public class StudentController {
 			e.printStackTrace();
 		}
 	}
+	
+	@PostMapping("/lecture")
+	public ResponseEntity<Map<String, Object>> showLectureList(@RequestParam(name="stdNo")String stdNo){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> lectureList = stdService.showLectureList(stdNo);
+			res.put("lectureList", lectureList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
 }

@@ -209,8 +209,6 @@ public class StudentServiceImpl implements StudentService {
 			map.put("status", status);
 			mapList.add(map);
 		}
-		
-		
 		return mapList;
 	}
 
@@ -266,6 +264,29 @@ public class StudentServiceImpl implements StudentService {
 			appeal.setContent(content);
 		}
 		appealRepository.save(appeal);
+	}
+	
+	public List<Map<String, Object>> showLectureList(String stdNo) throws Exception {
+		Integer finSem = sres.findById(stdNo).get().getFinSem();
+		Integer courYear = (finSem / 2) + 1;
+		Integer semester = (finSem % 2) + 1;
+		List<LectureByStd> lectureByStdGroup = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, courYear, semester);
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		
+		for (LectureByStd lectureByStd : lectureByStdGroup) {
+			String lecNo = lectureByStd.getLecture().getLecNo();
+			String lectureName = lectureByStd.getLecture().getSubject().getName();
+			String lectureRoom = lectureByStd.getLecture().getLecRoom();
+			String professorName = lectureByStd.getLecture().getProfessor().getName();
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("lecNo", lecNo);
+			map.put("lectureName", lectureName);
+			map.put("lectureRoom", lectureRoom);
+			map.put("professorName", professorName);
+			mapList.add(map);
+		}
+		return mapList;
 	}
 
 }

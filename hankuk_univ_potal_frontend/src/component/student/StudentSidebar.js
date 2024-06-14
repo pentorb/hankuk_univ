@@ -14,7 +14,7 @@ import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import './css/studentSidebar.css';
 
 export default function StudentSidebar() {
@@ -23,6 +23,7 @@ export default function StudentSidebar() {
   const [secondOpen, setSecondOpen] = useState(false);
   const [thirdOpen, setThirdOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
 
   const handleListItemClick = (e, index) => {
     setSelectedIndex(index);
@@ -48,7 +49,7 @@ export default function StudentSidebar() {
             <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>마이페이지</Typography>} id={1 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(1)} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
             <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>과목</Typography>} id={2 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(2)} sx={{ color: "white" }} />
+              onClick={() => {setActiveTab(2); navigate("/student/lecture"); setSelectedIndex(8);}} sx={{ color: "white" }} />
             <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>캘린더</Typography>} id={3 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(3)} sx={{ color: "white" }} />
             <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>쪽지</Typography>} id={4 === activeTab ? "active" : ""}
@@ -128,18 +129,11 @@ export default function StudentSidebar() {
             </>}
           {activeTab === 2 &&
             <>
-              <ListItemButton  selected={selectedIndex === 8} onClick={(e) => handleListItemClick(e, 8)}>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton  selected={selectedIndex === 9} onClick={(e) => handleListItemClick(e, 9)}>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton selected={selectedIndex === 11} onClick={(e) => handleListItemClick(e, 11)}>
-                <ListItemText primary="3번째 메뉴" />
-              </ListItemButton>
+              <Link to="/student/lecture" style={{textDecoration: "none", color:"black"}}>
+                <ListItemButton  selected={selectedIndex === 8} onClick={(e) => handleListItemClick(e, 8)}>
+                  <ListItemText primary="대시보드" />
+                </ListItemButton>
+              </Link>
             </>}
           {activeTab === 3 &&
             <>
@@ -156,15 +150,6 @@ export default function StudentSidebar() {
             </>}
           {activeTab === 4 &&
             <>
-              <ListItemButton>
-                <ListItemText primary="5번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="5번째 메뉴" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="5번째 메뉴" />
-              </ListItemButton>
             </>}
         </Grid>
       </Grid>

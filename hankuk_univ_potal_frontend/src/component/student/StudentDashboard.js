@@ -15,6 +15,7 @@ import Appeal from './Appeal';
 import CreditsList from './CreditsList';
 import AppealList from './AppealList';
 import AppealDetail from './AppealDetail';
+import LectureList from './LectureList';
 
 const StudentDashboard = () => {
     return (
@@ -37,6 +38,7 @@ const StudentDashboard = () => {
                             <Route path="/make-appeal" element={<Appeal/>}></Route>
                             <Route path="/appeal-list" element={<AppealList/>}></Route>
                             <Route path="/appeal-detail/:appNo" element={<AppealDetail />} />
+                            <Route path="/lecture" element={<LectureList />} />
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
                             <Route path="/my-grade" element={<AllmyGrades/>}></Route>
