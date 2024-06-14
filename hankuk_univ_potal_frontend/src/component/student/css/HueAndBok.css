@@ -58,10 +58,47 @@
 
 .table td{
     background-color: #EAECF1;
+    align-content: center;
+    height:50px;
 }
 
 .table td,
 .table th {
     padding: 15px;
     /* 간격을 늘리기 위해 패딩 값을 조정합니다 */
+}
+
+.noneData{
+    padding: 30px;
+    /* border: 1px solid lightgray; */
+    background: #e5e5e461;
+    border-radius: 16px;
+    height: 200px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.viewDetail{
+    width: 1129px;
+    position: absolute;
+    height: 378px;
+    z-index: 999;
+    opacity: 0.8;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+    border-radius: 16px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.rejText{
+    display: flex;
+    padding: 10px 30px;
+    font-size: larger;
+    justify-content: flex-end;
+    color: red;
 }
