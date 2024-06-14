@@ -35,6 +35,8 @@ public class HuehakDto {
 	private String stdNm;
 	private String colNm;
 	private String majNm;
+	private String year;
+	private String sem;
 	
 	public Huehak toHuehak() {
 		return Huehak.builder()
