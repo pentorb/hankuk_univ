@@ -1,8 +1,11 @@
 package com.kosta.hankuk.service;
 
 import java.io.InputStream;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -19,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
-import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
@@ -80,14 +82,29 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId) {
+        Major major = majorRepository.findById(majorId).orElse(null);
+        
+        Student student = new Student();
+        student.setStdNo(stdNo);
+        student.setName(name);
+        student.setTel(tel);
+        student.setPassword(passwordEncoder.encode(password));
+        student.setMajor(major);
+
+        studentRepository.save(student);
+        }
+
+    
+    @Override
     public void registerStudent(Student student) {
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
+		student.setPassword(passwordEncoder.encode(student.getPassword()));
         studentRepository.save(student);
     }
 
     @Override
     public void registerProfessor(Professor professor) {
-        professor.setPassword(passwordEncoder.encode(professor.getPassword()));
+		professor.setPassword(passwordEncoder.encode(professor.getPassword()));
         professorRepository.save(professor);
     }
 
@@ -102,212 +119,129 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void updateStudents(List<Student> students) {
-        for (Student student : students) {
-            Student existingStudent = studentRepository.findById(student.getId()).orElse(null);
+    public void updateStudents(List<Map<String, Object>> students) {
+        for (Map<String, Object> studentData : students) {
+            String id = (String) studentData.get("id");
+            Student existingStudent = studentRepository.findById(id).orElse(null);
             if (existingStudent != null) {
-                existingStudent.setName(student.getName());
-                existingStudent.setTel(student.getTel());
+                if (studentData.containsKey("name")) {
+                    existingStudent.setName((String) studentData.get("name"));
+                }
+                if (studentData.containsKey("tel")) {
+                    existingStudent.setTel((String) studentData.get("tel"));
+                }
                 studentRepository.save(existingStudent);
+            } else {
+                throw new IllegalArgumentException("No student found with ID: " + id);
             }
         }
     }
 
     @Override
-    public void updateProfessors(List<Professor> professors) {
-        for (Professor professor : professors) {
-            Professor existingProfessor = professorRepository.findById(professor.getId()).orElse(null);
+    public void updateProfessors(List<Map<String, Object>> professors) {
+        for (Map<String, Object> professorData : professors) {
+            String id = (String) professorData.get("id");
+            Professor existingProfessor = professorRepository.findById(id).orElse(null);
             if (existingProfessor != null) {
-                existingProfessor.setName(professor.getName());
-                existingProfessor.setTel(professor.getTel());
+                if (professorData.containsKey("name")) {
+                    existingProfessor.setName((String) professorData.get("name"));
+                }
+                if (professorData.containsKey("tel")) {
+                    existingProfessor.setTel((String) professorData.get("tel"));
+                }
                 professorRepository.save(existingProfessor);
+            } else {
+                throw new IllegalArgumentException("No professor found with ID: " + id);
             }
         }
     }
 
-    @Override
-    public List<StudentDto> searchStudents(String name, String colleage, String major) {
-        if (name != null && !name.isEmpty()) {
-            return studentRepository.findByNameContaining(name).stream()
-                    .map(student -> new StudentDto(
-                            student.getStdNo(),
-                            student.getPassword(),
-                            student.getName(),
-                            student.getTel(),
-                            student.getAddr(),
-                            student.getDetailAddr(),
-                            student.getPostCode(),
-                            student.getGender(),
-                            student.getBirthday(),
-                            student.getEmail(),
-                            student.getEmailDo(),
-                            student.getStatus(),
-                            student.getProfile(),
-                            student.getFinCredit(),
-                            student.getFinSem(),
-                            student.getProfessor().getProfNo(),
-                            student.getProfessor().getName(),
-                            student.getMajor().getName(),
-                            student.getMajor().getMajCd()
-                    ))
-                    .collect(Collectors.toList());
-        } else if (colleage != null && major == null) {
-            return studentRepository.findByMajor_Colleage_name(colleage).stream()
-                    .map(student -> new StudentDto(
-                            student.getStdNo(),
-                            student.getPassword(),
-                            student.getName(),
-                            student.getTel(),
-                            student.getAddr(),
-                            student.getDetailAddr(),
-                            student.getPostCode(),
-                            student.getGender(),
-                            student.getBirthday(),
-                            student.getEmail(),
-                            student.getEmailDo(),
-                            student.getStatus(),
-                            student.getProfile(),
-                            student.getFinCredit(),
-                            student.getFinSem(),
-                            student.getProfessor().getProfNo(),
-                            student.getProfessor().getName(),
-                            student.getMajor().getName(),
-                            student.getMajor().getMajCd()
-                    ))
-                    .collect(Collectors.toList());
-        } else if (major != null) {
-            return studentRepository.findByMajor(major).stream()
-                    .map(student -> new StudentDto(
-                            student.getStdNo(),
-                            student.getPassword(),
-                            student.getName(),
-                            student.getTel(),
-                            student.getAddr(),
-                            student.getDetailAddr(),
-                            student.getPostCode(),
-                            student.getGender(),
-                            student.getBirthday(),
-                            student.getEmail(),
-                            student.getEmailDo(),
-                            student.getStatus(),
-                            student.getProfile(),
-                            student.getFinCredit(),
-                            student.getFinSem(),
-                            student.getProfessor().getProfNo(),
-                            student.getProfessor().getName(),
-                            student.getMajor().getName(),
-                            student.getMajor().getMajCd()
-                    ))
-                    .collect(Collectors.toList());
-        }
-        return studentRepository.findAll().stream()
-                .map(student -> new StudentDto(
-                        student.getStdNo(),
-                        student.getPassword(),
-                        student.getName(),
-                        student.getTel(),
-                        student.getAddr(),
-                        student.getDetailAddr(),
-                        student.getPostCode(),
-                        student.getGender(),
-                        student.getBirthday(),
-                        student.getEmail(),
-                        student.getEmailDo(),
-                        student.getStatus(),
-                        student.getProfile(),
-                        student.getFinCredit(),
-                        student.getFinSem(),
-                        student.getProfessor().getProfNo(),
-                        student.getProfessor().getName(),
-                        student.getMajor().getName(),
-                        student.getMajor().getMajCd()
-                ))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<StudentDto> searchStudents(String name, String colleage, String major) {
+		if (name != null && !name.isEmpty()) {
+			return studentRepository.findByNameContaining(name).stream()
+					.map(student -> new StudentDto(student.getStdNo(), student.getPassword(), student.getName(),
+							student.getTel(), student.getAddr(), student.getDetailAddr(), student.getPostCode(),
+							student.getGender(), student.getBirthday(), student.getEmail(), student.getEmailDo(),
+							student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
+							student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
+							student.getProfessor() != null ? student.getProfessor().getName() : null,
+							student.getMajor() != null ? student.getMajor().getName() : null,
+							student.getMajor() != null ? student.getMajor().getMajCd() : null))
+					.collect(Collectors.toList());
+		} else if (colleage != null && major == null) {
+			return studentRepository.findByMajor_Colleage_name(colleage).stream()
+					.map(student -> new StudentDto(student.getStdNo(), student.getPassword(), student.getName(),
+							student.getTel(), student.getAddr(), student.getDetailAddr(), student.getPostCode(),
+							student.getGender(), student.getBirthday(), student.getEmail(), student.getEmailDo(),
+							student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
+							student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
+							student.getProfessor() != null ? student.getProfessor().getName() : null,
+							student.getMajor() != null ? student.getMajor().getName() : null,
+							student.getMajor() != null ? student.getMajor().getMajCd() : null))
+					.collect(Collectors.toList());
+		} else if (major != null) {
+			Major majorEntity = majorRepository.findById(major).orElse(null);
+			if (majorEntity != null) {
+				return studentRepository.findByMajor_majCd(major).stream()
+						.map(student -> new StudentDto(student.getStdNo(), student.getPassword(), student.getName(),
+								student.getTel(), student.getAddr(), student.getDetailAddr(), student.getPostCode(),
+								student.getGender(), student.getBirthday(), student.getEmail(), student.getEmailDo(),
+								student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
+								student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
+								student.getProfessor() != null ? student.getProfessor().getName() : null,
+								student.getMajor() != null ? student.getMajor().getName() : null,
+								student.getMajor() != null ? student.getMajor().getMajCd() : null))
+						.collect(Collectors.toList());
+			}
+		}
+		return studentRepository.findAll().stream()
+				.map(student -> new StudentDto(student.getStdNo(), student.getPassword(), student.getName(),
+						student.getTel(), student.getAddr(), student.getDetailAddr(), student.getPostCode(),
+						student.getGender(), student.getBirthday(), student.getEmail(), student.getEmailDo(),
+						student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
+						student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
+						student.getProfessor() != null ? student.getProfessor().getName() : null,
+						student.getMajor() != null ? student.getMajor().getName() : null,
+						student.getMajor() != null ? student.getMajor().getMajCd() : null))
+				.collect(Collectors.toList());
+	}
 
-    @Override
-    public List<ProfessorDto> searchProfessors(String name, String colleage, String major) {
-        if (name != null && !name.isEmpty()) {
-            return professorRepository.findByNameContaining(name).stream()
-                    .map(professor -> new ProfessorDto(
-                            professor.getProfNo(),
-                            professor.getPassword(),
-                            professor.getName(),
-                            professor.getGender(),
-                            professor.getProfile(),
-                            professor.getPosition(),
-                            professor.getAddr(),
-                            professor.getDetailAddr(),
-                            professor.getPostCode(),
-                            professor.getBirthday(),
-                            professor.getTel(),
-                            professor.getEmail(),
-                            professor.getEmailDo(),
-                            professor.getJoinDt(),
-                            professor.getMajor().getMajCd()
-                    ))
-                    .collect(Collectors.toList());
-        } else if (colleage != null && major != null) {
-            return professorRepository.findByMajor_Colleage_name(colleage).stream()
-                    .map(professor -> new ProfessorDto(
-                            professor.getProfNo(),
-                            professor.getPassword(),
-                            professor.getName(),
-                            professor.getGender(),
-                            professor.getProfile(),
-                            professor.getPosition(),
-                            professor.getAddr(),
-                            professor.getDetailAddr(),
-                            professor.getPostCode(),
-                            professor.getBirthday(),
-                            professor.getTel(),
-                            professor.getEmail(),
-                            professor.getEmailDo(),
-                            professor.getJoinDt(),
-                            professor.getMajor().getMajCd()
-                    ))
-                    .collect(Collectors.toList());
-        } else if (major != null) {
-            return professorRepository.findByMajor(major).stream()
-                    .map(professor -> new ProfessorDto(
-                            professor.getProfNo(),
-                            professor.getPassword(),
-                            professor.getName(),
-                            professor.getGender(),
-                            professor.getProfile(),
-                            professor.getPosition(),
-                            professor.getAddr(),
-                            professor.getDetailAddr(),
-                            professor.getPostCode(),
-                            professor.getBirthday(),
-                            professor.getTel(),
-                            professor.getEmail(),
-                            professor.getEmailDo(),
-                            professor.getJoinDt(),
-                            professor.getMajor().getMajCd()
-                    ))
-                    .collect(Collectors.toList());
-        }
-        return professorRepository.findAll().stream()
-                .map(professor -> new ProfessorDto(
-                        professor.getProfNo(),
-                        professor.getPassword(),
-                        professor.getName(),
-                        professor.getGender(),
-                        professor.getProfile(),
-                        professor.getPosition(),
-                        professor.getAddr(),
-                        professor.getDetailAddr(),
-                        professor.getPostCode(),
-                        professor.getBirthday(),
-                        professor.getTel(),
-                        professor.getEmail(),
-                        professor.getEmailDo(),
-                        professor.getJoinDt(),
-                        professor.getMajor().getMajCd()
-                ))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<ProfessorDto> searchProfessors(String name, String colleage, String major) {
+		if (name != null && !name.isEmpty()) {
+			return professorRepository.findByNameContaining(name).stream()
+					.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(),
+							professor.getName(), professor.getGender(), professor.getProfile(), professor.getPosition(),
+							professor.getAddr(), professor.getDetailAddr(), professor.getPostCode(),
+							professor.getBirthday(), professor.getTel(), professor.getEmail(), professor.getEmailDo(),
+							professor.getJoinDt(), professor.getMajor().getMajCd()))
+					.collect(Collectors.toList());
+		} else if (colleage != null && major != null) {
+			return professorRepository.findByMajor_Colleage_name(colleage).stream()
+					.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(),
+							professor.getName(), professor.getGender(), professor.getProfile(), professor.getPosition(),
+							professor.getAddr(), professor.getDetailAddr(), professor.getPostCode(),
+							professor.getBirthday(), professor.getTel(), professor.getEmail(), professor.getEmailDo(),
+							professor.getJoinDt(), professor.getMajor().getMajCd()))
+					.collect(Collectors.toList());
+		} else if (major != null) {
+			return professorRepository.findByMajor_majCd(major).stream()
+					.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(),
+							professor.getName(), professor.getGender(), professor.getProfile(), professor.getPosition(),
+							professor.getAddr(), professor.getDetailAddr(), professor.getPostCode(),
+							professor.getBirthday(), professor.getTel(), professor.getEmail(), professor.getEmailDo(),
+							professor.getJoinDt(), professor.getMajor().getMajCd()))
+					.collect(Collectors.toList());
+		}
+		return professorRepository.findAll().stream()
+				.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(), professor.getName(),
+						professor.getGender(), professor.getProfile(), professor.getPosition(), professor.getAddr(),
+						professor.getDetailAddr(), professor.getPostCode(), professor.getBirthday(), professor.getTel(),
+						professor.getEmail(), professor.getEmailDo(), professor.getJoinDt(),
+						professor.getMajor().getMajCd()))
+				.collect(Collectors.toList());
+	}
 
     @Override
     public List<ColleageDto> getAllColleages() {
@@ -325,58 +259,86 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void saveDataFromExcel(String category, MultipartFile file) throws Exception {
-        List<Student> students = new ArrayList<>();
-        List<Professor> professors = new ArrayList<>();
+		List<Student> students = new ArrayList<>();
+		List<Professor> professors = new ArrayList<>();
 
-        try (InputStream inputStream = file.getInputStream()) {
-            Workbook workbook = WorkbookFactory.create(inputStream);
-            Sheet sheet = workbook.getSheetAt(0);
+		try (InputStream inputStream = file.getInputStream()) {
+			Workbook workbook = WorkbookFactory.create(inputStream);
+			Sheet sheet = workbook.getSheetAt(0);
 
-            for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue; 
+			int nameIdx = -1, birthdayIdx = -1, emailIdx = -1, address1Idx = -1, address2Idx = -1, postcodeIdx = -1,
+					telIdx = -1, genderIdx = -1, majorIdx = -1, professorIdx = -1;
+			for (Row row : sheet) {
+				if (row.getRowNum() == 0) {
+					for (int i = 0; i < 10; i++) {
+						String colName = row.getCell(i).getStringCellValue();
+						if (colName.equals("name"))
+							nameIdx = i;
+						else if (colName.equals("birthday"))
+							birthdayIdx = i;
+						else if (colName.equals("email"))
+							emailIdx = i;
+						else if (colName.equals("address1"))
+							address1Idx = i;
+						else if (colName.equals("address2"))
+							address2Idx = i;
+						else if (colName.equals("postcode"))
+							postcodeIdx = i;
+						else if (colName.equals("tel"))
+							telIdx = i;
+						else if (colName.equals("gender"))
+							genderIdx = i;
+						else if (colName.equals("major"))
+							majorIdx = i;
+						else if (colName.equals("professor"))
+							professorIdx = i;
+					}
+					continue;
+				}
+				
+				String name = nameIdx==-1 || row.getCell(nameIdx)==null? "" :row.getCell(nameIdx).getStringCellValue();
+				Date birthday = birthdayIdx==-1 || row.getCell(birthdayIdx)==null? null :new Date(row.getCell(birthdayIdx).getDateCellValue().getTime());
+				String email = emailIdx==-1 || row.getCell(emailIdx)==null? "" :row.getCell(emailIdx).getStringCellValue();
+				String address1 = address1Idx==-1 || row.getCell(address1Idx)==null? "" :row.getCell(address1Idx).getStringCellValue();
+				String address2 = address2Idx==-1 || row.getCell(address2Idx)==null? "" :row.getCell(address2Idx).getStringCellValue();
+				String postcode = postcodeIdx==-1 || row.getCell(postcodeIdx)==null? "" :row.getCell(postcodeIdx).getStringCellValue();
+				String tel = telIdx==-1 || row.getCell(telIdx)==null? "" :row.getCell(telIdx).getStringCellValue();
+				String gender = genderIdx==-1 || row.getCell(genderIdx)==null? "": row.getCell(genderIdx).getStringCellValue();
+				String majorName = majorIdx==-1 || row.getCell(majorIdx)==null? "" :row.getCell(majorIdx).getStringCellValue();
+				System.out.println(majorName);
+				String majCd = majorRepository.findByName(majorName).map(Major::getMajCd).orElse(null);
+				System.out.println(majCd);
+				String professorName = professorIdx==-1 || row.getCell(professorIdx)==null? "" : row.getCell(professorIdx).getStringCellValue();
+				String profCd = null;
+				if(!professorName.equals("")) {
+					Optional<Professor> oprofessor = professorRepository.findByName(professorName);
+					if(oprofessor.isPresent()) {
+						profCd = oprofessor.get().getProfNo();
+					}
+				}
+				if ("student".equalsIgnoreCase(category)) {
+					Student student = Student.builder().stdNo(generateUniqueStudentId()).name(name).password("1234")
+							.birthday(birthday).email(email).addr(address1).detailAddr(address2)
+							.postCode(postcode).tel(tel).gender(gender)
+							.major(majCd != null ? Major.builder().majCd(majCd).build() : null)
+							.professor(profCd != null ? Professor.builder().profNo(profCd).build() : null).build();
+					students.add(student);
+				} else if ("professor".equalsIgnoreCase(category)) {
+					Professor professor = Professor.builder().profNo(generateUniqueProfessorId()).name(name).password(passwordEncoder.encode("1234"))
+							.birthday(birthday).email(email).addr(address1).detailAddr(address2)
+							.postCode(postcode).tel(tel).gender(gender)
+							.major(majCd != null ? Major.builder().majCd(majCd).build() : null).build();
 
-                String name = row.getCell(0).getStringCellValue();
-                String majorName = row.getCell(1).getStringCellValue();
-                String tel = row.getCell(2).getStringCellValue();
-                String gender = row.getCell(3).getStringCellValue();
-                
-                String majCd = majorRepository.findByName(majorName)
-                        .map(Major::getMajCd)
-                        .orElse(null);
+					professors.add(professor);
+				}
+			}
 
-               Major major = null;
-               if (majCd != null) {
-            	   major = new Major();
-            	   major.setMajCd(majCd);
-               }
-
-                if ("student".equalsIgnoreCase(category)) {
-                    Student student = new Student();
-                    student.setStdNo(generateUniqueStudentId());
-                    student.setName(name);
-                    student.setTel(tel);
-                    student.setGender(gender);
-                    student.setMajor(major);
-                    student.setPassword(passwordEncoder.encode("1234"));
-                    students.add(student);
-                } else if ("professor".equalsIgnoreCase(category)) {
-                    Professor professor = new Professor();
-                    professor.setProfNo(generateUniqueProfessorId());
-                    professor.setName(name);
-                    professor.setTel(tel);
-                    professor.setGender(gender);
-                    professor.setMajor(major); 
-                    professor.setPassword(passwordEncoder.encode("1234")); 
-                    professors.add(professor);
-                }
-            }
-
-            if ("student".equalsIgnoreCase(category)) {
-                students.forEach(this::registerStudent);
-            } else if ("professor".equalsIgnoreCase(category)) {
-                professors.forEach(this::registerProfessor);
-            }
-        }
+			if ("student".equalsIgnoreCase(category)) {
+				students.forEach(this::registerStudent);
+			} else if ("professor".equalsIgnoreCase(category)) {
+				professors.forEach(this::registerProfessor);
+			}
+		}
     }
 
     // 휴학 신청 내역 리스트 (페이징)

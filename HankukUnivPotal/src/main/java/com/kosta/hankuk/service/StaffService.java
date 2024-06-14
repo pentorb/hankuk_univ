@@ -1,6 +1,7 @@
 package com.kosta.hankuk.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,15 +19,17 @@ public interface StaffService {
     String generateUniqueStudentId();
     String generateUniqueProfessorId();
 
+    void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId);
+    
     void registerStudent(Student student);
     void registerProfessor(Professor professor);
 
     void deleteStudents(List<String> studentIds);
     void deleteProfessors(List<String> professorIds);
 
-    void updateStudents(List<Student> students);
-    void updateProfessors(List<Professor> professors);
-
+    void updateStudents(List<Map<String, Object>> students);
+    void updateProfessors(List<Map<String, Object>> professors);
+    
     List<StudentDto> searchStudents(String name, String colleage, String major);
     List<ProfessorDto> searchProfessors(String name, String colleage, String major);
 
