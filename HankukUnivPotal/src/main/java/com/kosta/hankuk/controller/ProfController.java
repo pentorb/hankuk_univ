@@ -21,7 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
+import com.kosta.hankuk.dto.ExamResultDto;
 import com.kosta.hankuk.dto.HomeworkDto;
+import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.service.ProfService;
@@ -225,7 +227,7 @@ public class ProfController {
 					new TypeReference<List<AttendanceDto>>() {
 					});
 			profService.attendanceModify(attendanceDtoList);
-			return new ResponseEntity<String>("과제가 수정되었습니다", HttpStatus.OK);
+			return new ResponseEntity<String>("성적이 저장되었습니다", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
@@ -267,5 +269,53 @@ public class ProfController {
 		}
 	}
 	
+	@GetMapping("/gradeManageDetail")
+	public ResponseEntity<Map<String, Object>> gradeManageDetail(
+			@RequestParam(name = "lecNo", required = false) String lecNo){
+		try {
+			Map<String, Object> gradeManageDetail = new HashMap<String, Object>();
+			gradeManageDetail.put("studentList", profService.studentListByLecNo(lecNo));
+			gradeManageDetail.put("attendanceList", profService.attendanceList(lecNo));
+			gradeManageDetail.put("examResultList", profService.examResultListByLecNo(lecNo));
+			gradeManageDetail.put("homeworkSubmitList", profService.homeworkSubmitListByLecNo(lecNo));
+			gradeManageDetail.put("homeworkCount", profService.homeworkCount(lecNo));
+			return new ResponseEntity<Map<String, Object>>(gradeManageDetail, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/examResultModify")
+	public ResponseEntity<String> examResultModify(@RequestBody Map<String, Object> param) {
+		try {
+			System.out.println(param);
+			List<Map<String, Object>> examResultListParam = (List<Map<String, Object>>) param.get("examResultList");			ObjectMapper objectMapper = new ObjectMapper();
+			List<ExamResultDto> examResultDtoList = objectMapper.convertValue(examResultListParam,
+					new TypeReference<List<ExamResultDto>>() {
+					});
+			profService.examResultModify(examResultDtoList);
+			return new ResponseEntity<String>("시험점수가 수정되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/gradeWrite")
+	public ResponseEntity<String> gradeWrite(@RequestBody Map<String, Object> param) {
+		try {
+			List<Map<String, Object>> lectureByStuListParam = (List<Map<String, Object>>) param.get("studentList");			
+			ObjectMapper objectMapper = new ObjectMapper();
+			List<LectureByStdDto> lectureByStuDtoList = objectMapper.convertValue(lectureByStuListParam,
+					new TypeReference<List<LectureByStdDto>>() {
+					});
+			profService.gradeWrite(lectureByStuDtoList);
+			return new ResponseEntity<String>("등급이 확정되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 }

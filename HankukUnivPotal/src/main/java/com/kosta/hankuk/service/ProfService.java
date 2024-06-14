@@ -5,7 +5,9 @@ import java.util.List;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
+import com.kosta.hankuk.dto.ExamResultDto;
 import com.kosta.hankuk.dto.HomeworkDto;
+import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
@@ -43,6 +45,18 @@ public interface ProfService {
 	void attendanceModify(List<AttendanceDto> attendanceList) throws Exception;
 
 	void examAndQuestionWrite(ExamDto examDto, List<ExamQuesDto> questionDtoList) throws Exception;
+
+	List<LectureByStdDto> studentListByLecNo(String lecNo) throws Exception;
+
+	List<ExamResultDto> examResultListByLecNo(String lecNo) throws Exception;
+
+	List<HomeworkSubmitDto> homeworkSubmitListByLecNo(String lecNo) throws Exception;
+
+	Integer homeworkCount(String lecNo) throws Exception;
+
+	void examResultModify(List<ExamResultDto> examResultDtoList) throws Exception;
+
+	void gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception;
 
 	
 

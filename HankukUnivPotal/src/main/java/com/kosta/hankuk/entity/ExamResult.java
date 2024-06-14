@@ -47,6 +47,7 @@ public class ExamResult {
 				.erNo(erNo)
 				.totalScore(totalScore)
 				.examNo(exam.getExamNo())
+				.sect(exam.getSect())
 				.stdNo(student.getStdNo())
 				.build();
 	}

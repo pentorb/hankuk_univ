@@ -10,4 +10,6 @@ public interface HomeworkRepository extends JpaRepository<Homework, Integer>{
 
 	List<Homework> findByLesson_Lecture_lecNo(String lecNo);
 
+	Integer countByLecture_lecNo(String lecNo);
+
 }

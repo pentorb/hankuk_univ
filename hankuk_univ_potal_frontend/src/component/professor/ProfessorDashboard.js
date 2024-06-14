@@ -15,6 +15,7 @@ import HomeworkModify from './HomeworkModify';
 import LessonDataWrite from './LessonDataWrite';
 import LessonDataModify from './LessonDataModify';
 import AttendanceManage from './AttendanceManage';
+import GradeManage from './GradeManage';
 
 
 const ProfessorDashboard = () => {
@@ -43,6 +44,7 @@ const ProfessorDashboard = () => {
                             <Route path="/lessonDataModify/:ldNo" element={<LessonDataModify/>}></Route>
                             <Route path="/attendanceManage" element={<AttendanceManage/>}></Route>
                             <Route path="/examQuestionForm" element={<ExamQuestionForm/>}></Route>
+                            <Route path="/gradeManage" element={<GradeManage/>}></Route>
                             {/* <Route path="/insert-calendar" element={< />}></Route>
                             <Route path="/calendar" element={<Calendar />}></Route> */}
                         </Routes>

@@ -21,6 +21,7 @@ public class ExamResultDto {
 	private Integer erNo;
 	private Integer totalScore;
 	private Integer examNo;
+	private String sect;
 	private String stdNo;
 	
 	public ExamResult toExamResult() {

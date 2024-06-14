@@ -1,6 +1,7 @@
 package com.kosta.hankuk.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,21 +10,27 @@ import org.springframework.stereotype.Service;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
+import com.kosta.hankuk.dto.ExamResultDto;
 import com.kosta.hankuk.dto.HomeworkDto;
+import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Attendance;
 import com.kosta.hankuk.entity.Exam;
+import com.kosta.hankuk.entity.ExamResult;
 import com.kosta.hankuk.entity.Homework;
+import com.kosta.hankuk.entity.HomeworkSubmit;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
 import com.kosta.hankuk.repository.AttendanceRepository;
 import com.kosta.hankuk.repository.ExamQuesRepository;
 import com.kosta.hankuk.repository.ExamRepository;
+import com.kosta.hankuk.repository.ExamResultRepository;
 import com.kosta.hankuk.repository.HomeworkRepository;
+import com.kosta.hankuk.repository.HomeworkSubmitRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.LessonDataRepository;
@@ -43,6 +50,8 @@ public class ProfServiceImpl implements ProfService{
 	private final LessonRepository lessonRepository;
 	private final LectureByStdRepository lectureByStdRepository;
 	private final AttendanceRepository attendanceRepository;
+	private final ExamResultRepository examResultRepository;
+	private final HomeworkSubmitRepository homeworkSubmitRepository;
 	
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
@@ -180,6 +189,62 @@ public class ProfServiceImpl implements ProfService{
 			examQuesDto.setExamNo(oExam.get().getExamNo());
 			examQuesRepository.save(examQuesDto.toExamQues());
 		}
+		
+	}
+
+	@Override
+	public List<LectureByStdDto> studentListByLecNo(String lecNo) throws Exception {
+		List<LectureByStd> lectureByStdList = lectureByStdRepository.findByLecture_lecNo(lecNo);
+		List<LectureByStdDto> lectureByStdDtoList = new ArrayList<LectureByStdDto>();
+		for (LectureByStd lectureByStd : lectureByStdList) {
+			lectureByStdDtoList.add(lectureByStd.toLectureByStdDto());
+		}
+		return lectureByStdDtoList;
+	}
+
+	@Override
+	public List<ExamResultDto> examResultListByLecNo(String lecNo) throws Exception {
+		List<ExamResult> examResultList = examResultRepository.findByExam_Lecture_lecNo(lecNo);
+		System.out.println(examResultList);
+		List<ExamResultDto> examResultDtoList = new ArrayList<ExamResultDto>();
+		for (ExamResult examResult : examResultList) {
+			examResultDtoList.add(examResult.toExamResultDto());
+		}
+		return examResultDtoList;
+	}
+
+	@Override
+	public List<HomeworkSubmitDto> homeworkSubmitListByLecNo(String lecNo) throws Exception {
+		List<HomeworkSubmit> homeworkSubmitList = homeworkSubmitRepository.findByHomework_Lecture_lecNo(lecNo);
+		List<HomeworkSubmitDto> homeworkSubmitDtoList = new ArrayList<HomeworkSubmitDto>();
+		for (HomeworkSubmit homeworkSubmit : homeworkSubmitList) {
+			homeworkSubmitDtoList.add(homeworkSubmit.toHomeworkSubmitDto());
+		}
+		return homeworkSubmitDtoList;
+	}
+
+	@Override
+	public Integer homeworkCount(String lecNo) throws Exception {
+		return homeworkRepository.countByLecture_lecNo(lecNo);
+	}
+
+	@Override
+	public void examResultModify(List<ExamResultDto> examResultDtoList) throws Exception {
+		for (ExamResultDto examResultDto : examResultDtoList) {
+			examResultRepository.save(examResultDto.toExamResult());
+		}
+	}
+
+	@Override
+	public void gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception {
+		Integer aplus = (int)Math.round(lectureByStuDtoList.size()/10.0);
+		Integer a = (int)Math.round(lectureByStuDtoList.size()/20.0);
+		Integer bplus = (int)Math.round(lectureByStuDtoList.size()/40.0);
+		System.out.println(aplus);
+		lectureByStuDtoList.sort(Comparator.comparingDouble(lectureByStdDto -> Float.parseFloat(((LectureByStdDto) lectureByStdDto).getGrade())).reversed());
+
+        // 정렬 후 출력
+        lectureByStuDtoList.forEach(System.out::println);
 		
 	}
 

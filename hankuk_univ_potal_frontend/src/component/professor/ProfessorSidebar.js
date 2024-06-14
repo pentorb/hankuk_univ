@@ -104,6 +104,11 @@ export default function ProfessorSidebar() {
                   <ListItemText primary="시험출제" />
                 </ListItemButton>
               </Link>
+              <Link to="/professor/gradeManage" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="성적관리" />
+                </ListItemButton>
+              </Link>
             </>}
           {activeTab === 4 &&
             <>

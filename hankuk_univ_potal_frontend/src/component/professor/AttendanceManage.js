@@ -1,6 +1,7 @@
 import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
 import { Button, Input, Table } from "reactstrap";
@@ -62,7 +63,11 @@ const AttendanceManage = () => {
         )
         .then((res)=>{
             console.log(res)
-        })
+            Swal.fire({
+                title: res.data,
+                // text: "That thing is still around?",
+                icon: "success"
+              });        })
         .catch((err)=>{
             console.log(err)
         })
@@ -98,7 +103,7 @@ const AttendanceManage = () => {
                     </div>
                     <div className="AttendManage_Table">
                         <Table bordered hover>
-                            <thead >
+                            <thead>
                                 <tr >
                                     <th className="AttendManage_Table_thead">
                                         학생\주차

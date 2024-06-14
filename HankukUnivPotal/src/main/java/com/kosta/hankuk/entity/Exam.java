@@ -39,7 +39,7 @@ public class Exam {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer examNo;
-	
+	//중간기말
 	@Column
 	private String sect;
 	@Column
