@@ -2,6 +2,7 @@ package com.kosta.hankuk.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -246,6 +247,19 @@ public class ProfServiceImpl implements ProfService{
         // 정렬 후 출력
         lectureByStuDtoList.forEach(System.out::println);
 		
+        for (int i = 0; i < lectureByStuDtoList.size(); i++) {
+			if(i<aplus) {
+				
+			}else if(aplus<=i && i<a+aplus) {
+				
+			}else if(a+aplus<=i && i<a+aplus+bplus) {
+				
+			}else if(a+aplus+bplus<=i && i<a+aplus+bplus+aplus) {
+				
+			}else {
+				
+			}
+		}
 	}
 
 	
