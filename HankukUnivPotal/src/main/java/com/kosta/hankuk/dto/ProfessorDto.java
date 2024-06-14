@@ -51,7 +51,7 @@ public class ProfessorDto implements UserDto {
 				.email(email)
 				.emailDo(emailDo)
 				.joinDt(joinDt)
-				.major(Major.builder().majCd(majCd).build())
+				.major(majCd!=null? Major.builder().majCd(majCd).build(): null)
 				.build();
 	}
 }

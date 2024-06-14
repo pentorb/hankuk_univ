@@ -82,7 +82,8 @@ const AccountManagement = () => {
             name: searchType === 'name' ? searchInput : null,
             colleage: searchType === 'major' ? formData.colleage : null,
             major: searchType === 'major' ? formData.major : null,
-          }
+          },
+          headers: {"Authorization": JSON.stringify(token)}
         });
         setProfessors(response.data);
       }

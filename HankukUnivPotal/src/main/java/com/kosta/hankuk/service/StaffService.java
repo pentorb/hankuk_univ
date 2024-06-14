@@ -20,7 +20,8 @@ public interface StaffService {
     String generateUniqueProfessorId();
 
     void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId);
-    
+    void registerProfessorByOne(String profNo, String name, String tel, String password, String majorId);
+
     void registerStudent(Student student);
     void registerProfessor(Professor professor);
 

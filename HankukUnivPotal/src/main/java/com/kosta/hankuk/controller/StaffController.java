@@ -51,14 +51,20 @@ public class StaffController {
     }
 
     @PostMapping("/registerProfessor")
-    public ResponseEntity<String> registerProfessor(@RequestBody Professor professor) {
+    public ResponseEntity<String> registerProfessor(@RequestBody Map<String, Object> payload) {
         try {
-
-            staffService.registerProfessor(professor);
-            return ResponseEntity.ok("교수가 성공적으로 등록되었습니다.");
+            String profNo = String.valueOf(payload.get("id"));
+            String name = (String) payload.get("name");
+            String tel = (String) payload.get("tel");
+            String password = String.valueOf(payload.get("password"));
+            String majorId = String.valueOf(payload.get("major"));
+            
+            staffService.registerProfessorByOne(profNo, name, tel, password, majorId);
+            
+            return ResponseEntity.ok("학생이 성공적으로 등록되었습니다.");
         } catch (Exception e) {
-        	e.printStackTrace();
-            return ResponseEntity.status(500).body("교수 등록 중 오류가 발생했습니다: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("학생 등록 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
     
