@@ -226,8 +226,10 @@ public class StudentServiceImpl implements StudentService {
 		appealRepository.save(appeal);
 		
 		String formerFileName = "";
-		Files files = filesRepository.findById(Integer.parseInt(appeal.getFiles())).get();
-		if(files != null) formerFileName = files.getName();
+		if(appeal.getFiles() != null && !appeal.getFiles().trim().equals("")) {
+			Files files = filesRepository.findById(Integer.parseInt(appeal.getFiles())).get();
+			formerFileName = files.getName();
+		}
 		
 		String status = appeal.getStatus();
 		String content = appeal.getContent();
