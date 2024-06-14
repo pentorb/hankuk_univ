@@ -1,13 +1,10 @@
-import { Typography, Paper, Button, Grid, Link, Breadcrumbs } from '@mui/material';
-import { Card, CardContent, CardActionArea, CardActions, CardMedia } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Typography, Paper, Grid } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom, selectedNumberAtom } from '../../atoms';
-import { useAtomValue } from 'jotai';
+import { tokenAtom, memberAtom } from '../../atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
-import { styled } from '@mui/system';
 import { useNavigate } from 'react-router';
 
 const LectureList = () => {
