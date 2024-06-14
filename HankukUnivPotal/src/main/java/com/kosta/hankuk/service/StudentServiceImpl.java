@@ -9,6 +9,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +31,7 @@ import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.ScoreRepository;
 import com.kosta.hankuk.repository.StudentRepository;
+import com.kosta.hankuk.util.PageInfo;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -60,18 +64,49 @@ public class StudentServiceImpl implements StudentService {
 		System.out.println(huehak);
 		hueRes.save(huehak);
 	}
+	
+	@Override
+	public HuehakDto huehakDetail(Integer hueNo) throws Exception {
+		HuehakDto huehak = hueRes.findById(hueNo).get().toHuehakDto();
+		System.out.println("serivce :" + huehak);
+		
+		String year = huehak.getHueSem().substring(0, 4); // "2024"
+		String semester = huehak.getHueSem().substring(4); // "02"
+		
+		huehak.setYear(year);
+		huehak.setSem(semester);
+	
+		return huehak;
+	}
 
-//	@Override
-//	public String stdByMajCd(StudentDto stdDto) throws Exception {
-//		return mres.findById(stdDto.getMajCd()).get().getName();
-//	}
 
 	// 학번으로 휴학 신청 내역
 	@Override
-	public List<HuehakDto> hueListByStdNo(String stdNo) throws Exception {
-		List<Huehak> hueList = hueRes.findByStudent_StdNo(stdNo);
+	public List<HuehakDto> hueListByStdNo(PageInfo pageInfo, String stdNo, String status, String type) throws Exception {
+		
+		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
+		Page<Huehak> pages = null;
+		
+		if ((type == null || type.trim().isEmpty()) && (status == null || status.trim().isEmpty())) {
+	        pages = hueRes.findByStudent_StdNo(stdNo, pageRequest);
+	    } else if ((type == null || type.trim().isEmpty())) {
+	        pages = hueRes.findByStatus(status, pageRequest);
+	    } else if ((status == null || status.trim().isEmpty())) {
+	        pages = hueRes.findByType(type, pageRequest);
+	    } else {
+	        pages = hueRes.findByStatusAndType(status, type, pageRequest);
+	    }
+		
+		pageInfo.setAllPage(pages.getTotalPages());
+		
+		int startPage = (pageInfo.getCurPage()-1)/1*10+1;
+		int endPage = Math.min(startPage+10-1, pageInfo.getAllPage());
+
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
 		List<HuehakDto> hueDtoList = new ArrayList<HuehakDto>();
-		for (Huehak hue : hueList) {
+		for (Huehak hue : pages.getContent()) {
 			hueDtoList.add(hue.toHuehakDto());
 		}
 		return hueDtoList;
