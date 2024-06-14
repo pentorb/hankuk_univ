@@ -34,7 +34,7 @@ const AccountManagement = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const token = useAtomValue(tokenAtom);
-
+  
   useEffect(() => {
     fetchcolleages();
   }, [token]);
@@ -106,7 +106,7 @@ const AccountManagement = () => {
       const response = await axios.post(`${url}/uploadExcel`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "Authorization": JSON.stringify(token)  
+          "Authorization": JSON.stringify(token)
         }
       });
       alert("Data uploaded successfully");
@@ -143,24 +143,33 @@ const AccountManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.category) {
-      alert("구분을 선택해주세요.");
-      return;
+        alert("구분을 선택해주세요.");
+        return;
     }
 
     try {
-      if (formData.category === 'student') {
-        await axios.post(`${url}/registerStudent`, formData,{"Authorization": JSON.stringify(token)});
-        alert("학생이 성공적으로 등록되었습니다.");
-      } else if (formData.category === 'professor') {
-        await axios.post(`${url}/registerProfessor`, formData,{"Authorization": JSON.stringify(token)});
-        alert("교수가 성공적으로 등록되었습니다.");
-      }
+        const payload = {
+            id: formData.id,
+            name: formData.name,
+            tel: formData.tel,
+            password: formData.password,
+            major: formData.major,
+        };
+
+        if (formData.category === 'student') {
+            await axios.post(`${url}/registerStudent`, payload, {headers:{ "Authorization": JSON.stringify(token) }});
+            alert("학생이 성공적으로 등록되었습니다.");
+        } else if (formData.category === 'professor') {
+            await axios.post(`${url}/registerProfessor`, payload, {headers:{ "Authorization": JSON.stringify(token) }});
+            alert("교수가 성공적으로 등록되었습니다.");
+        }
     } catch (error) {
-      console.error("Error registering:", error);
-      alert("등록 중 오류가 발생했습니다.");
+        console.error("Error registering:", error);
+        alert("등록 중 오류가 발생했습니다.");
     }
     closeModal();
-  };
+};
+
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
@@ -232,14 +241,55 @@ const AccountManagement = () => {
       setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
     }
   };
-
+  const handleSave = async () => {
+    try {
+      if (searchCategory === 'student') {
+        const updatedStudents = students
+          .filter(student => selectedIds.includes(student.id))
+          .map(student => ({
+            id: student.id,
+            name: student.name, 
+            tel: student.tel 
+          }));
+  
+        console.log("Sending students to server for update:", updatedStudents);
+  
+        await axios.post(`${url}/updateStudents`, updatedStudents, {
+          headers: { "Authorization": JSON.stringify(token) }
+        });
+      } else if (searchCategory === 'professor') {
+        const updatedProfessors = professors
+          .filter(professor => selectedIds.includes(professor.id))
+          .map(professor => ({
+            id: professor.id,
+            name: professor.name,
+            tel: professor.tel 
+          }));
+  
+        console.log("Sending professors to server for update:", updatedProfessors);
+  
+        await axios.post(`${url}/updateProfessors`, updatedProfessors, {
+          headers: { "Authorization": JSON.stringify(token) }
+        });
+      }
+  
+      alert("수정이 완료되었습니다.");
+      setEditMode(false);
+      setSelectedIds([]);
+    } catch (error) {
+      console.error("Error saving records:", error);
+      alert("수정 중 오류가 발생했습니다.");
+    }
+  };
+  
+  
   const handleDelete = async () => {
     try {
       if (searchCategory === 'student') {
-        await axios.post(`${url}/deleteStudents`, selectedIds,{"Authorization": JSON.stringify(token)});
+        await axios.post(`${url}/deleteStudents`, selectedIds, {headers:{"Authorization": JSON.stringify(token)}});
         setStudents(students.filter(student => !selectedIds.includes(student.id)));
       } else if (searchCategory === 'professor') {
-        await axios.post(`${url}/deleteProfessors`, selectedIds,{"Authorization": JSON.stringify(token)});
+        await axios.post(`${url}/deleteProfessors`, selectedIds, {headers:{"Authorization": JSON.stringify(token)}});
         setProfessors(professors.filter(professor => !selectedIds.includes(professor.id)));
       }
       alert("삭제가 완료되었습니다.");
@@ -251,31 +301,26 @@ const AccountManagement = () => {
   };
 
   const handleEdit = () => {
+    if (selectedIds.length === 0) {
+      alert("수정할 항목을 선택하세요."); // 선택된 항목이 없으면 경고 메시지 표시
+      return;
+    }
     setEditMode(true);
   };
 
-  const handleSave = async () => {
-    try {
-      if (searchCategory === 'student') {
-        await axios.post(`${url}/updateStudents`, students.filter(student => selectedIds.includes(student.id)),{"Authorization": JSON.stringify(token)});
-      } else if (searchCategory === 'professor') {
-        await axios.post(`${url}/updateProfessors`, professors.filter(professor => selectedIds.includes(professor.id)),{"Authorization": JSON.stringify(token)});
-      }
-      alert("수정이 완료되었습니다.");
-      setEditMode(false);
-      setSelectedIds([]);
-    } catch (error) {
-      console.error("Error saving records:", error);
-      alert("수정 중 오류가 발생했습니다.");
-    }
-  };
-
-
   const handleFieldChange = (e, id, field) => {
     if (searchCategory === 'student') {
-      setStudents(students.map(student => student.id === id ? { ...student, [field]: e.target.value } : student));
+      setStudents(students.map(student => 
+        selectedIds.includes(student.id) && student.id === id ? 
+        { ...student, [field]: e.target.value } : 
+        student
+      ));
     } else if (searchCategory === 'professor') {
-      setProfessors(professors.map(professor => professor.id === id ? { ...professor, [field]: e.target.value } : professor));
+      setProfessors(professors.map(professor => 
+        selectedIds.includes(professor.id) && professor.id === id ? 
+        { ...professor, [field]: e.target.value } : 
+        professor
+      ));
     }
   };
 
@@ -330,9 +375,9 @@ const AccountManagement = () => {
                             ))}
                           </Select>
                           <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '230px' }}>
-                          {majors.map((major) => (
-                            <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
-                          ))}
+                            {majors.map((major) => (
+                              <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                            ))}
                           </Select>
                         </>
                       ) : (
@@ -371,7 +416,6 @@ const AccountManagement = () => {
                     <th>아이디(학번/교번)</th>
                     <th>이름</th>
                     <th>전공</th>
-                    <th>이메일</th>
                     <th>번호</th>
                   </tr>
                 </thead>
@@ -383,19 +427,16 @@ const AccountManagement = () => {
                       <td>
                         <Input
                           value={student.name}
-                          readOnly={!editMode}
+                          readOnly={!editMode || !selectedIds.includes(student.id)} 
                           onChange={(e) => handleFieldChange(e, student.id, 'name')}
-                          fullWidth
                         />
                       </td>
-                      <td>{student.major}</td>
-                      <td>{student.email}</td>
+                      <td>{student.majCd}</td>
                       <td>
                         <Input
-                          value={student.phone}
-                          readOnly={!editMode}
-                          onChange={(e) => handleFieldChange(e, student.id, 'phone')}
-                          fullWidth
+                          value={student.tel}
+                          readOnly={!editMode || !selectedIds.includes(student.id)} 
+                          onChange={(e) => handleFieldChange(e, student.id, 'tel')}
                         />
                       </td>
                     </tr>
@@ -407,19 +448,16 @@ const AccountManagement = () => {
                       <td>
                         <Input
                           value={professor.name}
-                          readOnly={!editMode}
+                          readOnly={!editMode || !selectedIds.includes(professor.id)} 
                           onChange={(e) => handleFieldChange(e, professor.id, 'name')}
-                          fullWidth
                         />
                       </td>
-                      <td>{professor.major}</td>
-                      <td>{professor.email}</td>
+                      <td>{professor.majCd}</td>
                       <td>
                         <Input
-                          value={professor.phone}
-                          readOnly={!editMode}
-                          onChange={(e) => handleFieldChange(e, professor.id, 'phone')}
-                          fullWidth
+                          value={professor.tell}
+                          readOnly={!editMode || !selectedIds.includes(professor.id)} 
+                          onChange={(e) => handleFieldChange(e, professor.id, 'tell')}
                         />
                       </td>
                     </tr>
@@ -429,7 +467,9 @@ const AccountManagement = () => {
             </div>
             <div className="actions">
               <button style={{ color: '#1F3468', backgroundColor: 'white' }} onClick={openModal}>등록</button>
-              <button style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleEdit}>수정</button>
+              {!editMode && (
+                <Button variant="contained" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleEdit}>수정</Button>
+              )}
               {editMode && (
                 <Button variant="contained" style={{ color: 'white', backgroundColor: '#1F3468' }} onClick={handleSave}>저장</Button>
               )}
@@ -475,27 +515,34 @@ const AccountManagement = () => {
               </tr>
               <tr>
                 <th><label>소속</label></th>
-                <Select name="colleage" value={formData.colleage} onChange={handleInputChange} style={{ width: '100%', height: '30px' }}>
-                  {colleages.map((colleage) => (
-                    <MenuItem key={colleage} value={colleage}>{colleage}</MenuItem>
-                  ))}
-                </Select>
-                <Select name="major" value={formData.major} onChange={handleInputChange} style={{ width: '100%', height: '30px' }}>
-                  {majors.map((major) => (
-                    <MenuItem key={major} value={major}>{major}</MenuItem>
-                  ))}
-                </Select>
-              </tr>
-              <tr>
-              </tr>
-              <tr>
-                <th><label>이름</label></th>
-                <th><input type="text" name="name" value={formData.name} onChange={handleInputChange} /></th>
-              </tr>
-              <tr>
-                <th><label>비밀번호</label></th>
-                <th><input type="text" name="password" value={formData.password} readOnly /></th>
-              </tr>
+                <th>
+                  <Select value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '100%', height: '30px' }}>
+                    {colleages.map((colleage) => (
+                      <MenuItem key={colleage.colCd} value={colleage.colCd} >{colleage.name}</MenuItem>
+                    ))}
+                  </Select>
+                </th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>
+                    <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '100%', height: '30px' }}>
+                      {majors.map((major) => (
+                        <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </th>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+                  <th><label>이름</label></th>
+                  <th><input type="text" name="name" value={formData.name} onChange={handleInputChange} /></th>
+                </tr>
+                <tr>
+                  <th><label>비밀번호</label></th>
+                  <th><input type="text" name="password" value={formData.password} readOnly /></th>
+                </tr>
             </table>
             <br />
             <div className='actions2'>

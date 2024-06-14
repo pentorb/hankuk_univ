@@ -13,7 +13,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 	List<Student> findByMajor_Colleage_ColCd(String colCd);
 	List<Student> findByMajor(String major);
 	List<Student> findByMajor_Colleage_name(String colleage);
-
+	List<Student> findByMajor_majCd(String majCd);
 
 }
  

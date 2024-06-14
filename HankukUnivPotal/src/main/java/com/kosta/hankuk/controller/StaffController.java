@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
-import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.service.StaffService;
@@ -31,6 +31,58 @@ public class StaffController {
 
     @Autowired
     private StaffService staffService;
+    
+    @PostMapping("/registerStudent")
+    public ResponseEntity<String> registerStudent(@RequestBody Map<String, Object> payload) {
+        try {
+            String stdNo = String.valueOf(payload.get("id"));
+            String name = (String) payload.get("name");
+            String tel = (String) payload.get("tel");
+            String password = String.valueOf(payload.get("password"));
+            String majorId = String.valueOf(payload.get("major"));
+            
+            staffService.registerStudentByOne(stdNo, name, tel, password, majorId);
+            
+            return ResponseEntity.ok("학생이 성공적으로 등록되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("학생 등록 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/registerProfessor")
+    public ResponseEntity<String> registerProfessor(@RequestBody Professor professor) {
+        try {
+
+            staffService.registerProfessor(professor);
+            return ResponseEntity.ok("교수가 성공적으로 등록되었습니다.");
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return ResponseEntity.status(500).body("교수 등록 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+    
+    @PostMapping("/updateStudents")
+    public ResponseEntity<String> updateStudents(@RequestBody List<Map<String, Object>> students) {
+        try {
+            staffService.updateStudents(students);
+            return ResponseEntity.ok("학생이 성공적으로 업데이트 되었습니다");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error updating students: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/updateProfessors")
+    public ResponseEntity<String> updateProfessors(@RequestBody List<Map<String, Object>> professors) {
+        try {
+            staffService.updateProfessors(professors);
+            return ResponseEntity.ok("학생이 성공적으로 업데이트 되었습니다");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error updating students: " + e.getMessage());
+        }
+    }
 
     @GetMapping("/createStudentId")
     public ResponseEntity<String> createStudentId() {
@@ -86,24 +138,13 @@ public class StaffController {
         return ResponseEntity.ok("Professors deleted successfully");
     }
 
-    @PostMapping("/updateStudents")
-    public ResponseEntity<String> updateStudents(@RequestBody List<Student> students) {
-        staffService.updateStudents(students);
-        return ResponseEntity.ok("Students updated successfully");
-    }
-
-    @PostMapping("/updateProfessors")
-    public ResponseEntity<String> updateProfessors(@RequestBody List<Professor> professors) {
-        staffService.updateProfessors(professors);
-        return ResponseEntity.ok("Professors updated successfully");
-    }
-
     @PostMapping("/uploadExcel")
     public ResponseEntity<String> uploadExcel(@RequestParam("category") String category, @RequestParam("file") MultipartFile file) {
         try {
             staffService.saveDataFromExcel(category, file);
             return ResponseEntity.ok("Data uploaded and saved successfully");
         } catch (Exception e) {
+			e.printStackTrace();
             return ResponseEntity.status(500).body("Failed to upload data: " + e.getMessage());
         }
     }

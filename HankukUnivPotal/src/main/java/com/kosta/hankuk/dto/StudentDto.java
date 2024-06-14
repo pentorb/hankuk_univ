@@ -57,8 +57,8 @@ public class StudentDto implements UserDto {
 				.profile(profile)
 				.finCredit(finCredit)
 				.finSem(finSem)
-				.professor(Professor.builder().profNo(profNo).build())
-				.major(Major.builder().majCd(majCd).build())
+				.professor(profNo!=null? Professor.builder().profNo(profNo).build() : null)
+				.major(majCd!=null? Major.builder().majCd(majCd).build(): null)
 				.build();
 	}
 }
