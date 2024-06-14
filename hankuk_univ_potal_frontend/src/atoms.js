@@ -4,6 +4,9 @@ export const initMember = {id:'', name:'', password:''};
 export const initLecture = {lecNo: '', credit: 0, sect: '', time1: '', time2: '',
     numOfStd: 0, files: '', lecRoom: '',  status: '', isScoreChk: null, year: 0,  semester: '',
     subCd: '', profNo: '', profName: '', email: '', tel: '', subName: ''}
+
+export const initActiveTab = 0;
+
 // 공유할 데이터를 분리하여 선언
 export const memberAtom = atomWithStorage(
     'member', // 이름
@@ -25,5 +28,17 @@ export const tokenAtom = atomWithStorage(
 
 export const selectedNumberAtom = atomWithStorage(
     'selectedNumber',
+    createJSONStorage(()=>sessionStorage),
+)
+
+export const selectedLectureAtom = atomWithStorage(
+    'selectedLectureNumber',
+    'selectedLectureName',
+    createJSONStorage(()=>sessionStorage),
+)
+
+export const activeTabAtom = atomWithStorage(
+    'activeTab',
+    'initActiveTab',
     createJSONStorage(()=>sessionStorage),
 )

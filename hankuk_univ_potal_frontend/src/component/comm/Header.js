@@ -1,14 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { tokenAtom } from '../../atoms';
-import { useAtom } from 'jotai';
+import { memberAtom, activeTabAtom, tokenAtom } from '../../atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { url } from '../../config/config';
 
 const Header = () => {
-    // const [member, setMember] = useState({name:''});
+    const navigate = useNavigate();
+    const setActiveTab = useSetAtom(activeTabAtom);    
+    const member = useAtomValue(memberAtom);
     // const [token, setToken] = useAtom(tokenAtom);
+
+    const goPotal = () => {
+        if (member.id.substring(0, 1) === "P") {
+            navigate("/professor");
+        } else if (member.id.substring(0, 1) === "S") {
+            navigate("/staff");
+        } else if (member.id.substring(0, 1) === "2") {
+            navigate("/student");
+        }
+    }
 
     // useEffect(() => {
     //     // console.log(token);
@@ -34,8 +46,8 @@ const Header = () => {
         <div style={{display:'flex'}}>
             <div className="col-6" style={{height: '85px', display: 'flex', margin: '0 auto' }}>
                 <img src="/images/logo2.png" style={{ width: '50px', height: '50px', margin: '15px 10px 15px 20px' }} />
-                <span style={{ margin: '23px 5px 23px 0' }}><Link to="/" style={{ textDecoration: "none", color: "var(--maincolor)", fontSize: "24px", fontFamily: "ChosunLo" }}>한국대학교</Link> </span>
-                <span style={{ margin: '23px 0' }}>/ <Link to="/student" style={{ textDecoration: "none", color: "var(--maincolor)", fontSize: "22px", fontWeight: '600' }}>종합학사포탈</Link></span>
+                <span onClick={()=>{setActiveTab(0); navigate("/");}} style={{ margin: '23px 5px 23px 0', textDecoration: "none", color: "var(--maincolor)", fontSize: "24px", fontFamily: "ChosunLo", cursor:"pointer" }}>한국대학교 </span>
+                <span onClick={()=>{setActiveTab(0); goPotal();}} style={{ margin: '23px 0', textDecoration: "none", color: "var(--maincolor)", fontSize: "22px", fontWeight: '600', cursor:"pointer" }}>/ 종합학사포탈</span>
                 
             </div>
                 <div className="col-6" style={{ height: '85px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
