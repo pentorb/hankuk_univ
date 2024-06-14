@@ -198,4 +198,17 @@ public class StudentController {
 			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping({"/lecture/{lecNo}"})
+	public ResponseEntity<Map<String, Object>> showLectureContent(@PathVariable String lecNo){
+		try {
+			Map<String, Object> res = new HashMap<>();
+			Map<String, Object> lecture = stdService.showLectureContent(lecNo);
+			res.put("lecture", lecture);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }

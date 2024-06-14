@@ -30,4 +30,5 @@ public interface StudentService {
 	Map<String, Object> appealDetail(Integer appNo) throws Exception;
 	void modifyAppeal(Integer appNo, String content, MultipartFile file) throws Exception;
 	List<Map<String, Object>> showLectureList(String stdNo) throws Exception;
+	Map<String, Object> showLectureContent(String lecNo) throws Exception;
 }
