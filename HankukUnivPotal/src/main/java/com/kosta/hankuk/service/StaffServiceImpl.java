@@ -93,8 +93,23 @@ public class StaffServiceImpl implements StaffService {
         student.setMajor(major);
 
         studentRepository.save(student);
-        }
+     }
 
+    @Override
+    public void registerProfessorByOne(String profNo, String name, String tel, String password, String majorId) {
+        Major major = majorRepository.findById(majorId).orElse(null);
+        
+        Professor professor = new Professor();
+        professor.setProfNo(profNo);
+        professor.setName(name);
+        professor.setTel(tel);
+        professor.setPassword(passwordEncoder.encode(password));
+        professor.setMajor(major);
+
+        professorRepository.save(professor);
+     }
+    
+    
     
     @Override
     public void registerStudent(Student student) {
@@ -209,39 +224,91 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public List<ProfessorDto> searchProfessors(String name, String colleage, String major) {
-		if (name != null && !name.isEmpty()) {
-			return professorRepository.findByNameContaining(name).stream()
-					.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(),
-							professor.getName(), professor.getGender(), professor.getProfile(), professor.getPosition(),
-							professor.getAddr(), professor.getDetailAddr(), professor.getPostCode(),
-							professor.getBirthday(), professor.getTel(), professor.getEmail(), professor.getEmailDo(),
-							professor.getJoinDt(), professor.getMajor().getMajCd()))
-					.collect(Collectors.toList());
-		} else if (colleage != null && major != null) {
-			return professorRepository.findByMajor_Colleage_name(colleage).stream()
-					.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(),
-							professor.getName(), professor.getGender(), professor.getProfile(), professor.getPosition(),
-							professor.getAddr(), professor.getDetailAddr(), professor.getPostCode(),
-							professor.getBirthday(), professor.getTel(), professor.getEmail(), professor.getEmailDo(),
-							professor.getJoinDt(), professor.getMajor().getMajCd()))
-					.collect(Collectors.toList());
-		} else if (major != null) {
-			return professorRepository.findByMajor_majCd(major).stream()
-					.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(),
-							professor.getName(), professor.getGender(), professor.getProfile(), professor.getPosition(),
-							professor.getAddr(), professor.getDetailAddr(), professor.getPostCode(),
-							professor.getBirthday(), professor.getTel(), professor.getEmail(), professor.getEmailDo(),
-							professor.getJoinDt(), professor.getMajor().getMajCd()))
-					.collect(Collectors.toList());
-		}
-		return professorRepository.findAll().stream()
-				.map(professor -> new ProfessorDto(professor.getProfNo(), professor.getPassword(), professor.getName(),
-						professor.getGender(), professor.getProfile(), professor.getPosition(), professor.getAddr(),
-						professor.getDetailAddr(), professor.getPostCode(), professor.getBirthday(), professor.getTel(),
-						professor.getEmail(), professor.getEmailDo(), professor.getJoinDt(),
-						professor.getMajor().getMajCd()))
-				.collect(Collectors.toList());
+	    if (name != null && !name.isEmpty()) {
+	        return professorRepository.findByNameContaining(name).stream()
+	                .map(professor -> new ProfessorDto(
+	                        professor.getProfNo(), 
+	                        professor.getPassword(), 
+	                        professor.getName(),
+	                        professor.getGender(), 
+	                        professor.getProfile(), 
+	                        professor.getPosition(),
+	                        professor.getAddr(), 
+	                        professor.getDetailAddr(), 
+	                        professor.getPostCode(),
+	                        professor.getBirthday(), 
+	                        professor.getTel(), 
+	                        professor.getEmail(), 
+	                        professor.getEmailDo(),
+	                        professor.getJoinDt(), 
+	                        professor.getMajor() != null ? professor.getMajor().getMajCd() : null
+	                ))
+	                .collect(Collectors.toList());
+	    } else if (colleage != null && !colleage.isEmpty() && (major == null || major.isEmpty())) {
+	        return professorRepository.findByMajor_Colleage_name(colleage).stream()
+	                .map(professor -> new ProfessorDto(
+	                        professor.getProfNo(), 
+	                        professor.getPassword(), 
+	                        professor.getName(),
+	                        professor.getGender(), 
+	                        professor.getProfile(), 
+	                        professor.getPosition(),
+	                        professor.getAddr(), 
+	                        professor.getDetailAddr(), 
+	                        professor.getPostCode(),
+	                        professor.getBirthday(), 
+	                        professor.getTel(), 
+	                        professor.getEmail(), 
+	                        professor.getEmailDo(),
+	                        professor.getJoinDt(), 
+	                        professor.getMajor() != null ? professor.getMajor().getMajCd() : null
+	                ))
+	                .collect(Collectors.toList());
+	    } else if (major != null && !major.isEmpty()) {
+	        Major majorEntity = majorRepository.findById(major).orElse(null);
+	        if (majorEntity != null) {
+	            return professorRepository.findByMajor_majCd(major).stream()
+	                    .map(professor -> new ProfessorDto(
+	                            professor.getProfNo(), 
+	                            professor.getPassword(), 
+	                            professor.getName(),
+	                            professor.getGender(), 
+	                            professor.getProfile(), 
+	                            professor.getPosition(),
+	                            professor.getAddr(), 
+	                            professor.getDetailAddr(), 
+	                            professor.getPostCode(),
+	                            professor.getBirthday(), 
+	                            professor.getTel(), 
+	                            professor.getEmail(), 
+	                            professor.getEmailDo(),
+	                            professor.getJoinDt(), 
+	                            professor.getMajor() != null ? professor.getMajor().getMajCd() : null
+	                    ))
+	                    .collect(Collectors.toList());
+	        }
+	    }
+	    return professorRepository.findAll().stream()
+	            .map(professor -> new ProfessorDto(
+	                    professor.getProfNo(), 
+	                    professor.getPassword(), 
+	                    professor.getName(),
+	                    professor.getGender(), 
+	                    professor.getProfile(), 
+	                    professor.getPosition(),
+	                    professor.getAddr(), 
+	                    professor.getDetailAddr(), 
+	                    professor.getPostCode(),
+	                    professor.getBirthday(), 
+	                    professor.getTel(), 
+	                    professor.getEmail(), 
+	                    professor.getEmailDo(),
+	                    professor.getJoinDt(), 
+	                    professor.getMajor() != null ? professor.getMajor().getMajCd() : null
+	            ))
+	            .collect(Collectors.toList());
 	}
+
 
     @Override
     public List<ColleageDto> getAllColleages() {
@@ -301,7 +368,7 @@ public class StaffServiceImpl implements StaffService {
 				String email = emailIdx==-1 || row.getCell(emailIdx)==null? "" :row.getCell(emailIdx).getStringCellValue();
 				String address1 = address1Idx==-1 || row.getCell(address1Idx)==null? "" :row.getCell(address1Idx).getStringCellValue();
 				String address2 = address2Idx==-1 || row.getCell(address2Idx)==null? "" :row.getCell(address2Idx).getStringCellValue();
-				String postcode = postcodeIdx==-1 || row.getCell(postcodeIdx)==null? "" :row.getCell(postcodeIdx).getStringCellValue();
+				String postcode = postcodeIdx == -1 || row.getCell(postcodeIdx) == null ? "" : String.valueOf((int) row.getCell(postcodeIdx).getNumericCellValue());
 				String tel = telIdx==-1 || row.getCell(telIdx)==null? "" :row.getCell(telIdx).getStringCellValue();
 				String gender = genderIdx==-1 || row.getCell(genderIdx)==null? "": row.getCell(genderIdx).getStringCellValue();
 				String majorName = majorIdx==-1 || row.getCell(majorIdx)==null? "" :row.getCell(majorIdx).getStringCellValue();
