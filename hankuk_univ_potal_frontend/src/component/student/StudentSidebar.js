@@ -15,8 +15,8 @@ import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
 import { Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAtom } from 'jotai';
-import { activeTabAtom } from '../../atoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { activeTabAtom, lectureNumberAtom } from '../../atoms';
 // import './css/studentSidebar.css';
 
 export default function StudentSidebar() {
@@ -25,6 +25,7 @@ export default function StudentSidebar() {
   const [secondOpen, setSecondOpen] = useState(false);
   const [thirdOpen, setThirdOpen] = useState(false);
   const [activeTab, setActiveTab] = useAtom(activeTabAtom)
+  const lectureNumber = useAtomValue(lectureNumberAtom);
   const navigate = useNavigate();
 
   const handleListItemClick = (e, index) => {
@@ -155,14 +156,24 @@ export default function StudentSidebar() {
             </>}
           {(activeTab === 5) &&
             <>
-              <Link to="/student/calendar" style={{ textDecoration: "none", color: "black" }}>
-                <ListItemButton selected={selectedIndex === 12} onClick={(e) => handleListItemClick(e, 12)}>
+              <Link to={`/student/lecture/${lectureNumber}`} style={{ textDecoration: "none", color: "black" }}>
+                <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)}>
+                  <ListItemText primary="강의콘텐츠" />
+                </ListItemButton>
+              </Link>
+              <Link to={`/student/lecture/${lectureNumber}/syllabus`} style={{ textDecoration: "none", color: "black" }}>
+                <ListItemButton selected={selectedIndex === 2} onClick={(e) => handleListItemClick(e, 2)}>
                   <ListItemText primary="강의계획서" />
                 </ListItemButton>
               </Link>
-              <Link to="/student/insert-calendar" style={{ textDecoration: "none", color: "black" }}>
-                <ListItemButton selected={selectedIndex === 13} onClick={(e) => handleListItemClick(e, 13)}>
-                  <ListItemText primary="일정 등록" />
+              <Link to={`/student/lecture/${lectureNumber}/attendance`} style={{ textDecoration: "none", color: "black" }}>
+                <ListItemButton selected={selectedIndex === 3} onClick={(e) => handleListItemClick(e, 3)}>
+                  <ListItemText primary="출결현황" />
+                </ListItemButton>
+              </Link>
+              <Link to={`/student/lecture/${lectureNumber}/homework`} style={{ textDecoration: "none", color: "black" }}>
+                <ListItemButton selected={selectedIndex === 4} onClick={(e) => handleListItemClick(e, 4)}>
+                  <ListItemText primary="과제" />
                 </ListItemButton>
               </Link>
             </>}

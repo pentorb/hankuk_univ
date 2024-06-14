@@ -31,9 +31,13 @@ export const selectedNumberAtom = atomWithStorage(
     createJSONStorage(()=>sessionStorage),
 )
 
-export const selectedLectureAtom = atomWithStorage(
-    'selectedLectureNumber',
-    'selectedLectureName',
+export const lectureNumberAtom = atomWithStorage(
+    'lectureNumber',
+    createJSONStorage(()=>sessionStorage),
+)
+
+export const lectureNameAtom = atomWithStorage(
+    'lectureName',
     createJSONStorage(()=>sessionStorage),
 )
 
