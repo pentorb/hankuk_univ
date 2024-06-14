@@ -174,9 +174,9 @@ const StaffHuehak = () => {
                                             <td>{formatDate(hb.appDt)}</td>
                                             <td style={getStatusStyle(hb.status)}>
                                                 {/* <Button style={{backgroundColor: "#1F3468"}}>  */}
-                                                <span onClick={<HueModalByStf />}>
+                                                {/* <span onClick={<HueModalByStf />}> */}
                                                     {statusMap[hb.status] || hb.status}
-                                                </span>
+                                                {/* </span> */}
                                                 {/* </Button> */}
                                             </td>
                                         </tr>

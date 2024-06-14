@@ -394,19 +394,21 @@ public class StaffServiceImpl implements StaffService {
 		huehak.setRejResult(hueDto.getRejResult());
 		huehak.setStatus(hueDto.getStatus());
 		
-		if (hueDto.getStatus() == "APP") { // 승인이면 
+		if (hueDto.getStatus().equals("APP")) { // 승인이면 
+			huehak.setRejResult(null);
+			
 			Student std = studentRepository.findById(hueDto.getStdNo()).get();
-			std.setStatus("S2");
+			std.setStatus("S2"); // 휴학으로 상태 변경
 			studentRepository.save(std);
 			
 			HuehakAndBokhak hb = new HuehakAndBokhak();
 			hb.setStudent(std);
 			hb.setType(hueDto.getType());
 			hb.setAppSem(hueDto.getHueSem());
+			hb.setStatus("H");
 			hbres.save(hb);
 
-			System.out.println("하하하ㅏㅎ");
-		} 
+		}
 		
 		hueres.save(huehak);
 	}
