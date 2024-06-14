@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.service.StudentService;
@@ -43,9 +44,7 @@ public class StudentController {
 	public ResponseEntity<Map<String,Object>> hueListByStdNo(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
 															@RequestParam(name="stdNo") String stdNo,
 															@RequestParam(name="status", required = false) String status,
-															@RequestParam(name="type", required=false) String type
-															
-			){
+															@RequestParam(name="type", required=false) String type){
 		Map<String,Object> res = new HashMap<String, Object>();
 		try {
 			PageInfo pageInfo = PageInfo.builder().curPage(page).build();
@@ -55,6 +54,24 @@ public class StudentController {
 			return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
 		}
 		catch (Exception e) {
+			
+			e.printStackTrace();
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/bokListByStdNo") // 학번으로 복학 리스트 조회
+	public ResponseEntity<Map<String,Object>> bokListByStdNo(@RequestParam(name="page", required = false, defaultValue = "1") Integer page,
+															 @RequestParam(name="stdNo") String stdNo,
+															 @RequestParam(name="type", required = false) String type) {
+		Map<String,Object> res = new HashMap<String, Object>();
+		try {
+			PageInfo pageInfo = PageInfo.builder().curPage(page).build();
+			List<HuehakAndBokhakDto> hbDtoList = stdService.bokListByStdNo(pageInfo, stdNo, type);
+			res.put("bokhak", hbDtoList);
+			res.put("pageInfo", pageInfo);
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.OK);
+		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
 		}

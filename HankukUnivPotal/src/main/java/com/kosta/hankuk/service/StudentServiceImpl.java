@@ -15,17 +15,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Files;
 import com.kosta.hankuk.entity.Huehak;
+import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.FilesRepository;
+import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.MajorRepository;
@@ -39,6 +42,8 @@ public class StudentServiceImpl implements StudentService {
 	// 휴학
 	@Autowired
 	private HuehakRepository hueRes;
+	@Autowired
+	private HueAndBokRepository hbRes;
 
 	@Autowired
 	private MajorRepository mres;
@@ -79,7 +84,33 @@ public class StudentServiceImpl implements StudentService {
 		return huehak;
 	}
 
-
+	@Override
+	public List<HuehakAndBokhakDto> bokListByStdNo(PageInfo pageInfo, String stdNo, String type) throws Exception {
+		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
+		Page<HuehakAndBokhak> pages = null;
+		
+		if (type==null || type.trim().isEmpty()) {
+			pages = hbRes.findByStudent_StdNo(stdNo, pageRequest);
+		} else {
+			pages = hbRes.findByStudent_StdNoAndType(stdNo, type, pageRequest);
+		}
+		
+		pageInfo.setAllPage(pages.getTotalPages());
+		
+		int startPage = (pageInfo.getCurPage()-1)/1*10+1;
+		int endPage = Math.min(startPage+10-1, pageInfo.getAllPage());
+		
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
+		List<HuehakAndBokhakDto> hbDtoList = new ArrayList<HuehakAndBokhakDto>();
+		for(HuehakAndBokhak hb : pages.getContent()) {
+			hbDtoList.add(hb.toLeaveAndReturnDto());
+		}
+		
+		return hbDtoList;
+	}
+ 
 	// 학번으로 휴학 신청 내역
 	@Override
 	public List<HuehakDto> hueListByStdNo(PageInfo pageInfo, String stdNo, String status, String type) throws Exception {
@@ -90,11 +121,11 @@ public class StudentServiceImpl implements StudentService {
 		if ((type == null || type.trim().isEmpty()) && (status == null || status.trim().isEmpty())) {
 	        pages = hueRes.findByStudent_StdNo(stdNo, pageRequest);
 	    } else if ((type == null || type.trim().isEmpty())) {
-	        pages = hueRes.findByStatus(status, pageRequest);
+	        pages = hueRes.findByStudent_StdNoAndStatus(stdNo, status, pageRequest);
 	    } else if ((status == null || status.trim().isEmpty())) {
-	        pages = hueRes.findByType(type, pageRequest);
+	        pages = hueRes.findByStudent_StdNoAndType(stdNo, type, pageRequest);
 	    } else {
-	        pages = hueRes.findByStatusAndType(status, type, pageRequest);
+	        pages = hueRes.findByStudent_StdNoAndStatusAndType(stdNo, status, type, pageRequest);
 	    }
 		
 		pageInfo.setAllPage(pages.getTotalPages());
