@@ -156,22 +156,22 @@ export default function StudentSidebar() {
             </>}
           {(activeTab === 5) &&
             <>
-              <Link to={`/student/lecture/${lectureNumber}`} style={{ textDecoration: "none", color: "black" }}>
+              <Link to={`/student/${lectureNumber}`} style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)}>
                   <ListItemText primary="강의콘텐츠" />
                 </ListItemButton>
               </Link>
-              <Link to={`/student/lecture/${lectureNumber}/syllabus`} style={{ textDecoration: "none", color: "black" }}>
+              <Link to={`/student/${lectureNumber}/syllabus`} style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 2} onClick={(e) => handleListItemClick(e, 2)}>
                   <ListItemText primary="강의계획서" />
                 </ListItemButton>
               </Link>
-              <Link to={`/student/lecture/${lectureNumber}/attendance`} style={{ textDecoration: "none", color: "black" }}>
+              <Link to={`/student/${lectureNumber}/attendance`} style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 3} onClick={(e) => handleListItemClick(e, 3)}>
                   <ListItemText primary="출결현황" />
                 </ListItemButton>
               </Link>
-              <Link to={`/student/lecture/${lectureNumber}/homework`} style={{ textDecoration: "none", color: "black" }}>
+              <Link to={`/student/${lectureNumber}/homework`} style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 4} onClick={(e) => handleListItemClick(e, 4)}>
                   <ListItemText primary="과제" />
                 </ListItemButton>

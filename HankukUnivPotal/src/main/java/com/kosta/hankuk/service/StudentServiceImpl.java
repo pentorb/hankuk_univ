@@ -24,6 +24,7 @@ import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
+import com.kosta.hankuk.entity.Lesson;
 import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.AppealRepository;
@@ -31,6 +32,7 @@ import com.kosta.hankuk.repository.FilesRepository;
 import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
+import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.ScoreRepository;
 import com.kosta.hankuk.repository.StudentRepository;
@@ -59,6 +61,8 @@ public class StudentServiceImpl implements StudentService {
 	private FilesRepository filesRepository;
 	@Autowired
 	private AppealRepository appealRepository;
+	@Autowired
+	private LectureRepository lectureRepository;
 
 	@Value("${upload.path}")
 	private String uploadPath;
@@ -355,6 +359,24 @@ public class StudentServiceImpl implements StudentService {
 			mapList.add(map);
 		}
 		return mapList;
+	}
+	
+	@Override
+	public Map<String, Object> showLectureContent(String lecNo) throws Exception {
+		Optional<Lecture> olecture = lectureRepository.findById(lecNo);
+		if (olecture.isEmpty()) throw new Exception("강의번호 오류");
+		Lecture lecture = olecture.get();
+		
+		String lectureNumber = lecture.getLecNo();
+		String lectureName = lecture.getSubject().getName();
+		List<Lesson> lessonList = lecture.getLessonList();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("lectureNumber", lectureNumber);
+		map.put("lectureName", lectureName);
+		map.put("lessonList", lessonList);
+		
+		return map;
 	}
 
 }
