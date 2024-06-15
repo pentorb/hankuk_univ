@@ -74,6 +74,7 @@ public class StudentServiceImpl implements StudentService {
 		hueRes.save(huehak);
 	}
 	
+	// 휴학 신청 상세보기
 	@Override
 	public HuehakDto huehakDetail(Integer hueNo) throws Exception {
 		HuehakDto huehak = hueRes.findById(hueNo).get().toHuehakDto();
@@ -88,7 +89,7 @@ public class StudentServiceImpl implements StudentService {
 		return huehak;
 	}
 
-	@Override
+	@Override // 복학 내역 조회
 	public List<HuehakAndBokhakDto> bokListByStdNo(PageInfo pageInfo, String stdNo, String type) throws Exception {
 		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
 		Page<HuehakAndBokhak> pages = null;
