@@ -397,7 +397,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<Map<String, Object>> showHomeworkList(String lecNo) throws Exception {
+	public List<Map<String, Object>> showHomeworkList(String lecNo, String stdNo) throws Exception {
 		List<Homework> homeworkList = homeworkRepository.findByLecture_lecNo(lecNo);
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
@@ -411,9 +411,8 @@ public class StudentServiceImpl implements StudentService {
 
 			Integer score = null;
 			Boolean submission = false;
-			Optional<HomeworkSubmit> ohomeworkSubmit = homeworkSubmitRepository.findById(hwNo);
-			if (ohomeworkSubmit.isPresent()) {
-				HomeworkSubmit homeworkSubmit = ohomeworkSubmit.get();
+			HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+			if (homeworkSubmit != null) {
 				score = homeworkSubmit.getScore();
 				submission = true;
 			}
@@ -431,5 +430,42 @@ public class StudentServiceImpl implements StudentService {
 		}
 		return mapList;
 	}
+	
+	@Override
+	public Map<String, Object> loadHomeworkInformation(Integer hwNo) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		Homework homework = homeworkRepository.findById(hwNo).get();
 
+		String lectureName = homework.getLecture().getSubject().getName();
+		String professorName = homework.getLecture().getProfessor().getName();
+		String title = homework.getTitle();
+		String content = homework.getContent();
+		
+		map.put("lectureName", lectureName);
+		map.put("professorName", professorName);
+		map.put("title", title);
+		map.put("content", content);
+		return map;
+	}
+	
+	@Override
+	public void sumbitHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception {
+		String fileNo = "";
+		if (file != null && !file.isEmpty()) {
+			Files attachedFile = Files.builder().name(file.getOriginalFilename()).directory(uploadPath)
+					.size(file.getSize()).contenttype(file.getContentType()).build();
+			filesRepository.save(attachedFile);
+			File upFile = new File(uploadPath, attachedFile.getFileNo() + "");
+			file.transferTo(upFile);
+			fileNo = attachedFile.getFileNo() + "";
+		}
+		
+		HomeworkSubmit homeworkSubmit = HomeworkSubmit.builder()
+				.homework(Homework.builder().hwNo(hwNo).build())
+				.student(Student.builder().stdNo(stdNo).build())
+				.files(fileNo)
+				.build();
+		homeworkSubmitRepository.save(homeworkSubmit);
+	}
+	
 }

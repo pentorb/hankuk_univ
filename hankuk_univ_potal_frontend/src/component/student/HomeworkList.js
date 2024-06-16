@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 
-
 const HomeworkList = () => {
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
@@ -25,7 +24,6 @@ const HomeworkList = () => {
     const setSelectedNumber = useSetAtom(selectedNumberAtom);
     const [homeworkList, setHomeworkList] = useState([]);
     const navigate = useNavigate();
-
     
     useEffect(() => {
         let formData = new FormData();
