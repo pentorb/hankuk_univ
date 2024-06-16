@@ -1,6 +1,7 @@
 package com.kosta.hankuk.service;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Files;
+import com.kosta.hankuk.entity.Homework;
+import com.kosta.hankuk.entity.HomeworkSubmit;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Lecture;
@@ -29,6 +32,8 @@ import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.FilesRepository;
+import com.kosta.hankuk.repository.HomeworkRepository;
+import com.kosta.hankuk.repository.HomeworkSubmitRepository;
 import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
@@ -63,6 +68,10 @@ public class StudentServiceImpl implements StudentService {
 	private AppealRepository appealRepository;
 	@Autowired
 	private LectureRepository lectureRepository;
+	@Autowired
+	private HomeworkRepository homeworkRepository;
+	@Autowired
+	private HomeworkSubmitRepository homeworkSubmitRepository;
 
 	@Value("${upload.path}")
 	private String uploadPath;
@@ -73,74 +82,75 @@ public class StudentServiceImpl implements StudentService {
 		System.out.println(huehak);
 		hueRes.save(huehak);
 	}
-	
+
 	// 휴학 신청 상세보기
 	@Override
 	public HuehakDto huehakDetail(Integer hueNo) throws Exception {
 		HuehakDto huehak = hueRes.findById(hueNo).get().toHuehakDto();
 		System.out.println("serivce :" + huehak);
-		
+
 		String year = huehak.getHueSem().substring(0, 4); // "2024"
 		String semester = huehak.getHueSem().substring(4); // "02"
-		
+
 		huehak.setYear(year);
 		huehak.setSem(semester);
-	
+
 		return huehak;
 	}
 
 	@Override // 복학 내역 조회
 	public List<HuehakAndBokhakDto> bokListByStdNo(PageInfo pageInfo, String stdNo, String type) throws Exception {
-		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
+		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage() - 1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
 		Page<HuehakAndBokhak> pages = null;
-		
-		if (type==null || type.trim().isEmpty()) {
+
+		if (type == null || type.trim().isEmpty()) {
 			pages = hbRes.findByStudent_StdNo(stdNo, pageRequest);
 		} else {
 			pages = hbRes.findByStudent_StdNoAndType(stdNo, type, pageRequest);
 		}
-		
+
 		pageInfo.setAllPage(pages.getTotalPages());
-		
-		int startPage = (pageInfo.getCurPage()-1)/1*10+1;
-		int endPage = Math.min(startPage+10-1, pageInfo.getAllPage());
-		
-		pageInfo.setStartPage(startPage);
-		pageInfo.setEndPage(endPage);
-		
-		List<HuehakAndBokhakDto> hbDtoList = new ArrayList<HuehakAndBokhakDto>();
-		for(HuehakAndBokhak hb : pages.getContent()) {
-			hbDtoList.add(hb.toLeaveAndReturnDto());
-		}
-		
-		return hbDtoList;
-	}
- 
-	// 학번으로 휴학 신청 내역
-	@Override
-	public List<HuehakDto> hueListByStdNo(PageInfo pageInfo, String stdNo, String status, String type) throws Exception {
-		
-		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
-		Page<Huehak> pages = null;
-		
-		if ((type == null || type.trim().isEmpty()) && (status == null || status.trim().isEmpty())) {
-	        pages = hueRes.findByStudent_StdNo(stdNo, pageRequest);
-	    } else if ((type == null || type.trim().isEmpty())) {
-	        pages = hueRes.findByStudent_StdNoAndStatus(stdNo, status, pageRequest);
-	    } else if ((status == null || status.trim().isEmpty())) {
-	        pages = hueRes.findByStudent_StdNoAndType(stdNo, type, pageRequest);
-	    } else {
-	        pages = hueRes.findByStudent_StdNoAndStatusAndType(stdNo, status, type, pageRequest);
-	    }
-		
-		pageInfo.setAllPage(pages.getTotalPages());
-		
-		int startPage = (pageInfo.getCurPage()-1)/1*10+1;
-		int endPage = Math.min(startPage+10-1, pageInfo.getAllPage());
+
+		int startPage = (pageInfo.getCurPage() - 1) / 1 * 10 + 1;
+		int endPage = Math.min(startPage + 10 - 1, pageInfo.getAllPage());
 
 		pageInfo.setStartPage(startPage);
 		pageInfo.setEndPage(endPage);
-		
+
+		List<HuehakAndBokhakDto> hbDtoList = new ArrayList<HuehakAndBokhakDto>();
+		for (HuehakAndBokhak hb : pages.getContent()) {
+			hbDtoList.add(hb.toLeaveAndReturnDto());
+		}
+
+		return hbDtoList;
+	}
+
+	// 학번으로 휴학 신청 내역
+	@Override
+	public List<HuehakDto> hueListByStdNo(PageInfo pageInfo, String stdNo, String status, String type)
+			throws Exception {
+
+		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage() - 1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
+		Page<Huehak> pages = null;
+
+		if ((type == null || type.trim().isEmpty()) && (status == null || status.trim().isEmpty())) {
+			pages = hueRes.findByStudent_StdNo(stdNo, pageRequest);
+		} else if ((type == null || type.trim().isEmpty())) {
+			pages = hueRes.findByStudent_StdNoAndStatus(stdNo, status, pageRequest);
+		} else if ((status == null || status.trim().isEmpty())) {
+			pages = hueRes.findByStudent_StdNoAndType(stdNo, type, pageRequest);
+		} else {
+			pages = hueRes.findByStudent_StdNoAndStatusAndType(stdNo, status, type, pageRequest);
+		}
+
+		pageInfo.setAllPage(pages.getTotalPages());
+
+		int startPage = (pageInfo.getCurPage() - 1) / 1 * 10 + 1;
+		int endPage = Math.min(startPage + 10 - 1, pageInfo.getAllPage());
+
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+
 		List<HuehakDto> hueDtoList = new ArrayList<HuehakDto>();
 		for (Huehak hue : pages.getContent()) {
 			hueDtoList.add(hue.toHuehakDto());
@@ -245,19 +255,21 @@ public class StudentServiceImpl implements StudentService {
 		appealRepository.save(appeal);
 		return appeal.getAppNo();
 	}
-	
+
 	public List<Map<String, Object>> checkAppealList(String stdNo, Integer year, Integer semester) throws Exception {
-		List<LectureByStd> lectureByStdGroup = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
+		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
+				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
 		List<Appeal> appealList = new ArrayList<>();
 
 		for (LectureByStd lectureByStd : lectureByStdGroup) {
 			String lecNo = lectureByStd.getLecture().getLecNo();
 			List<Appeal> appealByOneLecture = appealRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo);
-			if(appealByOneLecture != null) {
-				for(Appeal appeal : appealByOneLecture) appealList.add(appeal);
-			}				
+			if (appealByOneLecture != null) {
+				for (Appeal appeal : appealByOneLecture)
+					appealList.add(appeal);
+			}
 		}
-		
+
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		for (Appeal selectedAppeal : appealList) {
@@ -286,27 +298,29 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Map<String, Object> appealDetail(Integer appNo) throws Exception {
 		Optional<Appeal> oappeal = appealRepository.findById(appNo);
-		if (oappeal.isEmpty()) throw new Exception("글번호 오류");
+		if (oappeal.isEmpty())
+			throw new Exception("글번호 오류");
 		Appeal appeal = oappeal.get();
-		
+
 		String lectureNumber = appeal.getLecture().getLecNo();
 		String lectureName = appeal.getLecture().getSubject().getName();
 		String professorName = appeal.getLecture().getProfessor().getName();
-		String grade = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(
-				appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo()).getGrade();
+		String grade = lectureByStdRepository
+				.findByStudent_stdNoAndLecture_lecNo(appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo())
+				.getGrade();
 		appealRepository.save(appeal);
-		
+
 		String formerFileName = "";
-		if(appeal.getFiles() != null && !appeal.getFiles().trim().equals("")) {
+		if (appeal.getFiles() != null && !appeal.getFiles().trim().equals("")) {
 			Files files = filesRepository.findById(Integer.parseInt(appeal.getFiles())).get();
 			formerFileName = files.getName();
 		}
-		
+
 		String status = appeal.getStatus();
 		String content = appeal.getContent();
 		String answer = appeal.getAnswer();
 		String reqDt = appeal.getReqDt();
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("lectureNumber", lectureNumber);
 		map.put("formerFileName", formerFileName);
@@ -317,10 +331,10 @@ public class StudentServiceImpl implements StudentService {
 		map.put("content", content);
 		map.put("answer", answer);
 		map.put("reqDt", reqDt);
-		
+
 		return map;
 	}
-	
+
 	@Override
 	public void modifyAppeal(Integer appNo, String content, MultipartFile file) throws Exception {
 		Appeal appeal = appealRepository.findById(appNo).get();
@@ -333,25 +347,26 @@ public class StudentServiceImpl implements StudentService {
 			String fileNo = attachedFile.getFileNo() + "";
 			appeal.setFiles(fileNo);
 		}
-		if(content != null && !content.isEmpty()) {
+		if (content != null && !content.isEmpty()) {
 			appeal.setContent(content);
 		}
 		appealRepository.save(appeal);
 	}
-	
+
 	public List<Map<String, Object>> showLectureList(String stdNo) throws Exception {
 		Integer finSem = sres.findById(stdNo).get().getFinSem();
 		Integer courYear = (finSem / 2) + 1;
 		Integer semester = (finSem % 2) + 1;
-		List<LectureByStd> lectureByStdGroup = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, courYear, semester);
+		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
+				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, courYear, semester);
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
-		
+
 		for (LectureByStd lectureByStd : lectureByStdGroup) {
 			String lecNo = lectureByStd.getLecture().getLecNo();
 			String lectureName = lectureByStd.getLecture().getSubject().getName();
 			String lectureRoom = lectureByStd.getLecture().getLecRoom();
 			String professorName = lectureByStd.getLecture().getProfessor().getName();
-			
+
 			Map<String, Object> map = new HashMap<>();
 			map.put("lecNo", lecNo);
 			map.put("lectureName", lectureName);
@@ -361,23 +376,57 @@ public class StudentServiceImpl implements StudentService {
 		}
 		return mapList;
 	}
-	
+
 	@Override
 	public Map<String, Object> showLectureContent(String lecNo) throws Exception {
 		Optional<Lecture> olecture = lectureRepository.findById(lecNo);
-		if (olecture.isEmpty()) throw new Exception("강의번호 오류");
+		if (olecture.isEmpty())
+			throw new Exception("강의번호 오류");
 		Lecture lecture = olecture.get();
-		
+
 		String lectureNumber = lecture.getLecNo();
 		String lectureName = lecture.getSubject().getName();
 		List<Lesson> lessonList = lecture.getLessonList();
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("lectureNumber", lectureNumber);
 		map.put("lectureName", lectureName);
 		map.put("lessonList", lessonList);
-		
+
 		return map;
+	}
+
+	@Override
+	public List<Map<String, Object>> showHomeworkList(String lecNo) throws Exception {
+		List<Homework> homeworkList = homeworkRepository.findByLecture_lecNo(lecNo);
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+
+		for (Homework selectedHomework : homeworkList) {
+			Integer hwNo = selectedHomework.getHwNo();
+			String homeworkTitle = selectedHomework.getTitle();
+			Date homeworkStartDate = selectedHomework.getStartDt();
+			Date homeworkEndDate = selectedHomework.getEndDt();
+			Integer homeworkWeek = selectedHomework.getLesson().getWeek();
+			Integer homeworkCount = selectedHomework.getLesson().getLessonCnt();
+
+			Integer homeworkScore = null;
+			Optional<HomeworkSubmit> ohomeworkSubmit = homeworkSubmitRepository.findById(hwNo);
+			if (ohomeworkSubmit.isPresent()) {
+				HomeworkSubmit homeworkSubmit = ohomeworkSubmit.get();
+				homeworkScore = homeworkSubmit.getScore();
+			}
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("homeworkNumber", hwNo);
+			map.put("homeworkTitle", homeworkTitle);
+			map.put("homeworkStartDate", homeworkStartDate);
+			map.put("homeworkEndDate", homeworkEndDate);
+			map.put("homeworkWeek", homeworkWeek);
+			map.put("homeworkCount", homeworkCount);
+			map.put("homeworkScore", homeworkScore);
+			mapList.add(map);
+		}
+		return mapList;
 	}
 
 }
