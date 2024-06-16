@@ -49,7 +49,7 @@ const HomeworkDetail = () => {
         formData.append("hwNo", hwNo);
         formData.append("files", files);
 
-        const homeworkUrl = `${url}/moidfy-homework`;
+        const homeworkUrl = `${url}/modify-homework`;
         console.log(homeworkUrl);
         axios.post(homeworkUrl, formData, {
             headers: { Authorization: JSON.stringify(token) }
