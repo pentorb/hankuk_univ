@@ -9,8 +9,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom,lectureNameAtom, lectureNumberAtom } from '../../atoms';
-import { useAtomValue } from 'jotai';
+import { tokenAtom, memberAtom,lectureNameAtom, lectureNumberAtom, selectedNumberAtom } from '../../atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -22,6 +22,7 @@ const HomeworkList = () => {
     const token = useAtomValue(tokenAtom);
     const lectureName = useAtomValue(lectureNameAtom);
     const lectureNumber = useAtomValue(lectureNumberAtom);
+    const setSelectedNumber = useSetAtom(selectedNumberAtom);
     const [homeworkList, setHomeworkList] = useState([]);
     const navigate = useNavigate();
 
@@ -83,18 +84,26 @@ const HomeworkList = () => {
                                 </TableHead>
                                 <TableBody>
                                     {homeworkList !== null && (homeworkList.map(homework => (
-                                        <TableRow key={homework.homeworkNumber}>
-                                            <TableCell align="center">{homework.homeworkWeek}</TableCell>
-                                            <TableCell align="center">{homework.homeworkCount}</TableCell>
-                                            <TableCell align="center">{homework.homeworkTitle}</TableCell>
-                                            <TableCell align="center">{homework.homeworkStartDate}</TableCell>
-                                            <TableCell align="center">{homework.homeworkEndDate}</TableCell>
-                                            <TableCell align="center">{homework.homeworkScore === null ? "미채점" : homework.homeworkScore}</TableCell>
+                                        <TableRow key={homework.number}>
+                                            <TableCell align="center">{homework.week}</TableCell>
+                                            <TableCell align="center">{homework.count}</TableCell>
+                                            <TableCell align="center">{homework.title}</TableCell>
+                                            <TableCell align="center">{homework.startDate}</TableCell>
+                                            <TableCell align="center">{homework.endDate}</TableCell>
+                                            <TableCell align="center">{homework.score === null ? "미채점" : homework.score}</TableCell>
                                             <TableCell align="center">
-                                                <Button variant="contained"
-                                                size="medium"
-                                                onClick={()=>navigate(`/student/${lectureNumber}/homework/${homework.homeworkNumber}`)}
-                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
+                                                {homework.submission === false &&
+                                                    <Button variant="contained"
+                                                    size="medium"
+                                                    onClick={()=>{setSelectedNumber(homework.number); navigate(`/student/${lectureNumber}/sumbit-homework`);}}
+                                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>제출</Button>
+                                                }
+                                                {homework.submission === true &&
+                                                    <Button variant="contained"
+                                                    size="medium"
+                                                    onClick={()=>navigate(`/student/${lectureNumber}/homework/${homework.number}`)}
+                                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
+                                                }                                                
                                             </TableCell>
                                         </TableRow>
                                     )))}

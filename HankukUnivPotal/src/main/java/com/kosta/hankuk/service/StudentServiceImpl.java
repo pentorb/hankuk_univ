@@ -403,27 +403,30 @@ public class StudentServiceImpl implements StudentService {
 
 		for (Homework selectedHomework : homeworkList) {
 			Integer hwNo = selectedHomework.getHwNo();
-			String homeworkTitle = selectedHomework.getTitle();
-			Date homeworkStartDate = selectedHomework.getStartDt();
-			Date homeworkEndDate = selectedHomework.getEndDt();
-			Integer homeworkWeek = selectedHomework.getLesson().getWeek();
-			Integer homeworkCount = selectedHomework.getLesson().getLessonCnt();
+			String title = selectedHomework.getTitle();
+			Date startDate = selectedHomework.getStartDt();
+			Date endDate = selectedHomework.getEndDt();
+			Integer week = selectedHomework.getLesson().getWeek();
+			Integer count = selectedHomework.getLesson().getLessonCnt();
 
-			Integer homeworkScore = null;
+			Integer score = null;
+			Boolean submission = false;
 			Optional<HomeworkSubmit> ohomeworkSubmit = homeworkSubmitRepository.findById(hwNo);
 			if (ohomeworkSubmit.isPresent()) {
 				HomeworkSubmit homeworkSubmit = ohomeworkSubmit.get();
-				homeworkScore = homeworkSubmit.getScore();
+				score = homeworkSubmit.getScore();
+				submission = true;
 			}
 
 			Map<String, Object> map = new HashMap<>();
-			map.put("homeworkNumber", hwNo);
-			map.put("homeworkTitle", homeworkTitle);
-			map.put("homeworkStartDate", homeworkStartDate);
-			map.put("homeworkEndDate", homeworkEndDate);
-			map.put("homeworkWeek", homeworkWeek);
-			map.put("homeworkCount", homeworkCount);
-			map.put("homeworkScore", homeworkScore);
+			map.put("number", hwNo);
+			map.put("title", title);
+			map.put("startDate", startDate);
+			map.put("endDate", endDate);
+			map.put("week", week);
+			map.put("count", count);
+			map.put("score", score);
+			map.put("submission", submission);
 			mapList.add(map);
 		}
 		return mapList;
