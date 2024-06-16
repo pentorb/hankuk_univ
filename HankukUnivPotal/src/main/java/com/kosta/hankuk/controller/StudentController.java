@@ -226,10 +226,11 @@ public class StudentController {
 	}
 	
 	@PostMapping("/load-homework-information")
-	public ResponseEntity<Map<String, Object>> loadHomeworkInformation(@RequestParam(name="hwNo") Integer hwNo){		
+	public ResponseEntity<Map<String, Object>> loadHomeworkInformation(@RequestParam("hwNo") Integer hwNo,
+			@RequestParam("stdNo") String stdNo){		
 		try {
 			Map<String, Object> res = new HashMap<>();
-			Map<String, Object> homeworkInformation = stdService.loadHomeworkInformation(hwNo);
+			Map<String, Object> homeworkInformation = stdService.loadHomeworkInformation(hwNo, stdNo);
 			res.put("homeworkInformation", homeworkInformation);
 			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
 		}	catch(Exception e) {
@@ -248,6 +249,17 @@ public class StudentController {
 		}	catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/modify-homework")
+	public void modifyHomework(@RequestParam("hwNo") Integer hwNo,
+			@RequestParam("stdNo") String stdNo,
+			@RequestParam(name="files", required=false) MultipartFile files){
+		try {
+			stdService.modifyHomework(stdNo, hwNo, files);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

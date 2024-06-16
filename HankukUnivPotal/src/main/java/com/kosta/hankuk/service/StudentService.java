@@ -32,6 +32,7 @@ public interface StudentService {
 	List<Map<String, Object>> showLectureList(String stdNo) throws Exception;
 	Map<String, Object> showLectureContent(String lecNo) throws Exception;
 	List<Map<String, Object>> showHomeworkList(String lecNo, String stdNo) throws Exception;
-	Map<String, Object> loadHomeworkInformation(Integer hwNo) throws Exception;	
+	Map<String, Object> loadHomeworkInformation(Integer hwNo, String stdNo) throws Exception;	
 	void sumbitHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception;
+	void modifyHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception;
 }

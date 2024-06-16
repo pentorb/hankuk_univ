@@ -432,15 +432,23 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	@Override
-	public Map<String, Object> loadHomeworkInformation(Integer hwNo) throws Exception {
+	public Map<String, Object> loadHomeworkInformation(Integer hwNo, String stdNo) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		Homework homework = homeworkRepository.findById(hwNo).get();
+		HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+		
+		String formerFileName = "";
+		if (!homeworkSubmit.getFiles().trim().equals("")) {
+			Files files = filesRepository.findById(Integer.parseInt(homeworkSubmit.getFiles())).get();
+			formerFileName = files.getName();
+		}
 
 		String lectureName = homework.getLecture().getSubject().getName();
 		String professorName = homework.getLecture().getProfessor().getName();
 		String title = homework.getTitle();
 		String content = homework.getContent();
 		
+		map.put("formerFileName", formerFileName);
 		map.put("lectureName", lectureName);
 		map.put("professorName", professorName);
 		map.put("title", title);
@@ -465,6 +473,21 @@ public class StudentServiceImpl implements StudentService {
 				.student(Student.builder().stdNo(stdNo).build())
 				.files(fileNo)
 				.build();
+		homeworkSubmitRepository.save(homeworkSubmit);
+	}
+	
+	@Override
+	public void modifyHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception {
+		HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+		if (file != null && !file.isEmpty()) {
+			Files attachedFile = Files.builder().name(file.getOriginalFilename()).directory(uploadPath)
+					.size(file.getSize()).contenttype(file.getContentType()).build();
+			filesRepository.save(attachedFile);
+			File upFile = new File(uploadPath, attachedFile.getFileNo() + "");
+			file.transferTo(upFile);
+			String fileNo = attachedFile.getFileNo() + "";
+			homeworkSubmit.setFiles(fileNo);
+		}
 		homeworkSubmitRepository.save(homeworkSubmit);
 	}
 	
