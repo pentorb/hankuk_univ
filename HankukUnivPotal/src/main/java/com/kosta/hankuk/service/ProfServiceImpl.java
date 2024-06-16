@@ -121,7 +121,7 @@ public class ProfServiceImpl implements ProfService{
 
 	@Override
 	public List<HomeworkDto> homeworkList(String lecNo) throws Exception {
-		List<Homework> homeworkList = homeworkRepository.findByLesson_Lecture_lecNo(lecNo);
+		List<Homework> homeworkList = homeworkRepository.findByLecture_lecNo(lecNo);
 		List<HomeworkDto> homeworkDtoList = new ArrayList<HomeworkDto>();
 		for (Homework Homework : homeworkList) {
 			homeworkDtoList.add(Homework.toHomeworkDto());
