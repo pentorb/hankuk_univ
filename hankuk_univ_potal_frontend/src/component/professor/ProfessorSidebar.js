@@ -109,7 +109,7 @@ export default function ProfessorSidebar() {
                   <ListItemText primary="성적관리" />
                 </ListItemButton>
               </Link>
-              <Link to="/professor/lectureRecordAppealList" style={{ textDecoration: "none", color: 'black' }}>
+              <Link to="/professor/appealList" style={{ textDecoration: "none", color: 'black' }}>
                 <ListItemButton>
                   <ListItemText primary="이의신청목록" />
                 </ListItemButton>

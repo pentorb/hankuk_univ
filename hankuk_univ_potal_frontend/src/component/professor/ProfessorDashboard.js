@@ -16,7 +16,8 @@ import LessonDataWrite from './LessonDataWrite';
 import LessonDataModify from './LessonDataModify';
 import AttendanceManage from './AttendanceManage';
 import GradeManage from './GradeManage';
-import LectureRecordAppealList from './LectureRecordAppealList';
+import AppealList from './AppealList';
+import AppealDetail from './AppealDetail';
 
 
 const ProfessorDashboard = () => {
@@ -46,7 +47,8 @@ const ProfessorDashboard = () => {
                             <Route path="/attendanceManage" element={<AttendanceManage/>}></Route>
                             <Route path="/examQuestionForm" element={<ExamQuestionForm/>}></Route>
                             <Route path="/gradeManage" element={<GradeManage/>}></Route>
-                            <Route path="/lectureRecordAppealList" element={<LectureRecordAppealList/>}></Route>
+                            <Route path="/appealList" element={<AppealList/>}></Route>
+                            <Route path="/appealDetail" element={<AppealDetail/>}></Route>
                             {/* <Route path="/insert-calendar" element={< />}></Route>
                             <Route path="/calendar" element={<Calendar />}></Route> */}
                         </Routes>

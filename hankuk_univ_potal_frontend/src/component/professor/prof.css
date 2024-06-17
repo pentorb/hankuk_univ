@@ -366,15 +366,14 @@
 
 .Appeal_body{
   width: 1140px;
-  margin: 0 auto;
+  margin: 0 auto 50px;
   padding: 20px 80px;
   background-color: rgba(73, 82, 169, 0.1);
   border-radius: 36px;
 }
 .Appeal_Input{
   width: 100px;
-  margin-right: 10px;
-  display: inline-block;
+  margin: 10px 0 20px 1060px;
 }
 .Appeal_Button{
   width: 60px;
@@ -418,4 +417,12 @@
 
 .Appeal_Table_Td{
   height: 100px;
+}
+
+
+
+
+.AppealDetail_Body{
+  width: 1140px;
+  margin: 50px auto 50px;
 }

@@ -273,7 +273,10 @@ public class ProfServiceImpl implements ProfService{
 	public List<AppealDto> appealList(String lecNo) throws Exception {
 		List<Appeal> appealList = appealRepository.findByLecture_lecNo(lecNo);
 		List<AppealDto> appealDtoList = new ArrayList<AppealDto>();
-		return null;
+		for (Appeal appeal : appealList) {
+			appealDtoList.add(appeal.toAppealDto());
+		}
+		return appealDtoList;
 	}
 
 	
