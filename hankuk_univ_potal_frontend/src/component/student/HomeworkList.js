@@ -99,7 +99,7 @@ const HomeworkList = () => {
                                                 {homework.submission === true &&
                                                     <Button variant="contained"
                                                     size="medium"
-                                                    onClick={()=>navigate(`/student/${lectureNumber}/homework/${homework.number}`)}
+                                                    onClick={()=>{setSelectedNumber(homework.number); navigate(`/student/${lectureNumber}/homework/${homework.number}`);}}
                                                     sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
                                                 }                                                
                                             </TableCell>
