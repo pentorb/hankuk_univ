@@ -52,8 +52,9 @@ function parseSemester(data) {
 
 const BokhakInsert = () => {
     const navigate = useNavigate();
-    const [bokhak, setBokhak] = useState([]);
+    const [huehak, setHuehak] = useState([]);
     const token = useAtomValue(tokenAtom);
+    const [status, setStatus] = useState('');
     const member = useAtomValue(memberAtom);
     const [type, setType] = useState('');
     const [pageInfo, setPageInfo] = useState({
@@ -106,24 +107,43 @@ const BokhakInsert = () => {
 
 
     const submit = (e) => {
-        // const formData = new FormData();
-        // formData.append("stdNo", member.id);
-        // formData.append("type", formValues.type);
-        // formData.append("hueSem", formValues.year + formValues.sem);
-        // formData.append("files", formValues.files);
-        // formData.append("reason", formValues.reason);
-        // formData.append("sect", 'B');
+        const formData = new FormData();
+        formData.append("stdNo", member.id);
+        formData.append("type", formValues.type);
+        formData.append("hueSem", formValues.year + formValues.sem);
+        formData.append("files", formValues.files);
+        formData.append("reason", formValues.reason);
+        formData.append("sect", 'B');
 
-        // axios.post('http://localhost:8090/hueInsert', formData)
-        //     .then(res => {
-        //         console.log(res.data);
-        //         navigate('/student/resSemester')
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
+        axios.post('http://localhost:8090/hueInsert', formData)
+            .then(res => {
+                console.log(res.data);
+                navigate('/student/resSemester')
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
+    const [selectedHue, setSelectedHue] = useState({
+        hueNo: '',
+        type: '',
+        appDt: '',
+        hueSem: '',
+        status: ''
+    });
+
+    const trClick = (hb) => {
+        // axios.get(`${url}/hueDetail?hueNo=${hb.hueNo}`, { headers: { Authorization: JSON.stringify(token) } })
+        //     .then(res => {
+        //         const huehak = res.data; // 서버에서 반환한 데이터 객체
+        //         // setHueDetail(huehak); // hueDetail 상태 업데이트
+        //     })
+        //     .catch(error => {
+        //         console.error('Error fetching data:', error);
+        //     });
+        setSelectedHue(hb);
+    };
 
     useEffect(() => {
         console.log(token);
@@ -132,11 +152,11 @@ const BokhakInsert = () => {
     }, [token, type]);
 
     const fetchData = (page) => {
-        const listUrl = `${url}/hueListByStdNo?stdNo=${member.id}&page=${page}&type=${type}`;
+        const listUrl = `${url}/hueListByStdNo?stdNo=${member.id}&page=${page}&type=${type}&status=${status}`;
         console.log(listUrl);
         axios.get(listUrl, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
-                setBokhak([...res.data.bokhak]);
+                setHuehak([...res.data.huebok]);
                 setPageInfo({ ...res.data.pageInfo });
                 // 페이지 버튼 설정
                 let pageButtons = [];
@@ -186,7 +206,7 @@ const BokhakInsert = () => {
                             <span style={{ fontSize: 'x-large' }}><b>휴학 내역</b></span>
                         </div>
                         <div style={{ padding: '0px 50px 0px', textAlign: 'center', fontSize: 'larger' }}>
-                            {bokhak.length === 0 ? (
+                            {huehak.length === 0 ? (
                                 <div className="noneData">조회 내역이 없습니다.</div>
                             ) : (
                                 <>
@@ -207,7 +227,7 @@ const BokhakInsert = () => {
                                             <option value="k">육아 복학</option>
                                         </Input>
                                     </div>
-                                    <Table className="table" bordered>
+                                    <Table className="table" bordered hover>
                                         <thead>
                                             <tr>
                                                 <th>휴학 번호</th>
@@ -219,23 +239,23 @@ const BokhakInsert = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {/* {bokhak.filter(bok => bok.sect === 'H').map(hue => (
-                                                <tr key={bok.hueNo}>
+                                            {huehak.filter(hue => hue.sect === 'H').map(hue => (
+                                                <tr key={hue.hueNo} onClick={()=> trClick(hue)}>
                                                     <td scope="row">{hue.hueNo}</td>
                                                     <td>{typeMap[hue.type] || hue.type}</td>
                                                     <td>{hue.appDt}</td>
                                                     <td>{parseSemester(hue.hueSem)}</td>
                                                     <td style={getStatusStyle(hue.status)}>
                                                         {statusMap[hue.status] || hue.status}
-                                                    </td> */}
+                                                    </td> 
                                                     {/* {hue.status === 'REJ' ? (
                                                         <td><Button variant="text" onClick={() => trClick(hue)}>상세보기</Button></td>
                                                     ) : (
                                                         <td onClick={(e)=> setClose(false)}>-</td>
                                                     )
                                                     } */}
-                                                {/* </tr>
-                                            ))} */}
+                                                 </tr>
+                                            ))}
                                         </tbody>
                                     </Table>
                                     <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
@@ -244,7 +264,7 @@ const BokhakInsert = () => {
                                 </>
                             )}
                         </div>
-                        
+                        <Divider sx={{margin:3}} />
                         <div className="categori">
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>복학 신청</b></span>
@@ -256,7 +276,7 @@ const BokhakInsert = () => {
                                     <div className="col-4 title">복학 구분</div>
                                     <div className="col-6">
                                         <Input type="select" id="type" name="type"
-                                            onChange={dataChange}>
+                                            onChange={dataChange} value={selectedHue.type}>
                                             <option>---선택하세요---</option>
                                             <option value="o">일반 복학</option>
                                             {member.gender !== 'F' ?
@@ -287,8 +307,8 @@ const BokhakInsert = () => {
                                 <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
                                     <div className="col-4 title">휴학 번호</div>
                                     <div className="col-6">
-                                    <Input type="select" id="type" name="type" onChange={dataChange}>
-                                        {bokhak.map(hue => (
+                                    <Input type="select" id="type" name="type" onChange={dataChange} value={selectedHue.hueNo}>
+                                        {huehak.map(hue => (
                                             <option key={hue.hueNo} value={hue.hueNo}>
                                                 {hue.hueNo}
                                             </option>

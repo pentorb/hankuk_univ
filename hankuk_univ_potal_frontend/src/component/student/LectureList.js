@@ -38,11 +38,11 @@ const LectureList = () => {
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 {/* ------Your content start------! */}
                 <Grid container>
-                    <Grid xs={12} sx={{height:100}}/>
-                    <Grid xs={1}/>
-                    <Grid xs={10}>
+                    <Grid item xs={12} sx={{height:100}}/>
+                    <Grid item xs={1}/>
+                    <Grid item xs={10}>
                         {lectureList !== null && (lectureList.map(lecture => (
-                            <Card sx={{ minWidth:250, cursor:"pointer", borderRadius:3, display: "inline-block", marginRight:4, marginBottom:4 }}
+                            <Card key={lecture.lecNo} sx={{ minWidth:250, cursor:"pointer", borderRadius:3, display: "inline-block", marginRight:4, marginBottom:4 }}
                             onClick={() => {setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5); navigate(`/student/${lecture.lecNo}`);}}>
                                 <CardContent sx={{ height: 100, backgroundColor:"firstColor.main"  }}>
                                     <Typography variant="h6" component="div" sx={{color:"white", marginTop:3}}>

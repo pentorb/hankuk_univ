@@ -71,7 +71,7 @@ const LectureWrite = () => {
                 </div>
                 
                 <div className="Lecture_Write_body">
-                    <div style={{ marginLeft: "736px" }}>
+                    <div style={{ marginLeft: "858px" }}>
                         <Button
                             onClick={() => navigate('/professor/lectureList')}
                             className='Button_Lecture_Write'
@@ -87,9 +87,9 @@ const LectureWrite = () => {
                     </div>
                     <div className="Lecture_Write_Container">
                         <div>
-                            <div className="Lecture_Write_header">강의정보</div>
+                            <div className="Lecture_Write_header">강의정보</div><br/>
                             <Form>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -105,8 +105,7 @@ const LectureWrite = () => {
                                             onChange={changeValue}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <FormGroup className="Lecture_Write_FormGroup right">
+                                    <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="semester">
@@ -130,9 +129,9 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
-                                    <FormGroup className="Lecture_Write_FormGroup left">
+                                
+                                
+                                    <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="subCd">
@@ -165,13 +164,14 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <FormGroup className="Lecture_Write_FormGroup right">
+                                    </div>
+                                    <div style={{ width: "100%", paddingLeft: "16px" }}>
+                                    <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="subName">
                                             과목명
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="subName"
@@ -192,14 +192,13 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
+                                            style={{ paddingLeft: "35px" }}
                                             className="Lecture_Write_Label"
                                             for="credit">
                                             학점
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="credit"
@@ -216,6 +215,7 @@ const LectureWrite = () => {
                                             온오프라인
                                         </Label>
                                         <Input
+                                            style={{ width: "211px" }}
                                             className="Lecture_Write_Input"
                                             id="sect"
                                             name="sect"
@@ -234,13 +234,13 @@ const LectureWrite = () => {
                                         </Input>
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
-                                            style={{ fontSize: "24px", marginRight: "4px" }}
+                                            style={{ fontSize: "larger", marginLeft:"-12px" ,marginRight: "18px" }}
                                             // className="Lecture_Write_Label"
                                             for="time1">
-                                            1차시시간&nbsp;
+                                            1차시 시간
                                         </Label>
                                         <Input
                                             className="Lecture_Write_Input"
@@ -250,12 +250,11 @@ const LectureWrite = () => {
                                             onChange={changeValue}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="time2">
-                                            2차시시간
+                                            2차시 시간
                                         </Label>
                                         <Input
                                             className="Lecture_Write_Input"
@@ -266,8 +265,9 @@ const LectureWrite = () => {
                                         />
                                     </FormGroup>
                                 </div>
-                                <div className="Lecture_Write_header">교수정보</div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div className="Lecture_Write_header" style={{ marginTop: "50px" }}>
+                                    교수정보</div><br/>
+                                <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -282,9 +282,9 @@ const LectureWrite = () => {
                                             onChange={changeValue}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <FormGroup className="Lecture_Write_FormGroup right">
+                                    <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
+                                            style={{ marginLeft:"12px" }}
                                             className="Lecture_Write_Label"
                                             for="profName">
                                             교수명
@@ -297,14 +297,12 @@ const LectureWrite = () => {
                                             type="text"
                                         />
                                     </FormGroup>
-                                </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="email">
                                             이메일
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="email"
@@ -313,26 +311,11 @@ const LectureWrite = () => {
                                             type="email"
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <FormGroup className="Lecture_Write_FormGroup right">
-                                        <Label
-                                            className="Lecture_Write_Label"
-                                            for="tel">
-                                            휴대전화
-                                        </Label>
-                                        <Input
-                                            className="Lecture_Write_Input"
-                                            id="tel"
-                                            name="tel"
-                                            placeholder=""
-                                            type="tel"
-                                        />
-                                    </FormGroup>
                                 </div>
-                                <div style={{ width: "959px", height: "50px" }}
+                                <div style={{ width: "959px", marginTop: "50px" }}
                                     className="Lecture_Write_header">강의계획서 첨부</div>
 
-                                <FormGroup style={{ width: "959px" }}>
+                                <FormGroup style={{ width: "959px" ,marginLeft:"50px" }}>
                                     <Label
 
                                         className="Lecture_Write_Label"
@@ -345,7 +328,7 @@ const LectureWrite = () => {
                                         type="file"
                                     />
                                 </FormGroup>
-                            </Form>
+                            </Form><br/>
                         </div>
                     </div>
                 </div>

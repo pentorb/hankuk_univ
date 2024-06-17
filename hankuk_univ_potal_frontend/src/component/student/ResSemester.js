@@ -200,7 +200,7 @@ const ResSemester = () => {
                                             <option value="k">육아 복학</option>
                                         </Input>
                                     </div>
-                                    <Table className="table" bordered>
+                                    <Table className="table" bordered hover>
                                         <thead>
                                             <tr>
                                                 <th>휴학 번호</th>

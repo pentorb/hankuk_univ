@@ -8,6 +8,9 @@ import { Button, Input, Table } from "reactstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
+import React from 'react';
+
+
 const AttendanceManage = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
@@ -105,14 +108,24 @@ const AttendanceManage = () => {
                         <Table bordered hover>
                             <thead>
                                 <tr >
-                                    <th className="AttendManage_Table_thead">
-                                        학생\주차
+                                    <th className="AttendManage_Table_thead" rowSpan="2">
+                                        
                                     </th>
+                                    
                                     {lessonList.map((lesson, i) => {
                                         return (
-                                            <th className="AttendManage_Table_thead" key={i} >{i + 1}주차</th>
+                                            <th className="AttendManage_Table_thead" key={i} colSpan="2" 
+                                            >{i + 1}주차</th>
                                         )
                                     })}
+                                </tr>
+                                <tr>
+                                    {lessonList.map((lesson, i) => (
+                                        <React.Fragment key={i}>
+                                            <th className="AttendManage_Table_thead">1차시</th>
+                                            <th className="AttendManage_Table_thead">2차시</th>
+                                        </React.Fragment>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,6 +135,7 @@ const AttendanceManage = () => {
                                             {att.stdName}
                                         </th>
                                         {lessonList.map((less, i) => (
+                                            <React.Fragment key={i}>
                                             <td key={i} className="AttendManage_Table_td">
                                                 <select
                                                     value={att.status.substr(i, 1) === '1' ? '출석' : att.status.substr(i, 1) === '2' ? '지각' : '결석'}
@@ -133,7 +147,7 @@ const AttendanceManage = () => {
                                                     <option value="지각" style={{ color: 'blue' }}>지각</option>
                                                     <option value="결석" style={{ color: 'red' }}>결석</option>
                                                 </select>
-                                                /
+                                                {/* /
                                                 <select
                                                     value={att.status.substr(15+i, 1) === '1' ? '출석' : att.status.substr(15+i, 1) === '2' ? '지각' : '결석'}
                                                     style={att.status.substr(15+i, 1) === '1' ? {color:'black'} : att.status.substr(15+i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
@@ -143,13 +157,24 @@ const AttendanceManage = () => {
                                                     <option value="출석" style={{color:'black'}}>출석</option>
                                                     <option value="지각" style={{ color: 'blue' }}>지각</option>
                                                     <option value="결석" style={{ color: 'red' }}>결석</option>
-                                                </select>
+                                                </select> */}
                                             </td>
-                                        )
-                                        )}
+                                            <td className="AttendManage_Table_td">
+                                            <select
+                                                value={att.status.substr(15+i, 1) === '1' ? '출석' : att.status.substr(15+i, 1) === '2' ? '지각' : '결석'}
+                                                style={att.status.substr(15+i, 1) === '1' ? {color:'black'} : att.status.substr(15+i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
+                                                onChange={(e) => handleStatusChange(e, index, i, 15)}
+                                                className="AttendManage_Select"
+                                            >
+                                                <option value="출석" style={{color:'black'}}>출석</option>
+                                                <option value="지각" style={{ color: 'blue' }}>지각</option>
+                                                <option value="결석" style={{ color: 'red' }}>결석</option>
+                                            </select>
+                                        </td>
+                                        </React.Fragment>
+                                        ))}
                                     </tr>
-                                )
-                                )}
+                                ))}
                             </tbody>
                         </Table>
                     </div>

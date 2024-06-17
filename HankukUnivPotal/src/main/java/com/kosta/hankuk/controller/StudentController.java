@@ -211,4 +211,70 @@ public class StudentController {
 			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/homework/{lecNo}")
+	public ResponseEntity<Map<String, Object>> showHomeworkList(@PathVariable String lecNo, @RequestParam("stdNo") String stdNo){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> homeworkList = stdService.showHomeworkList(lecNo, stdNo);
+			res.put("homeworkList", homeworkList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/load-homework-information")
+	public ResponseEntity<Map<String, Object>> loadHomeworkInformation(@RequestParam("hwNo") Integer hwNo,
+			@RequestParam("stdNo") String stdNo){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			Map<String, Object> homeworkInformation = stdService.loadHomeworkInformation(hwNo, stdNo);
+			res.put("homeworkInformation", homeworkInformation);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/sumbit-homework")
+	public ResponseEntity<String> submitHomework(@RequestParam("stdNo") String stdNo,
+			@RequestParam("hwNo") Integer hwNo,
+			@RequestParam(name="files", required=false) MultipartFile files){		
+		try {
+			stdService.sumbitHomework(stdNo, hwNo, files);
+			return new ResponseEntity<String> (HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/modify-homework")
+	public void modifyHomework(@RequestParam("hwNo") Integer hwNo,
+			@RequestParam("stdNo") String stdNo,
+			@RequestParam(name="files", required=false) MultipartFile files){
+		try {
+			stdService.modifyHomework(stdNo, hwNo, files);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@PostMapping("/attendance")
+	public ResponseEntity<Map<String, Object>> checkAttendance(@RequestParam String lecNo, @RequestParam String stdNo){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> attendanceList = stdService.checkAttendance(lecNo, stdNo);
+			Map<String, Object> attendanceCount = stdService.checkAttendanceCount(lecNo, stdNo);
+			res.put("attendanceList", attendanceList);
+			res.put("attendanceCount", attendanceCount);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
 }

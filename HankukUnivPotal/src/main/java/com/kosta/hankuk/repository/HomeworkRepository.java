@@ -8,7 +8,7 @@ import com.kosta.hankuk.entity.Homework;
 
 public interface HomeworkRepository extends JpaRepository<Homework, Integer>{
 
-	List<Homework> findByLesson_Lecture_lecNo(String lecNo);
+	List<Homework> findByLecture_lecNo(String lecNo);
 
 	Integer countByLecture_lecNo(String lecNo);
 

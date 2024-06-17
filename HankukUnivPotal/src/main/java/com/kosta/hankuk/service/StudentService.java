@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
-import com.kosta.hankuk.entity.HuehakAndBokhak;
+import com.kosta.hankuk.entity.Homework;
 import com.kosta.hankuk.util.PageInfo;
 
 public interface StudentService {
@@ -31,4 +31,10 @@ public interface StudentService {
 	void modifyAppeal(Integer appNo, String content, MultipartFile file) throws Exception;
 	List<Map<String, Object>> showLectureList(String stdNo) throws Exception;
 	Map<String, Object> showLectureContent(String lecNo) throws Exception;
+	List<Map<String, Object>> showHomeworkList(String lecNo, String stdNo) throws Exception;
+	Map<String, Object> loadHomeworkInformation(Integer hwNo, String stdNo) throws Exception;
+	void sumbitHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception;
+	void modifyHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception;
+	List<Map<String, Object>> checkAttendance(String lecNo, String stdNo) throws Exception;
+	Map<String, Object> checkAttendanceCount(String lecNo, String stdNo) throws Exception;
 }
