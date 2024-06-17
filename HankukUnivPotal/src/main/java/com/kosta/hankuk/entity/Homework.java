@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.kosta.hankuk.dto.HomeworkDto;
@@ -33,7 +34,7 @@ public class Homework {
 	private Integer hwNo;
 	
 	@Column
-	@CreatedDate
+	@CreationTimestamp
 	private Date regDt;
 	
 	@Column

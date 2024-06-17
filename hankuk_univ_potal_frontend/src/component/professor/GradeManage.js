@@ -1,6 +1,7 @@
 import { Breadcrumbs, Grid, Link, Paper, Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
 import { Button, Input, Table } from "reactstrap";
@@ -113,22 +114,41 @@ const GradeManage = () => {
     }
 
     const submitGrade = () => {
-        const updatedStudentList = studentList.map((std,i) => ({
-            ...std,
-            grade: calculateScore(std.stdNo)
-        }));
-        console.log(updatedStudentList)
-        axios.post(`${url}/gradeWrite`, {studentList:updatedStudentList},
-            {
-                headers: { Authorization: JSON.stringify(token) }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+              });
+              const updatedStudentList = studentList.map((std,i) => ({
+                ...std,
+                grade: calculateScore(std.stdNo)
+            }));
+            console.log(updatedStudentList)
+            axios.post(`${url}/gradeWrite`, {studentList:updatedStudentList},
+                {
+                    headers: { Authorization: JSON.stringify(token) }
+                }
+            )
+            .then((res)=>{
+                console.log(res)
+                setStudentList(res.data);
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
             }
-        )
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+          });
+        
     }
 
     return (
@@ -178,6 +198,7 @@ const GradeManage = () => {
                                     <th>중간고사</th>
                                     <th>기말고사</th>
                                     <th>과제</th>
+                                    <th>총점수</th>
                                     <th>등급</th>
                                 </tr>
                             </thead>
@@ -185,7 +206,7 @@ const GradeManage = () => {
                                 {studentList.map((std, index) => {
                                     return (
                                         <tr key={index}>
-                                            <td>
+                                            <td >
                                                 {std.stdName}
                                             </td>
                                             <td>
@@ -196,7 +217,7 @@ const GradeManage = () => {
                                             </td>
                                             <td>
                                                 <Input
-                                                    className=""
+                                                    className="GradeManage_Table_Input"
                                                     id=""
                                                     name=""
                                                     value={examResultList.find(att => att.stdNo === std.stdNo && att.sect === '중간고사')?.totalScore || 0}
@@ -206,7 +227,7 @@ const GradeManage = () => {
                                             </td>
                                             <td>
                                                 <Input
-                                                    className=""
+                                                    className="GradeManage_Table_Input"
                                                     id=""
                                                     name=""
                                                     value={examResultList.find(att => att.stdNo === std.stdNo && att.sect === '기말고사')?.totalScore || 0}
@@ -219,6 +240,9 @@ const GradeManage = () => {
                                             </td>
                                             <td>
                                                 {calculateScore(std.stdNo)}
+                                            </td>
+                                            <td>
+                                                {std.grade}
                                             </td>
                                         </tr>
                                     )

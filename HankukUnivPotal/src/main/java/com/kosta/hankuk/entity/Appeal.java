@@ -1,5 +1,7 @@
 package com.kosta.hankuk.entity;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -45,8 +48,8 @@ public class Appeal {
 	private String answer;
 	
 	@Column
-	@CreatedDate
-	private String reqDt;
+	@CreationTimestamp
+	private Date reqDt;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="lecNo")
@@ -66,6 +69,7 @@ public class Appeal {
 				.reqDt(reqDt)
 				.lecNo(lecture.getLecNo())
 				.stdNo(student.getStdNo())
+				.stdName(student.getName())
 				.build();
 	}
 }

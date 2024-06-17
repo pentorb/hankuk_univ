@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
@@ -303,19 +304,32 @@ public class ProfController {
 	}
 	
 	@PostMapping("/gradeWrite")
-	public ResponseEntity<String> gradeWrite(@RequestBody Map<String, Object> param) {
+	public ResponseEntity<List<LectureByStdDto>> gradeWrite(@RequestBody Map<String, Object> param) {
 		try {
 			List<Map<String, Object>> lectureByStuListParam = (List<Map<String, Object>>) param.get("studentList");			
 			ObjectMapper objectMapper = new ObjectMapper();
 			List<LectureByStdDto> lectureByStuDtoList = objectMapper.convertValue(lectureByStuListParam,
 					new TypeReference<List<LectureByStdDto>>() {
 					});
-			System.out.println(lectureByStuDtoList);
-			profService.gradeWrite(lectureByStuDtoList);
-			return new ResponseEntity<String>("등급이 확정되었습니다", HttpStatus.OK);
+			List<LectureByStdDto> newlectureByStuDtoList = profService.gradeWrite(lectureByStuDtoList);
+			return new ResponseEntity<List<LectureByStdDto>>(newlectureByStuDtoList, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<LectureByStdDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/appealList")
+	public ResponseEntity<List<AppealDto>> appealList(
+			@RequestParam(name = "lecNo", required = false) String lecNo) {
+		try {
+			System.out.println(lecNo);
+			List<AppealDto> appealList = profService.appealList(lecNo);
+			System.out.println(appealList);
+			return new ResponseEntity<List<AppealDto>>(appealList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<AppealDto>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

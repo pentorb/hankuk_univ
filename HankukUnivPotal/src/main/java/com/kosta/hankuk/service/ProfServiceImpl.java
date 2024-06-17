@@ -2,12 +2,12 @@ package com.kosta.hankuk.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
@@ -17,7 +17,7 @@ import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
-import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Attendance;
 import com.kosta.hankuk.entity.Exam;
 import com.kosta.hankuk.entity.ExamResult;
@@ -26,6 +26,7 @@ import com.kosta.hankuk.entity.HomeworkSubmit;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
+import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.AttendanceRepository;
 import com.kosta.hankuk.repository.ExamQuesRepository;
 import com.kosta.hankuk.repository.ExamRepository;
@@ -53,6 +54,7 @@ public class ProfServiceImpl implements ProfService{
 	private final AttendanceRepository attendanceRepository;
 	private final ExamResultRepository examResultRepository;
 	private final HomeworkSubmitRepository homeworkSubmitRepository;
+	private final AppealRepository appealRepository;
 	
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
@@ -237,13 +239,10 @@ public class ProfServiceImpl implements ProfService{
 	}
 
 	@Override
-	public void gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception {
+	public List<LectureByStdDto> gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception {
 		Integer aplus = (int)Math.round(lectureByStuDtoList.size()*0.1);
 		Integer a = (int)Math.round(lectureByStuDtoList.size()*0.2);
 		Integer bplus = (int)Math.round(lectureByStuDtoList.size()*0.4);
-		System.out.println(aplus);
-		System.out.println(a);
-		System.out.println(bplus);
 		lectureByStuDtoList.sort(Comparator.comparingDouble(lectureByStdDto -> Float.parseFloat(((LectureByStdDto) lectureByStdDto).getGrade())).reversed());
 
         // 정렬 후 출력
@@ -252,19 +251,29 @@ public class ProfServiceImpl implements ProfService{
         for (int i = 0; i < lectureByStuDtoList.size(); i++) {
 			if(i<aplus) {
 				lectureByStuDtoList.get(i).setGrade("A+");
-			}else if(aplus>=i && i<a+aplus) {
+			}else if(aplus<=i && i<a+aplus) {
 				lectureByStuDtoList.get(i).setGrade("A");
-			}else if(a+aplus>=i && i<a+aplus+bplus) {
+			}else if(a+aplus<=i && i<a+aplus+bplus) {
 				lectureByStuDtoList.get(i).setGrade("B+");
-			}else if(a+aplus+bplus>=i && i<a+aplus+bplus+aplus) {
+			}else if(a+aplus+bplus<=i && i<a+aplus+bplus+aplus) {
 				lectureByStuDtoList.get(i).setGrade("B");
 			}else {
 				lectureByStuDtoList.get(i).setGrade("C");
 			}
 		}
+        List<LectureByStdDto> newLectureByStdDtoList = new ArrayList<LectureByStdDto>();
         for (LectureByStdDto lectureByStdDto2 : lectureByStuDtoList) {
 			lectureByStdRepository.save(lectureByStdDto2.toLectureByStd());
+			newLectureByStdDtoList.add(lectureByStdRepository.findById(lectureByStdDto2.getLbsNo()).get().toLectureByStdDto());
 		}
+        return newLectureByStdDtoList;
+	}
+
+	@Override
+	public List<AppealDto> appealList(String lecNo) throws Exception {
+		List<Appeal> appealList = appealRepository.findByLecture_lecNo(lecNo);
+		List<AppealDto> appealDtoList = new ArrayList<AppealDto>();
+		return null;
 	}
 
 	

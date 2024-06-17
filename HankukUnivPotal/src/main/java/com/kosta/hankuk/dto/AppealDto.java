@@ -1,5 +1,7 @@
 package com.kosta.hankuk.dto;
 
+import java.sql.Date;
+
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.Student;
@@ -23,9 +25,10 @@ public class AppealDto {
 	private String content;
 	private String files;
 	private String answer;
-	private String reqDt;
+	private Date reqDt;
 	private String lecNo;
 	private String stdNo;
+	private String stdName;
 	
 	public Appeal toAppeal() {
 		return Appeal.builder()

@@ -279,7 +279,7 @@ public class StudentServiceImpl implements StudentService {
 			String grade = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(
 					selectedAppeal.getStudent().getStdNo(), selectedAppeal.getLecture().getLecNo()).getGrade();
 			Integer credit = selectedAppeal.getLecture().getCredit();
-			String reqDt = selectedAppeal.getReqDt();
+			Date reqDt = selectedAppeal.getReqDt();
 			String status = selectedAppeal.getStatus();
 
 			Map<String, Object> map = new HashMap<>();
@@ -319,7 +319,7 @@ public class StudentServiceImpl implements StudentService {
 		String status = appeal.getStatus();
 		String content = appeal.getContent();
 		String answer = appeal.getAnswer();
-		String reqDt = appeal.getReqDt();
+		Date reqDt = appeal.getReqDt();
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("lectureNumber", lectureNumber);

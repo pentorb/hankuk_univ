@@ -345,3 +345,77 @@
   border-radius: 10px;
   background-color: #1F3468;
 }
+
+
+
+
+
+
+
+
+
+
+.GradeManage_Table_Input{
+  width: 52px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+
+
+
+.Appeal_body{
+  width: 1140px;
+  margin: 0 auto;
+  padding: 20px 80px;
+  background-color: rgba(73, 82, 169, 0.1);
+  border-radius: 36px;
+}
+.Appeal_Input{
+  width: 100px;
+  margin-right: 10px;
+  display: inline-block;
+}
+.Appeal_Button{
+  width: 60px;
+}
+.Appeal_Table{
+  width: 100%;
+  text-align: center;
+  font-size: larger;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.Appeal_Table_Thead{
+  color: #403E98;
+  height: 80px;
+}
+.Appeal_Table_TBody{
+  font-weight: 900;
+}
+.Appeal_Table_Tr:hover{
+  cursor: pointer;
+}
+.Appeal_Table_Tr td{
+  background-color: white;
+  border-top: solid #C0C0C0 0.1px;
+  border-bottom: solid #C0C0C0 0.1px;
+}
+.Appeal_Table_Tr td:first-child {
+  border-left: solid #C0C0C0 0.1px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.Appeal_Table_Tr td:last-child {
+  border-right: solid #C0C0C0 0.1px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.Appeal_Table_spacer td{
+  height: 20px;
+}
+
+.Appeal_Table_Td{
+  height: 100px;
+}

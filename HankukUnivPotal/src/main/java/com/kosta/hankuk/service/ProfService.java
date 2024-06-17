@@ -2,6 +2,7 @@ package com.kosta.hankuk.service;
 
 import java.util.List;
 
+import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
@@ -56,7 +57,9 @@ public interface ProfService {
 
 	void examResultModify(List<ExamResultDto> examResultDtoList) throws Exception;
 
-	void gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception;
+	List<LectureByStdDto> gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception;
+
+	List<AppealDto> appealList(String lecNo) throws Exception;
 
 	
 

@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -47,7 +48,7 @@ public class Huehak {
 	private String rejResult;
 	
 	@Column
-	@CreatedDate
+	@CreationTimestamp
 	private Date appDt;
 	
 	@Column
