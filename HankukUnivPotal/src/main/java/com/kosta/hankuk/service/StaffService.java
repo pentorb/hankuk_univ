@@ -39,6 +39,8 @@ public interface StaffService {
 
     void saveDataFromExcel(String category, MultipartFile file) throws Exception;
     
+    List<Map<String, Object>> searchMajors(String name, String colleage);
+
     
     // 교직원 휴학 관리 
     List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception;
