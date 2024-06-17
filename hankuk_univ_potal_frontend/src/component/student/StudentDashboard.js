@@ -21,6 +21,7 @@ import Syllabus from './Syllabus';
 import HomeworkList from './HomeworkList';
 import Homework from './Homework';
 import HomeworkDetail from './HomeworkDetail';
+import Attendance from './Attendance';
 
 const StudentDashboard = () => {
     return (
@@ -46,6 +47,7 @@ const StudentDashboard = () => {
                             <Route path="/lecture" element={<LectureList />} />
                             <Route path="/:lecNo/" element={<Lecture />} />
                             <Route path="/:lecNo/syllabus" element={<Syllabus />} />
+                            <Route path="/:lecNo/attendance" element={<Attendance />} />
                             <Route path="/:lecNo/homework" element={<HomeworkList />} />
                             <Route path="/:lecNo/sumbit-homework" element={<Homework/>} />
                             <Route path="/:lecNo/homework/:hwNo" element={<HomeworkDetail/>}/>

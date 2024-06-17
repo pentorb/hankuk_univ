@@ -262,4 +262,19 @@ public class StudentController {
 			e.printStackTrace();
 		}
 	}
+	
+	@PostMapping("/attendance")
+	public ResponseEntity<Map<String, Object>> checkAttendance(@RequestParam String lecNo, @RequestParam String stdNo){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> attendanceList = stdService.checkAttendance(lecNo, stdNo);
+			Map<String, Object> attendanceCount = stdService.checkAttendanceCount(lecNo, stdNo);
+			res.put("attendanceList", attendanceList);
+			res.put("attendanceCount", attendanceCount);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
 }

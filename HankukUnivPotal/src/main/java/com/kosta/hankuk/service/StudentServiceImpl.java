@@ -19,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
+import com.kosta.hankuk.entity.Absence;
 import com.kosta.hankuk.entity.Appeal;
+import com.kosta.hankuk.entity.Attendance;
 import com.kosta.hankuk.entity.Files;
 import com.kosta.hankuk.entity.Homework;
 import com.kosta.hankuk.entity.HomeworkSubmit;
@@ -30,7 +32,9 @@ import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.Lesson;
 import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.repository.AbsenceRepository;
 import com.kosta.hankuk.repository.AppealRepository;
+import com.kosta.hankuk.repository.AttendanceRepository;
 import com.kosta.hankuk.repository.FilesRepository;
 import com.kosta.hankuk.repository.HomeworkRepository;
 import com.kosta.hankuk.repository.HomeworkSubmitRepository;
@@ -72,6 +76,10 @@ public class StudentServiceImpl implements StudentService {
 	private HomeworkRepository homeworkRepository;
 	@Autowired
 	private HomeworkSubmitRepository homeworkSubmitRepository;
+	@Autowired
+	private AttendanceRepository attendanceRepository;
+	@Autowired
+	private AbsenceRepository absenceRepository;
 
 	@Value("${upload.path}")
 	private String uploadPath;
@@ -489,6 +497,86 @@ public class StudentServiceImpl implements StudentService {
 			homeworkSubmit.setFiles(fileNo);
 		}
 		homeworkSubmitRepository.save(homeworkSubmit);
+	}
+	
+	@Override
+	public List<Map<String, Object>> checkAttendance(String lecNo, String stdNo) throws Exception {
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		Attendance attendance = attendanceRepository.findByLecture_lecNoAndStudent_stdNo(lecNo, stdNo);
+		String wholeStatus = attendance.getStatus();
+		List<Lesson> lessonList = attendance.getLecture().getLessonList();
+
+		for (int i = 0; i < lessonList.size(); i++) {
+			Integer lessonNo = lessonList.get(i).getLessonNo();
+			Integer week = lessonList.get(i).getWeek();
+			Integer count = lessonList.get(i).getLessonCnt();
+			
+			String status = "";
+			if(wholeStatus.substring(i, i + 1).equals("1")) {
+				status = "출석";
+			} else if(wholeStatus.substring(i, i + 1).equals("2")) {
+				status = "지각";
+			} else if(wholeStatus.substring(i, i + 1).equals("3")) {
+				status = "결석";
+			} else if(wholeStatus.substring(i, i + 1).equals("4")) {
+				status = "공결";
+			}
+			
+			Boolean report = false;
+			Boolean possibilityOfReport = false;
+			Integer absNo = -1;
+			Optional<Absence> optionalAbsence = absenceRepository.findByLesson_lessonNoAndStudent_stdNo(lessonNo, stdNo);
+			if(optionalAbsence.isPresent()) {
+				absNo = optionalAbsence.get().getAbsNo();
+				report = true;
+			}
+			
+			if(status.equals("결석")) {
+				possibilityOfReport = true;
+			}
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("lessonNo", lessonNo);
+			map.put("absNo", absNo);
+			map.put("week", week);
+			map.put("count", count);
+			map.put("status", status);
+			map.put("report", report);
+			map.put("possibilityOfReport", possibilityOfReport);
+			mapList.add(map);
+		}
+		return mapList;
+	}
+	
+	@Override
+	public Map<String, Object> checkAttendanceCount(String lecNo, String stdNo) throws Exception {
+		Attendance attendance = attendanceRepository.findByLecture_lecNoAndStudent_stdNo(lecNo, stdNo);
+		String wholeStatus = attendance.getStatus();
+		List<Lesson> lessonList = attendance.getLecture().getLessonList();
+		
+		Integer presence = 0;
+		Integer lateness = 0;
+		Integer absence = 0;
+		Integer approvedAbsence = 0;
+
+		for (int i = 0; i < lessonList.size(); i++) {
+			if(wholeStatus.substring(i, i + 1).equals("1")) {
+				presence++;
+			} else if(wholeStatus.substring(i, i + 1).equals("2")) {
+				lateness++;
+			} else if(wholeStatus.substring(i, i + 1).equals("3")) {
+				absence++;
+			} else if(wholeStatus.substring(i, i + 1).equals("4")) {
+				approvedAbsence++;
+			}
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("presence", presence);
+		map.put("lateness", lateness);
+		map.put("absence", absence);
+		map.put("approvedAbsence", approvedAbsence);
+		return map;
 	}
 	
 }
