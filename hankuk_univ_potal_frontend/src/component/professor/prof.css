@@ -59,7 +59,7 @@
 
 
 .Lecture_Write_body{
-  width: 1042px;
+  width: 1142px;
   margin: 41px auto 100px;
 }
 .Button_Lecture_Write{
@@ -72,11 +72,12 @@
 }
 .Lecture_Write_Container{
   background-color: rgba(194, 194, 194, 0.25);
-  border-radius: 36px;
-  margin-top: 30px;
+  border-radius: 22px;
+  margin-top: 15px;
   padding: 40px 0 40px 36.5px;
 }
 .Lecture_Write_header{
+  margin-top: 10px;
   margin-right: 874px;
   font-size: 24px;
   font-weight: 900;
@@ -85,20 +86,23 @@
   display: inline-block;
 }
 .right{
-  float: right;
+  /* float: right; */
 }
 .left{
-  float: left;
+  /* float: left; */
+  margin-left: 18px;
+  margin-right: 30px;
 }
 .Lecture_Write_Label{
-  font-size: 24px;
+  font-size: larger;
   margin-right: 20px;
 }
 .Lecture_Write_Input{
   display: inline-block;
-  font-size: 24px;
-  width: 322px; height: 54px;
+  font-size: larger;
+  width: 230px; height: 54px;
   border-radius: 20px;
+  text-align: center;
 }
 
 
@@ -153,13 +157,16 @@
 }
 .Contents_Divs{
   width: 1100px;
-  margin: 0 0 0 110px;
+  margin: 0 0 5px 110px;
   display: flex;
 }
 .Contents_Divs_Title{
-  margin: 0 0 0 20px;
+  margin: 5px 10px 0 20px;
 }
 .Contents_Divs_Button{
+  margin-top: 5px;
+  font-size: smaller;
+  padding: 1px 10px 0px 10px;
 }
 
 
@@ -250,10 +257,12 @@
   margin: 50px auto 50px;
 }
 .AttendManage_Header{
-  margin: 0 0 20px 1100px;
+  margin-bottom: 45px;
 }
 .AttendManage_Header_Button{
+  float: right;
   width: 100px;
+  margin-left: 10px;
 }
 .AttendManage_Table{
   overflow-x: scroll;

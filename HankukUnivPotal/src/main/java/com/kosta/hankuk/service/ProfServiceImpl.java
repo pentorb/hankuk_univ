@@ -238,10 +238,12 @@ public class ProfServiceImpl implements ProfService{
 
 	@Override
 	public void gradeWrite(List<LectureByStdDto> lectureByStuDtoList) throws Exception {
-		Integer aplus = (int)Math.round(lectureByStuDtoList.size()/10.0);
-		Integer a = (int)Math.round(lectureByStuDtoList.size()/20.0);
-		Integer bplus = (int)Math.round(lectureByStuDtoList.size()/40.0);
+		Integer aplus = (int)Math.round(lectureByStuDtoList.size()*0.1);
+		Integer a = (int)Math.round(lectureByStuDtoList.size()*0.2);
+		Integer bplus = (int)Math.round(lectureByStuDtoList.size()*0.4);
 		System.out.println(aplus);
+		System.out.println(a);
+		System.out.println(bplus);
 		lectureByStuDtoList.sort(Comparator.comparingDouble(lectureByStdDto -> Float.parseFloat(((LectureByStdDto) lectureByStdDto).getGrade())).reversed());
 
         // 정렬 후 출력
@@ -249,16 +251,19 @@ public class ProfServiceImpl implements ProfService{
 		
         for (int i = 0; i < lectureByStuDtoList.size(); i++) {
 			if(i<aplus) {
-				
-			}else if(aplus<=i && i<a+aplus) {
-				
-			}else if(a+aplus<=i && i<a+aplus+bplus) {
-				
-			}else if(a+aplus+bplus<=i && i<a+aplus+bplus+aplus) {
-				
+				lectureByStuDtoList.get(i).setGrade("A+");
+			}else if(aplus>=i && i<a+aplus) {
+				lectureByStuDtoList.get(i).setGrade("A");
+			}else if(a+aplus>=i && i<a+aplus+bplus) {
+				lectureByStuDtoList.get(i).setGrade("B+");
+			}else if(a+aplus+bplus>=i && i<a+aplus+bplus+aplus) {
+				lectureByStuDtoList.get(i).setGrade("B");
 			}else {
-				
+				lectureByStuDtoList.get(i).setGrade("C");
 			}
+		}
+        for (LectureByStdDto lectureByStdDto2 : lectureByStuDtoList) {
+			lectureByStdRepository.save(lectureByStdDto2.toLectureByStd());
 		}
 	}
 

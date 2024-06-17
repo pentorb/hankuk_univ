@@ -117,7 +117,6 @@ const GradeManage = () => {
             ...std,
             grade: calculateScore(std.stdNo)
         }));
-        setStudentList(updatedStudentList);
         console.log(updatedStudentList)
         axios.post(`${url}/gradeWrite`, {studentList:updatedStudentList},
             {

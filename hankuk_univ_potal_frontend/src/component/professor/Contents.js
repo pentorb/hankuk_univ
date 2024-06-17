@@ -111,16 +111,21 @@ const Contents = () => {
                     ))}
                     {lessonList.map((lesson, i) => (
                         <div key={i}>
-                            <div onClick={() => toggle(i)} style={{ cursor: 'pointer', padding: '10px', borderBottom: '1px solid #ddd' }}>
-                                <div style={{ display: 'inline-block', fontSize: '20px', margin: '10px 0' }}>{lesson.week}주차</div>
+                            <div onClick={() => toggle(i)} style={{ cursor: 'pointer', padding: '10px', borderBottom: '2px solid #ddd' }}>
+                                <div style={{ display: 'inline-block', fontSize: '20px', margin: '10px 0', fontWeight: 'bold' }}
+                                >{lesson.week}주차</div>
                                 <div style={{ float: 'right', marginTop: '15px' }}>{openIndexes.includes(i) ? '△' : '▽'}</div>
                             </div>
                             <Collapse isOpen={openIndexes.includes(i)}>
-                                <Card>
-                                    <CardBody>
-                                        <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}>강의자료등록</Button>
-                                        <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}>과제등록</Button>
-                                        <div>1차시</div><hr />
+                                <Card style={{ border: 'none' }}>
+                                    <CardBody style={{ marginLeft:'25px',paddingInline: '25px' }}>
+                                        <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}
+                                                style={{ float: 'right', marginInline: '5px' }}
+                                        >강의자료등록</Button>
+                                        <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}
+                                                style={{ float: 'right', marginInline: '5px' }}
+                                        >과제등록</Button>
+                                        <div  style={{ paddingTop: '5px', fontWeight:'bold' }} >1차시</div><hr />
                                         {lesson.lessonData.map((data, i) => {
                                             console.log(data);
                                             if (data.lessonCnt === 1) {
@@ -153,7 +158,7 @@ const Contents = () => {
                                             }
                                             return null;
                                         })}
-                                        <div>2차시</div><hr />
+                                        <div  style={{ fontWeight:'bold' }}>2차시</div><hr />
                                         {lesson.lessonData.map((data, i) => {
                                             console.log(data);
                                             if (data.lessonCnt === 2) {

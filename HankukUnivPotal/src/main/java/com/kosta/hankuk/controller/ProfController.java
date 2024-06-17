@@ -310,6 +310,7 @@ public class ProfController {
 			List<LectureByStdDto> lectureByStuDtoList = objectMapper.convertValue(lectureByStuListParam,
 					new TypeReference<List<LectureByStdDto>>() {
 					});
+			System.out.println(lectureByStuDtoList);
 			profService.gradeWrite(lectureByStuDtoList);
 			return new ResponseEntity<String>("등급이 확정되었습니다", HttpStatus.OK);
 		} catch (Exception e) {
