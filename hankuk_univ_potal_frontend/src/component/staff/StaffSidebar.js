@@ -99,7 +99,7 @@ export default function StaffSidebar() {
               </ListItemButton>
               <Collapse in={secondOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <Link to="/staff/AccountManagement" style={{textDecoration: "none", color:"black"}}>
+                  <Link to="/staff/MajorManagement" style={{textDecoration: "none", color:"black"}}>
                     <ListItemButton sx={{ pl: 4 }}>
                       <ListItemText primary="전체성적" />
                     </ListItemButton>

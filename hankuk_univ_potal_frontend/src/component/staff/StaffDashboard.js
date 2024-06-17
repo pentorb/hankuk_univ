@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import {Routes, Route} from 'react-router-dom';
 import StaffSidebar from './StaffSidebar';
 import AccountManagement from'./AccountManagement'
+import MajorManagement from'./MajorManagement'
 import Header from '../comm/Header';
 import StaffHuehak from './StaffHuehak';
 
@@ -22,6 +23,7 @@ const StaffDashboard = () => {
                         <Routes>
                             <Route path="/confirmHuehak" element={<StaffHuehak/>} />
                             <Route path="/AccountManagement" element={<AccountManagement/>}></Route>
+                            <Route path="/MajorManagement" element={<MajorManagement/>}></Route>
                         </Routes>
                     
 

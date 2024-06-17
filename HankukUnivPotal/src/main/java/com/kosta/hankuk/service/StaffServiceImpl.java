@@ -3,6 +3,7 @@ package com.kosta.hankuk.service;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -406,6 +407,32 @@ public class StaffServiceImpl implements StaffService {
 				professors.forEach(this::registerProfessor);
 			}
 		}
+    }
+    
+    @Override
+    public List<Map<String, Object>> searchMajors(String name, String colleage) {
+        List<Major> majors;
+
+        if (name != null && !name.isEmpty()) {
+            majors = majorRepository.findByNameContaining(name);
+        } else if (colleage != null && !colleage.isEmpty()) {
+            majors = majorRepository.findByColleageColCd(colleage);
+        } else {
+            majors = majorRepository.findAll();
+        }
+
+        return majors.stream().map(major -> {
+            Map<String, Object> resultMap = new HashMap<>();
+            resultMap.put("majCd", major.getMajCd());
+            resultMap.put("colleage", major.getColleage().getName());
+            resultMap.put("name", major.getName());
+
+            // 학과장 찾기
+            Professor headProfessor = professorRepository.findByMajor_majCdAndPosition(major.getMajCd(), "0").stream().findFirst().orElse(null);
+            resultMap.put("professor", headProfessor != null ? headProfessor.getName() : "");
+
+            return resultMap;
+        }).collect(Collectors.toList());
     }
 
     // 휴학 신청 내역 리스트 (페이징)

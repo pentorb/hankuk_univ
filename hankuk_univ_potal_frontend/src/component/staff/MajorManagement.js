@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
-import { Paper, Typography, Button, Select, MenuItem, Input, Checkbox } from '@mui/material';
-import { Box, Paper, Typography } from '@mui/material';
+import { Paper, Typography, Button, Select, MenuItem, Input, Checkbox, Box } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import { url } from "../../config/config";
 import './staff.css';
@@ -12,11 +11,21 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { tokenAtom } from "../../atoms";
 import { useAtomValue } from 'jotai';
+import { useNavigate } from 'react-router-dom';
+
 
 const MajorManagement = () => {
+    const [searchType, setSearchType] = useState('colleage');
+    const [searchInput, setSearchInput] = useState('');
+    const [formData, setFormData] = useState({
+        colleage: '',
+        major: '',
+        name: '',
+    });
+    const [colleages, setColleages] = useState([]);
+    const [majors, setMajors] = useState([]);
     const token = useAtomValue(tokenAtom);
-    const [searchType, setSearchType] = useState('major');
-
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -33,21 +42,32 @@ const MajorManagement = () => {
             console.error("Error fetching colleages:", error);
         }
     };
+
     const handleSearch = async () => {
         try {
-            if (searchCategory === 'student') {
-                const response = await axios.get(`${url}/searchStudents`, {
-                    params: {
-                        name: searchType === 'name' ? searchInput : null,
-                        colleage: searchType === 'major' ? formData.colleage : null,
-                    },
-                    headers: { "Authorization": JSON.stringify(token) }
-                });
-                setStudents(response.data);
-            }
+            const response = await axios.get(`${url}/searchMajors`, {
+                params: {
+                    name: searchType === 'name' ? searchInput : null,
+                    colleage: searchType === 'colleage' ? formData.colleage : null,
+                },
+                headers: { "Authorization": JSON.stringify(token) }
+            });
+            setMajors(response.data);
         } catch (error) {
             console.error("Error fetching search results:", error);
         }
+    };
+
+    const handleSearchTypeChange = (e) => {
+        setSearchType(e.target.value);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
 
     return (
@@ -81,10 +101,10 @@ const MajorManagement = () => {
                                         <td>검색</td>
                                         <td>
                                             <select onChange={handleSearchTypeChange} className="search-select" defaultValue="major" >
-                                                <option value="major">전공별</option>
+                                                <option value="colleage">단과별</option>
                                                 <option value="name">이름별</option>
                                             </select>
-                                            {searchType === 'major' ? (
+                                            {searchType === 'colleage' ? (
                                                 <>
                                                     <Select value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '120px', marginRight: '5px' }}>
                                                         {colleages.map((colleage) => (
@@ -108,8 +128,17 @@ const MajorManagement = () => {
                             </div>
                         </div>
                         <div className="result-section">
-                            <Box
-                            />
+                            <table className={'major-result-box'}>
+                                {majors.map((major, index) => (
+                                    <tr key={index} onClick={() => navigate(`/majordetail/${major.majCd}`)} className={'major-result-box-tr'}>
+                                        <td>{major.majCd}</td>
+                                        <td>{major.colleage}</td>
+                                        <td>{major.name}</td>
+                                        <td>{major.professor}</td>
+                                    </tr>
+                                ))}
+
+                            </table>
                         </div>
                     </div>
                 </Paper>

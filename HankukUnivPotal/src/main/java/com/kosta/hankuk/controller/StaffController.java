@@ -155,6 +155,14 @@ public class StaffController {
         }
     }
     
+    @GetMapping("/searchMajors")
+    public ResponseEntity<List<Map<String, Object>>> searchMajors(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String colleage) {
+        List<Map<String, Object>> majors = staffService.searchMajors(name, colleage);
+        return ResponseEntity.ok(majors);
+    }
+    
     @GetMapping("/allHBList")
     public ResponseEntity<Map<String,Object>> allHueList(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
     													 @RequestParam(name="type", required = false) String type) {
