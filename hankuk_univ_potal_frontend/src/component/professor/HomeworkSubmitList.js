@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router";
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
 import { Button, Input, Table } from 'reactstrap';
+import Swal from 'sweetalert2';
 
 const HomeworkSubmitList = () => {
     const [token, setToken] = useAtom(tokenAtom);
@@ -38,15 +39,34 @@ const HomeworkSubmitList = () => {
 
     const changevalue = (e, hwsNo) => {
         console.log(hwsNo)
-        const updatedHomeworkSubmitList = homeworkSubmitList.filter((std, i) => {
-            // if (std.stdNo === stdNo && std.sect===sect) {
-            //     return { ...std, totalScore: e.target.value };
-            // }
-            // return std;
+        const updatedHomeworkSubmitList = homeworkSubmitList.map((sub, i) => {
+            if (sub.hwsNo === hwsNo) {
+                return { ...sub, score: e.target.value };
+            }
+            return sub;
         });
         setHomeworkSubmitList(updatedHomeworkSubmitList);
     }
     
+    const submitGrade = () => {
+        axios.post(`${url}/homeworkSubmitModify`,{homeworkSubmitList:homeworkSubmitList},
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
+        )
+        .then((res)=>{
+            console.log(res)
+            Swal.fire({
+                title: res.data,
+                icon: "success"
+              });        
+            })
+        .catch((err)=>{
+            console.log(err)
+        })
+        
+    }
+
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom>
@@ -81,9 +101,8 @@ const HomeworkSubmitList = () => {
                             시험수정
                         </Button>
                         <Button className="AttendManage_Header_Button"
-                        // onMouseUp={() => {  submitGrade(); }}
+                        onMouseUp={() => {  submitGrade(); }}
                         >
-                        
                             등급확정
                         </Button>
                     </div>
