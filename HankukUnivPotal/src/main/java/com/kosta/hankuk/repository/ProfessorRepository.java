@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Professor;
 
 public interface ProfessorRepository extends JpaRepository<Professor, String> {
@@ -14,6 +15,9 @@ public interface ProfessorRepository extends JpaRepository<Professor, String> {
 	List<Professor> findByMajor_majCd(String majCd);
 
     Optional<Professor> findByName(String name);
+    Optional<Professor> findByMajorAndName(Major major,String name);
+
+    List<Professor> findByMajor(Major major);
     List<Professor> findByMajor_majCdAndPosition(String majCd, String position);
 
 }

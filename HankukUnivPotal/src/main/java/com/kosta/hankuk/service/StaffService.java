@@ -38,9 +38,16 @@ public interface StaffService {
     List<MajorDto> getMajorsByColleage(String colCd);
 
     void saveDataFromExcel(String category, MultipartFile file) throws Exception;
-    
+    //학과관리
     List<Map<String, Object>> searchMajors(String name, String colleage);
+    //학과개설
+    
+    //학과관리 detail
+    void saveSubjectFromExcel(String major, MultipartFile file) throws Exception;
+    
+    void chooseHeadProf(String prof);
 
+    
     
     // 교직원 휴학 관리 
     List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception;

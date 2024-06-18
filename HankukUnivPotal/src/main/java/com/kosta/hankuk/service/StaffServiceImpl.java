@@ -32,12 +32,14 @@ import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
+import com.kosta.hankuk.repository.SubjectRepository;
 import com.kosta.hankuk.util.PageInfo;
 
 @Service
@@ -51,6 +53,9 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private ColleageRepository colleageRepository;
+    
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     @Autowired
     private MajorRepository majorRepository;
@@ -373,9 +378,7 @@ public class StaffServiceImpl implements StaffService {
 				String tel = telIdx==-1 || row.getCell(telIdx)==null? "" :row.getCell(telIdx).getStringCellValue();
 				String gender = genderIdx==-1 || row.getCell(genderIdx)==null? "": row.getCell(genderIdx).getStringCellValue();
 				String majorName = majorIdx==-1 || row.getCell(majorIdx)==null? "" :row.getCell(majorIdx).getStringCellValue();
-				System.out.println(majorName);
 				String majCd = majorRepository.findByName(majorName).map(Major::getMajCd).orElse(null);
-				System.out.println(majCd);
 				String professorName = professorIdx==-1 || row.getCell(professorIdx)==null? "" : row.getCell(professorIdx).getStringCellValue();
 				String profCd = null;
 				if(!professorName.equals("")) {
@@ -409,6 +412,8 @@ public class StaffServiceImpl implements StaffService {
 		}
     }
     
+    
+    
     @Override
     public List<Map<String, Object>> searchMajors(String name, String colleage) {
         List<Major> majors;
@@ -427,13 +432,78 @@ public class StaffServiceImpl implements StaffService {
             resultMap.put("colleage", major.getColleage().getName());
             resultMap.put("name", major.getName());
 
-            // 학과장 찾기
-            Professor headProfessor = professorRepository.findByMajor_majCdAndPosition(major.getMajCd(), "0").stream().findFirst().orElse(null);
+            Professor headProfessor = professorRepository.findByMajor_majCdAndPosition(major.getMajCd(), "0").stream().orElse(null);
             resultMap.put("professor", headProfessor != null ? headProfessor.getName() : "");
 
             return resultMap;
         }).collect(Collectors.toList());
     }
+    
+    public void saveSubjectFromExcel(String major, MultipartFile file) throws Exception{
+		List<Subject> subjects = new ArrayList<>();
+
+		try (InputStream inputStream = file.getInputStream()) {
+			Workbook workbook = WorkbookFactory.create(inputStream);
+			Sheet sheet = workbook.getSheetAt(0);
+
+			int nameIdx = -1,typeIdx = -1, targetGrdIdx = -1 , majorIdx = -1;
+			for (Row row : sheet) {
+				if (row.getRowNum() == 0) {
+					for (int i = 0; i < 4; i++) {
+						String colName = row.getCell(i).getStringCellValue();
+						if (colName.equals("name"))
+							nameIdx = i;
+						else if (colName.equals("type"))
+							typeIdx = i;
+						else if (colName.equals("targetGrd"))
+							targetGrdIdx = i;
+						else if (colName.equals("major"))
+							majorIdx = i;
+					}
+					continue;
+				}
+				String name = nameIdx==-1 || row.getCell(nameIdx)==null? "" :row.getCell(nameIdx).getStringCellValue();
+				String type = typeIdx==-1 || row.getCell(typeIdx)==null? "" :row.getCell(typeIdx).getStringCellValue();
+				String targetGrd = targetGrdIdx==-1 || row.getCell(targetGrdIdx)==null? "": row.getCell(targetGrdIdx).getStringCellValue();
+				String majorName = majorIdx==-1 || row.getCell(majorIdx)==null? "" :row.getCell(majorIdx).getStringCellValue();
+				String majCd = majorRepository.findByName(majorName).map(Major::getMajCd).orElse(null);
+				
+				String subCd= majorName+targetGrd+00;
+
+				
+				Subject subject = Subject.builder().subCd(subCd).name(name).type(type).targetGrd(Integer.parseInt(targetGrd))
+						.major(majCd != null ? Major.builder().majCd(majCd).build() : null).build();
+				subjects.add(subject);
+			}
+	        subjectRepository.saveAll(subjects);
+		}
+	}
+    
+    
+    public void changeHeadProf(String majorName, String profName) {
+    	Optional<Major> majorOpt = majorRepository.findByName(majorName);
+        
+        Major major = majorOpt.get();
+            
+        List<Professor> professors = professorRepository.findByMajor(major);
+        
+        for (Professor professor : professors) {
+            if (professor.getPosition() == 0) {
+                professor.setPosition(1);
+                professorRepository.save(professor);
+            }
+        }
+        
+        Optional<Professor> newHeadProfessorOpt = professorRepository.findByMajorAndName(major, profName);
+        Professor newHeadProfessor = newHeadProfessorOpt.get();
+        newHeadProfessor.setPosition(0);
+        professorRepository.save(newHeadProfessor);
+    }
+
+
+
+
+    
 
     // 휴학 신청 내역 리스트 (페이징)
 	@Override
