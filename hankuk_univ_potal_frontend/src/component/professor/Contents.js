@@ -151,7 +151,7 @@ const Contents = () => {
                                                         <Button
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
-                                                            과제보기
+                                                            과제상세보기
                                                         </Button>
                                                     </div>
                                                 )
@@ -184,7 +184,7 @@ const Contents = () => {
                                                         <Button
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
-                                                            과제보기
+                                                            과제상세보기
                                                         </Button>
                                                     </div>
                                                 )

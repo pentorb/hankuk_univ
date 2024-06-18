@@ -18,6 +18,8 @@ import AttendanceManage from './AttendanceManage';
 import GradeManage from './GradeManage';
 import AppealList from './AppealList';
 import AppealDetail from './AppealDetail';
+import AbsenceList from './AbsenceList';
+import AbsenceDetail from './AbsenceDetail';
 
 
 const ProfessorDashboard = () => {
@@ -49,6 +51,8 @@ const ProfessorDashboard = () => {
                             <Route path="/gradeManage" element={<GradeManage/>}></Route>
                             <Route path="/appealList" element={<AppealList/>}></Route>
                             <Route path="/appealDetail" element={<AppealDetail/>}></Route>
+                            <Route path="/absenceList" element={<AbsenceList/>}></Route>
+                            <Route path="/absenceDetail" element={<AbsenceDetail/>}></Route>
                             {/* <Route path="/insert-calendar" element={< />}></Route>
                             <Route path="/calendar" element={<Calendar />}></Route> */}
                         </Routes>

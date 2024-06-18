@@ -1,22 +1,15 @@
 import { useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Grid from '@mui/material/Grid';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import List from '@mui/material/List';
-import Collapse from '@mui/material/Collapse';
 import '../../config/activeTab.css';
-import { Typography } from '@mui/material';
+import { Tab, Tabs, Grid, Typography, List, ListSubheader, Collapse, ListItemButton, ListItemText } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAtom, useAtomValue } from 'jotai';
-import { activeTabAtom, lectureNumberAtom } from '../../atoms';
+import { activeTabAtom, lectureNameAtom, lectureNumberAtom } from '../../atoms';
 // import './css/studentSidebar.css';
 
 export default function StudentSidebar() {
@@ -26,6 +19,7 @@ export default function StudentSidebar() {
   const [thirdOpen, setThirdOpen] = useState(false);
   const [activeTab, setActiveTab] = useAtom(activeTabAtom)
   const lectureNumber = useAtomValue(lectureNumberAtom);
+  const lectureName = useAtomValue(lectureNameAtom);
   const navigate = useNavigate();
 
   const handleListItemClick = (e, index) => {
@@ -156,6 +150,9 @@ export default function StudentSidebar() {
             </>}
           {(activeTab === 5) &&
             <>
+              <ListSubheader component="div" id="nested-list-subheader">
+                <Typography fontWeight={"bold"} sx={{marginTop:6, marginBottom:4, color:"#4952A9" }}>{lectureName}</Typography>
+              </ListSubheader>
               <Link to={`/student/${lectureNumber}`} style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)}>
                   <ListItemText primary="강의콘텐츠" />
