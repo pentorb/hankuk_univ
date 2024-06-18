@@ -23,10 +23,7 @@ const AbsenceDetail = () => {
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
     const [information, setInformation] = useState({lectureName:'', professorName:'', type:'', content:'', week:'', count:'', fileName:''});
-    const [type, setType] = useState();
-    const [content, setContent] = useState();
     const [files, setFiles] = useState();
-    const [fileName, setFileName] = useState();
     const navigate = useNavigate();
     const { absNo } = useParams();
 
