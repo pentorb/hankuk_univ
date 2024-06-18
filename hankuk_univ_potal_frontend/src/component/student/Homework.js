@@ -22,20 +22,20 @@ const Homework = () => {
     const lectureName = useAtomValue(lectureNameAtom);
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
-    const [information, setInformation] = useState({});
+    const [information, setInformation] = useState({fileName:'', lectureName:'', professorName:'', title:'', content:''});
     const [files, setFiles] = useState();
-    const [fileName, setFileName] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
         let formData = new FormData();
         formData.append("hwNo", hwNo);
+        formData.append("stdNo", member.id);
 
         axios.post(`${url}/load-homework-information`, formData, {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
-                setInformation(res.data.homeworkInformation);
+                setInformation({...information, ...res.data.homeworkInformation});
             })
             .catch(err => {
                 console.log(err);
@@ -63,7 +63,7 @@ const Homework = () => {
 
     const changeFile = (e) => {
         setFiles(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        setInformation({...information, fileName: e.target.files[0].name});
     }
 
     return (
@@ -133,7 +133,7 @@ const Homework = () => {
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>파일 업로드</b></Typography>
                         <OutlinedInput type="file" id="file" onChange={changeFile} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} hidden/>
-                        <OutlinedInput type="text" value={fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
+                        <OutlinedInput type="text" value={information.fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 50 }} />

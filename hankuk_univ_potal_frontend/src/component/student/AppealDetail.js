@@ -22,9 +22,7 @@ const FormGrid = styled(Grid)(() => ({
 const AppealDetail = () => {
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
-    const [content, setContent] = useState("");
     const [files, setFiles] = useState();
-    const [fileName, setFileName] = useState("");
     const [appeal, setAppeal] = useState({});
     const {appNo} = useParams();
     const navigate = useNavigate();
@@ -46,7 +44,7 @@ const AppealDetail = () => {
     const modifyAppeal = () => {
         let formData = new FormData();
         formData.append("appNo", appNo);
-        formData.append("content", content);
+        formData.append("content", appeal.content);
         formData.append("files", files);
 
         const appealUrl = `${url}/modify-appeal`;
@@ -62,13 +60,13 @@ const AppealDetail = () => {
             })
     }
 
-    const changeContent = (e) => {
-        setContent(e.target.value);
+    const changeValue = (e) => {
+        setAppeal({...appeal, [e.target.name]:e.target.value});
     }
 
     const changeFile = (e) => {
         setFiles(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        setAppeal({...appeal, fileName: e.target.files[0].name});
     }
 
 
@@ -128,7 +126,7 @@ const AppealDetail = () => {
                     <FormGrid item xs={1} />
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>내&nbsp;&nbsp;&nbsp;용</b></Typography>
-                        <OutlinedInput value={content ? content : appeal.content} onChange={changeContent} sx={{ borderRadius: 5, marginLeft:4, marginRight:5, height:200}} required/>
+                        <OutlinedInput name="content" value={appeal.content} onChange={changeValue} sx={{ borderRadius: 5, marginLeft:4, marginRight:5, height:200}} required/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 20 }} />
@@ -136,7 +134,7 @@ const AppealDetail = () => {
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>파일 업로드</b></Typography>
                         <OutlinedInput type="file" id="file" onChange={changeFile} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} hidden/>
-                        <OutlinedInput type="text" value={fileName ? fileName : appeal.formerFileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
+                        <OutlinedInput type="text" value={appeal.fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 50 }} />

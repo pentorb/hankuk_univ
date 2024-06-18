@@ -3,7 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom, selectedNumberAtom, lectureNameAtom } from '../../atoms';
+import { tokenAtom, memberAtom, selectedNumberAtom, lectureNameAtom, lectureNumberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -20,11 +20,11 @@ const FormGrid = styled(Grid)(() => ({
 const HomeworkDetail = () => {
     const hwNo = useAtomValue(selectedNumberAtom);
     const lectureName = useAtomValue(lectureNameAtom);
+    const lectureNumber = useAtomValue(lectureNumberAtom)
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
-    const [information, setInformation] = useState({});
+    const [information, setInformation] = useState({fileName:'', lectureName:'', professorName:'', title:'', content:''});
     const [files, setFiles] = useState();
-    const [fileName, setFileName] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const HomeworkDetail = () => {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
-                setInformation(res.data.homeworkInformation);
+                setInformation({...information, ...res.data.homeworkInformation});
             })
             .catch(err => {
                 console.log(err);
@@ -55,7 +55,7 @@ const HomeworkDetail = () => {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
-                navigate("/student/:lecNo/homework")
+                navigate(`/student/${lectureNumber}/homework`)
             })
             .catch(err => {
                 console.log(err);
@@ -64,7 +64,7 @@ const HomeworkDetail = () => {
 
     const changeFile = (e) => {
         setFiles(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        setInformation({...information, fileName: e.target.files[0].name});
     }
 
     return (
@@ -134,7 +134,7 @@ const HomeworkDetail = () => {
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>파일 업로드</b></Typography>
                         <OutlinedInput type="file" id="file" onChange={changeFile} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} hidden/>
-                        <OutlinedInput type="text" value={fileName ? fileName : information.formerFileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
+                        <OutlinedInput type="text" value={information.fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 50 }} />

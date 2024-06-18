@@ -322,10 +322,10 @@ public class StudentServiceImpl implements StudentService {
 				.getGrade();
 		appealRepository.save(appeal);
 
-		String formerFileName = "";
+		String fileName = "";
 		if (appeal.getFiles() != null && !appeal.getFiles().trim().equals("")) {
 			Files files = filesRepository.findById(Integer.parseInt(appeal.getFiles())).get();
-			formerFileName = files.getName();
+			fileName = files.getName();
 		}
 
 		String status = appeal.getStatus();
@@ -335,7 +335,7 @@ public class StudentServiceImpl implements StudentService {
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("lectureNumber", lectureNumber);
-		map.put("formerFileName", formerFileName);
+		map.put("fileName", fileName);
 		map.put("lectureName", lectureName);
 		map.put("professorName", professorName);
 		map.put("grade", grade);
@@ -423,9 +423,9 @@ public class StudentServiceImpl implements StudentService {
 
 			Integer score = null;
 			Boolean submission = false;
-			HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
-			if (homeworkSubmit != null) {
-				score = homeworkSubmit.getScore();
+			Optional<HomeworkSubmit> optionalHomeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+			if (optionalHomeworkSubmit.isPresent()) {
+				score = optionalHomeworkSubmit.get().getScore();
 				submission = true;
 			}
 
@@ -447,12 +447,15 @@ public class StudentServiceImpl implements StudentService {
 	public Map<String, Object> loadHomeworkInformation(Integer hwNo, String stdNo) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		Homework homework = homeworkRepository.findById(hwNo).get();
-		HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+		Optional<HomeworkSubmit> optionalHomeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+		String fileName = "";
 		
-		String formerFileName = "";
-		if (!homeworkSubmit.getFiles().trim().equals("")) {
-			Files files = filesRepository.findById(Integer.parseInt(homeworkSubmit.getFiles())).get();
-			formerFileName = files.getName();
+		if(optionalHomeworkSubmit.isPresent()) {
+			HomeworkSubmit homeworkSubmit = optionalHomeworkSubmit.get();
+			if (!homeworkSubmit.getFiles().trim().equals("")) {
+				Files files = filesRepository.findById(Integer.parseInt(homeworkSubmit.getFiles())).get();
+				fileName = files.getName();
+			}
 		}
 
 		String lectureName = homework.getLecture().getSubject().getName();
@@ -460,7 +463,7 @@ public class StudentServiceImpl implements StudentService {
 		String title = homework.getTitle();
 		String content = homework.getContent();
 		
-		map.put("formerFileName", formerFileName);
+		map.put("fileName", fileName);
 		map.put("lectureName", lectureName);
 		map.put("professorName", professorName);
 		map.put("title", title);
@@ -490,7 +493,7 @@ public class StudentServiceImpl implements StudentService {
 	
 	@Override
 	public void modifyHomework(String stdNo, Integer hwNo, MultipartFile file) throws Exception {
-		HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo);
+		HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByStudent_stdNoAndHomework_hwNo(stdNo, hwNo).get();
 		if (file != null && !file.isEmpty()) {
 			Files attachedFile = Files.builder().name(file.getOriginalFilename()).directory(uploadPath)
 					.size(file.getSize()).contenttype(file.getContentType()).build();

@@ -22,11 +22,8 @@ const Absence = () => {
     const lectureName = useAtomValue(lectureNameAtom);
     const member = useAtomValue(memberAtom);
     const token = useAtomValue(tokenAtom);
-    const [information, setInformation] = useState({lectureName:'', professorName:'', type:'', content:'', week:'', count:'', formerFileName:''});
-    const [type, setType] = useState("01");
-    const [content, setContent] = useState();
+    const [information, setInformation] = useState({lectureName:'', professorName:'', type:'', content:'', week:'', count:'', fileName:''});
     const [files, setFiles] = useState();
-    const [fileName, setFileName] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,7 +35,7 @@ const Absence = () => {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
-                setInformation(res.data.absenceInformation);
+                setInformation({...information, ...res.data.absenceInformation});
             })
             .catch(err => {
                 console.log(err);
@@ -49,8 +46,8 @@ const Absence = () => {
         let formData = new FormData();
         formData.append("stdNo", member.id);
         formData.append("lessonNo", lessonNo);
-        formData.append("content", content);
-        formData.append("type", type);
+        formData.append("content", information.content);
+        formData.append("type", information.type);
         formData.append("files", files);
 
         const absenceUrl = `${url}/report-absence`;
@@ -65,17 +62,13 @@ const Absence = () => {
             })
     }
 
-    const changeType = (e) => {
-        setType(e.target.value);
-    }
-
-    const changeContent = (e) => {
-        setContent(e.target.value);
+    const changeValue = (e) => {
+        setInformation({...information, [e.target.name]:e.target.value});
     }
 
     const changeFile = (e) => {
         setFiles(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        setInformation({...information, fileName: e.target.files[0].name});
     }
 
     return (
@@ -106,7 +99,7 @@ const Absence = () => {
                     <FormGrid item xs={5} sx={{ display: "block" }}>
                         <Typography sx={{ display: "inline-block", marginLeft:5 }}><b>구&nbsp;&nbsp;&nbsp;분</b></Typography>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <Select value={type} onChange={changeType} sx={{ borderRadius: 5, width:400 }}>
+                        <Select name="type" defaultValue={"01"} onChange={changeValue} sx={{ borderRadius: 5, width:400 }}>
                             <MenuItem value={"01"}>일반</MenuItem>
                             <MenuItem value={"02"}>병결</MenuItem>
                             <MenuItem value={"44"}>여학생공결</MenuItem>
@@ -156,7 +149,7 @@ const Absence = () => {
                     <FormGrid item xs={1} />
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>내&nbsp;&nbsp;&nbsp;용</b></Typography>
-                        <OutlinedInput onChange={changeContent} sx={{ borderRadius: 5, marginLeft:4, marginRight:5, height:200}}/>
+                        <OutlinedInput name="content" onChange={changeValue} sx={{ borderRadius: 5, marginLeft:4, marginRight:5, height:200}}/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 30 }} />
@@ -164,7 +157,7 @@ const Absence = () => {
                     <FormGrid item xs={10}>
                         <Typography sx={{ display: "inline-block", marginLeft:5, marginRight:1, marginBottom:1 }}><b>파일 업로드</b></Typography>
                         <OutlinedInput type="file" id="file" onChange={changeFile} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} hidden/>
-                        <OutlinedInput type="text" value={fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
+                        <OutlinedInput type="text" value={information.fileName} sx={{ borderRadius: 5, marginLeft:4, marginRight:5 }} readOnly/>
                     </FormGrid>
                     <FormGrid item xs={1} />
                     <FormGrid item xs={12} sx={{ height: 60 }} />
