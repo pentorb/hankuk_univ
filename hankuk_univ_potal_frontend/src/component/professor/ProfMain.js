@@ -19,6 +19,8 @@ import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { url } from '../../config/config';
+import { useAtom, useAtomValue } from 'jotai';
+import { memberAtom, tokenAtom } from '../../atoms';
 
 const renderEventContent = (eventInfo) => {
     return (
@@ -29,6 +31,8 @@ const renderEventContent = (eventInfo) => {
 };
 
 const ProfMain = () => {
+    const [member, setMember] = useAtom(memberAtom);
+    const token = useAtomValue(tokenAtom);
     const [events, setEvents] = useState([]);
     const navigate = useNavigate();
 
@@ -46,8 +50,16 @@ const ProfMain = () => {
         };
     }
 
+    const logout = () => {
+        setMember(null);
+        sessionStorage.removeItem("access_token");
+        sessionStorage.removeItem("refresh_token");
+        navigate("/")
+    }
+
     useEffect(() => {
-        axios.get(`${url}/calendar`)
+        console.log(member)
+        axios.get(`${url}/calendar?id=${member.id}`)
             .then(res => {
                 const formattedEvents = res.data.map(event => {
                     return {
@@ -66,7 +78,7 @@ const ProfMain = () => {
             .catch(error => {
                 console.error('Error fetching events:', error);
             });
-    }, []);
+    }, [token]);
 
 
 
@@ -83,33 +95,33 @@ const ProfMain = () => {
                     </Grid>
                     <Grid container spacing={2} style={{ position: 'absolute', top: '60px', display: 'flex', justifyContent: 'center' }}>
                         <Grid item xs={4} style={{ paddingTop: '0px' }}>
-                            <div>
+                        <div>
                                 <div style={{ textAlign: 'center', marginBottom: '15px' }}><h5><b>오늘의 학식</b></h5></div>
                                 <div className='horDiv' style={{ height: '70px' }}>
-                                    <div className='col-2'><WbTwilightIcon />&nbsp;조식</div>
-                                    <div className='col-10'>브레드, 쌀시리얼&우유, 삶은 계란, 토마토채소샐러드, 후르츠칵테일</div>
+                                    <div className='col-2 menuT'><WbTwilightIcon />&nbsp;조식</div>
+                                    <div className='col-10 menu'>브레드, 쌀시리얼&우유, 삶은 계란, 토마토채소샐러드, 후르츠칵테일</div>
                                 </div>
                                 <div className='horDiv' style={{ height: '70px' }}>
-                                    <div className='col-2' style={{ backgroundColor: "rgb(187 193 233 / 70%)" }}><LightModeIcon />&nbsp;중식</div>
-                                    <div className='col-10'>쌀밥, 시금치된장국, 파채돈까스, 알감자새송이조림, 무말랭이무침, 배추김치</div>
+                                    <div className='col-2 menuT' style={{ backgroundColor: "rgb(187 193 233 / 70%)" }}><LightModeIcon />&nbsp;중식</div>
+                                    <div className='col-10 menu'>쌀밥, 시금치된장국, 파채돈까스, 알감자새송이조림, 무말랭이무침, 배추김치</div>
                                 </div>
                                 <div className='horDiv' style={{ height: '70px' }}>
-                                    <div className='col-2' style={{ backgroundColor: "#bbc1e9" }}><DarkModeIcon />&nbsp;석식</div>
-                                    <div className='col-10'>쌀밥, 만두국, 가자미구이, 비엔나김치볶음, <br />깻잎지무침, 깍두기</div>
+                                    <div className='col-2 menuT' style={{ backgroundColor: "#bbc1e9" }}><DarkModeIcon />&nbsp;석식</div>
+                                    <div className='col-10 menu'>쌀밥, 만두국, 가자미구이, 비엔나김치볶음, <br />깻잎지무침, 깍두기</div>
                                 </div>
                             </div>
                         </Grid>
                         <Grid item xs={3} style={{ textAlign: 'center', marginTop: '45px' }}>
-                            <div style={{ paddingBottom: '15px' }}><h4><b>홍길동</b> 님, 환영합니다.</h4></div>
-                            <div style={{ paddingBottom: '15px' }}><h5>컴퓨터공학과 | 3학년 | 재학</h5></div>
+                            <div style={{ paddingBottom: '15px' }}><h4><b>{member.name}</b> 님, 환영합니다.</h4></div>
+                            <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | {member.position} | {member.email}{member.emailDo}</h5></div>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} /></div>&nbsp;&nbsp;&nbsp;
-                                <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} /></div>
+                                <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={logout} /></div>
                             </div>
                         </Grid>
                         <Grid item xs={4} style={{ textAlign: 'center' }}>
                             {/* 투두리스트  */}
-                            <div className="todoBox">
+                            {/* <div className="todoBox">
                                 <div style={{ display: 'flex', alignItems: 'center', paddingTop: '15px' }}>
                                     <BoltIcon style={{ height: '50px', width: '50px', color: '#403E98' }} /> <h4 style={{ marginBottom: '0px', fontWeight: '700' }}>To Do List</h4>
                                 </div>
@@ -129,7 +141,7 @@ const ProfMain = () => {
                                         </li>
                                     </List>
                                 </div>
-                            </div>
+                            </div> */}
                         </Grid>
                     </Grid>
                 </div>
@@ -139,7 +151,7 @@ const ProfMain = () => {
                     <Grid item xs={6}>
                         <div className="secBox">
                             <div className="header">
-                                <h3 onClick={() => { navigate('/my-potal/calendar') }}><b>SCHEDULE</b></h3>
+                                <h3 onClick={() => { navigate('/professor/calendar') }}><b>SCHEDULE</b></h3>
                                 <span style={{ color: '#999696' }}><i>누르면 일정 조회 화면으로 이동합니다.</i></span>
                             </div>
                             <div >
