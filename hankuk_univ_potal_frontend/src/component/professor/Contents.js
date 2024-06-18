@@ -153,6 +153,11 @@ const Contents = () => {
                                                             onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
                                                             과제상세보기
                                                         </Button>
+                                                        <Button
+                                                            className="Contents_Divs_Button"
+                                                            onClick={() => navigate(`/professor/homeworkSubmitList/${data.hwNo}/${data.week}/1`)}>
+                                                            과제란
+                                                        </Button>
                                                     </div>
                                                 )
                                             }
@@ -185,6 +190,11 @@ const Contents = () => {
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
                                                             과제상세보기
+                                                        </Button>
+                                                        <Button
+                                                            className="Contents_Divs_Button"
+                                                            onClick={() => navigate(`/professor/homeworkSubmitList/${data.hwNo}/${data.week}/2`)}>
+                                                            과제란
                                                         </Button>
                                                     </div>
                                                 )

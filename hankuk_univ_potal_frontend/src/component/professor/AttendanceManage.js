@@ -70,7 +70,8 @@ const AttendanceManage = () => {
                 title: res.data,
                 // text: "That thing is still around?",
                 icon: "success"
-              });        })
+              });        
+            })
         .catch((err)=>{
             console.log(err)
         })

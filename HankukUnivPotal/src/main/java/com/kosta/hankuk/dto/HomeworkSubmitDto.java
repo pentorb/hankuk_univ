@@ -23,6 +23,7 @@ public class HomeworkSubmitDto {
 	private Integer hwsNo;
 	private Integer hwNo;
 	private String stdNo;
+	private String stdName;
 	private String files;
 	private Date submitDt;
 	private Date modifyDt;

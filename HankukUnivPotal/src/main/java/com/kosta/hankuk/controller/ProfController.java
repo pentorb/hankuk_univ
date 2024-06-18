@@ -25,6 +25,7 @@ import com.kosta.hankuk.dto.ExamDto;
 import com.kosta.hankuk.dto.ExamQuesDto;
 import com.kosta.hankuk.dto.ExamResultDto;
 import com.kosta.hankuk.dto.HomeworkDto;
+import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
@@ -375,6 +376,20 @@ public class ProfController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/homeworkSubmitList")
+	public ResponseEntity<List<HomeworkSubmitDto>> homeworkSubmitList(
+			@RequestParam(name = "hwNo", required = false) Integer hwNo) {
+		try {
+			System.out.println(hwNo);
+			List<HomeworkSubmitDto> homeworkSubmitList = profService.homeworkSubmitList(hwNo);
+			System.out.println(homeworkSubmitList);
+			return new ResponseEntity<List<HomeworkSubmitDto>>(homeworkSubmitList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<HomeworkSubmitDto>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
