@@ -35,7 +35,7 @@ export default function Login() {
                 .then(res => {
                         console.log(res.data)
                         setMemberAtom(res.data)
-                        navigate("/main");
+                        navigate("/");
                 })
                 .catch(err => {
                     console.log(err);

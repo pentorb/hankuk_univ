@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { memberAtom, activeTabAtom, tokenAtom } from '../../atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { url } from '../../config/config';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = () => {
     const navigate = useNavigate();
-    const setActiveTab = useSetAtom(activeTabAtom);    
+    const setActiveTab = useSetAtom(activeTabAtom);
     const member = useAtomValue(memberAtom);
     // const [token, setToken] = useAtom(tokenAtom);
 
@@ -43,16 +43,21 @@ const Header = () => {
     // }, [])
 
     return (
-        <div style={{display:'flex'}}>
-            <div className="col-6" style={{height: '85px', display: 'flex', margin: '0 auto' }}>
+        <div style={{ display: 'flex' }}>
+            <div className="col-6" style={{ height: '85px', display: 'flex', margin: '0 auto' }}>
                 <img src="/images/logo2.png" style={{ width: '50px', height: '50px', margin: '15px 10px 15px 20px' }} />
-                <span onClick={()=>{setActiveTab(0); navigate("/");}} style={{ margin: '23px 5px 23px 0', textDecoration: "none", color: "var(--maincolor)", fontSize: "24px", fontFamily: "ChosunLo", cursor:"pointer" }}>한국대학교 </span>
-                <span onClick={()=>{setActiveTab(0); goPotal();}} style={{ margin: '23px 0', textDecoration: "none", color: "var(--maincolor)", fontSize: "22px", fontWeight: '600', cursor:"pointer" }}>/ 종합학사포탈</span>
-                
+                <span onClick={() => { setActiveTab(0); navigate("/"); }} style={{ margin: '23px 5px 23px 0', textDecoration: "none", color: "var(--maincolor)", fontSize: "24px", fontFamily: "ChosunLo", cursor: "pointer" }}>한국대학교 </span>
+                <span onClick={() => { setActiveTab(0); goPotal(); }} style={{ margin: '23px 0', textDecoration: "none", color: "var(--maincolor)", fontSize: "22px", fontWeight: '600', cursor: "pointer" }}>/ 종합학사포탈</span>
+
             </div>
-                <div className="col-6" style={{ height: '85px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                    {/* <span style={{ margin: '23px 20px 23px 0', fontSize: '18px' }}><AccountCircleIcon />&nbsp;&nbsp;<b>{member.name}</b> 님</span> */}
-                </div>
+            <div className="col-6" style={{ height: '85px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                {member ? (<>
+                    <span style={{ fontSize: '18px', display:'flex', alignItems:'center', color: '#092264', margin: '13px 25px' }}><AccountCircleIcon/>&nbsp;&nbsp;<b>{member.name} 님</b></span>
+                </>) : (
+                    <>
+                    </>
+                )}
+            </div>
         </div>
     )
 }
