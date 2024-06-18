@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.HuehakAndBokhakDto;
@@ -42,6 +43,7 @@ import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
+import com.kosta.hankuk.repository.LessonRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.ScoreRepository;
 import com.kosta.hankuk.repository.StudentRepository;
@@ -80,6 +82,8 @@ public class StudentServiceImpl implements StudentService {
 	private AttendanceRepository attendanceRepository;
 	@Autowired
 	private AbsenceRepository absenceRepository;
+	@Autowired
+	private LessonRepository lessonRepository;
 
 	@Value("${upload.path}")
 	private String uploadPath;
@@ -579,4 +583,83 @@ public class StudentServiceImpl implements StudentService {
 		return map;
 	}
 	
+	@Override
+	public void reportAbsence(String stdNo, Integer lessonNo, String content, String type, MultipartFile file) throws Exception {
+		String fileNo = "";
+		if (file != null && !file.isEmpty()) {
+			Files attachedFile = Files.builder().name(file.getOriginalFilename()).directory(uploadPath)
+					.size(file.getSize()).contenttype(file.getContentType()).build();
+			filesRepository.save(attachedFile);
+			File upFile = new File(uploadPath, attachedFile.getFileNo() + "");
+			file.transferTo(upFile);
+			fileNo = attachedFile.getFileNo() + "";
+		}
+		Absence absence = Absence.builder()
+				.content(content)
+				.files(fileNo)
+				.type(type)
+				.lesson(Lesson.builder().lessonNo(lessonNo).build())
+				.student(Student.builder().stdNo(stdNo).build())
+				.build();
+		absenceRepository.save(absence);
+	}
+	
+	@Override
+	public Map<String, Object> loadAbsenceInformation(Integer lessonNo, String stdNo) throws Exception {
+		Lesson lesson = lessonRepository.findById(lessonNo).get();
+		
+		String lectureName = lesson.getLecture().getSubject().getName();
+		String professorName = lesson.getLecture().getProfessor().getName();		
+		Integer week = lesson.getWeek();
+		Integer count = lesson.getLessonCnt();
+		
+		String type = "";
+		String content = "";
+		String fileName = "";
+		String status = "";
+		
+		Optional<Absence> optionalAbsence = absenceRepository.findByLesson_lessonNoAndStudent_stdNo(lessonNo, stdNo);
+		if(optionalAbsence.isPresent()) {
+			Absence absence = optionalAbsence.get();
+			type = absence.getType();
+			content = absence.getContent();
+			status = absence.getStatus();
+			if (!absence.getFiles().trim().equals("")) {
+				Files files = filesRepository.findById(Integer.parseInt(absence.getFiles())).get();
+				fileName = files.getName();
+			}
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("fileName", fileName);
+		map.put("lectureName", lectureName);
+		map.put("professorName", professorName);
+		map.put("type", type);
+		map.put("content", content);
+		map.put("status", status);
+		map.put("week", week);
+		map.put("count", count);
+		return map;
+	}
+	
+	@Override
+	public void modifyAbsence(Integer absNo, String content, String type, MultipartFile file) throws Exception {
+		Absence absence = absenceRepository.findById(absNo).get();
+		if (file != null && !file.isEmpty()) {
+			Files attachedFile = Files.builder().name(file.getOriginalFilename()).directory(uploadPath)
+					.size(file.getSize()).contenttype(file.getContentType()).build();
+			filesRepository.save(attachedFile);
+			File upFile = new File(uploadPath, attachedFile.getFileNo() + "");
+			file.transferTo(upFile);
+			String fileNo = attachedFile.getFileNo() + "";
+			absence.setFiles(fileNo);
+		}
+		
+		absence.setType(type);
+		
+		if (content != null && !content.isEmpty()) {
+			absence.setContent(content);
+		}
+		absenceRepository.save(absence);
+	}
 }

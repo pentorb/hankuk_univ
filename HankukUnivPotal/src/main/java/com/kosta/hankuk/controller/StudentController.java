@@ -277,4 +277,45 @@ public class StudentController {
 			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/load-absence-information")
+	public ResponseEntity<Map<String, Object>> loadAbsenceInformation(@RequestParam Integer lessonNo,
+			@RequestParam String stdNo){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			Map<String, Object> absenceInformation = stdService.loadAbsenceInformation(lessonNo, stdNo);
+			res.put("absenceInformation", absenceInformation);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/report-absence")
+	public ResponseEntity<String> reportAbsence(@RequestParam String stdNo,
+			@RequestParam Integer lessonNo,
+			@RequestParam String content,
+			@RequestParam String type,
+			@RequestParam(name="files", required=false) MultipartFile files){
+		try {
+			stdService.reportAbsence(stdNo, lessonNo, content, type, files);
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/modify-absence")
+	public void modifyAbsence(@RequestParam("absNo") Integer absNo,
+			@RequestParam("content") String content,
+			@RequestParam("type") String type,
+			@RequestParam(name="files", required=false) MultipartFile files){
+		try {
+			stdService.modifyAbsence(absNo, content, type, files);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

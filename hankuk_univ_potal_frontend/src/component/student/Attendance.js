@@ -107,13 +107,13 @@ const Attendance = () => {
                                                 {(attendance.possibilityOfReport === true && attendance.report === true) &&
                                                     <Button variant="contained"
                                                     size="small"
-                                                    onClick={()=>{setSelectedNumber(attendance.absNo); navigate(`/student/${lectureNumber}/absence/${attendance.absNo}`);}}
+                                                    onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/absence/${attendance.absNo}`);}}
                                                     sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
                                                 }
                                                 {(attendance.possibilityOfReport === true && attendance.report === false) &&
                                                     <Button variant="contained"
                                                     size="small"
-                                                    onClick={()=>{setSelectedNumber(attendance.absNo); navigate(`/student/${lectureNumber}/report-absence`);}}
+                                                    onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/report-absence`);}}
                                                     sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>신청</Button>
                                                 }                                                           
                                             </TableCell>
