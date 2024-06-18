@@ -86,6 +86,7 @@ const BokhakInsert = () => {
                 axios.get(modifyUrl, { headers: { Authorization: JSON.stringify(token) } })
                     .then(res => {
                         navigate('/student/regBokhak')
+                        window.location.reload();
                     })
             }
         });
