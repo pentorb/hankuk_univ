@@ -5,12 +5,12 @@ import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
 import { useLocation, useNavigate } from "react-router";
 import { Button, Input } from "reactstrap";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
 import Swal from "sweetalert2";
 
-const AppealDetail = () => {
+const AbsenceDetail = () => {
     const text = {
         display: "flex",
         margin: "10px",
@@ -20,18 +20,18 @@ const AppealDetail = () => {
     }
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
-    const location = useLocation();
-    const app = location.state?.app;
-    const [appeal, setAppeal] = useState(app);
     const navigate = useNavigate();
+    const location = useLocation();
+    const abs = location.state?.abs;
+    const [absence, setAbsence] = useState(abs);
 
     const changeValue = (e) => {
-        setAppeal({ ...appeal, [e.target.name]: e.target.value });
+        setAbsence({ ...absence, [e.target.name]: e.target.value });
     }
 
     const confirm = () => {
 
-        axios.post(`${url}/appealConfirm`, { appeal: appeal },
+        axios.post(`${url}/absenceConfirm`, { absence: absence },
             {
                 headers: { Authorization: JSON.stringify(token) }
             }
@@ -49,9 +49,10 @@ const AppealDetail = () => {
                 console.log(err);
             })
     }
-    return (
+
+    return(
         <Grid item xs={12}>
-            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>이의신청상세</b></Typography>
+            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>공결신청목록</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
@@ -64,11 +65,8 @@ const AppealDetail = () => {
                         <Link color="inherit" underline='none'>
                             {lecture.subName}
                         </Link>
-                        <Link color="inherit" underline='none' href="/professor/appealList">
-                            이의신청목록
-                        </Link>
                         <Link underline="hover" color="#4952A9">
-                            <b>이의신청상세</b>
+                            <b>공결신청목록</b>
                         </Link>
                     </Breadcrumbs>
                 </div>
@@ -79,7 +77,7 @@ const AppealDetail = () => {
                             <div style={text} className="col-4">이름</div>
                             <div className="col-6">
                                 <Input type="text" id="name" name="name"
-                                    disabled value={appeal.stdName}
+                                    disabled value={absence.stdName}
                                 />
                             </div>
                         </div>
@@ -87,7 +85,7 @@ const AppealDetail = () => {
                             <div style={text} className="col-4">학번</div>
                             <div className="col-6">
                                 <Input type="text" id="stdNo" name="stdNo"
-                                    disabled value={appeal.stdNo}
+                                    disabled value={absence.stdNo}
                                 />
                             </div>
                         </div>
@@ -101,14 +99,20 @@ const AppealDetail = () => {
                         </div>
                     </div>
                     <div style={{ display: 'flex', padding: '10px' }}>
-
+                        <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={text} className="col-4">주차</div>
+                            <div className="col-6">
+                                <Input type="text" id="week" name="week"
+                                    disabled value={absence.week}
+                                />
+                            </div>
+                        </div>
 
                         <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                            <div style={text} className="col-4">첨부자료</div>
+                            <div style={text} className="col-4">사유</div>
                             <div className="col-6">
-                                <Input type="file" id="files" name="files"
-                                    style={{ width: '100%' }}
-
+                                <Input type="text" id="week" name="week"
+                                    disabled value={absence.type==='01' ? '일반' : absence.type==='02' ? '병결' : absence.type==='44' ? '여학생공결' : absence.type==='21' ? '예비군' : ''}
                                 />
                             </div>
                         </div>
@@ -120,11 +124,23 @@ const AppealDetail = () => {
                                     type="select"
                                     id="status"
                                     name="status"
-                                    value={appeal.status}
+                                    value={absence.status}
                                     onChange={(e) => changeValue(e)}>
                                     <option value="NEW">신규</option>
                                     <option value="END">완료</option>
                                 </Input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', padding: '10px' }}>
+                        <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={text} className="col-4">첨부자료</div>
+                            <div className="col-6">
+                                <Input type="file" id="files" name="files"
+                                    style={{ width: '100%' }}
+
+                                />
                             </div>
                         </div>
                     </div>
@@ -135,34 +151,21 @@ const AppealDetail = () => {
                         <div style={{ padding: '5px 0px 0px 15px' }}>
                             <Input type="textarea" id="reason" name="reason"
                                 style={{ padding: '20px', width: '98%', height: '250px', resize: 'none' }}
-                                disabled value={app.content}
+                                disabled value={absence.content}
                             />
                         </div>
-                        <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                            <div style={text} className="col-3">답변</div>
-                        </div>
-                        <div style={{ padding: '5px 0px 0px 15px' }}>
-                            <Input
-                                type="textarea"
-                                id="answer"
-                                name="answer"
-                                value={app.answer}
-                                onChange={(e) => changeValue(e)}
-                                style={{ padding: '20px', width: '98%', height: '150px', resize: 'none' }}
-
-                            />
-                        </div>
+                        
 
                     </div>
 
                     <div className="col-12" style={{ padding: '10px 30px 0px', display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button style={{ backgroundColor: '#1F3468', marginRight: '10px' }} onClick={() => navigate(`/professor/appealList`)} >목록</Button>
+                        <Button style={{ backgroundColor: '#1F3468', marginRight: '10px' }} onClick={() => navigate(`/professor/absenceList`)} >목록</Button>
                         <Button style={{ backgroundColor: '#1F3468' }} onClick={confirm}>답변</Button>
                     </div>
                 </div>
 
-            </Paper>
+                </Paper>
         </Grid>
     )
 }
-export default AppealDetail;
+export default AbsenceDetail;

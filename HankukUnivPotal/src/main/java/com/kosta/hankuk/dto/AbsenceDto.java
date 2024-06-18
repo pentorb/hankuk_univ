@@ -27,7 +27,10 @@ public class AbsenceDto {
 	private String type;
 	private String status;
 	private String stdNo;
+	private String stdName;
 	private Integer lessonNo;
+	private Integer week;
+	private Integer lessonCnt;
 	
 	public Absence toAbsence() {
 		return Absence.builder()

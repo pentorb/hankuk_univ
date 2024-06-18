@@ -19,10 +19,10 @@ const AppealList = () => {
 
         // let profNo = JSON.parse(sessionStorage.getItem("prof"));
         submit(1);
-    }, [token,lecture])
+    }, [token, lecture])
 
     const submit = (page) => {
-        axios.get(`${url}/appealList?lecNo=${lecture.lecNo}&status=${status}`,
+        axios.get(`${url}/appealList?lecNo=${lecture.lecNo}`,
             {
                 headers: { Authorization: JSON.stringify(token) }
             }
@@ -44,43 +44,43 @@ const AppealList = () => {
                 </tr>
             );
         }
-        
-        if(status==="BOTH") {
+
+        if (status === "BOTH") {
             return appealList.map((app, i) => (
                 <React.Fragment key={i}>
-                    <tr 
+                    <tr
                         className="Appeal_Table_Tr"
-                        onClick={()=>navigate(`/professor/appealDetail`, { state: { app } })}>
+                        onClick={() => navigate(`/professor/appealDetail`, { state: { app } })}>
                         <td className="Appeal_Table_Td Appeal_Table_Td_First">{app.reqDt}</td>
                         <td className="Appeal_Table_Td">{app.stdNo}</td>
                         <td className="Appeal_Table_Td">{app.stdName}</td>
-                        <td 
+                        <td
                             className="Appeal_Table_Td Appeal_Table_Td_Last"
-                            style={app.status==='NEW' ? {color:'red'}:{color:'blueviolet'}}>
-                            {app.status==='NEW' ? '신규':'완료'}
+                            style={app.status === 'NEW' ? { color: 'red' } : { color: 'blueviolet' }}>
+                            {app.status === 'NEW' ? '신규' : '완료'}
                         </td>
                     </tr>
                     <tr className="Appeal_Table_spacer"><td colSpan="4"></td></tr>
                 </React.Fragment>
             ));
-        } else{
-            return appealList.filter((appeal)=>appeal.status===status).map((app, i) => (
+        } else {
+            return appealList.filter((appeal) => appeal.status === status).map((app, i) => (
                 <React.Fragment key={i}>
                     <tr className="Appeal_Table_Tr">
                         <td className="Appeal_Table_Td Appeal_Table_Td_First">{app.reqDt}</td>
                         <td className="Appeal_Table_Td">{app.stdNo}</td>
                         <td className="Appeal_Table_Td">{app.stdName}</td>
-                        <td 
+                        <td
                             className="Appeal_Table_Td Appeal_Table_Td_Last"
-                            style={app.status==='NEW' ? {color:'red'}:{color:'blueviolet'}}>
-                            {app.status==='NEW' ? '신규':'완료'}
+                            style={app.status === 'NEW' ? { color: 'red' } : { color: 'blueviolet' }}>
+                            {app.status === 'NEW' ? '신규' : '완료'}
                         </td>
                     </tr>
                     <tr className="Appeal_Table_spacer"><td colSpan="4"></td></tr>
                 </React.Fragment>
             ));
         }
-        
+
     };
 
     return (
@@ -104,17 +104,19 @@ const AppealList = () => {
                     </Breadcrumbs>
                 </div>
                 
-                    <Input
-                        className="Appeal_Input"
-                        id="status"
-                        name="status"
-                        type="select"
-                        onChange={(e) => setStatus(e.target.value)}
-                    >
-                        <option value='BOTH'>상태</option>
-                        <option value='NEW'>신규</option>
-                        <option value='END'>완료</option>
-                    </Input>
+                <div style={{width:'1170px'}}>
+                <Input
+                    className="Appeal_Input"
+                    id="status"
+                    name="status"
+                    type="select"
+                    onChange={(e) => setStatus(e.target.value)}
+                >
+                    <option value='BOTH'>상태</option>
+                    <option value='NEW'>신규</option>
+                    <option value='END'>완료</option>
+                </Input>
+                </div>
                 
                 <div className='Appeal_body'>
                     <table className="Appeal_Table">

@@ -76,7 +76,10 @@ public class Absence {
 				.type(type)
 				.status(status)
 				.stdNo(student.getStdNo())
+				.stdName(student.getName())
 				.lessonNo(lesson.getLessonNo())
+				.week(lesson.getWeek())
+				.lessonCnt(lesson.getLessonCnt())
 				.build();
 	}
 	

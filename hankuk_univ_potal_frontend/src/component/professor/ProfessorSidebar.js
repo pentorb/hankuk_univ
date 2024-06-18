@@ -114,6 +114,11 @@ export default function ProfessorSidebar() {
                   <ListItemText primary="이의신청목록" />
                 </ListItemButton>
               </Link>
+              <Link to="/professor/absenceList" style={{ textDecoration: "none", color: 'black' }}>
+                <ListItemButton>
+                  <ListItemText primary="공결신청목록" />
+                </ListItemButton>
+              </Link>
             </>}
           {activeTab === 4 &&
             <>

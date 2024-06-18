@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.kosta.hankuk.dto.AbsenceDto;
 import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
@@ -17,6 +18,7 @@ import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
+import com.kosta.hankuk.entity.Absence;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Attendance;
 import com.kosta.hankuk.entity.Exam;
@@ -26,6 +28,7 @@ import com.kosta.hankuk.entity.HomeworkSubmit;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
+import com.kosta.hankuk.repository.AbsenceRepository;
 import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.AttendanceRepository;
 import com.kosta.hankuk.repository.ExamQuesRepository;
@@ -55,6 +58,7 @@ public class ProfServiceImpl implements ProfService{
 	private final ExamResultRepository examResultRepository;
 	private final HomeworkSubmitRepository homeworkSubmitRepository;
 	private final AppealRepository appealRepository;
+	private final AbsenceRepository absenceRepository;
 	
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
@@ -277,6 +281,26 @@ public class ProfServiceImpl implements ProfService{
 			appealDtoList.add(appeal.toAppealDto());
 		}
 		return appealDtoList;
+	}
+
+	@Override
+	public void appealModify(AppealDto appealDto) throws Exception {
+		appealRepository.save(appealDto.toAppeal());
+	}
+
+	@Override
+	public List<AbsenceDto> absenceList(String lecNo) throws Exception {
+		List<Absence> absenceList = absenceRepository.findByLesson_Lecture_lecNo(lecNo);
+		List<AbsenceDto> absenceDtoList = new ArrayList<AbsenceDto>();
+		for (Absence absence : absenceList) {
+			absenceDtoList.add(absence.toAbsencDto());
+		}
+		return absenceDtoList;
+	}
+
+	@Override
+	public void absenceModify(AbsenceDto absenceDto) throws Exception {
+		absenceRepository.save(absenceDto.toAbsence());
 	}
 
 	

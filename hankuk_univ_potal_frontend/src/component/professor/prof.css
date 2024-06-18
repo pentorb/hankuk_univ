@@ -372,8 +372,9 @@
   border-radius: 36px;
 }
 .Appeal_Input{
+  float: right;
   width: 100px;
-  margin: 10px 0 20px 1060px;
+  margin: 10px 0 10px 10px;
 }
 .Appeal_Button{
   width: 60px;

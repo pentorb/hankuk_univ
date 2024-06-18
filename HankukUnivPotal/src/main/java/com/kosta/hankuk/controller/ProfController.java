@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kosta.hankuk.dto.AbsenceDto;
 import com.kosta.hankuk.dto.AppealDto;
 import com.kosta.hankuk.dto.AttendanceDto;
 import com.kosta.hankuk.dto.ExamDto;
@@ -330,6 +331,50 @@ public class ProfController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<List<AppealDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/appealConfirm")
+	public ResponseEntity<String> appealConfirm(@RequestBody Map<String, Object> param) {
+		try {
+			System.out.println(param);
+			Map<String, Object> appealParam = (Map<String, Object>) param.get("appeal");
+			ObjectMapper objectMapper = new ObjectMapper();
+			AppealDto appealDto = objectMapper.convertValue(appealParam, AppealDto.class);
+			profService.appealModify(appealDto);
+			return new ResponseEntity<String>("이의신청에 응답되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/absenceList")
+	public ResponseEntity<List<AbsenceDto>> absenceList(
+			@RequestParam(name = "lecNo", required = false) String lecNo) {
+		try {
+			System.out.println(lecNo);
+			List<AbsenceDto> absenceList = profService.absenceList(lecNo);
+			System.out.println(absenceList);
+			return new ResponseEntity<List<AbsenceDto>>(absenceList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<AbsenceDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/absenceConfirm")
+	public ResponseEntity<String> absenceConfirm(@RequestBody Map<String, Object> param) {
+		try {
+			System.out.println(param);
+			Map<String, Object> absenceParam = (Map<String, Object>) param.get("absence");
+			ObjectMapper objectMapper = new ObjectMapper();
+			AbsenceDto absenceDto = objectMapper.convertValue(absenceParam, AbsenceDto.class);
+			profService.absenceModify(absenceDto);
+			return new ResponseEntity<String>("공결신청에 응답되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
