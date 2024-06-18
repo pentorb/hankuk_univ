@@ -247,6 +247,7 @@ public class StaffServiceImpl implements StaffService {
 	                        professor.getEmail(), 
 	                        professor.getEmailDo(),
 	                        professor.getJoinDt(), 
+	                        professor.getMajor()!=null ? professor.getMajor().getName() : null,
 	                        professor.getMajor() != null ? professor.getMajor().getMajCd() : null
 	                ))
 	                .collect(Collectors.toList());
@@ -267,6 +268,7 @@ public class StaffServiceImpl implements StaffService {
 	                        professor.getEmail(), 
 	                        professor.getEmailDo(),
 	                        professor.getJoinDt(), 
+	                        professor.getMajor()!=null ? professor.getMajor().getName() : null,
 	                        professor.getMajor() != null ? professor.getMajor().getMajCd() : null
 	                ))
 	                .collect(Collectors.toList());
@@ -289,6 +291,7 @@ public class StaffServiceImpl implements StaffService {
 	                            professor.getEmail(), 
 	                            professor.getEmailDo(),
 	                            professor.getJoinDt(), 
+	                            professor.getMajor()!=null ? professor.getMajor().getName() : null,
 	                            professor.getMajor() != null ? professor.getMajor().getMajCd() : null
 	                    ))
 	                    .collect(Collectors.toList());
@@ -310,6 +313,7 @@ public class StaffServiceImpl implements StaffService {
 	                    professor.getEmail(), 
 	                    professor.getEmailDo(),
 	                    professor.getJoinDt(), 
+	                    professor.getMajor()!=null ? professor.getMajor().getName() : null,
 	                    professor.getMajor() != null ? professor.getMajor().getMajCd() : null
 	            ))
 	            .collect(Collectors.toList());

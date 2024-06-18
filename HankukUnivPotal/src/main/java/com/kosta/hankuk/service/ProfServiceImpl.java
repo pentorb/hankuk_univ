@@ -153,6 +153,16 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
+	public List<HomeworkSubmitDto> homeworkSubmitList(Integer hwNo) throws Exception {
+		List<HomeworkSubmit> homeworkSubmitList = homeworkSubmitRepository.findByHomework_hwNo(hwNo);
+		List<HomeworkSubmitDto> homeworkSubmitDtoList = new ArrayList<HomeworkSubmitDto>();
+		for (HomeworkSubmit homeworkSubmit : homeworkSubmitList) {
+			homeworkSubmitDtoList.add(homeworkSubmit.toHomeworkSubmitDto());
+		}
+		return homeworkSubmitDtoList;
+	}
+	
+	@Override
 	public void lessonDataWrite(LessonDataDto lessonDataDto) throws Exception {
 		lessonDataDto.setLessonNo(lessonRepository.findByLecture_lecNoAndWeekAndLessonCnt(
 				lessonDataDto.getLecNo(), lessonDataDto.getWeek(), lessonDataDto.getLessonCnt()).get().getLessonNo());
@@ -302,22 +312,6 @@ public class ProfServiceImpl implements ProfService{
 	public void absenceModify(AbsenceDto absenceDto) throws Exception {
 		absenceRepository.save(absenceDto.toAbsence());
 	}
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 	
 

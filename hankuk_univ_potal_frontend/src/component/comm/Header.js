@@ -51,12 +51,23 @@ const Header = () => {
 
             </div>
             <div className="col-6" style={{ height: '85px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {member ? (<>
-                    <span style={{ fontSize: '18px', display:'flex', alignItems:'center', color: '#092264', margin: '13px 25px' }}><AccountCircleIcon/>&nbsp;&nbsp;<b>{member.name} 님</b></span>
-                </>) : (
+                {member ? (
+                    <>
+                        {member.id.substring(0, 1) === "S" ? (
+                            <span style={{ fontSize: '18px', display: 'flex', alignItems: 'center', color: '#092264', margin: '13px 25px' }}>
+                                <AccountCircleIcon />&nbsp;&nbsp; {member.dept}
+                            </span>
+                        ) : (
+                            <span style={{ fontSize: '18px', display: 'flex', alignItems: 'center', color: '#092264', margin: '13px 25px' }}>
+                                <AccountCircleIcon />&nbsp;&nbsp; {member.name} 님
+                            </span>
+                        )}
+                    </>
+                ) : (
                     <>
                     </>
                 )}
+
             </div>
         </div>
     )

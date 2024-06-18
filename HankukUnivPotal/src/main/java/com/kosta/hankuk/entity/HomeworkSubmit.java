@@ -59,6 +59,7 @@ public class HomeworkSubmit {
 				.hwsNo(hwsNo)
 				.hwNo(homework.getHwNo())
 				.stdNo(student.getStdNo())
+				.stdName(student.getName())
 				.files(files)
 				.submitDt(submitDt)
 				.modifyDt(modifyDt)

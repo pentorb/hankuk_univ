@@ -45,6 +45,19 @@ const ModalCalendar = () => {
         setModalOpen(false);
     };
 
+    const handleCalendarInsert = () => {
+        let baseUrl = '';
+
+        if (member.id.substring(0, 1) === "P") {
+            baseUrl = '/professor';
+        } else if (member.id.substring(0, 1) === "S") {
+            baseUrl = '/staff';
+        } else if (member.id.substring(0, 1) === "2") {
+            baseUrl = '/student';
+        }
+        navigate(`${baseUrl}/insert-calendar`);
+    }
+
     useEffect(() => {
         console.log(token);
         if(token.access_token==='') return
@@ -145,7 +158,7 @@ const ModalCalendar = () => {
                 <Grid item xs={8} >
                     <div style={{ marginBottom:'30px'}} className="App">
                     <div style={{ display: "flex", justifyContent: "flex-end", padding: "0px 0px 30px 50px" }}>
-                        <Button variant="contained" style={{ backgroundColor: '#1F3468' }} onClick={()=>{navigate('/student/insert-calendar')}} >일정 등록</Button>
+                        <Button variant="contained" style={{ backgroundColor: '#1F3468' }} onClick={handleCalendarInsert} >일정 등록</Button>
                     </div>
                     <FullCalendar
                          headerToolbar={{

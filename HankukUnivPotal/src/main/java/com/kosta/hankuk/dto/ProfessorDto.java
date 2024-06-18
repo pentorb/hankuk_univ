@@ -34,6 +34,7 @@ public class ProfessorDto implements UserDto {
 	private String emailDo;
 	private Date joinDt;
 	private String majCd;
+	private String majName;
 	
 	public Professor toProfessor() {
 		return Professor.builder()

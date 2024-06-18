@@ -127,7 +127,7 @@ const StudentMain = () => {
                             <div style={{ paddingBottom: '15px' }}><h4><b>{member.name}</b> 님, 환영합니다.</h4></div>
                             <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | {finSem(member.finSem)} | {statusMap[member.status] || member.status}</h5></div>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} /></div>&nbsp;&nbsp;&nbsp;
+                                <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={() => navigate("/student/mypage")} /></div>&nbsp;&nbsp;&nbsp;
                                 <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={logout} /></div>
                             </div>
                         </Grid>

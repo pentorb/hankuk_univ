@@ -91,6 +91,7 @@ public class Professor implements User{
 				.emailDo(emailDo)
 				.joinDt(joinDt)
 				.majCd(major.getMajCd())
+				.majName(major.getName())
 				.build();
 	}
 	

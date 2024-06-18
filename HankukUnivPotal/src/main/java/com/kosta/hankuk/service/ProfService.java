@@ -68,6 +68,8 @@ public interface ProfService {
 
 	void absenceModify(AbsenceDto absenceDto) throws Exception;
 
+	List<HomeworkSubmitDto> homeworkSubmitList(Integer hwNo) throws Exception;
+
 	
 
 
