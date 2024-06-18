@@ -24,6 +24,7 @@ import HomeworkDetail from './HomeworkDetail';
 import Attendance from './Attendance';
 import Absence from './Absence';
 import AbsenceDetail from './AbsenceDetail';
+import MyPage from './MyPage';
 
 const StudentDashboard = () => {
     return (
@@ -59,6 +60,7 @@ const StudentDashboard = () => {
                             <Route path="/calendar" element={<Calendar/>}></Route>
                             <Route path="/my-grade" element={<AllmyGrades/>}></Route>
                             <Route path="/credits" element={<CreditsList/>}></Route>
+                            <Route path="/mypage" element={<MyPage/>}></Route>
                         </Routes>
                     </Grid>
                    

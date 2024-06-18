@@ -17,7 +17,8 @@ const Main = () => {
         setMember(null);
         sessionStorage.removeItem("access_token");
         sessionStorage.removeItem("refresh_token");
-        window.location.reload(); // 페이지 새로고침
+        // window.location.reload(); 
+        // 페이지 새로고침
     }
 
     return (

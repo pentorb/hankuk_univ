@@ -1,0 +1,23 @@
+.ttext {
+    display: flex;
+    margin: 10px;
+    /* font-weight: bold; */
+    font-size: larger;
+    text-align: left;
+}
+
+.infoD{
+    width: 250px;
+    background-color: #E4E6E7;
+}
+
+.personIcon{
+    color: #AEB4B7;
+}
+
+.personBG{
+    background-color: rgb(228, 230, 231);
+    margin: 0px 70px;
+    width: 320px;
+    border-radius: 16px;
+}
