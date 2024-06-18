@@ -42,9 +42,19 @@ const Main = () => {
                             <span style={{ fontSize: '22px', color: 'white', margin: '13px 3px' }}> / 종합학사포탈</span>
                         </div>
                         <div>
-                            {member ? (<>
-                                <span style={{ fontSize: '22px', color: 'white', margin: '13px 3px' }}><AccountCircleIcon /> {member.name} 님</span>
-                            </>) : (
+                            {member ? (
+                                <>
+                                    {member.id.substring(0, 1) === "S" ? (
+                                        <span style={{ fontSize: '22px', color: 'white', margin: '13px 3px' }}>
+                                            <AccountCircleIcon /> {member.dept}
+                                        </span>
+                                    ) : (
+                                        <span style={{ fontSize: '22px', color: 'white', margin: '13px 3px' }}>
+                                            <AccountCircleIcon /> {member.name} 님
+                                        </span>
+                                    )}
+                                </>
+                            ) : (
                                 <>
                                 </>
                             )}
