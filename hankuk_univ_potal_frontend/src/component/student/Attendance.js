@@ -91,7 +91,7 @@ const Attendance = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {attendanceList !== null && (attendanceList.map(attendance => (
+                                    {attendanceList.length !== 0 && (attendanceList.map(attendance => (
                                         <TableRow key={attendance.number}>
                                             {attendance.count === 1
                                             ? <TableCell align="center" rowSpan={2} sx={{ width: "20%" }}>{attendance.week}</TableCell>
@@ -119,9 +119,9 @@ const Attendance = () => {
                                             </TableCell>
                                         </TableRow>
                                     )))}
-                                    {attendanceList === null &&
+                                    {attendanceList.length === 0 &&
                                         <TableRow>
-                                            <TableCell align="center" colSpan={7}>출석이 없습니다</TableCell>
+                                            <TableCell align="center" colSpan={7}>출석 현황이 없습니다</TableCell>
                                         </TableRow>
                                     }
                                 </TableBody>

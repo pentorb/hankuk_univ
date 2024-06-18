@@ -40,11 +40,11 @@ const AppealList = () => {
         formData.append("semester", semester);
 
         const appealUrl = `${url}/appeal`;
-        console.log(appealUrl);
         axios.post(appealUrl, formData, {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
+                console.log(res.data)
                 setAppealList([...res.data.appealList])
             })
             .catch(err => {
@@ -124,7 +124,7 @@ const AppealList = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {appealList !== null && (appealList.map(appeal => (
+                                        {appealList.length !== 0 && (appealList.map(appeal => (
                                             <TableRow key={appeal.appNo}>
                                                 <TableCell align="center">{appeal.reqDt}</TableCell>
                                                 <TableCell align="center">{appeal.lectureName}</TableCell>
@@ -140,9 +140,9 @@ const AppealList = () => {
                                                 </TableCell>
                                             </TableRow>
                                         )))}
-                                        {appealList === null &&
+                                        {appealList.length === 0 &&
                                             <TableRow>
-                                                <TableCell align="center" colSpan={7}>데이터가 없습니다</TableCell>
+                                                <TableCell align="center" colSpan={7}>이의신청이 없습니다</TableCell>
                                             </TableRow>
                                         }
                                     </TableBody>

@@ -81,7 +81,7 @@ const HomeworkList = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {homeworkList !== null && (homeworkList.map(homework => (
+                                    {homeworkList.length !== 0 && (homeworkList.map(homework => (
                                         <TableRow key={homework.number}>
                                             <TableCell align="center">{homework.week}</TableCell>
                                             <TableCell align="center">{homework.count}</TableCell>
@@ -105,7 +105,7 @@ const HomeworkList = () => {
                                             </TableCell>
                                         </TableRow>
                                     )))}
-                                    {homeworkList === null &&
+                                    {homeworkList.length === 0 &&
                                         <TableRow>
                                             <TableCell align="center" colSpan={7}>과제가 없습니다</TableCell>
                                         </TableRow>
