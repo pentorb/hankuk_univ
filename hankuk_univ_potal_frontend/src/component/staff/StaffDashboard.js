@@ -6,7 +6,8 @@ import AccountManagement from'./AccountManagement'
 import MajorManagement from'./MajorManagement'
 import Header from '../comm/Header';
 import StaffHuehak from './StaffHuehak';
-
+import Calendar from '../comm/Calendar';
+import InsertCal from '../comm/InsertCal';
 
 const StaffDashboard = () => {
     return (
@@ -24,6 +25,8 @@ const StaffDashboard = () => {
                             <Route path="/confirmHuehak" element={<StaffHuehak/>} />
                             <Route path="/AccountManagement" element={<AccountManagement/>}></Route>
                             <Route path="/MajorManagement" element={<MajorManagement/>}></Route>
+                            <Route path="/calendar" element={<Calendar/>}></Route>
+                            <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                         </Routes>
                     
 
