@@ -64,7 +64,9 @@ const StudentMain = () => {
     };
 
     const logout = () => {
-        setMember(member)
+        setMember(null);
+        sessionStorage.removeItem("access_token");
+        sessionStorage.removeItem("refresh_token");
         navigate("/")
     }
 
