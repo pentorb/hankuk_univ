@@ -15,7 +15,7 @@ import { url } from '../../config/config';
 import { memberAtom, tokenAtom } from '../../atoms';
 import React, { useEffect, useState } from 'react';
 import BokInfo from '../student/BokInfo';
-import BokModalByStd from './BokModalByStd';
+// import BokModalByStd from './BokModalByStd';
 
 const typeMap = {
     p: '출산, 임신 휴학',
@@ -247,9 +247,9 @@ const BokhakInsert = () => {
                                     <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
                                         <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
                                     </Stack>
-                                    {selectedHue && (
+                                    {/* {selectedHue && (
                                         <BokModalByStd isOpen={modal} toggle={toggle} data={selectedHue} />
-                                    )}
+                                    )} */}
                                 </>
                             )}
                         </div>
