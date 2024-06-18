@@ -109,10 +109,17 @@ public class StudentServiceImpl implements StudentService {
 
 		return huehak;
 	}
+	
+	@Override
+	public void BokhakModify(HuehakAndBokhakDto habDto) throws Exception{
+		HuehakAndBokhak huebok = hbRes.findById(habDto.getHabNo()).get();
+		huebok.setStatus("B");
+		hbRes.save(huebok);
+	}
 
 	@Override // 복학 내역 조회
-	public List<HuehakAndBokhakDto> bokListByStdNo(PageInfo pageInfo, String stdNo, String type) throws Exception {
-		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage() - 1, 4, Sort.by(Sort.Direction.DESC, "hueNo"));
+	public List<HuehakAndBokhakDto> HueBokList(PageInfo pageInfo, String stdNo, String type) throws Exception {
+		PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage() - 1, 4, Sort.by(Sort.Direction.DESC, "habNo"));
 		Page<HuehakAndBokhak> pages = null;
 
 		if (type == null || type.trim().isEmpty()) {

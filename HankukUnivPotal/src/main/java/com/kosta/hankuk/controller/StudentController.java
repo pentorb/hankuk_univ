@@ -60,17 +60,18 @@ public class StudentController {
 		}
 	}
 	
-	@GetMapping("/bokListByStdNo") // 학번으로 복학 리스트 조회
-	public ResponseEntity<Map<String,Object>> bokListByStdNo(@RequestParam(name="page", required = false, defaultValue = "1") Integer page,
+	@GetMapping("/HueBokList") // 학번으로 복학 리스트 조회
+	public ResponseEntity<Map<String,Object>> HueBokList(@RequestParam(name="page", required = false, defaultValue = "1") Integer page,
 															 @RequestParam(name="stdNo") String stdNo,
 															 @RequestParam(name="type", required = false) String type) {
 		Map<String,Object> res = new HashMap<String, Object>();
 		try {
 			PageInfo pageInfo = PageInfo.builder().curPage(page).build();
-			List<HuehakAndBokhakDto> hbDtoList = stdService.bokListByStdNo(pageInfo, stdNo, type);
-			res.put("bokhak", hbDtoList);
+			List<HuehakAndBokhakDto> hbDtoList = stdService.HueBokList(pageInfo, stdNo, type);
+			res.put("hueInfo", hbDtoList);
 			res.put("pageInfo", pageInfo);
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.OK);
+			System.out.println("hbDtoList: " + hbDtoList);
+			return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
@@ -88,6 +89,18 @@ public class StudentController {
 		}
 		
 	}
+	
+	@GetMapping("bokModify")
+	public ResponseEntity<String> bokModify(@ModelAttribute HuehakAndBokhakDto habDto) {
+		try {
+			stdService.BokhakModify(habDto);
+			return new ResponseEntity<String>("복학 신청 완료", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	
 	
 	@PostMapping("/grade")

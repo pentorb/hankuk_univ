@@ -2,10 +2,10 @@ import Grid from '@mui/material/Grid';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Paper, Typography, Stack, Pagination, Divider } from '@mui/material';
+import { Paper, Typography, Stack, Pagination, Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
-import { Table, Input, Button } from 'reactstrap';
+import { Table, Input } from 'reactstrap';
 import '../student/css/HueAndBok.css';
 import Swal from "sweetalert2";
 import axios from 'axios';
@@ -53,13 +53,10 @@ function parseSemester(data) {
 
 const BokhakInsert = () => {
     const navigate = useNavigate();
-    const [huehak, setHuehak] = useState([]);
+    const [hueInfo, setHueInfo] = useState([]);
     const token = useAtomValue(tokenAtom);
-    const [status, setStatus] = useState('');
     const member = useAtomValue(memberAtom);
     const [type, setType] = useState('');
-    const [modal, setModal] = useState(false);
-    const toggle = () => setModal(!modal);
     const [selectedHue, setSelectedHue] = useState(null);
     const [pageBtn, setPageBtn] = useState([]);
     const [pageInfo, setPageInfo] = useState({
@@ -75,16 +72,21 @@ const BokhakInsert = () => {
     const trClick = (hb) => {
         setSelectedHue(hb);
         Swal.fire({
-            title: "복학 신청하시겠습니까?",
-            icon: 'info',
+            title: `${hb.habNo}번 복학 신청하시겠습니까?`,
+            html:'한 번 복학 신청을 하면 철회할 수 없습니다.<br/>신중히 신청하시길 바랍니다.',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             cancelButtonText: "취소",
             confirmButtonText: "확인"
         }).then((result) => {
+            const modifyUrl = `${url}/bokModify?stdNo=${member.id}&habNo=${hb.habNo}`; // HaB 테이블에서 데이터 수정 
             if (result.isConfirmed) {
-                toggle();
+                axios.get(modifyUrl, { headers: { Authorization: JSON.stringify(token) } })
+                    .then(res => {
+                        navigate('/student/regBokhak')
+                    })
             }
         });
 
@@ -92,16 +94,17 @@ const BokhakInsert = () => {
 
     useEffect(() => {
         console.log(token);
-        if(token.access_token==='') return
+        if (token.access_token === '') return
         fetchData(1);
     }, [token, type]);
 
     const fetchData = (page) => {
-        const listUrl = `${url}/hueListByStdNo?stdNo=${member.id}&page=${page}&type=${type}&status=${status}`;
+        const listUrl = `${url}/HueBokList?stdNo=${member.id}&page=${page}&type=${type}`; // HaB 테이블에서 데이터 조회 
         console.log(listUrl);
         axios.get(listUrl, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
-                setHuehak([...res.data.huebok]);
+                setHueInfo([...res.data.hueInfo]);
+                console.log(res.data.hueInfo);
                 setPageInfo({ ...res.data.pageInfo });
                 // 페이지 버튼 설정
                 let pageButtons = [];
@@ -117,7 +120,7 @@ const BokhakInsert = () => {
 
     // 이수 학기로 학년 구하기 
     const finSem = (finSem) => {
-        const grade = Math.floor((finSem-1) / 2 + 1);
+        const grade = Math.floor((finSem - 1) / 2 + 1);
         return `${grade}학년`;
     }
 
@@ -125,7 +128,7 @@ const BokhakInsert = () => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>복학 신청</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <div id="breadCrumb" style={{ margin:'24px 40px 32px'}}>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
                         <Link underline="none" color="inherit" href="/student">
                             <HomeIcon />
@@ -146,9 +149,9 @@ const BokhakInsert = () => {
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>복학 시 유의 사항</b></span>
                         </div>
-                        <div className='box' style={{overflowY:'scroll', height:'300px'}}>
+                        <div className='box' style={{ overflowY: 'scroll', height: '300px' }}>
                             <div>
-                                <BokInfo/>
+                                <BokInfo />
                             </div>
                         </div>
 
@@ -184,75 +187,99 @@ const BokhakInsert = () => {
                         </div>
 
 
-                        <div className="categori" style={{justifyContent:'space-between'}}>
-                            <div style={{display:'flex', alignItems:'center'}}>
-                            <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
-                            <span style={{ fontSize: 'x-large' }}><b>휴학 내역</b></span>
+                        <div className="categori" style={{ justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
+                                <span style={{ fontSize: 'x-large' }}><b>복학 내역</b></span>
                             </div>
-                            <span style={{marginRight:'41px', color:'lightgrey'}}>해당 휴학 내역을 선택하고 복학 신청을 진행해주세요.</span>
                         </div>
                         <div style={{ padding: '0px 50px 0px', textAlign: 'center', fontSize: 'larger' }}>
-                            {huehak.length === 0 ? (
-                                <div className="noneData">조회 내역이 없습니다.</div>
+                            <Table className="table" bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th>복학 번호</th>
+                                        {/* <th>학번</th> */}
+                                        <th>복학 신청 학기</th>
+                                        <th>복학 유형</th>
+                                        {/* <th>상태</th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {hueInfo.length === 0 ? (
+                                <tr>
+                                        <td colSpan="4"> 조회 내역이 없습니다. </td>
+                                </tr>
                             ) : (
                                 <>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight:'0px' }}>
-                                        <Input type="select" className="selBox" name="status">
-                                            <option>처리 현황</option>
-                                            <option value="REQ">신청</option>
-                                            <option value="REJ">반려</option>
-                                            <option value="APP">승인</option>
-                                        </Input>&nbsp;&nbsp;&nbsp;
-                                        <Input type="select" className="selBox" id="type" name="type">
-                                            <option>구분</option>
-                                            <option value="o">일반 휴학</option>
-                                            {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}
-                                            <option value="p">출산, 임신 휴학</option>
-                                            <option value="s">창업 휴학</option>
-                                            <option value="i">질병 휴학</option>
-                                            <option value="k">육아 복학</option>
-                                        </Input>
-                                    </div>
-                                    <Table className="table" bordered hover>
-                                        <thead>
-                                            <tr>
-                                                <th>휴학 번호</th>
-                                                <th>휴학 유형</th>
-                                                <th>휴학 신청 일자</th>
-                                                <th>휴학 학기</th>
-                                                <th>처리 상태</th>
-                                                {/* <th>상세보기</th> */}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {huehak.filter(hue => hue.sect === 'H').map(hue => (
-                                                <tr key={hue.hueNo} onClick={()=> trClick(hue)}>
-                                                    <td scope="row">{hue.hueNo}</td>
-                                                    <td>{typeMap[hue.type] || hue.type}</td>
-                                                    <td>{hue.appDt}</td>
-                                                    <td>{parseSemester(hue.hueSem)}</td>
-                                                    <td style={getStatusStyle(hue.status)}>
-                                                        {statusMap[hue.status] || hue.status}
-                                                    </td> 
-                                                    {/* {hue.status === 'REJ' ? (
-                                                        <td><Button variant="text" onClick={() => trClick(hue)}>상세보기</Button></td>
-                                                    ) : (
-                                                        <td onClick={(e)=> setClose(false)}>-</td>
-                                                    )
-                                                    } */}
-                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </Table>
-                                    <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
-                                        <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
-                                    </Stack>
-                                    {/* {selectedHue && (
-                                        <BokModalByStd isOpen={modal} toggle={toggle} data={selectedHue} />
-                                    )} */}
-                                </>
+                                    {hueInfo.filter(info => info.status === 'B').map(info => (
+                                        <tr key={info.habNo}>
+                                            <td scope="row">{info.habNo}</td>
+                                            <td>{parseSemester(info.appSem)}</td>
+                                            <td>{typeMap[info.type] || info.type}</td>
+                                            {/* <td><Button onClick={() => trClick(info)}>복학 신청</Button></td> */}
+                                        </tr>
+                                    ))}
+                                    </>
                             )}
+                                </tbody>
+                            </Table>
+                            {/* <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
+                                <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
+                            </Stack> */}
                         </div>
+
+                        <div className="categori" style={{ justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
+                                <span style={{ fontSize: 'x-large' }}><b>휴학 내역</b></span>
+                            </div>
+                        </div>
+                        <div style={{ padding: '0px 50px 0px', textAlign: 'center', fontSize: 'larger' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Input type="select" className="selBox" id="type" name="type" style={{ marginRight: '0px' }}>
+                                    <option>구분</option>
+                                    <option value="o">일반 휴학</option>
+                                    {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}
+                                    <option value="p">출산, 임신 휴학</option>
+                                    <option value="s">창업 휴학</option>
+                                    <option value="i">질병 휴학</option>
+                                    <option value="k">육아 복학</option>
+                                </Input>
+                            </div>
+                            <Table className="table" bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th>휴학 번호</th>
+                                        {/* <th>학번</th> */}
+                                        <th>휴학 신청 학기</th>
+                                        <th>휴학 유형</th>
+                                        <th>신청</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {hueInfo.length === 0 ? (
+                                <tr>
+                                        <td colSpan="4"> 조회 내역이 없습니다. </td>
+                                </tr>
+                            ) : (
+                                <>
+                                    {hueInfo.filter(info => info.status === 'H').map(info => (
+                                        <tr key={info.habNo}>
+                                            <td scope="row">{info.habNo}</td>
+                                            <td>{parseSemester(info.appSem)}</td>
+                                            <td>{typeMap[info.type] || info.type}</td>
+                                            <td><Button onClick={() => trClick(info)}>복학 신청</Button></td>
+                                        </tr>
+                                    ))}
+                                    </>
+                            )}
+                                </tbody>
+                            </Table>
+                            <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
+                                <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
+                            </Stack>
+                        </div>
+
                     </Grid>
                     <Grid item xs={1}></Grid>
                 </Grid>
