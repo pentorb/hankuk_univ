@@ -163,6 +163,13 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
+	public void homeworkSubmitModify(List<HomeworkSubmitDto> homeworkSubmitDtoList) {
+		for (HomeworkSubmitDto homeworkSubmitDto : homeworkSubmitDtoList) {
+			homeworkSubmitRepository.save(homeworkSubmitDto.toHomeworkSubmit());
+		}
+	}
+	
+	@Override
 	public void lessonDataWrite(LessonDataDto lessonDataDto) throws Exception {
 		lessonDataDto.setLessonNo(lessonRepository.findByLecture_lecNoAndWeekAndLessonCnt(
 				lessonDataDto.getLecNo(), lessonDataDto.getWeek(), lessonDataDto.getLessonCnt()).get().getLessonNo());
@@ -312,6 +319,8 @@ public class ProfServiceImpl implements ProfService{
 	public void absenceModify(AbsenceDto absenceDto) throws Exception {
 		absenceRepository.save(absenceDto.toAbsence());
 	}
+
+	
 
 	
 

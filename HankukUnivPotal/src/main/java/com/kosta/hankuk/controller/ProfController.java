@@ -165,6 +165,36 @@ public class ProfController {
 		}
 	}
 	
+	@GetMapping("/homeworkSubmitList")
+	public ResponseEntity<List<HomeworkSubmitDto>> homeworkSubmitList(
+			@RequestParam(name = "hwNo", required = false) Integer hwNo) {
+		try {
+			System.out.println(hwNo);
+			List<HomeworkSubmitDto> homeworkSubmitList = profService.homeworkSubmitList(hwNo);
+			System.out.println(homeworkSubmitList);
+			return new ResponseEntity<List<HomeworkSubmitDto>>(homeworkSubmitList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<HomeworkSubmitDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/homeworkSubmitModify")
+	public ResponseEntity<String> homeworkSubmitModify(@RequestBody Map<String, Object> param) {
+		try {
+			System.out.println(param);
+			List<Map<String, Object>> homeworkSubmitListParam = (List<Map<String, Object>>) param.get("homeworkSubmitList");			ObjectMapper objectMapper = new ObjectMapper();
+			List<HomeworkSubmitDto> homeworkSubmitDtoList = objectMapper.convertValue(homeworkSubmitListParam,
+					new TypeReference<List<HomeworkSubmitDto>>() {
+					});
+			profService.homeworkSubmitModify(homeworkSubmitDtoList);
+			return new ResponseEntity<String>("과제점수가 저장되었습니다", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/lessonDataWrite")
 	public ResponseEntity<String> lessonDataWrite(@RequestBody Map<String, Object> param) {
 		try {
@@ -379,18 +409,6 @@ public class ProfController {
 		}
 	}
 	
-	@GetMapping("/homeworkSubmitList")
-	public ResponseEntity<List<HomeworkSubmitDto>> homeworkSubmitList(
-			@RequestParam(name = "hwNo", required = false) Integer hwNo) {
-		try {
-			System.out.println(hwNo);
-			List<HomeworkSubmitDto> homeworkSubmitList = profService.homeworkSubmitList(hwNo);
-			System.out.println(homeworkSubmitList);
-			return new ResponseEntity<List<HomeworkSubmitDto>>(homeworkSubmitList, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<List<HomeworkSubmitDto>>(HttpStatus.BAD_REQUEST);
-		}
-	}
+	
 	
 }
