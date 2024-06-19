@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Absence;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Attendance;
@@ -52,18 +53,14 @@ import com.kosta.hankuk.util.PageInfo;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	// 휴학
 	@Autowired
 	private HuehakRepository hueRes;
 	@Autowired
 	private HueAndBokRepository hbRes;
-
 	@Autowired
 	private MajorRepository mres;
-
 	@Autowired
 	private StudentRepository sres;
-
 	@Autowired
 	private LectureByStdRepository lectureByStdRepository;
 	@Autowired
@@ -88,6 +85,22 @@ public class StudentServiceImpl implements StudentService {
 	@Value("${upload.path}")
 	private String uploadPath;
 
+	@Override
+	public void stdInfoModify(StudentDto stdDto) throws Exception{
+		Student std = sres.findById(stdDto.getId()).get();
+		
+		System.out.println(stdDto);
+		std.setAddr(stdDto.getAddr());
+		std.setDetailAddr(stdDto.getDetailAddr());
+		std.setTel(stdDto.getTel());
+		std.setEmail(stdDto.getEmail());
+		std.setEmail(stdDto.getEmailDo());
+		std.setPostCode(stdDto.getPostCode());
+		
+		sres.save(std);
+		
+	}
+	
 	@Override
 	public void hueInsert(HuehakDto hueDto) throws Exception {
 		Huehak huehak = hueDto.toHuehak();
