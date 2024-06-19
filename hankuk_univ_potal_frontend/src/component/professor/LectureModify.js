@@ -17,23 +17,23 @@ const LectureModify = () => {
     const { lecNo } = useParams();
     const [lecture, setLecture] = useState({});
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`${url}/lectureDetail/${lecNo}`,
-        {
-            headers: { Authorization: JSON.stringify(token) }
-        }
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
         )
             .then(res => {
                 console.log(res);
                 setLecture(res.data);
-                
+
             })
             .catch(err => {
                 console.log(err);
             })
-    },[token])
+    }, [token])
 
     const submit = () => {
         const formData = new FormData();
@@ -45,19 +45,19 @@ const LectureModify = () => {
         formData.append("time2", lecture.time2);
         formData.append("email", lecture.email);
         formData.append("tel", lecture.tel);
-        axios.post(`${url}/lectureModify`,formData)
-            .then(res=>{
+        axios.post(`${url}/lectureModify`, formData)
+            .then(res => {
                 console.log(res)
                 navigate('/professor/lectureList');
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err)
             })
     }
 
     const changeValue = (e) => {
-        setLecture({...lecture, [e.target.name]:e.target.value})
-        
+        setLecture({ ...lecture, [e.target.name]: e.target.value })
+
     }
 
 
@@ -65,7 +65,7 @@ const LectureModify = () => {
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의계획서</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-            <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
                         <Link underline="none" color="inherit" href="/professor/">
                             <HomeIcon />
@@ -81,11 +81,11 @@ const LectureModify = () => {
                         </Link>
                     </Breadcrumbs>
                 </div>
-                
+
                 <div className="Lecture_Write_body">
-                    <div style={{ marginLeft: "736px" }}>
+                    <div style={{ marginLeft: "850px" }}>
                         <Button
-                            onClick={()=>navigate('/professor/lectureList')}
+                            onClick={() => navigate('/professor/lectureList')}
                             className='Button_Lecture_Write'
                         >
                             목록
@@ -101,7 +101,7 @@ const LectureModify = () => {
                         <div>
                             <div className="Lecture_Write_header">강의정보</div>
                             <Form>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -116,7 +116,6 @@ const LectureModify = () => {
                                             disabled value={lecture.year}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -142,12 +141,11 @@ const LectureModify = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
-                                    
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
+                                            // style={{paddingRight:'10px'}}
                                             className="Lecture_Write_Label"
                                             for="subCd">
                                             과목코드
@@ -159,16 +157,17 @@ const LectureModify = () => {
                                             type="text"
                                             disabled value={lecture.subCd}
                                         >
-                                            
+
                                         </Input>
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div style={{ width: "100%", paddingLeft: "16px" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
                                             for="subName">
                                             과목명
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="subName"
@@ -176,17 +175,15 @@ const LectureModify = () => {
                                             type="text"
                                             disabled value={lecture.subName}
                                         >
-                                            
                                         </Input>
                                     </FormGroup>
-                                </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
+                                            style={{ paddingLeft: "35px" }}
                                             className="Lecture_Write_Label"
                                             for="credit">
                                             학점
-                                        </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </Label>
                                         <Input
                                             className="Lecture_Write_Input"
                                             id="credit"
@@ -203,6 +200,7 @@ const LectureModify = () => {
                                             온오프라인
                                         </Label>
                                         <Input
+                                            style={{ width: "211px" }}
                                             className="Lecture_Write_Input"
                                             id="sect"
                                             name="sect"
@@ -219,13 +217,14 @@ const LectureModify = () => {
                                         </Input>
                                     </FormGroup>
                                 </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+
+                                <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
-                                            style={{ fontSize: "24px", marginRight: "4px" }}
+                                            style={{ fontSize: "larger", marginLeft: "-12px", marginRight: "18px" }}
                                             // className="Lecture_Write_Label"
                                             for="time1">
-                                            1차시시간&nbsp;
+                                            1차시시간
                                         </Label>
                                         <Input
                                             className="Lecture_Write_Input"
@@ -236,7 +235,6 @@ const LectureModify = () => {
                                             value={lecture.time1}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -253,8 +251,9 @@ const LectureModify = () => {
                                         />
                                     </FormGroup>
                                 </div>
-                                <div className="Lecture_Write_header">교수정보</div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+                                <div className="Lecture_Write_header" style={{ marginTop: "50px" }}>
+                                    교수정보</div><br />
+                                <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -269,9 +268,9 @@ const LectureModify = () => {
                                             disabled value={lecture.profNo}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
+                                            style={{ marginLeft: "12px" }}
                                             className="Lecture_Write_Label"
                                             for="profName">
                                             교수명
@@ -284,8 +283,7 @@ const LectureModify = () => {
                                             disabled value={lecture.profName}
                                         />
                                     </FormGroup>
-                                </div>
-                                <div style={{ width: "959px", height: "87px", margin: "20px 0 20px 0" }}>
+
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -300,26 +298,12 @@ const LectureModify = () => {
                                             onChange={changeValue}
                                         />
                                     </FormGroup>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <FormGroup className="Lecture_Write_FormGroup right">
-                                        <Label
-                                            className="Lecture_Write_Label"
-                                            for="tel">
-                                            휴대전화
-                                        </Label>
-                                        <Input
-                                            className="Lecture_Write_Input"
-                                            id="tel"
-                                            name="tel"
-                                            type="tel"
-                                            onChange={changeValue}
-                                        />
-                                    </FormGroup>
                                 </div>
+
                                 <div style={{ width: "959px", height: "50px" }}
                                     className="Lecture_Write_header">강의계획서 첨부</div>
 
-                                <FormGroup style={{ width: "959px"}} >
+                                <FormGroup style={{ width: "959px", marginLeft: "50px" }}>
                                     <Label
 
                                         className="Lecture_Write_Label"
@@ -333,7 +317,8 @@ const LectureModify = () => {
                                     />
                                 </FormGroup>
                             </Form>
-                        </div>
+                        </div><br />
+
                     </div>
                 </div>
             </Paper>

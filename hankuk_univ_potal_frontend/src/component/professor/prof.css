@@ -5,12 +5,14 @@
   text-align: center;
 }
 .Button_Lecture{
-  width: 120px; height: 50px;
-  font-size: 20px;
+  width: 100px; height: 38px;
+  font-size: large;
+  float: right;
   color: white;
   border-radius: 10px;
   background-color: #1F3468;
-  margin: 0 10px 5px 10px;
+  margin: 10px 0 10px 10px;
+  padding: 0px;
 }
 .container_body{
   width: 1050px;
@@ -63,12 +65,13 @@
   margin: 41px auto 100px;
 }
 .Button_Lecture_Write{
-  width: 120px; height: 50px;
-  font-size: 20px;
+  width: 100px; height: 38px;
+  font-size: large;
   color: white;
   border-radius: 10px;
   background-color: #1F3468;
-  margin-left: 20px;
+  margin: 10px 0 0px 10px;
+  padding: 0;
 }
 .Lecture_Write_Container{
   background-color: rgba(194, 194, 194, 0.25);
@@ -426,4 +429,59 @@
 .AppealDetail_Body{
   width: 1140px;
   margin: 50px auto 50px;
+}
+
+
+
+
+
+.ScoreList_SearchInput{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right-color: white;
+}
+.ScoreList_SearchButton{
+  float: right;
+  margin: 10px -8px;
+  padding: 6px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: solid 0.1px rgba(0, 0, 0, 0.1);
+}
+.ScoreList_SearchButton:hover{
+  cursor: pointer;
+}
+.ScoreList_StudentBody{
+  margin: 0 0 0 114px;
+  width: 700px; 
+}
+.ScoreList_Student_Table{
+  text-align: center;
+  font-size: larger;
+  border-collapse: separate;
+  border-spacing: 0px;
+  width: 100%;
+  border-radius: 5px;
+
+}
+.ScoreList_Student_Thead{
+  background-color: #403E98;
+  color: white;
+}
+.ScoreList_Student_Th{
+  
+  padding: 10px;
+}
+.ScoreList_Student_Tbody{
+
+}
+.ScoreList_Student_Tr{
+
+}
+.ScoreList_Student_Td{
+  padding: 8px;
+
+  border-bottom: 0.1px solid #C0C0C0;;
 }

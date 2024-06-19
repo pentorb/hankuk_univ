@@ -1,6 +1,7 @@
 package com.kosta.hankuk.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kosta.hankuk.dto.AbsenceDto;
 import com.kosta.hankuk.dto.AppealDto;
@@ -26,6 +27,8 @@ public interface ProfService {
 	
 	List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception;
 	
+	Map<String, Object> studentListAndLectureByStdList(String profNo, Integer year, String stdName) throws Exception;
+
 	List<LessonDataDto> lessonDataList(String lecNo) throws Exception;
 
 	List<HomeworkDto> homeworkList(String lecNo) throws Exception;
@@ -71,6 +74,7 @@ public interface ProfService {
 	List<AbsenceDto> absenceList(String lecNo) throws Exception;
 
 	void absenceModify(AbsenceDto absenceDto) throws Exception;
+
 
 	
 

@@ -41,7 +41,7 @@ public class ProfController {
 	public ResponseEntity<List<LectureDto>> lectureList(
 			@RequestParam(name = "profNo", required = false) String profNo,
 			@RequestParam(name = "year", required = false) Integer year,
-			@RequestParam(name = "div", required = false) String status) {
+			@RequestParam(name = "status", required = false) String status) {
 		try {
 			System.out.println(profNo);
 			List<LectureDto> lectureList = profService.lectureList(profNo, year, status);
@@ -106,7 +106,21 @@ public class ProfController {
 		}
 	}
 	
-	
+	@GetMapping("/studentListAndLectureByStdList")
+	public ResponseEntity<Map<String, Object>> studentListAndLectureByStdList(
+			@RequestParam(name = "profNo", required = false) String profNo,
+			@RequestParam(name = "year", required = false) Integer year,
+			@RequestParam(name = "stdName", required = false) String stdName) {
+		try {
+			System.out.println(profNo);
+			Map<String, Object> studentListAndLectureByStdList = profService.studentListAndLectureByStdList(profNo, year, stdName);
+			System.out.println(studentListAndLectureByStdList);
+			return new ResponseEntity<Map<String, Object>>(studentListAndLectureByStdList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 	@GetMapping("/contents")
 	public ResponseEntity<Map<String, Object>> contents(

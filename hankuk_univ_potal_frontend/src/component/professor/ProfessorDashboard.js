@@ -23,6 +23,8 @@ import AbsenceDetail from './AbsenceDetail';
 import Calendar from '../comm/Calendar';
 import InsertCal from '../comm/InsertCal';
 import HomeworkSubmitList from './HomeworkSubmitList';
+import SyllabusFile from './SyllabusFile';
+import ScoreList from './ScoreList';
 
 
 const ProfessorDashboard = () => {
@@ -43,6 +45,7 @@ const ProfessorDashboard = () => {
                             <Route path="/lectureList" element={<LectureList/>}></Route>
                             <Route path="/lectureWrite" element={<LectureWrite/>}></Route>
                             <Route path="/lectureModify/:lecNo" element={<LectureModify/>}></Route>
+                            <Route path="/scoreList" element={<ScoreList/>}></Route>
                             <Route path="/lectureDashboard" element={<LectureDashboard/>}></Route>
                             <Route path="/contents" element={<Contents/>}></Route>
                             <Route path="/homeworkWrite/:week/:lecNo" element={<HomeworkWrite/>}></Route>
@@ -50,6 +53,7 @@ const ProfessorDashboard = () => {
                             <Route path="/homeworkSubmitList/:hwNo/:week/:lessonCnt" element={<HomeworkSubmitList/>}></Route>
                             <Route path="/lessonDataWrite/:week/:lecNo" element={<LessonDataWrite/>}></Route>
                             <Route path="/lessonDataModify/:ldNo" element={<LessonDataModify/>}></Route>
+                            <Route path="/syllabusFile" element={<SyllabusFile/>}></Route>
                             <Route path="/attendanceManage" element={<AttendanceManage/>}></Route>
                             <Route path="/examQuestionForm" element={<ExamQuestionForm/>}></Route>
                             <Route path="/gradeManage" element={<GradeManage/>}></Route>
