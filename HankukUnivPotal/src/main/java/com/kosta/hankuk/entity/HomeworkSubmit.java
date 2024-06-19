@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -51,7 +52,8 @@ public class HomeworkSubmit {
 	@UpdateTimestamp
 	private Date modifyDt;
 	
-	@Column()
+	@Column
+	@ColumnDefault("0")
 	private Integer score;
 	
 	public HomeworkSubmitDto toHomeworkSubmitDto() {

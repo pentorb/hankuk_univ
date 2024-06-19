@@ -35,6 +35,10 @@ public interface ProfService {
 	HomeworkDto homeworkSelectOne(Integer hwNo) throws Exception;
 
 	void homeworkModify(HomeworkDto homeworkDto) throws Exception;
+	
+	List<HomeworkSubmitDto> homeworkSubmitList(Integer hwNo) throws Exception;
+
+	void homeworkSubmitModify(List<HomeworkSubmitDto> homeworkSubmitDtoList);
 
 	void lessonDataWrite(LessonDataDto lessonDataDto) throws Exception;
 
@@ -68,7 +72,7 @@ public interface ProfService {
 
 	void absenceModify(AbsenceDto absenceDto) throws Exception;
 
-	List<HomeworkSubmitDto> homeworkSubmitList(Integer hwNo) throws Exception;
+	
 
 	
 
