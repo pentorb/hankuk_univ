@@ -8,10 +8,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.HuehakAndBokhakDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Homework;
 import com.kosta.hankuk.util.PageInfo;
 
 public interface StudentService {
+	// 학생 개인정보 수정
+	void stdInfoModify(StudentDto stdDto) throws Exception;
 	// 휴학
 	void hueInsert(HuehakDto hueDto) throws Exception;
 	// 학번으로 휴학 내역 조회하기
