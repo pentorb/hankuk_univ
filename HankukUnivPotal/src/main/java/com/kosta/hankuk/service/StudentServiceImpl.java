@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,10 +82,37 @@ public class StudentServiceImpl implements StudentService {
 	private AbsenceRepository absenceRepository;
 	@Autowired
 	private LessonRepository lessonRepository;
+	@Autowired
+    PasswordEncoder passwordEncoder;
 
 	@Value("${upload.path}")
 	private String uploadPath;
 
+	@Override // 비번 맞는지 확인
+	public Boolean checkPassword(String stdNo, String inputPw) throws Exception {
+		String encodePw = sres.findById(stdNo).get().getPassword();
+		System.out.println("encodePW"+ encodePw);
+		System.out.println("inpputPW"+inputPw);
+		
+		if(passwordEncoder.matches(inputPw, encodePw)){
+        	return true;
+        }else{
+        	return false;
+        }
+	}
+	
+	@Override
+	public void updatePW(String stdNo, String tel) throws Exception {
+		Student std = sres.findById(stdNo).get(); 
+		
+		if (tel.equals(std.getTel())){
+			std.setPassword(passwordEncoder.encode("0000"));
+			sres.save(std);
+		} else {
+			System.out.println("전화번호 틀림");
+		}
+	}
+	
 	@Override
 	public void stdInfoModify(StudentDto stdDto) throws Exception{
 		Student std = sres.findById(stdDto.getId()).get();
@@ -98,7 +126,6 @@ public class StudentServiceImpl implements StudentService {
 		std.setPostCode(stdDto.getPostCode());
 		
 		sres.save(std);
-		
 	}
 	
 	@Override

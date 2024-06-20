@@ -1,6 +1,7 @@
 package com.kosta.hankuk.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,6 +16,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 	List<Student> findByMajor_Colleage_name(String colleage);
 	List<Student> findByMajor_majCd(String majCd);
 	List<Student> findByProfessor_profNoAndStdNoStartsWith(String profNo, String strYear);
-
 }
  

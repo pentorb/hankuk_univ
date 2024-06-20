@@ -32,25 +32,49 @@ public class StudentController {
 	@PostMapping("/stdInfoModify")
 	public ResponseEntity<String> stdInfoModify(@ModelAttribute StudentDto stdDto){
 		try {
-			System.out.println(stdDto);
 			stdService.stdInfoModify(stdDto);
 			return new ResponseEntity<String>("정보 변경 완료", HttpStatus.OK);
 		} catch(Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 	
 	@PostMapping("/hueInsert")
 	public ResponseEntity<String> huehakInsert(@ModelAttribute HuehakDto hueDto) {
 		try {
 			stdService.hueInsert(hueDto);
-			System.out.println(hueDto);
 			return new ResponseEntity<String>("휴학 정상 신청", HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/updatePw") // 비번 초기ㅗ하
+	public ResponseEntity<String> findPw(@RequestParam String stdNo, @RequestParam(name="stdTel") String tel) {
+		try {
+			stdService.updatePW(stdNo, tel);
+			return new ResponseEntity<String>("비밀번호 초기화 성공", HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<String>("비밀번호 초기화 실패", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/checkPw")
+	public ResponseEntity<String> checkPw(@RequestParam String stdNo, @RequestParam(name="password") String inputPw) {
+		try { 
+			Boolean isCorrect = stdService.checkPassword(stdNo, inputPw);
+			if (!isCorrect) {
+				return new ResponseEntity<String>("비번 찾기 실패", HttpStatus.BAD_REQUEST);
+			} else {
+				return new ResponseEntity<String>("비번 찾기 성공", HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	
 	@GetMapping("/hueListByStdNo") // 학번으로 휴학 리스트 조회 
 	public ResponseEntity<Map<String,Object>> hueListByStdNo(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
