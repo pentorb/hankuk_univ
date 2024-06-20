@@ -53,7 +53,11 @@ public class LectureByStd {
 				.stdName(student.getName())
 				.grade(grade)
 				.isDrop(isDrop)
+				.subName(lecture.getSubject().getName())
 				.courYear(courYear)
+				.credit(lecture.getCredit())
+				.semester(lecture.getSemester())
+				.profName(lecture.getProfessor().getName())
 				.build();
 	}
 }

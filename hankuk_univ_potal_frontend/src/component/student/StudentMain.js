@@ -14,13 +14,11 @@ import '../student/css/StudentMain.css';
 import { List } from 'reactstrap';
 import axios from 'axios';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router';
-import { useAtom, useAtomValue } from 'jotai/react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai/react';
 import { url } from '../../config/config';
-import { tokenAtom, memberAtom } from '../../atoms';
+import { CardBody, CardText, CardTitle, Label } from "reactstrap";
+import { tokenAtom, memberAtom, lectureAtom, lectureNumberAtom, lectureNameAtom, activeTabAtom } from '../../atoms';
 
 const renderEventContent = (eventInfo) => {
     return (
@@ -31,8 +29,13 @@ const renderEventContent = (eventInfo) => {
 };
 
 const StudentMain = () => {
+    const setLectureAtom = useSetAtom(lectureAtom);
     const [member, setMember] = useAtom(memberAtom);
     const [events, setEvents] = useState([]);
+    const setLectureNumber = useSetAtom(lectureNumberAtom);
+    const setLectureName = useSetAtom(lectureNameAtom);
+    const setActiveTab = useSetAtom(activeTabAtom);
+    const [lectureList, setLectureList] = useState([]);
     const token = useAtomValue(tokenAtom);
     const navigate = useNavigate();
 
@@ -53,7 +56,7 @@ const StudentMain = () => {
     // 이수 학기로 학년 구하기 
     const finSem = (finSem) => {
         const grade = Math.floor((finSem - 1) / 2 + 1);
-        return `${grade}학년`;
+        return grade;
     }
 
     const statusMap = {
@@ -71,7 +74,14 @@ const StudentMain = () => {
     }
 
     useEffect(() => {
-        axios.get(`${url}/calendar?id=${member.id}`)
+        if (token && member && member.id) {
+            myCalendar();
+            myLecture();
+        }
+    }, [token, member]);
+
+    const myCalendar = () => {
+        axios.get(`${url}/calendar?id=${member.id}`, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
                 const formattedEvents = res.data.map(event => {
                     return {
@@ -85,12 +95,29 @@ const StudentMain = () => {
                     };
                 });
                 setEvents(formattedEvents);
-                console.log(formattedEvents);
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
             });
-    }, [token]);
+    }
+
+    const myLecture = () => {
+        let formData = new FormData();
+        formData.append("stdNo", member.id);
+
+        axios.post(`${url}/lecture`, formData, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
+            .then(res => {
+                setLectureList([...res.data.lectureList])
+            })
+            .catch(err => {
+                console.log(err);
+                setLectureList(null)
+            })
+    }
+
+
 
 
 
@@ -125,7 +152,7 @@ const StudentMain = () => {
                         </Grid>
                         <Grid item xs={3} style={{ textAlign: 'center', marginTop: '45px' }}>
                             <div style={{ paddingBottom: '15px' }}><h4><b>{member.name}</b> 님, 환영합니다.</h4></div>
-                            <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | {finSem(member.finSem)} | {statusMap[member.status] || member.status}</h5></div>
+                            <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | {finSem(member.finSem)}학년 | {statusMap[member.status] || member.status}</h5></div>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={() => navigate("/student/mypage")} /></div>&nbsp;&nbsp;&nbsp;
                                 <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={logout} /></div>
@@ -190,116 +217,30 @@ const StudentMain = () => {
 
                     {/* 내 강의리스트  */}
                     <Grid item xs={6}>
-                        <div className="secBox">
+                        <div className="secBox" style={{ padding: '40px 20px 0px 20px' }}>
                             <div className="header">
                                 <h3 onClick={() => { navigate('/my-potal/calendar') }}><b>나의 강의</b></h3>
                                 <span style={{ color: '#999696' }}><i>누르면 해당 강의로 이동합니다.</i></span>
                             </div>
-                            <div style={{ display: 'flex', fontFamily: 'Pretendard-Regular', paddingBottom: '15px' }}>
-                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="100"
-                                            image="../../image/blue.jpg"
-                                            alt="bobo"
-                                        />
-                                        <CardContent>
-                                            <h5><b>게임프로그래밍</b></h5>
-                                            <div style={{ color: "#a7a2a2" }}>
-                                                2024년도 2학기 <br />
-                                                공과대학 502호
-                                            </div>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="100"
-                                            image="src/image/gosim.jpg"
-                                            alt="bobo"
-                                        />
-                                        <CardContent>
-                                            <h5><b>게임프로그래밍</b></h5>
-                                            <div style={{ color: "#a7a2a2" }}>
-                                                2024년도 2학기 <br />
-                                                공과대학 502호
-                                            </div>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="100"
-                                            image="src/image/gosim.jpg"
-                                            alt="bobo"
-                                        />
-                                        <CardContent>
-                                            <h5><b>게임프로그래밍</b></h5>
-                                            <div style={{ color: "#a7a2a2" }}>
-                                                2024년도 2학기 <br />
-                                                공과대학 502호
-                                            </div>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </div>
-                            <div style={{ display: 'flex', fontFamily: 'Pretendard-Regular' }}>
-                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="100"
-                                            image="src/image/gosim.jpg"
-                                            alt="bobo"
-                                        />
-                                        <CardContent>
-                                            <h5><b>게임프로그래밍</b></h5>
-                                            <div style={{ color: "#a7a2a2" }}>
-                                                2024년도 2학기 <br />
-                                                공과대학 502호
-                                            </div>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="100"
-                                            image="src/image/gosim.jpg"
-                                            alt="bobo"
-                                        />
-                                        <CardContent>
-                                            <h5><b>게임프로그래밍</b></h5>
-                                            <div style={{ color: "#a7a2a2" }}>
-                                                2024년도 2학기 <br />
-                                                공과대학 502호
-                                            </div>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                                <Card sx={{ width: 200, marginRight: '20px', height: 'fit-content' }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="100"
-                                            image="src/image/gosim.jpg"
-                                            alt="bobo"
-                                        />
-                                        <CardContent>
-                                            <h5><b>게임프로그래밍</b></h5>
-                                            <div style={{ color: "#a7a2a2" }}>
-                                                2024년도 2학기 <br />
-                                                공과대학 502호
-                                            </div>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
+                            <div className='lecture-grid'>
+                                {lectureList !== null && (lectureList.map(lecture => (
+                                    <Card key={lecture.lecNo} className="lecture-card"
+                                        onClick={() => { setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5); 
+                                        navigate(`/student/${lecture.lecNo}`); }}>
+                                        <Label className="lecture-color-card" />
+                                        <CardBody style={{ margin: '0px 10px 10px' }}>
+                                            <CardTitle style={{ fontSize: 'larger' }}>
+                                                <b>{lecture.lectureName}</b>
+                                            </CardTitle>
+
+                                            <CardText style={{ margin: '0px' }}>
+                                                {lecture.now}<br />
+                                                {lecture.time1} {lecture.time2} <br />
+                                                {lecture.lectureRoom}
+                                            </CardText>
+                                        </CardBody>
+                                    </Card>
+                                )))}
                             </div>
                         </div>
                     </Grid>

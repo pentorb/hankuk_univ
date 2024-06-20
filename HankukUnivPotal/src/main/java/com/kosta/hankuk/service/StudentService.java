@@ -27,7 +27,6 @@ public interface StudentService {
 	List<HuehakDto> hueListByStdNo(PageInfo pageInfo, String stdNo, String status, String type) throws Exception;
 	// 학번으로 복학 내역 조회하기
 	List<HuehakAndBokhakDto> HueBokList(PageInfo pageInfo, String stdNo, String type) throws Exception;
-	// 학번으로 수강하는 강의리스트 가져오기
 	List<LectureByStdDto> lecListByStdNo(String stdNo, Integer year, Integer semester) throws Exception;
 	HuehakDto huehakDetail(Integer hueNo) throws Exception;
 	void BokhakModify(HuehakAndBokhakDto habDto) throws Exception;

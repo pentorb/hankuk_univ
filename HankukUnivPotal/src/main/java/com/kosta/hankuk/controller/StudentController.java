@@ -85,7 +85,6 @@ public class StudentController {
 		}
 	}
 	
-	
 	@GetMapping("/hueListByStdNo") // 학번으로 휴학 리스트 조회 
 	public ResponseEntity<Map<String,Object>> hueListByStdNo(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
 															@RequestParam(name="stdNo") String stdNo,
@@ -147,7 +146,16 @@ public class StudentController {
 		}
 	}
 
-	
+//	// 현재학기 수강하는 강의 리스트 
+//	@GetMapping("/lecListByCurSem")
+//	public ResponseEntity<Map<String, Object>> lecListByCurSem(@RequestParam("stdNo") String stdNo, @RequestParam("courYear") Integer courYear, @RequestParam("semester") Integer semester){
+//		try {
+//			Map<String, Object>
+//			return new ResponseEntity<Map<String,Object>>(HttpStatus.OK);
+//		} catch(Exception e) {
+//			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+//		}
+//	}
 	
 	@PostMapping("/grade")
 	public ResponseEntity<Map<String, Object>> checkGrade(@RequestParam(name="stdNo")String stdNo,
