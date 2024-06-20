@@ -102,15 +102,22 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	@Override
-	public void updatePW(String stdNo, String tel) throws Exception {
+	public void resetPW(String stdNo, String tel) throws Exception {
 		Student std = sres.findById(stdNo).get(); 
 		
 		if (tel.equals(std.getTel())){
 			std.setPassword(passwordEncoder.encode("0000"));
 			sres.save(std);
 		} else {
-			System.out.println("전화번호 틀림");
+			System.out.println("비밀번호 틀림");
 		}
+	}
+	
+	@Override
+	public void updatePw(String stdNo, String newPw) throws Exception {
+		Student std = sres.findById(stdNo).get();
+		std.setPassword(passwordEncoder.encode(newPw));
+		sres.save(std);
 	}
 	
 	@Override
@@ -274,8 +281,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override // 학생이 수강하는 강의 리스트 (학기별)
 	public List<LectureByStdDto> lecListByStdNo(String stdNo, Integer courYear, Integer semester) throws Exception {
-		List<LectureByStd> lbsList = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo,
-				courYear, semester);
+		List<LectureByStd> lbsList = lectureByStdRepository.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo,courYear, semester);
 		List<LectureByStdDto> lbsDtoList = new ArrayList<>();
 		for (LectureByStd lbs : lbsList) {
 			LectureByStdDto lbsDto = lbs.toLectureByStdDto();

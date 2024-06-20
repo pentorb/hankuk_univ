@@ -85,7 +85,7 @@ export default function Login() {
 
                 try {
                     console.log(stdTel);
-                    const response = await axios.get(`${url}/updatePw`, {
+                    const response = await axios.get(`${url}/resetPw`, {
                         params: {
                             stdNo: stdNo,
                             stdTel: stdTel
