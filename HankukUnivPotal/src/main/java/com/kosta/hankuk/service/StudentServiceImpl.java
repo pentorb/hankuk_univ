@@ -286,7 +286,9 @@ public class StudentServiceImpl implements StudentService {
 		for (LectureByStd lbs : lbsList) {
 			LectureByStdDto lbsDto = lbs.toLectureByStdDto();
 			String subName = lbs.getLecture().getSubject().getName();
+			
 			lbsDto.setSubName(subName);
+			
 			lbsDtoList.add(lbsDto);
 		}
 		return lbsDtoList;
@@ -431,12 +433,18 @@ public class StudentServiceImpl implements StudentService {
 			String lectureName = lectureByStd.getLecture().getSubject().getName();
 			String lectureRoom = lectureByStd.getLecture().getLecRoom();
 			String professorName = lectureByStd.getLecture().getProfessor().getName();
-
+			String time1 = lectureByStd.getLecture().getTime1();
+			String time2 = lectureByStd.getLecture().getTime2();
+			String now = String.format("%d-0%d", lectureByStd.getLecture().getYear(), lectureByStd.getLecture().getSemester());
+			
 			Map<String, Object> map = new HashMap<>();
 			map.put("lecNo", lecNo);
 			map.put("lectureName", lectureName);
 			map.put("lectureRoom", lectureRoom);
 			map.put("professorName", professorName);
+			map.put("time1", time1);
+			map.put("time2", time2);
+			map.put("now", now);
 			mapList.add(map);
 		}
 		return mapList;
