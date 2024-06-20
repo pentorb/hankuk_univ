@@ -24,6 +24,10 @@ const Example = () => {
                 </Link>
               </Breadcrumbs>
               </div>
+              <hr />
+
+
+              
             </Paper>
         </Grid>
         </Grid>

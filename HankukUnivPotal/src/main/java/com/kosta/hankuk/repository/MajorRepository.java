@@ -11,6 +11,8 @@ public interface MajorRepository extends JpaRepository<Major, String> {
     List<Major> findByColleageColCd(String colCd);
     Optional<Major> findByName(String name);
     List<Major> findByNameContaining(String name);
+    boolean existsByMajCd(String majCd);
+
 
 
 }

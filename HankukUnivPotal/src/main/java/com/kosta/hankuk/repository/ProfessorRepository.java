@@ -19,5 +19,8 @@ public interface ProfessorRepository extends JpaRepository<Professor, String> {
 
     List<Professor> findByMajor(Major major);
     List<Professor> findByMajor_majCdAndPosition(String majCd, String position);
+    
+    List<Professor> findByMajor_MajCd(String majCd);
+
 
 }

@@ -27,6 +27,7 @@ import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Major;
@@ -88,8 +89,10 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId) {
+    public void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId, String profId) {
         Major major = majorRepository.findById(majorId).orElse(null);
+        Professor porfessor = professorRepository.findById(profId).orElse(null);
+        
         
         Student student = new Student();
         student.setStdNo(stdNo);
@@ -97,6 +100,7 @@ public class StaffServiceImpl implements StaffService {
         student.setTel(tel);
         student.setPassword(passwordEncoder.encode(password));
         student.setMajor(major);
+        student.setProfessor(porfessor);
 
         studentRepository.save(student);
      }
@@ -335,6 +339,19 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public List<Map<String, String>> getProfessorsByMajor(String majCd) {
+        List<Professor> professors = professorRepository.findByMajor_MajCd(majCd);
+        return professors.stream()
+                         .map(professor -> {
+                             Map<String, String> map = new HashMap<>();
+                             map.put("profNo", professor.getProfNo());
+                             map.put("name", professor.getName());
+                             return map;
+                         })
+                         .collect(Collectors.toList());
+    }
+    
+    @Override
     public void saveDataFromExcel(String category, MultipartFile file) throws Exception {
 		List<Student> students = new ArrayList<>();
 		List<Professor> professors = new ArrayList<>();
@@ -436,13 +453,49 @@ public class StaffServiceImpl implements StaffService {
             resultMap.put("colleage", major.getColleage().getName());
             resultMap.put("name", major.getName());
 
-            Professor headProfessor = professorRepository.findByMajor_majCdAndPosition(major.getMajCd(), "0").stream().orElse(null);
+            Professor headProfessor = professorRepository.findByMajor_majCdAndPosition(major.getMajCd(), "0").stream().findFirst().orElse(null);
             resultMap.put("professor", headProfessor != null ? headProfessor.getName() : "");
 
             return resultMap;
         }).collect(Collectors.toList());
     }
     
+    @Override
+    public boolean checkMajorCode(String majCd) {
+        return majorRepository.existsByMajCd(majCd);
+    }
+    
+    @Override
+    public void createMajor(Map<String, Object> majorData) throws Exception {
+        try {
+            String majCd = (String) majorData.get("majorCode");
+            String name = (String) majorData.get("majorName");
+            String tel = (String) majorData.get("majorNumber"); // 전화번호 또는 학과 번호로 사용 가능
+            Integer reqGenCredit = majorData.get("generalEducationCredits") != null ? Integer.parseInt(majorData.get("generalEducationCredits").toString()) : 0;
+            Integer reqMajCredit = majorData.get("majorCredits") != null ? Integer.parseInt(majorData.get("majorCredits").toString()) : 0;
+            Integer gradCredit = majorData.get("totalCredits") != null ? Integer.parseInt(majorData.get("totalCredits").toString()) : 0;
+            String colCd = (String) majorData.get("colleage");
+
+            // 단과대학 조회 및 설정
+            Colleage colleage = colleageRepository.findById(colCd).orElseThrow(() -> new Exception("Invalid colleage code"));
+
+            Major major = Major.builder()
+                    .majCd(majCd)
+                    .name(name)
+                    .tel(tel)
+                    .reqGenCredit(reqGenCredit)
+                    .reqMajCredit(reqMajCredit)
+                    .gradCredit(gradCredit)
+                    .colleage(colleage)
+                    .build();
+
+            majorRepository.save(major);
+        } catch (Exception e) {
+            throw new Exception("Error while creating major: " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
     public void saveSubjectFromExcel(String major, MultipartFile file) throws Exception{
 		List<Subject> subjects = new ArrayList<>();
 
@@ -492,15 +545,15 @@ public class StaffServiceImpl implements StaffService {
         List<Professor> professors = professorRepository.findByMajor(major);
         
         for (Professor professor : professors) {
-            if (professor.getPosition() == 0) {
-                professor.setPosition(1);
+            if (professor.getPosition() == "0") {
+                professor.setPosition("1");
                 professorRepository.save(professor);
             }
         }
         
         Optional<Professor> newHeadProfessorOpt = professorRepository.findByMajorAndName(major, profName);
         Professor newHeadProfessor = newHeadProfessorOpt.get();
-        newHeadProfessor.setPosition(0);
+        newHeadProfessor.setPosition("0");
         professorRepository.save(newHeadProfessor);
     }
 
