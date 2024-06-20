@@ -3,8 +3,10 @@ package com.kosta.hankuk.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.stereotype.Service;
 
 import com.kosta.hankuk.dto.AbsenceDto;
@@ -18,6 +20,7 @@ import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.entity.Absence;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Attendance;
@@ -28,6 +31,7 @@ import com.kosta.hankuk.entity.HomeworkSubmit;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
+import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.AbsenceRepository;
 import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.AttendanceRepository;
@@ -40,6 +44,7 @@ import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.LessonDataRepository;
 import com.kosta.hankuk.repository.LessonRepository;
+import com.kosta.hankuk.repository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,11 +64,12 @@ public class ProfServiceImpl implements ProfService{
 	private final HomeworkSubmitRepository homeworkSubmitRepository;
 	private final AppealRepository appealRepository;
 	private final AbsenceRepository absenceRepository;
+	private final StudentRepository studentRepository;
 	
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
 		List<Lecture> lectureList=null;
-		if(status.equals("")) {
+		if(status.equals("ALL")) {
 			lectureList = lectureRepository.findByProfessor_profNoAndYear(profNo, year);
 		} else {
 			lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatus(profNo, year, status);
@@ -113,6 +119,21 @@ public class ProfServiceImpl implements ProfService{
 			lectureDtoList.add(lecture.toLectureDto());
 		}
 		return lectureDtoList;
+	}
+	
+	@Override
+	public Map<String, Object> studentListAndLectureByStdList(String profNo, Integer year, String stdName)
+			throws Exception {
+		Map<String, Object> param = new HashedMap<String, Object>();
+		String strYear = String.valueOf(year).substring(2,3);
+		System.out.println(strYear);
+		List<Student> stdList = studentRepository.findByProfessor_profNoAndStdNoStartsWith(profNo, strYear);
+		List<StudentDto> studentList = new ArrayList<StudentDto>();
+		for (Student std : stdList) {
+			studentList.add(std.toStudentDto());
+		}
+		param.put("studentList", studentList);
+		return param;
 	}
 	
 	@Override
@@ -319,6 +340,8 @@ public class ProfServiceImpl implements ProfService{
 	public void absenceModify(AbsenceDto absenceDto) throws Exception {
 		absenceRepository.save(absenceDto.toAbsence());
 	}
+
+	
 
 	
 

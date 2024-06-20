@@ -48,7 +48,7 @@ const HomeworkSubmitList = () => {
         setHomeworkSubmitList(updatedHomeworkSubmitList);
     }
     
-    const submitGrade = () => {
+    const submitScore = () => {
         axios.post(`${url}/homeworkSubmitModify`,{homeworkSubmitList:homeworkSubmitList},
             {
                 headers: { Authorization: JSON.stringify(token) }
@@ -96,14 +96,9 @@ const HomeworkSubmitList = () => {
                 <div className="AttendManage_Body">
                     <div className="AttendManage_Header">
                         <Button className="AttendManage_Header_Button"
-                        // onClick={modifyExamResult}
+                        onMouseUp={() => {  submitScore(); }}
                         >
-                            시험수정
-                        </Button>
-                        <Button className="AttendManage_Header_Button"
-                        onMouseUp={() => {  submitGrade(); }}
-                        >
-                            등급확정
+                            점수저장
                         </Button>
                     </div>
                     <div className="AttendManage_Table">

@@ -69,7 +69,7 @@ const LectureWrite = () => {
                         </Link>
                     </Breadcrumbs>
                 </div>
-                
+
                 <div className="Lecture_Write_body">
                     <div style={{ marginLeft: "858px" }}>
                         <Button
@@ -87,7 +87,7 @@ const LectureWrite = () => {
                     </div>
                     <div className="Lecture_Write_Container">
                         <div>
-                            <div className="Lecture_Write_header">강의정보</div><br/>
+                            <div className="Lecture_Write_header">강의정보</div><br />
                             <Form>
                                 <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
@@ -129,8 +129,8 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                
-                                
+
+
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -164,8 +164,8 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                    </div>
-                                    <div style={{ width: "100%", paddingLeft: "16px" }}>
+                                </div>
+                                <div style={{ width: "100%", paddingLeft: "16px" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
@@ -237,7 +237,7 @@ const LectureWrite = () => {
                                 <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
-                                            style={{ fontSize: "larger", marginLeft:"-12px" ,marginRight: "18px" }}
+                                            style={{ fontSize: "larger", marginLeft: "-12px", marginRight: "18px" }}
                                             // className="Lecture_Write_Label"
                                             for="time1">
                                             1차시 시간
@@ -266,7 +266,7 @@ const LectureWrite = () => {
                                     </FormGroup>
                                 </div>
                                 <div className="Lecture_Write_header" style={{ marginTop: "50px" }}>
-                                    교수정보</div><br/>
+                                    교수정보</div><br />
                                 <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
@@ -284,7 +284,7 @@ const LectureWrite = () => {
                                     </FormGroup>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
-                                            style={{ marginLeft:"12px" }}
+                                            style={{ marginLeft: "12px" }}
                                             className="Lecture_Write_Label"
                                             for="profName">
                                             교수명
@@ -315,7 +315,7 @@ const LectureWrite = () => {
                                 <div style={{ width: "959px", marginTop: "50px" }}
                                     className="Lecture_Write_header">강의계획서 첨부</div>
 
-                                <FormGroup style={{ width: "959px" ,marginLeft:"50px" }}>
+                                <FormGroup style={{ width: "959px", marginLeft: "50px" }}>
                                     <Label
 
                                         className="Lecture_Write_Label"
@@ -328,7 +328,7 @@ const LectureWrite = () => {
                                         type="file"
                                     />
                                 </FormGroup>
-                            </Form><br/>
+                            </Form><br />
                         </div>
                     </div>
                 </div>
