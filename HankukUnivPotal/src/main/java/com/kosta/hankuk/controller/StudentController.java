@@ -51,10 +51,20 @@ public class StudentController {
 		}
 	}
 	
-	@GetMapping("/updatePw") // 비번 초기ㅗ하
-	public ResponseEntity<String> findPw(@RequestParam String stdNo, @RequestParam(name="stdTel") String tel) {
+	@GetMapping("/updatePw") // 비번 재설정
+	public ResponseEntity<String> updatePw(@RequestParam String stdNo, @RequestParam(name="newPw") String newPw) {
 		try {
-			stdService.updatePW(stdNo, tel);
+			stdService.updatePw(stdNo, newPw);
+			return new ResponseEntity<String>("비밀번호 변경 성공", HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<String>("비밀번호 변경 실패", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/resetPW") // 비번 초기ㅗ하
+	public ResponseEntity<String> resetPw(@RequestParam String stdNo, @RequestParam(name="stdTel") String tel) {
+		try {
+			stdService.resetPW(stdNo, tel);
 			return new ResponseEntity<String>("비밀번호 초기화 성공", HttpStatus.OK);
 		} catch(Exception e) {
 			return new ResponseEntity<String>("비밀번호 초기화 실패", HttpStatus.BAD_REQUEST);

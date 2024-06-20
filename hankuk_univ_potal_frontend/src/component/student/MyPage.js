@@ -5,7 +5,7 @@ import { Input, Table } from 'reactstrap';
 import PersonIcon from '@mui/icons-material/Person';
 import '../student/css/Mypage.css';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { memberAtom, tokenAtom } from '../../atoms';
 import React, { useEffect, useState } from 'react';
 import { url } from '../../config/config';
@@ -14,9 +14,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 
 const MyPage = () => {
-    const member = useAtomValue(memberAtom);
+    const [member, setMember] = useAtom(memberAtom);
     const token = useAtomValue(tokenAtom);
     const navigate = useNavigate();
+    const logout = () => {
+        setMember(null);
+        sessionStorage.removeItem("access_token");
+        sessionStorage.removeItem("refresh_token");
+        // window.location.reload(); 
+        // 페이지 새로고침
+    }
 
     // 이수 학기로 학년 구하기 
     const finSem = (finSem) => {
@@ -38,7 +45,7 @@ const MyPage = () => {
     });
 
 
-    const alert = (e) => {
+    const checkPw = (e) => {
         e.preventDefault();
         Swal.fire({
             title: '비밀번호를 입력하세요',
@@ -56,7 +63,7 @@ const MyPage = () => {
                             stdNo: member.id,
                             password: password
                         },
-                        headers: {Authorization: JSON.stringify(token)}
+                        headers: { Authorization: JSON.stringify(token) }
                     });
                     if (response.status === 200) {
                         Swal.fire({
@@ -81,8 +88,6 @@ const MyPage = () => {
                 submit(e);
             }
         });
-
-
     }
 
     useEffect(() => {
@@ -117,6 +122,83 @@ const MyPage = () => {
             })
     }
 
+    const updatePw = (e) => {
+        Swal.fire({
+            title: '현재 비밀번호를 입력해주세요.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            showLoaderOnConfirm: true,
+
+            preConfirm: async (password) => {
+                try {
+                    const response = await axios.get(`${url}/checkPw`, {
+                        params: {
+                            stdNo: member.id,
+                            password: password
+                        },
+                        headers: { Authorization: JSON.stringify(token) }
+                    });
+
+                    if (response.status === 200) {
+                        // 비밀번호가 일치하면 새로운 비밀번호를 입력받는 함수 호출
+                        return showNewPasswordAlert();
+                    } else {
+                        Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+                    }
+                } catch (error) {
+                    Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    };
+
+    const showNewPasswordAlert = () => {
+        return Swal.fire({
+            title: '변경하실 비밀번호를 입력해주세요.',
+            html: '<input id="newPw" class="swal2-input" placeholder="변경할 비밀번호">',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            showLoaderOnConfirm: true,
+            preConfirm: async () => {
+                const newPw = document.getElementById('newPw').value;
+                try {
+                    const response = await axios.get(`${url}/updatePw`, {
+                        params: {
+                            stdNo: member.id,
+                            newPw: newPw
+                        },
+                        headers: { Authorization: JSON.stringify(token) }
+                    });
+
+                    if (response.status === 200) {
+                        Swal.fire({
+                            title: '비밀번호가 변경완료되었습니다.',
+                            text: '비밀번호 변경 후 자동으로 로그아웃 되오니 재로그인 해주세요.',
+                            timer: 2000,
+                            showLoaderOnConfirm: true,
+                            confirmButtonText: '확인',
+                        }).then(() => {
+                            logout();
+                            navigate('/');
+                        });
+                    }
+                } catch (error) {
+                    Swal.showValidationMessage('비밀번호 변경에 실패했습니다.');
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    };
+
+
 
     return (
         <Grid item xs={12}>
@@ -139,7 +221,7 @@ const MyPage = () => {
                     <Grid item xs={1}></Grid>
 
                     <Grid item xs={10} >
-                        <form onSubmit={submit}>
+                        <form>
                             <div style={{ display: 'flex', marginTop: '20px' }}>
                                 <div className='col-4'>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -215,7 +297,7 @@ const MyPage = () => {
                                 </div>
                             </div>
                             <div style={{ margin: '20px 0px 0px 360px' }}>
-                                <Button style={{ backgroundColor: '#1F3468', color: 'white' }} onClick={alert}>수 정</Button>
+                                <Button style={{ backgroundColor: '#1F3468', color: 'white' }} onClick={checkPw}>수 정</Button>
                             </div>
                         </form>
 
@@ -226,7 +308,7 @@ const MyPage = () => {
                                 <span style={{ fontSize: 'x-large' }}><b>비밀번호 변경</b></span>
                             </div>
                             <div style={{ padding: '22px 50px', fontSize: 'larger' }}>
-                                비밀번호를 변경하시려면 <b style={{ color: 'blue', textDecoration: 'underline' }}>여기</b>를 클릭하시오
+                                비밀번호를 변경하시려면 <b onClick={updatePw} style={{ color: 'blue', textDecoration: 'underline' }}>여기</b>를 클릭하시오
                             </div>
                         </div>
 

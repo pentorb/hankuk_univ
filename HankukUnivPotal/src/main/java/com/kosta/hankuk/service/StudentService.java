@@ -15,10 +15,12 @@ import com.kosta.hankuk.util.PageInfo;
 public interface StudentService {
 	// 학생 개인정보 수정
 	void stdInfoModify(StudentDto stdDto) throws Exception;
-	// 비밀번호 일치하는지 확인
+	// 비밀번호 검증
 	Boolean checkPassword(String stdNo, String inputPw) throws Exception;
 	// 비번 초기화
-	void updatePW(String stdNo, String tel) throws Exception;
+	void resetPW(String stdNo, String tel) throws Exception;
+	// 비번 변경
+	void updatePw(String stdNo, String newPw) throws Exception;
 	// 휴학
 	void hueInsert(HuehakDto hueDto) throws Exception;
 	// 학번으로 휴학 내역 조회하기
