@@ -10,4 +10,5 @@ public interface LectureRepository extends JpaRepository<Lecture, String>{
 	List<Lecture> findByProfessor_profNoAndYearAndStatus(String profNo, Integer year, String status);
 
 	List<Lecture> findByProfessor_profNoAndYear(String profNo, Integer year);
+	List<Lecture> findBySubject_Major_majCdAndSubject_targetGrd(String majCd, Integer targetGrd);
 }

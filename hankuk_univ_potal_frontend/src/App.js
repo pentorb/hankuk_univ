@@ -8,6 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 import BoardNav from './component/comm/BoardNav';
 import Login from './component/comm/Login';
 import AccessedMain from './component/comm/AccessedMain';
+import CourseRegistrationMain from './component/course/CourseRegistrationMain';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route exact path="/professor/*" element={<ProfessorDashboard />} />
       <Route exact path="/staff/*" element={<StaffDashboard />} />
       <Route exact path="/student/*" element={<StudentDashboard />} />
+      <Route exact path="/course-registration/*" element={<CourseRegistrationMain/>} />
     </Routes>
   );
 }

@@ -17,7 +17,7 @@ const Toc = () => {
     }
     return (
         <div className="btn-group-vertical">
-            <Link to="/수강신청" className="toc_bnt">
+            <Link to="/course-registration" className="toc_bnt">
                 <img src="\images\university.png" style={{ width: "50px", height: "50px" }} alt="" />
                 <div style={{ paddingTop: "10px" }}>수강신청</div>
             </Link>
