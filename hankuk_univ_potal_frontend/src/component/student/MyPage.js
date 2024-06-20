@@ -37,40 +37,51 @@ const MyPage = () => {
         emailDo: member.emailDo,
     });
 
-    
+
     const alert = (e) => {
         e.preventDefault();
         Swal.fire({
             title: '비밀번호를 입력하세요',
             input: 'password',
             inputAttributes: {
-              autocapitalize: 'off'
+                autocapitalize: 'off'
             },
             showCancelButton: true,
             confirmButtonText: '확인',
             showLoaderOnConfirm: true,
-            preConfirm: (password) => {
-                if ('1234' === password) {
-                  return Swal.fire({
-                    icon: 'success',
-                    title: '비밀번호 확인됨'
-                  });
-                } else {
-                  Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+            preConfirm: async (password) => {
+                try {
+                    const response = await axios.get(`${url}/checkPw`, {
+                        params: {
+                            stdNo: member.id,
+                            password: password
+                        },
+                        headers: {Authorization: JSON.stringify(token)}
+                    });
+                    if (response.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '비밀번호 확인됨'
+                        });
+                    } else {
+                        Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+                    }
+                } catch (error) {
+                    Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
                 }
-              },
+            },
             allowOutsideClick: () => !Swal.isLoading()
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                  icon:'success',
-                  title: '정보 수정 완료',
-                  text: '입력하신 정보가 성공적으로 변경되었습니다.'
+                    icon: 'success',
+                    title: '정보 수정 완료',
+                    text: '입력하신 정보가 성공적으로 변경되었습니다.'
                 });
                 submit(e);
-              }
-          });
-          
+            }
+        });
+
 
     }
 
@@ -128,7 +139,7 @@ const MyPage = () => {
                     <Grid item xs={1}></Grid>
 
                     <Grid item xs={10} >
-                    <form onSubmit={submit}>
+                        <form onSubmit={submit}>
                             <div style={{ display: 'flex', marginTop: '20px' }}>
                                 <div className='col-4'>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
