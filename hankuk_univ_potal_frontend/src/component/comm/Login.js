@@ -10,14 +10,26 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import axios from 'axios';
 import { url } from '../../config/config';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { tokenAtom, memberAtom } from '../../atoms';
 import '../comm/css/Main.css';
 import Swal from "sweetalert2";
 
+
+function formatPhoneNumber(value) {
+    // 숫자만 남기고 모두 제거
+    const cleaned = ('' + value).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{3,4})(\d{4})$/);
+    if (match) {
+        return `${match[1]}-${match[2]}-${match[3]}`;
+    }
+    return value;
+}
+
 export default function Login() {
     const [member, setMember] = useState({ username: '', password: '' })
-    const setToken = useSetAtom(tokenAtom)
+    const token = useAtomValue(tokenAtom);
+    const setToken = useSetAtom(tokenAtom);
     const setMemberAtom = useSetAtom(memberAtom)
     const navigate = useNavigate();
 
@@ -52,40 +64,51 @@ export default function Login() {
     const searchPW = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: '비밀번호를 입력하세요',
+            title: '비밀번호가 기억나지 않으십니까?',
             html:
-                '<input id="swal-input1" class="swal2-input" placeholder="학번">' +
-                '<input id="swal-input2" class="swal2-input" placeholder="전화번호">',
+                '<input id="stdNo" class="swal2-input" placeholder="학번">' +
+                '<input id="stdTel" class="swal2-input" placeholder="전화번호">',
             inputAttributes: {
               autocapitalize: 'off'
             },
             showCancelButton: true,
             confirmButtonText: '확인',
             showLoaderOnConfirm: true,
-            preConfirm: (password) => {
-                if ('1234' === password) {
-                  return Swal.fire({
-                    icon: 'success',
-                    title: '비밀번호 확인됨'
-                  });
-                } else {
-                  Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
-                }
-              },
-            allowOutsideClick: () => !Swal.isLoading()
-          }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                  icon:'success',
-                  title: '정보 수정 완료',
-                  text: '입력하신 정보가 성공적으로 변경되었습니다.'
-                });
-                // submit(e);
-              }
-          });
-          
+            preConfirm: async () => {
+                const stdNo = document.getElementById('stdNo').value;
+                const stdTel = formatPhoneNumber(document.getElementById('stdTel').value);
 
+                if (!stdNo || !stdTel) {
+                    Swal.showValidationMessage('모든 필드를 채워주세요.');
+                    return;
+                }
+
+                try {
+                    console.log(stdTel);
+                    const response = await axios.get(`${url}/updatePw`, {
+                        params: {
+                            stdNo: stdNo,
+                            stdTel: stdTel
+                        },
+                        headers: {Authorization: JSON.stringify(token)}
+                    });
+                    if (response.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '비밀번호 초기화 완료',
+                            text: `0000으로 비밀번호가 초기화 되었습니다. 재로그인 해주세요.`
+                        });
+                    } else {
+                        Swal.showValidationMessage('입력하신 정보와 일치한 정보가 없습니다.');
+                    }
+                } catch (error) {
+                    Swal.showValidationMessage('입력하신 정보와 일치한 정보가 없습니다.');
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
     }
+
 
     return (
         <Container component="main" maxWidth="sm">
