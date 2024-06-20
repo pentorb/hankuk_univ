@@ -93,7 +93,8 @@ public class ProfController {
 	@GetMapping("/lectureDashboard")
 	public ResponseEntity<List<LectureDto>> lectureList(
 			@RequestParam(name = "profNo", required = false) String profNo,
-			@RequestParam(name = "year", required = false) String year) {
+			@RequestParam(name = "year", required = false) String year,
+			@RequestParam(name = "semester", required = false) String semester) {
 		try {
 			System.out.println(profNo);
 			System.out.println(year);
