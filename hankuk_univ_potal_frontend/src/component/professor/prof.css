@@ -456,6 +456,7 @@
 .ScoreList_StudentBody{
   margin: 0 0 0 114px;
   width: 700px; 
+  display: inline-block;
 }
 .ScoreList_Student_Table{
   text-align: center;
@@ -468,20 +469,57 @@
 }
 .ScoreList_Student_Thead{
   background-color: #403E98;
+  display: flex;
+  height: 50px;
   color: white;
 }
 .ScoreList_Student_Th{
   
-  padding: 10px;
+  padding: 12.5px 0;
 }
 .ScoreList_Student_Tbody{
 
 }
 .ScoreList_Student_Tr{
-
+  display: flex;
+  height: 70px;
+  border-bottom: 0.1px solid #C0C0C0;;
+}
+.ScoreList_Student_Tbody :hover > .ScoreList_Student_Td{
+  background-color: #f0eff7;
 }
 .ScoreList_Student_Td{
-  padding: 8px;
+  padding: 21px 0;
+  
+}
 
-  border-bottom: 0.1px solid #C0C0C0;;
+.ScoreList_Lecture_Body{
+  display: inline-block;
+  margin: 10px 0;
+  border-radius: 10px;
+  padding: 20px 20px;
+  background-color: #f0f0f0;
+}
+
+.ScoreList_Lecture_Header{
+  margin: 0 0 10px 0;
+}
+.ScoreList_Lecture_Input{
+  width: 123px;
+}
+.ScoreList_Lecture_Table{
+  width: 620px;
+  box-shadow: 1px 2px 5px rgb(127 127 127 / 50%);
+}
+.ScoreList_Lecture_Thead{
+  display: flex;
+  height: 50px;
+  padding: 12.5px 0;
+  background-color: #d3d2e4;
+}
+.ScoreList_Lecture_Tr{
+  display: flex;
+  height: 50px;
+  padding: 12.5px 0;
+  background-color: white;
 }

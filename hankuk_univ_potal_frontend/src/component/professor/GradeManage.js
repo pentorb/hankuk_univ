@@ -77,20 +77,23 @@ const GradeManage = () => {
     };
 
     const getHomeworkScores = (stdNo) => {
+
         const scores = homeworkSubmitList.filter(hw => hw.stdNo === stdNo).map(hw => hw.score);
         const totalScore = scores.reduce((acc, score) => acc + score, 0);
-        return scores.length > 0 ? totalScore + `/${homeworkCount * 100}` : 'N/A';
+        return scores.length > 0 ? totalScore + `/${homeworkCount * 100}` : '없음';
+   
+
     };
 
     const calculateScore = (stdNo) => {
         const attendanceScore = getattendance(stdNo) / 30 * 100 * 0.2;
-        const homeworkScore = homeworkSubmitList.filter(hw => hw.stdNo === stdNo).map(hw => hw.score).reduce((acc, score) => acc + score, 0) * 0.2 / homeworkCount;
+        const homeworkScore = homeworkSubmitList.filter(hw => hw.stdNo === stdNo).length > 0 ? homeworkSubmitList.filter(hw => hw.stdNo === stdNo).map(hw => hw.score).reduce((acc, score) => acc + score, 0) * 0.2 / homeworkCount : 0;
         const midtermScore = examResultList.find(exam => exam.stdNo === stdNo && exam.sect === '중간고사')?.totalScore * 0.3 || 0;
         const finalScore = examResultList.find(exam => exam.stdNo === stdNo && exam.sect === '기말고사')?.totalScore * 0.3 || 0;
-        // console.log(attendanceScore)
-        // console.log(homeworkScore)
-        // console.log(midtermScore)
-        // console.log(finalScore)
+        console.log(attendanceScore)
+        console.log(homeworkScore)
+        console.log(midtermScore)
+        console.log(finalScore)
         
         return (attendanceScore + homeworkScore + midtermScore + finalScore).toFixed(2);
     };

@@ -125,12 +125,25 @@ public class ProfServiceImpl implements ProfService{
 	public Map<String, Object> studentListAndLectureByStdList(String profNo, Integer year, String stdName)
 			throws Exception {
 		Map<String, Object> param = new HashedMap<String, Object>();
-		String strYear = String.valueOf(year).substring(2,3);
-		System.out.println(strYear);
-		List<Student> stdList = studentRepository.findByProfessor_profNoAndStdNoStartsWith(profNo, strYear);
+		String strYear = String.valueOf(year).substring(2);
+		System.out.println(strYear+"학번");
+		List<Student> stdList = new ArrayList<Student>();
+		if(stdName=="") {
+			stdList = studentRepository.findByProfessor_profNoAndStdNoStartsWith(profNo, strYear);
+		} else { 
+			stdList = studentRepository.findByProfessor_profNoAndStdNoStartsWithAndNameContaining(profNo, strYear, stdName);
+		}
+		
 		List<StudentDto> studentList = new ArrayList<StudentDto>();
+		
 		for (Student std : stdList) {
 			studentList.add(std.toStudentDto());
+			List<LectureByStd> lectureByStdList= lectureByStdRepository.findByStudent_stdNo(std.getStdNo());
+			List<LectureByStdDto> lectureByStdDtoList = new ArrayList<LectureByStdDto>();
+			for (LectureByStd lectureByStd : lectureByStdList) {
+				lectureByStdDtoList.add(lectureByStd.toLectureByStdDto());
+			}
+			param.put(std.getStdNo(), lectureByStdDtoList);
 		}
 		param.put("studentList", studentList);
 		return param;
@@ -300,7 +313,7 @@ public class ProfServiceImpl implements ProfService{
 			}else if(a+aplus+bplus<=i && i<a+aplus+bplus+aplus) {
 				lectureByStuDtoList.get(i).setGrade("B");
 			}else {
-				lectureByStuDtoList.get(i).setGrade("C");
+				lectureByStuDtoList.get(i).setGrade("C+");
 			}
 		}
         List<LectureByStdDto> newLectureByStdDtoList = new ArrayList<LectureByStdDto>();

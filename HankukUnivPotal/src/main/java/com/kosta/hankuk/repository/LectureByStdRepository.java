@@ -13,4 +13,6 @@ public interface LectureByStdRepository extends JpaRepository<LectureByStd, Inte
 	List<LectureByStd> findByStudent_stdNoAndCourYearAndLecture_semester(String stdNo, Integer courYear, Integer semester);
 	
 	List<LectureByStd> findByLecture_lecNo(String lecNo);
+
+	List<LectureByStd> findByStudent_stdNo(String stdNo);
 }

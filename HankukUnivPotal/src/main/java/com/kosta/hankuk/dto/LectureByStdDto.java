@@ -26,6 +26,9 @@ public class LectureByStdDto {
 	private Boolean isDrop;
 	private String subName;
 	private Integer courYear;
+	private Integer credit;
+	private Integer semester;
+	private String profName;
 	
 	public LectureByStd toLectureByStd() {
 		return LectureByStd.builder()

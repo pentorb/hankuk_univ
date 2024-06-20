@@ -16,5 +16,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 	List<Student> findByMajor_Colleage_name(String colleage);
 	List<Student> findByMajor_majCd(String majCd);
 	List<Student> findByProfessor_profNoAndStdNoStartsWith(String profNo, String strYear);
+	List<Student> findByProfessor_profNoAndStdNoStartsWithAndNameContaining(String profNo, String strYear,
+			String stdName);
 }
  
