@@ -8,13 +8,21 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureBasket;
 import com.kosta.hankuk.entity.LectureByStd;
+import com.kosta.hankuk.entity.Major;
+import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.LectureBasketRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
+import com.kosta.hankuk.repository.MajorRepository;
+import com.kosta.hankuk.repository.ScoreRepository;
 import com.kosta.hankuk.repository.StudentRepository;
 
 @Service
@@ -31,6 +39,15 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	@Autowired
 	private LectureBasketRepository lectureBasketRepository;
+	
+	@Autowired
+	private ColleageRepository colleageRepository;
+	
+	@Autowired
+	private MajorRepository majorRepository;
+	
+	@Autowired
+	private ScoreRepository scoreRepository;
 
 	@Override
 	public Map<String, Object> loadStudentInformation(String stdNo) throws Exception {
@@ -211,5 +228,153 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	public void removePreRegistration(Integer lbNo) throws Exception {
 		lectureBasketRepository.deleteById(lbNo);
+	}
+	
+	public List<ColleageDto> showCollege() throws Exception {
+		List<Colleage> originCollegeList = colleageRepository.findAll();
+		List<ColleageDto> collegeList = new ArrayList<>();
+		for(Colleage college : originCollegeList) {
+			ColleageDto collegeDto = college.toColleageDto();
+			collegeList.add(collegeDto);
+		}
+		return collegeList;
+	}
+	
+	public List<MajorDto> showMajor(String colCd) throws Exception {
+		List<Major> originMajorList = majorRepository.findByColleageColCd(colCd);
+		List<MajorDto> majorList = new ArrayList<>();
+		for(Major major : originMajorList) {
+			MajorDto majorDto = major.toMajorDto();
+			majorList.add(majorDto);
+		}
+		return majorList;
+	}
+	
+	public List<Map<String, Object>> showWholeCourses() throws Exception {
+		List<Lecture> lectureList = lectureRepository.findAll();
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+
+		for (Lecture lecture : lectureList) {			
+			String lectureName = lecture.getSubject().getName();
+			String professorName = lecture.getProfessor().getName();
+			String lectureNumber = lecture.getLecNo();
+			Integer credit = lecture.getCredit();
+			String firstTimeOfLecture = lecture.getTime1();
+			String secondTimeOfLecture = lecture.getTime2();
+			String LectureRoom = lecture.getLecRoom();
+			Integer numOfStd = lecture.getNumOfStd();
+			
+			List<LectureByStd> lectureByStdList = lectureByStdRepository.findByLecture_lecNo(lectureNumber);
+			Integer countOfStudent = lectureByStdList.size();	
+			
+			String type = "";
+			String lectureType = lecture.getSubject().getType();
+			if(lectureType.equals("P")) {
+				type = "전필";
+			} else if(lectureType.equals("S")) {
+				type = "전선";
+			}
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("lectureName", lectureName);
+			map.put("professorName", professorName);
+			map.put("lectureNumber", lectureNumber);
+			map.put("credit", credit);
+			map.put("firstTimeOfLecture", firstTimeOfLecture);
+			map.put("secondTimeOfLecture", secondTimeOfLecture);
+			map.put("LectureRoom", LectureRoom);
+			map.put("countOfStudent", countOfStudent);
+			map.put("numOfStd", numOfStd);
+			map.put("type", type);
+			mapList.add(map);
+		}
+		return mapList;
+	}
+	
+	public List<Map<String, Object>> searhCourses(String majCd, Integer targetGrd, String searchType, String searchWord) throws Exception {
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		List<Lecture> lectureList = new ArrayList<>();
+		if(majCd.equals("") && targetGrd == 0) {
+			lectureList = lectureRepository.findAll();
+		} else {
+			lectureList = lectureRepository.findBySubject_Major_majCdAndSubject_targetGrd(majCd, targetGrd);
+		}		
+		
+		for (Lecture lecture : lectureList) {
+			if(searchType.equals("name")) {
+				if(!(lecture.getSubject().getName().contains(searchWord))) continue;
+			} else if(searchType.equals("type")) {
+				if(!(lecture.getSubject().getType().contains(searchWord))) continue;
+			} else if(searchType.equals("code")) {
+				if(!(lecture.getLecNo().contains(searchWord))) continue;
+			} else if(searchType.equals("professorName")) {
+				if(!(lecture.getProfessor().getName().contains(searchWord))) continue;
+			}
+			
+			String lectureName = lecture.getSubject().getName();
+			String professorName = lecture.getProfessor().getName();
+			String lectureNumber = lecture.getLecNo();
+			Integer credit = lecture.getCredit();
+			String firstTimeOfLecture = lecture.getTime1();
+			String secondTimeOfLecture = lecture.getTime2();
+			String LectureRoom = lecture.getLecRoom();
+			Integer numOfStd = lecture.getNumOfStd();
+			
+			List<LectureByStd> lectureByStdList = lectureByStdRepository.findByLecture_lecNo(lectureNumber);
+			Integer countOfStudent = lectureByStdList.size();	
+			
+			String type = "";
+			String lectureType = lecture.getSubject().getType();
+			if(lectureType.equals("P")) {
+				type = "전필";
+			} else if(lectureType.equals("S")) {
+				type = "전선";
+			}
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("lectureName", lectureName);
+			map.put("professorName", professorName);
+			map.put("lectureNumber", lectureNumber);
+			map.put("credit", credit);
+			map.put("firstTimeOfLecture", firstTimeOfLecture);
+			map.put("secondTimeOfLecture", secondTimeOfLecture);
+			map.put("LectureRoom", LectureRoom);
+			map.put("countOfStudent", countOfStudent);
+			map.put("numOfStd", numOfStd);
+			map.put("type", type);
+			mapList.add(map);
+		}
+		return mapList;
+	}
+	
+	public Map<String, Object> checkConfirmationCount(String stdNo) throws Exception {
+		Student student = studentRepository.findById(stdNo).get();
+		Integer finSem = student.getFinSem();
+		Integer year = (finSem / 2) + 1;
+		Integer semester = (finSem % 2) + 1; 
+		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
+				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
+		
+		Integer countOfLecture = 0;
+		Integer maximumOfCredit = 0;
+		Integer wholeCredit = 0;
+		
+		countOfLecture = lectureByStdGroup.size();
+		Score score = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
+		if(score.getScore() >= 3.75) {
+			maximumOfCredit = 24;
+		} else {
+			maximumOfCredit = 21;
+		}
+
+		for (LectureByStd lectureByStd : lectureByStdGroup) {
+			wholeCredit += lectureByStd.getLecture().getCredit();
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("countOfLecture", countOfLecture);
+		map.put("maximumOfCredit", maximumOfCredit);
+		map.put("wholeCredit", wholeCredit);
+		return map;
 	}
 }

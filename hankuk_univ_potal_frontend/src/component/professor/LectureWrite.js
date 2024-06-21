@@ -6,19 +6,43 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import axios from "axios";
 import { url } from '../../config/config';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useAtom } from "jotai";
-import { tokenAtom } from "../../atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { memberAtom, tokenAtom } from "../../atoms";
 const LectureWrite = () => {
     const [token, setToken] = useAtom(tokenAtom);
-
+    const member = useAtomValue(memberAtom);
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [subjectList, setSubjectList] = useState([]);
     const [lecture, setLecture] = useState(
         {
-            lecNo: 'CSEM01', year: 0, semester: '', subCd: '', credit: 0,
-            sect: '', time1: '', time2: '', profNo: ''
+            lecNo: '', year: 0, semester: '', subName: '', credit: 0,
+            sect: '', day1: '', start1: '', end1: '', day2: '', start2: '', end2: '', profNo: ''
         })
     const navigate = useNavigate();
+    const [time2Check, setTime2Check] = useState(false);
+
+    useEffect(() => {
+        const currentDate = new Date();
+        setCurrentYear(currentDate.getFullYear());
+        getSubject();
+    }, [token])
+
+    const getSubject = () => {
+        axios.get(`${url}/subjectList?majCd=${member.majCd}`,
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
+        )
+            .then(res => {
+                console.log(res);
+                setSubjectList([...res.data])
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     const changeValue = (e) => {
         setLecture({ ...lecture, [e.target.name]: e.target.value })
@@ -29,11 +53,11 @@ const LectureWrite = () => {
         formData.append("lecNo", lecture.lecNo);
         formData.append("year", lecture.year);
         formData.append("semester", lecture.semester);
-        formData.append("subCd", lecture.subCd);
+        formData.append("subName", lecture.subName);
         formData.append("credit", lecture.credit);
         formData.append("sect", lecture.sect);
-        formData.append("time1", lecture.time1);
-        formData.append("time2", lecture.time2);
+        formData.append("time1", lecture.day1 + lecture.start1 + '-' + lecture.end1 + '교시');
+        formData.append("time2", lecture.day2 + lecture.start2 + '-' + lecture.end2 + '교시');
         formData.append("profNo", lecture.profNo);
         axios.post(`${url}/lectureWrite`, formData,
             {
@@ -103,6 +127,7 @@ const LectureWrite = () => {
                                             placeholder="개설년도(숫자만)"
                                             type="text"
                                             onChange={changeValue}
+                                            disabled value={currentYear}
                                         />
                                     </FormGroup>
                                     <FormGroup className="Lecture_Write_FormGroup left">
@@ -133,35 +158,18 @@ const LectureWrite = () => {
 
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
+                                            style={{ marginRight: '5px', marginLeft: '-7px' }}
                                             className="Lecture_Write_Label"
-                                            for="subCd">
-                                            과목코드
+                                            for="lecRoom">
+                                            건물/강의실
                                         </Label>
                                         <Input
                                             className="Lecture_Write_Input"
-                                            id="subCd"
-                                            name="subCd"
-                                            type="select"
+                                            id="lecRoom"
+                                            name="lecRoom"
+                                            type="text"
                                             onChange={changeValue}
                                         >
-                                            <option>
-                                                과목코드선택
-                                            </option>
-                                            <option>
-                                                CSCS
-                                            </option>
-                                            <option>
-                                                CSEM
-                                            </option>
-                                            <option>
-                                                3
-                                            </option>
-                                            <option>
-                                                4
-                                            </option>
-                                            <option>
-                                                5
-                                            </option>
                                         </Input>
                                     </FormGroup>
                                 </div>
@@ -178,23 +186,19 @@ const LectureWrite = () => {
                                             name="subName"
                                             type="select"
                                         >
-                                            <option>
+                                            <option value=''>
                                                 과목선택
                                             </option>
-                                            <option>
-                                                컴퓨터과학
-                                            </option>
-                                            <option>
-                                                공업수학
-                                            </option>
-                                            <option>
-                                                게이밍이론
-                                            </option>
+                                            {subjectList.map((sub, i) => (
+                                                <option key={i}>
+                                                    {sub.name}
+                                                </option>
+                                            ))}
                                         </Input>
                                     </FormGroup>
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
-                                            style={{ paddingLeft: "35px" }}
+                                            style={{ paddingLeft: "33px" }}
                                             className="Lecture_Write_Label"
                                             for="credit">
                                             학점
@@ -215,7 +219,7 @@ const LectureWrite = () => {
                                             온오프라인
                                         </Label>
                                         <Input
-                                            style={{ width: "211px" }}
+                                            style={{ width: "228px", marginLeft: '-14.5px' }}
                                             className="Lecture_Write_Input"
                                             id="sect"
                                             name="sect"
@@ -233,39 +237,186 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                </div>
+                                </div><br />
                                 <div style={{ width: "100%" }}>
-                                    <FormGroup className="Lecture_Write_FormGroup left">
+                                    <FormGroup className="Lecture_Write_FormGroup left" style={{ marginLeft: '402px' }}>
                                         <Label
                                             style={{ fontSize: "larger", marginLeft: "-12px", marginRight: "18px" }}
                                             // className="Lecture_Write_Label"
-                                            for="time1">
-                                            1차시 시간
+                                            for="day1">
+                                            1차시 요일 / 시간
                                         </Label>
                                         <Input
+                                            style={{ width: '90px', marginRight: '-40px' }}
                                             className="Lecture_Write_Input"
-                                            id="time1"
-                                            name="time1"
-                                            type="time"
+                                            id="day1"
+                                            name="day1"
+                                            type="select"
                                             onChange={changeValue}
-                                        />
+                                        >
+                                            <option value=''>
+                                                요일
+                                            </option>
+                                            <option value='월'>
+                                                월
+                                            </option>
+                                            <option value='화'>
+                                                화
+                                            </option>
+                                            <option value='수'>
+                                                수
+                                            </option>
+                                            <option value='목'>
+                                                목
+                                            </option>
+                                            <option value='금'>
+                                                금
+                                            </option>
+                                        </Input>
                                     </FormGroup>
                                     <FormGroup className="Lecture_Write_FormGroup right">
                                         <Label
+                                            // style={{marginLeft:'50px'}}
                                             className="Lecture_Write_Label"
-                                            for="time2">
-                                            2차시 시간
+                                            for="start11">
+
                                         </Label>
                                         <Input
+                                            style={{ width: '190px' }}
                                             className="Lecture_Write_Input"
-                                            id="time2"
-                                            name="time2"
-                                            type="time"
+                                            id="start1"
+                                            name="start1"
+                                            type="select"
                                             onChange={changeValue}
-                                        />
+                                        >
+                                            <option value=''>시간시간</option>
+                                            <option value='1'>1교시(09:00~09:50)</option>
+                                            <option value='2'>2교시(10:00~10:50)</option>
+                                            <option value='3'>3교시(11:00~11:50)</option>
+                                            <option value='4'>4교시(12:00~12:50)</option>
+                                            <option value='5'>5교시(13:00~13:50)</option>
+                                            <option value='6'>6교시(14:00~14:50)</option>
+                                            <option value='7'>7교시(15:00~15:50)</option>
+                                            <option value='8'>8교시(16:00~16:50)</option>
+                                            <option value='9'>9교시(17:00~17:50)</option>
+                                            <option value='10'>10교시(18:00~18:50)</option>
+                                        </Input>
+                                        &nbsp;&nbsp;~&nbsp;&nbsp;
+                                        <Input
+                                            style={{ width: '190px' }}
+                                            className="Lecture_Write_Input"
+                                            id="end1"
+                                            name="end1"
+                                            type="select"
+                                            onChange={changeValue}
+                                        >
+                                            <option value=''>종료시간</option>
+                                            <option value='1'>1교시(09:00~09:50)</option>
+                                            <option value='2'>2교시(10:00~10:50)</option>
+                                            <option value='3'>3교시(11:00~11:50)</option>
+                                            <option value='4'>4교시(12:00~12:50)</option>
+                                            <option value='5'>5교시(13:00~13:50)</option>
+                                            <option value='6'>6교시(14:00~14:50)</option>
+                                            <option value='7'>7교시(15:00~15:50)</option>
+                                            <option value='8'>8교시(16:00~16:50)</option>
+                                            <option value='9'>9교시(17:00~17:50)</option>
+                                            <option value='10'>10교시(18:00~18:50)</option>
+                                        </Input>
                                     </FormGroup>
                                 </div>
-                                <div className="Lecture_Write_header" style={{ marginTop: "50px" }}>
+                                <div style={{ width: "100%" }}>
+                                    <FormGroup className="Lecture_Write_FormGroup left" style={{ marginLeft: '355px' }}>
+                                        <Input
+                                            style={{ margin: '19px 30px 0 0px' }}
+                                            type="checkbox" onChange={() => time2Check ? setTime2Check(false) : setTime2Check(true)} />
+                                        <Label
+                                            style={{ fontSize: "larger", marginLeft: "-14px", marginRight: "18px", color: time2Check ? 'black' : 'grey' }}
+
+                                            // className="Lecture_Write_Label"
+                                            for="day2">
+                                            2차시 요일 / 시간
+                                        </Label>
+                                        <Input
+                                            style={{ width: '90px', marginRight: '-40px', color: time2Check ? 'black' : 'grey' }}
+                                            disabled={!time2Check}
+                                            className="Lecture_Write_Input"
+                                            id="day2"
+                                            name="day2"
+                                            type="select"
+                                            onChange={changeValue}
+                                        >
+                                            <option value=''>
+                                                요일
+                                            </option>
+                                            <option value='월'>
+                                                월
+                                            </option>
+                                            <option value='화'>
+                                                화
+                                            </option>
+                                            <option value='수'>
+                                                수
+                                            </option>
+                                            <option value='목'>
+                                                목
+                                            </option>
+                                            <option value='금'>
+                                                금
+                                            </option>
+                                        </Input>
+                                    </FormGroup>
+                                    <FormGroup className="Lecture_Write_FormGroup right">
+                                        <Label
+                                            style={{ color: time2Check ? 'black' : 'grey' }}
+                                            className="Lecture_Write_Label"
+                                            for="start2">
+                                        </Label>
+                                        <Input
+                                            style={{ width: '190px', color: time2Check ? 'black' : 'grey' }}
+                                            disabled={!time2Check}
+                                            className="Lecture_Write_Input"
+                                            id="start2"
+                                            name="start2"
+                                            type="select"
+                                            onChange={changeValue}
+                                        >
+                                            <option value=''>시작시간</option>
+                                            <option value='1'>1교시(09:00~09:50)</option>
+                                            <option value='2'>2교시(10:00~10:50)</option>
+                                            <option value='3'>3교시(11:00~11:50)</option>
+                                            <option value='4'>4교시(12:00~12:50)</option>
+                                            <option value='5'>5교시(13:00~13:50)</option>
+                                            <option value='6'>6교시(14:00~14:50)</option>
+                                            <option value='7'>7교시(15:00~15:50)</option>
+                                            <option value='8'>8교시(16:00~16:50)</option>
+                                            <option value='9'>9교시(17:00~17:50)</option>
+                                            <option value='10'>10교시(18:00~18:50)</option>
+                                        </Input>
+                                        &nbsp;&nbsp;~&nbsp;&nbsp;
+                                        <Input
+                                            style={{ width: '190px', color: time2Check ? 'black' : 'grey' }}
+                                            disabled={!time2Check}
+                                            className="Lecture_Write_Input"
+                                            id="end2"
+                                            name="end2"
+                                            type="select"
+                                            onChange={changeValue}
+                                        >
+                                            <option value=''>종료시간</option>
+                                            <option value='1'>1교시(09:00~09:50)</option>
+                                            <option value='2'>2교시(10:00~10:50)</option>
+                                            <option value='3'>3교시(11:00~11:50)</option>
+                                            <option value='4'>4교시(12:00~12:50)</option>
+                                            <option value='5'>5교시(13:00~13:50)</option>
+                                            <option value='6'>6교시(14:00~14:50)</option>
+                                            <option value='7'>7교시(15:00~15:50)</option>
+                                            <option value='8'>8교시(16:00~16:50)</option>
+                                            <option value='9'>9교시(17:00~17:50)</option>
+                                            <option value='10'>10교시(18:00~18:50)</option>
+                                        </Input>
+                                    </FormGroup>
+                                </div>
+                                <div className="Lecture_Write_header" style={{ marginTop: "40px" }}>
                                     교수정보</div><br />
                                 <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left">
@@ -279,6 +430,7 @@ const LectureWrite = () => {
                                             id="profNo"
                                             name="profNo"
                                             type="text"
+                                            disabled value={member.id}
                                             onChange={changeValue}
                                         />
                                     </FormGroup>
@@ -293,7 +445,7 @@ const LectureWrite = () => {
                                             className="Lecture_Write_Input"
                                             id="profName"
                                             name="profName"
-                                            placeholder=""
+                                            disabled value={member.name}
                                             type="text"
                                         />
                                     </FormGroup>

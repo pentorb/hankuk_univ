@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kosta.hankuk.dto.AbsenceDto;
@@ -20,7 +22,9 @@ import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
+import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.dto.SubjectDto;
 import com.kosta.hankuk.entity.Absence;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Attendance;
@@ -31,7 +35,9 @@ import com.kosta.hankuk.entity.HomeworkSubmit;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
+import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.repository.AbsenceRepository;
 import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.AttendanceRepository;
@@ -44,14 +50,19 @@ import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.LessonDataRepository;
 import com.kosta.hankuk.repository.LessonRepository;
+import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
+import com.kosta.hankuk.repository.SubjectRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ProfServiceImpl implements ProfService{
+	@Autowired
+    PasswordEncoder passwordEncoder;
 	
+	private final ProfessorRepository professorRepository;
 	private final LectureRepository lectureRepository;
 	private final ExamRepository examRepository;
 	private final ExamQuesRepository examQuesRepository;
@@ -65,6 +76,41 @@ public class ProfServiceImpl implements ProfService{
 	private final AppealRepository appealRepository;
 	private final AbsenceRepository absenceRepository;
 	private final StudentRepository studentRepository;
+	private final SubjectRepository subjectRepository;
+	
+	@Override
+	public Boolean checkPassword(String profNo, String inputPw) throws Exception {
+		String encodePw = professorRepository.findById(profNo).get().getPassword();
+		System.out.println("encodePW"+ encodePw);
+		System.out.println("inpputPW"+inputPw);
+		
+		if(passwordEncoder.matches(inputPw, encodePw)){
+        	return true;
+        }else{
+        	return false;
+        }
+	}
+	
+	@Override
+	public void updateProfPw(String profNo, String newPw) throws Exception {
+		Professor professor = professorRepository.findById(profNo).get();
+		professor.setPassword(passwordEncoder.encode(newPw));
+		professorRepository.save(professor);
+	}
+	
+	@Override
+	public void profInfoModify(ProfessorDto professorDto) throws Exception {
+		Professor professor = professorRepository.findById(professorDto.getId()).get();
+
+		professor.setAddr(professorDto.getAddr());
+		professor.setDetailAddr(professorDto.getDetailAddr());
+		professor.setTel(professorDto.getTel());
+		professor.setEmail(professorDto.getEmail());
+		professor.setEmailDo(professorDto.getEmailDo());
+		professor.setPostCode(professorDto.getPostCode());
+
+		professorRepository.save(professor);
+	}
 	
 	@Override
 	public List<LectureDto> lectureList(String profNo, Integer year, String status) throws Exception {
@@ -79,6 +125,16 @@ public class ProfServiceImpl implements ProfService{
 			lectureDtoList.add(lecture.toLectureDto());
 		}
 		return lectureDtoList;
+	}
+	
+	@Override
+	public List<SubjectDto> subjectList(String majCd) throws Exception {
+		List<Subject> subjectList = subjectRepository.findByMajor_majCd(majCd);
+		List<SubjectDto> subjectDtoList = new ArrayList<SubjectDto>();
+		for (Subject subject : subjectList) {
+			subjectDtoList.add(subject.toSubjectDto());
+		}
+		return subjectDtoList;
 	}
 	
 	@Override
@@ -110,9 +166,9 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
-	public List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception {
+	public List<LectureDto> lectureDashboard(String profNo, Integer year, Integer semester) throws Exception {
 		
-		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatus(profNo, year, "REQ");
+		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatusAndSemester(profNo, year, "REQ", semester);
 		
 		List<LectureDto> lectureDtoList = new ArrayList<LectureDto>();
 		for (Lecture lecture : lectureList) {
@@ -353,6 +409,14 @@ public class ProfServiceImpl implements ProfService{
 	public void absenceModify(AbsenceDto absenceDto) throws Exception {
 		absenceRepository.save(absenceDto.toAbsence());
 	}
+
+	
+
+	
+
+	
+
+	
 
 	
 

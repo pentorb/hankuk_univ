@@ -16,6 +16,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { memberAtom, tokenAtom } from '../../atoms';
+import { url } from '../../config/config';
 
 const InsertCal = () => {
     const navigate = useNavigate();
@@ -117,10 +118,19 @@ const InsertCal = () => {
         formData.append("allDay", formValues.allDay);
         formData.append("writer", member.id);
 
-        axios.post('http://localhost:8090/calInsert', formData, { headers: { Authorization: JSON.stringify(token) } })
+        axios.post(`${url}/calInsert`, formData, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
                 console.log(res.data);
-                navigate('/student/calendar')
+                let baseUrl = '';
+
+                if (member.id.substring(0, 1) === "P") {
+                    baseUrl = '/professor';
+                } else if (member.id.substring(0, 1) === "S") {
+                    baseUrl = '/staff';
+                } else if (member.id.substring(0, 1) === "2") {
+                    baseUrl = '/student';
+                }
+                navigate(`${baseUrl}/calendar`);
             })
             .catch(err => {
                 console.log(err)

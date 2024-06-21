@@ -49,7 +49,7 @@ export default function ProfessorSidebar() {
         <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh" }}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
             <Tab icon={<ManageAccountsIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(1)} sx={{ color: "white" }} />
+              onClick={() => {setActiveTab(1); navigate("/professor/myPage");}} sx={{ color: "white" }} />
             <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>마이페이지</Typography>} id={2 === activeTab ? "active" : ""}
               onClick={() => {setActiveTab(2); navigate("/professor/");}} sx={{ color: "white", paddingLeft: 0, paddingRight: 0 }} />
             <Tab icon={<MenuBookIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>과목</Typography>} id={3 === activeTab ? "active" : ""}
@@ -71,23 +71,13 @@ export default function ProfessorSidebar() {
             </>}
           {activeTab === 1 &&
             <>
-              <ListItemButton onClick={handleFirstClick}>
-                <ListItemText primary="학적" />
-                {firstOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={firstOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="상세보기" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="휴학신청" />
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemText primary="복학신청" />
-                  </ListItemButton>
-                </List>
-              </Collapse>
+              <Link to="/professor/myPage" style={{ textDecoration: "none", color: 'black' }}>
+
+                <ListItemButton onClick={handleFirstClick}>
+                  <ListItemText primary="계정" />
+                </ListItemButton>
+              </Link>
+
             </>}
           {activeTab === 2 &&
             <>

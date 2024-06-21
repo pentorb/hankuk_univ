@@ -65,7 +65,7 @@ const ModalTest = props => {
                                 <div style={categori}><DriveFileRenameOutlineIcon />&nbsp;메모</div>
                                 <div style={{display:'flex', justifyContent:'center'}}>
                                     <div className="memo">
-                                        {content}
+                                        {content === "undefined" || !content ? '' : content}
                                     </div>
                                 </div>
                             </Grid>
