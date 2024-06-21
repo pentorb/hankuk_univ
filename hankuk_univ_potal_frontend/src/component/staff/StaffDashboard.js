@@ -4,6 +4,7 @@ import {Routes, Route} from 'react-router-dom';
 import StaffSidebar from './StaffSidebar';
 import AccountManagement from'./AccountManagement'
 import MajorManagement from'./MajorManagement'
+import MajorCreate from'./MajorCreate'
 import Header from '../comm/Header';
 import StaffHuehak from './StaffHuehak';
 import Calendar from '../comm/Calendar';
@@ -27,6 +28,7 @@ const StaffDashboard = () => {
                             <Route path="/MajorManagement" element={<MajorManagement/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
+                            <Route path="/MajorCreate" element={<MajorCreate/>}></Route>
                         </Routes>
                     
 

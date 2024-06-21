@@ -127,3 +127,29 @@ h1 {
   border-collapse: separate;
   border-spacing: 10px 10px;
 }
+
+.major-create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.major-info-section, .graduation-criteria-section {
+  margin-bottom: 20px;
+}
+
+.majcreateform-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.majcreateform-group {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.majcreateform-group:last-child {
+  margin-right: 0;
+}

@@ -19,7 +19,7 @@ public interface StaffService {
     String generateUniqueStudentId();
     String generateUniqueProfessorId();
 
-    void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId);
+    void registerStudentByOne(String stdNo, String name, String tel, String password, String majorId, String profId);
     void registerProfessorByOne(String profNo, String name, String tel, String password, String majorId);
 
     void registerStudent(Student student);
@@ -36,11 +36,22 @@ public interface StaffService {
 
     List<ColleageDto> getAllColleages();
     List<MajorDto> getMajorsByColleage(String colCd);
+    List<Map<String, String>> getProfessorsByMajor(String majCd);
+
 
     void saveDataFromExcel(String category, MultipartFile file) throws Exception;
-    
+    //학과관리
     List<Map<String, Object>> searchMajors(String name, String colleage);
+    //학과개설
+    boolean checkMajorCode(String majCd);
+    void createMajor(Map<String, Object> majorData) throws Exception;
 
+    //학과관리 detail
+    void saveSubjectFromExcel(String major, MultipartFile file) throws Exception;
+    
+//    void chooseHeadProf(String prof);
+
+    
     
     // 교직원 휴학 관리 
     List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception;

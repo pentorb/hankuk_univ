@@ -11,8 +11,8 @@ import { url } from "../../config/config";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import {tokenAtom} from "../../atoms";
-import {useAtomValue} from 'jotai';
+import { tokenAtom } from "../../atoms";
+import { useAtomValue } from 'jotai';
 
 const AccountManagement = () => {
   const [students, setStudents] = useState([]);
@@ -27,6 +27,7 @@ const AccountManagement = () => {
     major: '',
     name: '',
     password: '1234',
+    professor: '',
   });
   const [colleages, setColleages] = useState([]);
   const [majors, setMajors] = useState([]);
@@ -34,15 +35,15 @@ const AccountManagement = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const token = useAtomValue(tokenAtom);
-  
+
   useEffect(() => {
     fetchcolleages();
   }, [token]);
-
+  
   const fetchcolleages = async () => {
     try {
       const response = await axios.get(`${url}/colleagesSearchList`,
-        {headers: {"Authorization": JSON.stringify(token)}}
+        { headers: { "Authorization": JSON.stringify(token) } }
       );
       setColleages(response.data);
     } catch (error) {
@@ -56,13 +57,29 @@ const AccountManagement = () => {
         params: {
           colCd: colleageName,
         },
-        headers: {"Authorization": JSON.stringify(token)}
+        headers: { "Authorization": JSON.stringify(token) }
       });
       setMajors(response.data);
     } catch (error) {
       console.error("Error fetching majors:", error);
     }
   };
+
+  const fetchProfessor = async (majorName) => {
+    try {
+      const response = await axios.get(`${url}/professorsByMajor`, {
+        params: {
+          majCd: majorName,
+        },
+        headers: { "Authorization": JSON.stringify(token) }
+      });
+      setProfessors(response.data);
+    } catch (error) {
+      console.error("Error fetching professors:", error);
+    }
+  };
+
+
 
   const handleSearch = async () => {
     try {
@@ -73,7 +90,7 @@ const AccountManagement = () => {
             colleage: searchType === 'major' ? formData.colleage : null,
             major: searchType === 'major' ? formData.major : null,
           },
-          headers: {"Authorization": JSON.stringify(token)}
+          headers: { "Authorization": JSON.stringify(token) }
         });
         setStudents(response.data);
       } else if (searchCategory === 'professor') {
@@ -83,7 +100,7 @@ const AccountManagement = () => {
             colleage: searchType === 'major' ? formData.colleage : null,
             major: searchType === 'major' ? formData.major : null,
           },
-          headers: {"Authorization": JSON.stringify(token)}
+          headers: { "Authorization": JSON.stringify(token) }
         });
         setProfessors(response.data);
       }
@@ -144,33 +161,34 @@ const AccountManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.category) {
-        alert("구분을 선택해주세요.");
-        return;
+      alert("구분을 선택해주세요.");
+      return;
     }
 
     try {
-        const payload = {
-            id: formData.id,
-            name: formData.name,
-            tel: formData.tel,
-            password: formData.password,
-            major: formData.major,
-        };
+      const payload = {
+        id: formData.id,
+        name: formData.name,
+        tel: formData.tel,
+        password: formData.password,
+        major: formData.major,
+        professor: formData.professor,
+      };
 
-        if (formData.category === 'student') {
-            await axios.post(`${url}/registerStudent`, payload, {headers:{ "Authorization": JSON.stringify(token) }});
-            alert("학생이 성공적으로 등록되었습니다.");
-        } else if (formData.category === 'professor') {
-            await axios.post(`${url}/registerProfessor`, payload, {headers:{ "Authorization": JSON.stringify(token) }});
-            alert("교수가 성공적으로 등록되었습니다.");
-        }
+      if (formData.category === 'student') {
+        await axios.post(`${url}/registerStudent`, payload, { headers: { "Authorization": JSON.stringify(token) } });
+        alert("학생이 성공적으로 등록되었습니다.");
+      } else if (formData.category === 'professor') {
+        await axios.post(`${url}/registerProfessor`, payload, { headers: { "Authorization": JSON.stringify(token) } });
+        alert("교수가 성공적으로 등록되었습니다.");
+        await fetchProfessor(formData.major);
+      }
     } catch (error) {
-        console.error("Error registering:", error);
-        alert("등록 중 오류가 발생했습니다.");
+      console.error("Error registering:", error);
+      alert("등록 중 오류가 발생했습니다.");
     }
     closeModal();
-};
-
+  };
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
@@ -181,6 +199,10 @@ const AccountManagement = () => {
 
     if (name === 'colleage') {
       fetchMajors(value);
+    }
+
+    if (name === 'major' && formData.category === 'student') {
+      fetchProfessor(value);
     }
 
     if (name === 'category') {
@@ -194,10 +216,11 @@ const AccountManagement = () => {
 
 
 
+
   const generateStudentId = async () => {
     try {
       const response = await axios.get(`${url}/createStudentId`, {
-        headers: {"Authorization": JSON.stringify(token)}
+        headers: { "Authorization": JSON.stringify(token) }
       });
       setFormData((prevData) => ({
         ...prevData,
@@ -210,8 +233,8 @@ const AccountManagement = () => {
 
   const generateProfessorId = async () => {
     try {
-      const response = await axios.get(`${url}/createProfessorId`,{
-        headers: {"Authorization": JSON.stringify(token)}
+      const response = await axios.get(`${url}/createProfessorId`, {
+        headers: { "Authorization": JSON.stringify(token) }
       });
       setFormData((prevData) => ({
         ...prevData,
@@ -242,6 +265,7 @@ const AccountManagement = () => {
       setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
     }
   };
+
   const handleSave = async () => {
     try {
       if (searchCategory === 'student') {
@@ -249,12 +273,12 @@ const AccountManagement = () => {
           .filter(student => selectedIds.includes(student.id))
           .map(student => ({
             id: student.id,
-            name: student.name, 
-            tel: student.tel 
+            name: student.name,
+            tel: student.tel
           }));
-  
+
         console.log("Sending students to server for update:", updatedStudents);
-  
+
         await axios.post(`${url}/updateStudents`, updatedStudents, {
           headers: { "Authorization": JSON.stringify(token) }
         });
@@ -264,16 +288,16 @@ const AccountManagement = () => {
           .map(professor => ({
             id: professor.id,
             name: professor.name,
-            tel: professor.tel 
+            tel: professor.tel
           }));
-  
+
         console.log("Sending professors to server for update:", updatedProfessors);
-  
+
         await axios.post(`${url}/updateProfessors`, updatedProfessors, {
           headers: { "Authorization": JSON.stringify(token) }
         });
       }
-  
+
       alert("수정이 완료되었습니다.");
       setEditMode(false);
       setSelectedIds([]);
@@ -282,15 +306,15 @@ const AccountManagement = () => {
       alert("수정 중 오류가 발생했습니다.");
     }
   };
-  
-  
+
+
   const handleDelete = async () => {
     try {
       if (searchCategory === 'student') {
-        await axios.post(`${url}/deleteStudents`, selectedIds, {headers:{"Authorization": JSON.stringify(token)}});
+        await axios.post(`${url}/deleteStudents`, selectedIds, { headers: { "Authorization": JSON.stringify(token) } });
         setStudents(students.filter(student => !selectedIds.includes(student.id)));
       } else if (searchCategory === 'professor') {
-        await axios.post(`${url}/deleteProfessors`, selectedIds, {headers:{"Authorization": JSON.stringify(token)}});
+        await axios.post(`${url}/deleteProfessors`, selectedIds, { headers: { "Authorization": JSON.stringify(token) } });
         setProfessors(professors.filter(professor => !selectedIds.includes(professor.id)));
       }
       alert("삭제가 완료되었습니다.");
@@ -303,7 +327,7 @@ const AccountManagement = () => {
 
   const handleEdit = () => {
     if (selectedIds.length === 0) {
-      alert("수정할 항목을 선택하세요."); // 선택된 항목이 없으면 경고 메시지 표시
+      alert("수정할 항목을 선택하세요.");
       return;
     }
     setEditMode(true);
@@ -311,16 +335,16 @@ const AccountManagement = () => {
 
   const handleFieldChange = (e, id, field) => {
     if (searchCategory === 'student') {
-      setStudents(students.map(student => 
-        selectedIds.includes(student.id) && student.id === id ? 
-        { ...student, [field]: e.target.value } : 
-        student
+      setStudents(students.map(student =>
+        selectedIds.includes(student.id) && student.id === id ?
+          { ...student, [field]: e.target.value } :
+          student
       ));
     } else if (searchCategory === 'professor') {
-      setProfessors(professors.map(professor => 
-        selectedIds.includes(professor.id) && professor.id === id ? 
-        { ...professor, [field]: e.target.value } : 
-        professor
+      setProfessors(professors.map(professor =>
+        selectedIds.includes(professor.id) && professor.id === id ?
+          { ...professor, [field]: e.target.value } :
+          professor
       ));
     }
   };
@@ -428,7 +452,7 @@ const AccountManagement = () => {
                       <td>
                         <Input
                           value={student.name}
-                          readOnly={!editMode || !selectedIds.includes(student.id)} 
+                          readOnly={!editMode || !selectedIds.includes(student.id)}
                           onChange={(e) => handleFieldChange(e, student.id, 'name')}
                         />
                       </td>
@@ -436,7 +460,7 @@ const AccountManagement = () => {
                       <td>
                         <Input
                           value={student.tel}
-                          readOnly={!editMode || !selectedIds.includes(student.id)} 
+                          readOnly={!editMode || !selectedIds.includes(student.id)}
                           onChange={(e) => handleFieldChange(e, student.id, 'tel')}
                         />
                       </td>
@@ -449,7 +473,7 @@ const AccountManagement = () => {
                       <td>
                         <Input
                           value={professor.name}
-                          readOnly={!editMode || !selectedIds.includes(professor.id)} 
+                          readOnly={!editMode || !selectedIds.includes(professor.id)}
                           onChange={(e) => handleFieldChange(e, professor.id, 'name')}
                         />
                       </td>
@@ -457,7 +481,7 @@ const AccountManagement = () => {
                       <td>
                         <Input
                           value={professor.tell}
-                          readOnly={!editMode || !selectedIds.includes(professor.id)} 
+                          readOnly={!editMode || !selectedIds.includes(professor.id)}
                           onChange={(e) => handleFieldChange(e, professor.id, 'tell')}
                         />
                       </td>
@@ -492,7 +516,7 @@ const AccountManagement = () => {
               marginRight: '-50%',
               transform: 'translate(-50%, -50%)',
               width: '400px',
-              height: '450px',
+              height: 'auto',
               padding: '20px',
               borderRadius: '10px',
             },
@@ -523,27 +547,39 @@ const AccountManagement = () => {
                     ))}
                   </Select>
                 </th>
-                </tr>
+              </tr>
+              <tr>
+                <th></th>
+                <th>
+                  <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '100%', height: '30px' }}>
+                    {majors.map((major) => (
+                      <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                    ))}
+                  </Select>
+                </th>
+              </tr>
+              <tr>
+              </tr>
+              {formData.category === 'student' && (
                 <tr>
-                  <th></th>
+                  <th><label>담당교수</label></th>
                   <th>
-                    <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '100%', height: '30px' }}>
-                      {majors.map((major) => (
-                        <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                    <Select value={formData.professor} onChange={handleInputChange} name="professor" style={{ width: '100%', height: '30px' }}>
+                      {professors.map((professor) => (
+                        <MenuItem key={professor.profNo} value={professor.profNo}>{professor.name}</MenuItem>
                       ))}
                     </Select>
                   </th>
                 </tr>
-                <tr>
-                </tr>
-                <tr>
-                  <th><label>이름</label></th>
-                  <th><input type="text" name="name" value={formData.name} onChange={handleInputChange} /></th>
-                </tr>
-                <tr>
-                  <th><label>비밀번호</label></th>
-                  <th><input type="text" name="password" value={formData.password} readOnly /></th>
-                </tr>
+              )}
+              <tr>
+                <th><label>이름</label></th>
+                <th><input type="text" name="name" value={formData.name} onChange={handleInputChange} /></th>
+              </tr>
+              <tr>
+                <th><label>비밀번호</label></th>
+                <th><input type="text" name="password" value={formData.password} readOnly /></th>
+              </tr>
             </table>
             <br />
             <div className='actions2'>

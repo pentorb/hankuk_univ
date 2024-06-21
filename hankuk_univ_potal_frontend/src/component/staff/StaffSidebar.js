@@ -108,9 +108,11 @@ export default function StaffSidebar() {
                       <ListItemText primary="전체성적" />
                     </ListItemButton>
                   </Link>
+                  <Link to="/staff/MajorCreate" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 7} onClick={(e) => handleListItemClick(e, 7)}>
                     <ListItemText primary="이의신청 내역" />
                   </ListItemButton>
+                  </Link>
                 </List>
               </Collapse>
               

@@ -40,8 +40,10 @@ public class StaffController {
             String tel = (String) payload.get("tel");
             String password = String.valueOf(payload.get("password"));
             String majorId = String.valueOf(payload.get("major"));
+            String profId = String.valueOf(payload.get("professor"));
+
             
-            staffService.registerStudentByOne(stdNo, name, tel, password, majorId);
+            staffService.registerStudentByOne(stdNo, name, tel, password, majorId, profId);
             
             return ResponseEntity.ok("학생이 성공적으로 등록되었습니다.");
         } catch (Exception e) {
@@ -113,7 +115,13 @@ public class StaffController {
         List<MajorDto> majors = staffService.getMajorsByColleage(colCd);
         return ResponseEntity.ok(majors);
     }
-
+    
+    @GetMapping("/professorsByMajor")
+    public ResponseEntity<List<Map<String, String>>> getProfessorsByMajor(@RequestParam String majCd) {
+        List<Map<String, String>> professors = staffService.getProfessorsByMajor(majCd);
+        return ResponseEntity.ok(professors);
+    }
+    
     @GetMapping("/searchStudents")
     public ResponseEntity<List<StudentDto>> searchStudents(
             @RequestParam(required = false) String name,
@@ -144,6 +152,16 @@ public class StaffController {
         return ResponseEntity.ok("Professors deleted successfully");
     }
 
+    @PostMapping("/createMajor")
+    public ResponseEntity<String> createMajor(@RequestBody Map<String, Object> majorData) {
+        try {
+            staffService.createMajor(majorData);
+            return ResponseEntity.ok("학과가 성공적으로 개설되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("학과 개설 중 오류가 발생했습니다.");
+        }
+    }
+    
     @PostMapping("/uploadExcel")
     public ResponseEntity<String> uploadExcel(@RequestParam("category") String category, @RequestParam("file") MultipartFile file) {
         try {
@@ -162,6 +180,22 @@ public class StaffController {
         List<Map<String, Object>> majors = staffService.searchMajors(name, colleage);
         return ResponseEntity.ok(majors);
     }
+    
+    
+    @GetMapping("/checkMajorCode")
+    public ResponseEntity<Boolean> checkMajorCode(@RequestParam String majCd) {
+        boolean exists = staffService.checkMajorCode(majCd);
+        return ResponseEntity.ok(exists);
+    }
+    
+    @GetMapping("/createMajor")
+    public ResponseEntity<List<Map<String, Object>>> createMajor(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String colleage) {
+        List<Map<String, Object>> majors = staffService.searchMajors(name, colleage);
+        return ResponseEntity.ok(majors);
+    }
+    
     
     @GetMapping("/allHBList")
     public ResponseEntity<Map<String,Object>> allHueList(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
