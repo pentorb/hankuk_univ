@@ -2,6 +2,7 @@ package com.kosta.hankuk.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,8 +11,11 @@ import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.dto.SubjectDto;
+import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.util.PageInfo;
 
 public interface StaffService {
@@ -45,9 +49,16 @@ public interface StaffService {
     //학과개설
     boolean checkMajorCode(String majCd);
     void createMajor(Map<String, Object> majorData) throws Exception;
-
     //학과관리 detail
-    void saveSubjectFromExcel(String major, MultipartFile file) throws Exception;
+    void saveSubjectFromExcel(String majCd, MultipartFile file) throws Exception;
+    MajorDto getMajorByCode(String majCd);
+    List<SubjectDto> findSubjectsByMajor(String majCd);
+    void updateMajor(String majCd, MajorDto majorDto);
+    Optional<Major> getMajorByCodeop(String majCd);
+    void updateSubjects(List<SubjectDto> updatedSubjects) throws Exception;
+    void updateHeadProfessor(String majCd, String profNo) throws Exception;
+    void deleteSubjects(List<String> subjectCodes);
+    Subject addSubject(Map<String, Object> subjectData) throws Exception;
     
 //    void chooseHeadProf(String prof);
 

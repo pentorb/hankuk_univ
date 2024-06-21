@@ -23,7 +23,7 @@ public class SubjectDto {
 	private String type;
 	private Integer targetGrd;
 	private String majCd;
-	
+    
 	public Subject toSubject() {
 		return Subject.builder()
 				.subCd(subCd)

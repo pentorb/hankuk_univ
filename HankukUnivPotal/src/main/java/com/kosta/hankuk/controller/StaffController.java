@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +22,8 @@ import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
-import com.kosta.hankuk.entity.Major;
-import com.kosta.hankuk.entity.Professor;
-import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.dto.SubjectDto;
+import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.service.StaffService;
 import com.kosta.hankuk.util.PageInfo;
 
@@ -195,6 +196,89 @@ public class StaffController {
         List<Map<String, Object>> majors = staffService.searchMajors(name, colleage);
         return ResponseEntity.ok(majors);
     }
+    
+    
+    @GetMapping("/majorsinformation")
+    public ResponseEntity<MajorDto> getMajorDetail(
+            @RequestParam String majCd) {
+        
+        MajorDto major = staffService.getMajorByCode(majCd);
+        
+        if (major != null) {
+            return ResponseEntity.ok(major);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/subjectsByMajor")
+    public ResponseEntity<List<SubjectDto>> getSubjectsByMajor(@RequestParam("majCd") String majCd) {
+        try {
+            List<SubjectDto> subjects = staffService.findSubjectsByMajor(majCd);
+            return ResponseEntity.ok(subjects);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+    
+    
+    @PutMapping("/updatemajors/{majCd}")
+    public ResponseEntity<String> updateMajor(
+        @PathVariable String majCd,
+        @RequestBody MajorDto majorDto) {
+            staffService.updateMajor(majCd, majorDto);
+            return ResponseEntity.ok("학과 정보가 성공적으로 업데이트되었습니다.");
+
+    }
+    
+    @PostMapping("/addSubject")
+    public ResponseEntity<Subject> addSubject(@RequestBody Map<String, Object> subjectData) {
+        try {
+            System.out.println("Received subject data: " + subjectData);
+
+            Subject createdSubject = staffService.addSubject(subjectData);
+            return ResponseEntity.ok(createdSubject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+    
+    @PostMapping("/updateHeadProfessor")
+    public ResponseEntity<String> updateHeadProfessor(@RequestParam String majCd, @RequestParam String profNo) {
+        try {
+            staffService.updateHeadProfessor(majCd, profNo);
+            return ResponseEntity.ok("Head professor updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Failed to update head professor: " + e.getMessage());
+        }
+    }
+    
+    @PostMapping("/deleteSubjects")
+    public ResponseEntity<String> deleteSubjects(@RequestBody List<String> subjectCodes) {
+        try {
+            staffService.deleteSubjects(subjectCodes);
+            return ResponseEntity.ok("Subjects successfully deleted.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Failed to delete subjects: " + e.getMessage());
+        }
+    }
+    
+    @PostMapping("/uploadSubjectExcel")
+    public ResponseEntity<String> uploadSubjectExcel(@RequestParam("majCd") String majCd, @RequestParam("file") MultipartFile file) {
+        try {
+            staffService.saveSubjectFromExcel(majCd, file);
+            return ResponseEntity.ok("Data uploaded and saved successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Failed to upload data: " + e.getMessage());
+        }
+    }
+    
+    
     
     
     @GetMapping("/allHBList")

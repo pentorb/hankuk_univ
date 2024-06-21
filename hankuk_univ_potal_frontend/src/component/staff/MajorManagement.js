@@ -130,7 +130,7 @@ const MajorManagement = () => {
                         <div className="result-section">
                             <table className={'major-result-box'}>
                                 {majors.map((major, index) => (
-                                    <tr key={index} onClick={() => navigate(`/majordetail/${major.majCd}`)} className={'major-result-box-tr'}>
+                                    <tr key={index} onClick={() => navigate(`/staff/majordetail/${major.majCd}`)} className={'major-result-box-tr'}>
                                         <td>{major.majCd}</td>
                                         <td>{major.colleage}</td>
                                         <td>{major.name}</td>

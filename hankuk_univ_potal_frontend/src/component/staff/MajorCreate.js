@@ -27,6 +27,7 @@ const MajorCreate = () => {
   const [majorCodeError, setMajorCodeError] = useState('');
   const token = useAtomValue(tokenAtom);
   const navigate = useNavigate();
+  
   useEffect(() => {
     fetchColleages();
   }, [token]);
@@ -85,12 +86,13 @@ const MajorCreate = () => {
         headers: { "Authorization": JSON.stringify(token) }
       });
       alert("학과가 성공적으로 개설되었습니다.");
-      navigate(`/majordetail/${formData.majorCode}`);
+      navigate(`/staff/majordetail/${formData.majorCode}`);
     } catch (error) {
       console.error("Error creating major:", error);
       alert("학과 개설 중 오류가 발생했습니다.");
     }
   };
+
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>

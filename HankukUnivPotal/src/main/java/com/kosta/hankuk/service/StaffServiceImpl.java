@@ -18,8 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
@@ -27,6 +30,7 @@ import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.dto.SubjectDto;
 import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
@@ -346,10 +350,18 @@ public class StaffServiceImpl implements StaffService {
                              Map<String, String> map = new HashMap<>();
                              map.put("profNo", professor.getProfNo());
                              map.put("name", professor.getName());
+                             map.put("position", professor.getPosition());
                              return map;
                          })
                          .collect(Collectors.toList());
     }
+    
+    @Override
+    public MajorDto getMajorByCode(String majCd) {
+        return majorRepository.findByMajCd(majCd).map(Major::toMajorDto).orElse(null);
+    }
+    
+    
     
     @Override
     public void saveDataFromExcel(String category, MultipartFile file) throws Exception {
@@ -402,11 +414,14 @@ public class StaffServiceImpl implements StaffService {
 				String majCd = majorRepository.findByName(majorName).map(Major::getMajCd).orElse(null);
 				String professorName = professorIdx==-1 || row.getCell(professorIdx)==null? "" : row.getCell(professorIdx).getStringCellValue();
 				String profCd = null;
-				if(!professorName.equals("")) {
-					Optional<Professor> oprofessor = professorRepository.findByName(professorName);
-					if(oprofessor.isPresent()) {
-						profCd = oprofessor.get().getProfNo();
-					}
+				Major opmajor = majCd != null ? majorRepository.findById(majCd).orElse(null) : null;
+
+				if (opmajor != null && !professorName.isEmpty()) {
+				    Optional<Professor> oprofessor = professorRepository.findByMajorAndName(opmajor, professorName);
+				    
+				    if (oprofessor.isPresent()) {
+				        profCd = oprofessor.get().getProfNo();
+				    }
 				}
 				if ("student".equalsIgnoreCase(category)) {
 					Student student = Student.builder().stdNo(generateUniqueStudentId()).name(name).password("1234")
@@ -470,13 +485,12 @@ public class StaffServiceImpl implements StaffService {
         try {
             String majCd = (String) majorData.get("majorCode");
             String name = (String) majorData.get("majorName");
-            String tel = (String) majorData.get("majorNumber"); // 전화번호 또는 학과 번호로 사용 가능
+            String tel = (String) majorData.get("majorNumber");
             Integer reqGenCredit = majorData.get("generalEducationCredits") != null ? Integer.parseInt(majorData.get("generalEducationCredits").toString()) : 0;
             Integer reqMajCredit = majorData.get("majorCredits") != null ? Integer.parseInt(majorData.get("majorCredits").toString()) : 0;
             Integer gradCredit = majorData.get("totalCredits") != null ? Integer.parseInt(majorData.get("totalCredits").toString()) : 0;
             String colCd = (String) majorData.get("colleage");
 
-            // 단과대학 조회 및 설정
             Colleage colleage = colleageRepository.findById(colCd).orElseThrow(() -> new Exception("Invalid colleage code"));
 
             Major major = Major.builder()
@@ -495,46 +509,168 @@ public class StaffServiceImpl implements StaffService {
         }
     }
     
+    
     @Override
-    public void saveSubjectFromExcel(String major, MultipartFile file) throws Exception{
-		List<Subject> subjects = new ArrayList<>();
+    public List<SubjectDto> findSubjectsByMajor(String majCd) {
+        List<Subject> subjects = subjectRepository.findByMajorMajCd(majCd);
+        return subjects.stream()
+                       .map(subject -> new SubjectDto(
+                               subject.getSubCd(),
+                               subject.getName(),
+                               subject.getType(),
+                               subject.getTargetGrd(),
+                               subject.getMajor().getMajCd()
+                       ))
+                       .collect(Collectors.toList());
+    }
+    
+    @Override
+    public void updateMajor(String majCd, MajorDto majorDto) {
+        Optional<Major> majorOptional = majorRepository.findById(majCd);
 
-		try (InputStream inputStream = file.getInputStream()) {
-			Workbook workbook = WorkbookFactory.create(inputStream);
-			Sheet sheet = workbook.getSheetAt(0);
+        if (majorOptional.isPresent()) {
+            Major major = majorOptional.get();
+            major.setName(majorDto.getName());
+            major.setTel(majorDto.getTel());
+            major.setReqGenCredit(majorDto.getReqGenCredit());
+            major.setReqMajCredit(majorDto.getReqMajCredit());
+            major.setGradCredit(majorDto.getGradCredit());
+            
+            majorRepository.save(major);
+        } else {
+            throw new RuntimeException("학과를 찾을 수 없습니다.");
+        }
+    }
+    
+    @Override
+    public void updateSubjects(List<SubjectDto> updatedSubjects) throws Exception {
+        for (SubjectDto subjectDto : updatedSubjects) {
+            Optional<Subject> optionalSubject = subjectRepository.findById(subjectDto.getSubCd());
 
-			int nameIdx = -1,typeIdx = -1, targetGrdIdx = -1 , majorIdx = -1;
-			for (Row row : sheet) {
-				if (row.getRowNum() == 0) {
-					for (int i = 0; i < 4; i++) {
-						String colName = row.getCell(i).getStringCellValue();
-						if (colName.equals("name"))
-							nameIdx = i;
-						else if (colName.equals("type"))
-							typeIdx = i;
-						else if (colName.equals("targetGrd"))
-							targetGrdIdx = i;
-						else if (colName.equals("major"))
-							majorIdx = i;
-					}
-					continue;
-				}
-				String name = nameIdx==-1 || row.getCell(nameIdx)==null? "" :row.getCell(nameIdx).getStringCellValue();
-				String type = typeIdx==-1 || row.getCell(typeIdx)==null? "" :row.getCell(typeIdx).getStringCellValue();
-				String targetGrd = targetGrdIdx==-1 || row.getCell(targetGrdIdx)==null? "": row.getCell(targetGrdIdx).getStringCellValue();
-				String majorName = majorIdx==-1 || row.getCell(majorIdx)==null? "" :row.getCell(majorIdx).getStringCellValue();
-				String majCd = majorRepository.findByName(majorName).map(Major::getMajCd).orElse(null);
-				
-				String subCd= majorName+targetGrd+00;
+            if (optionalSubject.isPresent()) {
+                Subject subject = optionalSubject.get();
+                subject.setName(subjectDto.getName());
+                subject.setType(subjectDto.getType());
+                subject.setTargetGrd(subjectDto.getTargetGrd());
+                
+                subjectRepository.save(subject);
+            } else {
+                throw new Exception("Subject with code " + subjectDto.getSubCd() + " not found");
+            }
+        }
+    }
+    
+    @Override
+    public void updateHeadProfessor(String majCd, String profNo) throws Exception {
+        List<Professor> professorsByMajor = professorRepository.findByMajor_MajCd(majCd);
+        for (Professor professor : professorsByMajor) {
+            professor.setPosition("1");
+            professorRepository.save(professor);
+        }
 
-				
-				Subject subject = Subject.builder().subCd(subCd).name(name).type(type).targetGrd(Integer.parseInt(targetGrd))
-						.major(majCd != null ? Major.builder().majCd(majCd).build() : null).build();
-				subjects.add(subject);
-			}
-	        subjectRepository.saveAll(subjects);
-		}
-	}
+        Professor headProfessor = professorRepository.findById(profNo)
+                .orElseThrow(() -> new Exception("Professor with profNo " + profNo + " not found"));
+        headProfessor.setPosition("0");
+        professorRepository.save(headProfessor);
+    }
+    
+    public void deleteSubjects(List<String> subjectCodes) {
+        subjectRepository.deleteAllById(subjectCodes);
+    }
+    
+    
+    @Override
+    public Optional<Major> getMajorByCodeop(String majCd) {
+        return majorRepository.findById(majCd);
+    }
+    
+    @Override
+    public void saveSubjectFromExcel(String majCd, MultipartFile file) throws Exception{
+        List<Subject> subjects = new ArrayList<>();
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            int nameIdx = -1, typeIdx = -1, targetGrdIdx = -1, majorIdx = -1;
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    for (int i = 0; i < 3; i++) {
+                        String colName = row.getCell(i).getStringCellValue();
+                        if (colName.equals("name"))
+                            nameIdx = i;
+                        else if (colName.equals("type"))
+                            typeIdx = i;
+                        else if (colName.equals("targetGrd"))
+                            targetGrdIdx = i;
+
+                    }
+                    continue;
+                }
+
+                String name = nameIdx == -1 || row.getCell(nameIdx) == null ? "" : row.getCell(nameIdx).getStringCellValue();
+                String type = typeIdx == -1 || row.getCell(typeIdx) == null ? "" : row.getCell(typeIdx).getStringCellValue();
+                String targetGrd = targetGrdIdx == -1 || row.getCell(targetGrdIdx) == null ? "" : String.valueOf((int) row.getCell(targetGrdIdx).getNumericCellValue());
+
+                String baseSubCd = majCd + targetGrd;
+                String subCd = baseSubCd + "00";
+                
+                int suffix = 0;
+                
+                while (subjectRepository.existsBySubCd(subCd)) {
+                    suffix++;
+                    subCd = baseSubCd + String.format("%02d", suffix);
+                }
+
+                Subject subject = Subject.builder()
+                        .subCd(subCd)
+                        .name(name)
+                        .type(type)
+                        .targetGrd(Integer.parseInt(targetGrd))
+                        .major(Major.builder().majCd(majCd).build())
+                        .build();
+
+                subjects.add(subject);
+            }
+            subjectRepository.saveAll(subjects);
+        }
+    }
+    @Override
+    public Subject addSubject(Map<String, Object> subjectData) throws Exception {
+
+        String majCd = (String) subjectData.get("majCd");
+        String name = (String) subjectData.get("name");
+        String type = (String) subjectData.get("type");
+        String targetGrd = (String) subjectData.get("targetGrd");
+        
+        
+        String baseSubCd = majCd.toUpperCase() + targetGrd;
+        String subCd = baseSubCd + "00";
+        
+        int suffix = 0;
+        
+        while (subjectRepository.existsBySubCd(subCd)) {
+            suffix++;
+            subCd = baseSubCd + String.format("%02d", suffix);
+        }
+
+        Major major = majorRepository.findById(majCd)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid majCd: " + majCd));
+
+        Subject subject = Subject.builder()
+                .subCd(subCd)
+                .name(name)
+                .type(type)
+                .targetGrd(Integer.parseInt(targetGrd))
+                .major(major)
+                .build();
+        
+        Subject savedSubject = subjectRepository.save(subject);
+        
+        System.out.println("Saved subject: " + savedSubject);
+
+        return savedSubject;
+    }
     
     
     public void changeHeadProf(String majorName, String profName) {
