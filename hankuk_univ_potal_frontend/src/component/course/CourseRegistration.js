@@ -1,11 +1,11 @@
-import { Typography, Paper, Button, Grid } from '@mui/material';
+import { Typography, Paper, Button, Grid, OutlinedInput } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import FormControl from '@mui/material/FormControl';
+import { styled } from '@mui/system';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useState } from 'react';
@@ -14,23 +14,80 @@ import { tokenAtom, memberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
 
+const FormGrid = styled(Grid)(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+}));
+
 const CourseRegistration = () => {
     const token = useAtomValue(tokenAtom);
     const member = useAtomValue(memberAtom);
     const [courseList, setCourseList] = useState([]);
     const [confirmationList, setConfirmationList] = useState([]);
-    const [semester, setSemester] = useState(1);
-    const [year, setYear] = useState(1);
+    const [collegeList, setCollegeList] = useState([]);
+    const [majorList, setMajorList] = useState([]);
+    const [collegeCode, setCollegeCode] = useState();
+    const [majorCode, setMajorCode] = useState('');
+    const [targetGrade, setTargetGrade] = useState(0);
+    const [searchType, setSearchType] = useState();
+    const [searchWord, setSearchWord] = useState();
     
-    useEffect(() => {        
-        checkCourseRegistration();
+    useEffect(() => {
+        loadWholeCourses();
         checkConfirmation();
+        loadCollege();
     }, [])
 
-    const checkCourseRegistration = () => {
+    const loadWholeCourses = () => {
+        const initialCourseRegistrationUrl = `${url}/whole-courses`;
+        console.log(initialCourseRegistrationUrl);
+        axios.post(initialCourseRegistrationUrl, null, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
+            .then(res => {
+                setCourseList([...res.data.courseList])
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    const loadCollege = () => {
+        const collegeUrl = `${url}/college`;
+        console.log(collegeUrl);
+        axios.post(collegeUrl, null, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
+            .then(res => {
+                setCollegeList([...res.data.collegeList])
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    const loadMajor = () => {
         let formData = new FormData();
-        formData.append("majCd", 100);
-        formData.append("targetGrd", 2);
+        formData.append("colCd", collegeCode);
+
+        const majorUrl = `${url}/major`;
+        console.log(majorUrl);
+        axios.post(majorUrl, formData, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
+            .then(res => {
+                setMajorList([...res.data.majorList])
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }   
+
+    const loadCoursesBySelectedCondition = (event) => {
+        setTargetGrade(event.target.value);
+        let formData = new FormData();
+        formData.append("majCd", majorCode);
+        formData.append("targetGrd", event.target.value);
 
         const courseRegistrationUrl = `${url}/course-registration`;
         console.log(courseRegistrationUrl);
@@ -38,7 +95,46 @@ const CourseRegistration = () => {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
-                setCourseList([...res.data.courseList])
+                setCourseList([...res.data.courseList])                
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    const loadCoursesBySearchCondition = () => {
+        let formData = new FormData();
+        formData.append("majCd", majorCode);
+        formData.append("targetGrd", targetGrade);
+        formData.append("searchType", searchType);
+        formData.append("searchWord", searchWord);
+
+        const courseSearchUrl = `${url}/course-search`;
+        console.log(courseSearchUrl);
+        axios.post(courseSearchUrl, formData, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
+            .then(res => {
+                console.log(res.data)
+                setCourseList([...res.data.courseList])             
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    const checkCourseRegistration = () => {
+        let formData = new FormData();
+        formData.append("majCd", majorCode);
+        formData.append("targetGrd", targetGrade);
+
+        const courseRegistrationUrl = `${url}/course-registration`;
+        console.log(courseRegistrationUrl);
+        axios.post(courseRegistrationUrl, formData, {
+            headers: { Authorization: JSON.stringify(token) }
+        })
+            .then(res => {
+                setCourseList([...res.data.courseList])                
             })
             .catch(err => {
                 console.log(err);
@@ -119,34 +215,53 @@ const CourseRegistration = () => {
     return (
         <Grid container>
             <Grid item xs={1}/>
-            <Grid item xs={10}>                
-                <Typography mt={3} mb={2} variant="h4" color="#444444" gutterBottom><b>수강신청</b></Typography>
-                <div>
-                    <FormControl sx={{ m: 1, minWidth: 250, float: "left", margin: "0 auto", marginRight: 4 }} size="small">
-                        <Select value={year} onChange={(event) => setYear(event.target.value)}>
+            <Grid item xs={10}>         
+                <Typography mt={3} mb={6} variant="h4" color="#444444" gutterBottom><b>수강신청</b></Typography>
+                <div style={{ display:"flex", marginBottom:20}}>
+                    <FormGrid item xs sx={{ display:"block" }}>
+                        <Typography sx={{ display: "inline-block" }}><b>단과</b></Typography>
+                        &nbsp;&nbsp;                  
+                        <Select value={collegeCode || ''} onChange={(e) => setCollegeCode(e.target.value)} sx={{ width:150, height:43 }}>
+                            {collegeList.map(college => (
+                                <MenuItem key={college.colCd} value={college.colCd}>{college.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormGrid>
+                    <FormGrid item xs sx={{ display:"block" }}>
+                        <Typography sx={{ display: "inline-block" }}><b>학과</b></Typography>
+                        &nbsp;&nbsp;
+                        <Select value={majorCode || ''} onFocus={()=>loadMajor()} onChange={(e) => setMajorCode(e.target.value)} sx={{ width:150, height:43 }}>
+                            {majorList.map(major => (
+                                <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormGrid>
+                    <FormGrid item xs sx={{ display:"block" }}>
+                        <Typography sx={{ display: "inline-block" }}><b>학년</b></Typography>
+                        &nbsp;&nbsp;
+                        <Select value={targetGrade || ''} onChange={(e) => loadCoursesBySelectedCondition(e)} sx={{ width:150, height:43 }}>
                             <MenuItem value={1}>1학년</MenuItem>
                             <MenuItem value={2}>2학년</MenuItem>
                             <MenuItem value={3}>3학년</MenuItem>
                             <MenuItem value={4}>4학년</MenuItem>
                         </Select>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 250, float: "left", margin: "0 auto", marginRight: 4 }} size="small">
-                        <Select value={year} onChange={(event) => setYear(event.target.value)}>
-                            <MenuItem value={1}>1학년</MenuItem>
-                            <MenuItem value={2}>2학년</MenuItem>
-                            <MenuItem value={3}>3학년</MenuItem>
-                            <MenuItem value={4}>4학년</MenuItem>
+                    </FormGrid>
+                    <FormGrid item xs={5} sx={{ display:"block" }}>
+                        <Typography sx={{ display: "inline-block", verticalAlign:"middle" }}><b>구분</b></Typography>
+                        &nbsp;&nbsp;                   
+                        <Select value={searchType || ''} onChange={(e) => setSearchType(e.target.value)} sx={{ width:120, height:43, verticalAlign:"middle" }}>
+                            <MenuItem value="name">강의명</MenuItem>
+                            <MenuItem value="type">이수구분</MenuItem>
+                            <MenuItem value="code">강의코드</MenuItem>
+                            <MenuItem value="professorName">교수명</MenuItem>
                         </Select>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 250, float: "left", margin: "0 auto", marginRight: 4 }} size="small">
-                        <Select value={semester} onChange={(event) => setSemester(event.target.value)}>
-                            <MenuItem value={1}>1학기</MenuItem>
-                            <MenuItem value={2}>2학기</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button variant="contained" size="medium" sx={{ margin: "0 auto", backgroundColor: "firstColor.main" }}>조회</Button>
+                        &nbsp;&nbsp;
+                        <OutlinedInput onChange={(e) => setSearchWord(e.target.value)} sx={{ width:200, height:43, verticalAlign:"middle" }} />
+                        &nbsp;&nbsp;
+                        <Button variant="contained" size="medium" onClick={loadCoursesBySearchCondition} sx={{ margin: "0 auto", backgroundColor: "firstColor.main", verticalAlign:"middle" }}>검색</Button>
+                    </FormGrid>
                 </div>
-                <TableContainer component={Paper} sx={{ marginTop: 10, marginBottom: 10 }}>
+                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8 }}>
                     <Table aria-label="simple table" sx={{overflowY: "scroll"}}>
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>

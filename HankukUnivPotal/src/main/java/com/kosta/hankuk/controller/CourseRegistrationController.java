@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kosta.hankuk.dto.ColleageDto;
+import com.kosta.hankuk.dto.MajorDto;
 import com.kosta.hankuk.service.CourseRegistrationService;
 
 @RestController
@@ -112,6 +114,59 @@ public class CourseRegistrationController {
 		}	catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Boolean> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/college")
+	public ResponseEntity<Map<String, Object>> showCollege(){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<ColleageDto> collegeList = courseRegistrationService.showCollege();
+			res.put("collegeList", collegeList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/major")
+	public ResponseEntity<Map<String, Object>> showMajor(@RequestParam String colCd){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<MajorDto> majorList = courseRegistrationService.showMajor(colCd);
+			res.put("majorList", majorList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/whole-courses")
+	public ResponseEntity<Map<String, Object>> showWholeCourses(){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> courseList = courseRegistrationService.showWholeCourses();
+			res.put("courseList", courseList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/course-search")
+	public ResponseEntity<Map<String, Object>> searhCourses(@RequestParam String majCd, @RequestParam Integer targetGrd,
+			@RequestParam String searchType, @RequestParam String searchWord){		
+		try {
+			Map<String, Object> res = new HashMap<>();
+			List<Map<String, Object>> courseList = courseRegistrationService.searhCourses(majCd, targetGrd, searchType, searchWord);
+			res.put("courseList", courseList);
+			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
+		}	catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>> (HttpStatus.BAD_REQUEST);
 		}
 	}
 }

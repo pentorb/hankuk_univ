@@ -169,7 +169,7 @@ const PreRegistration = () => {
             <Grid item xs={1}/>
             <Grid item xs={10}>
                 <Typography mt={3} mb={2} variant="h6" color="#444444" gutterBottom><b>수강신청 내역</b></Typography>
-                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 10 }}>
+                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8 }}>
                     <Table aria-label="simple table" sx={{overflowY: "scroll"}}>
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>
