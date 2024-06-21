@@ -19,4 +19,5 @@ public interface CourseRegistrationService {
 	List<MajorDto> showMajor(String colCd) throws Exception;
 	List<Map<String, Object>> showWholeCourses() throws Exception;
 	List<Map<String, Object>> searhCourses(String majCd, Integer targetGrd, String searchType, String searchWord) throws Exception;
+	Map<String, Object> checkConfirmationCount(String stdNo) throws Exception;
 }

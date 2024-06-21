@@ -63,7 +63,9 @@ public class CourseRegistrationController {
 		try {
 			Map<String, Object> res = new HashMap<>();
 			List<Map<String, Object>> confirmationList = courseRegistrationService.showCourseRegistrationConfirmation(stdNo);
+			Map<String, Object> confirmationCount = courseRegistrationService.checkConfirmationCount(stdNo);
 			res.put("confirmationList", confirmationList);
+			res.put("confirmationCount", confirmationCount);
 			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
 		}	catch(Exception e) {
 			e.printStackTrace();

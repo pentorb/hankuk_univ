@@ -15,12 +15,14 @@ import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureBasket;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.Major;
+import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.LectureBasketRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.MajorRepository;
+import com.kosta.hankuk.repository.ScoreRepository;
 import com.kosta.hankuk.repository.StudentRepository;
 
 @Service
@@ -43,6 +45,9 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	@Autowired
 	private MajorRepository majorRepository;
+	
+	@Autowired
+	private ScoreRepository scoreRepository;
 
 	@Override
 	public Map<String, Object> loadStudentInformation(String stdNo) throws Exception {
@@ -340,5 +345,36 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			mapList.add(map);
 		}
 		return mapList;
+	}
+	
+	public Map<String, Object> checkConfirmationCount(String stdNo) throws Exception {
+		Student student = studentRepository.findById(stdNo).get();
+		Integer finSem = student.getFinSem();
+		Integer year = (finSem / 2) + 1;
+		Integer semester = (finSem % 2) + 1; 
+		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
+				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
+		
+		Integer countOfLecture = 0;
+		Integer maximumOfCredit = 0;
+		Integer wholeCredit = 0;
+		
+		countOfLecture = lectureByStdGroup.size();
+		Score score = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
+		if(score.getScore() >= 3.75) {
+			maximumOfCredit = 24;
+		} else {
+			maximumOfCredit = 21;
+		}
+
+		for (LectureByStd lectureByStd : lectureByStdGroup) {
+			wholeCredit += lectureByStd.getLecture().getCredit();
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("countOfLecture", countOfLecture);
+		map.put("maximumOfCredit", maximumOfCredit);
+		map.put("wholeCredit", wholeCredit);
+		return map;
 	}
 }

@@ -16,6 +16,7 @@ const PreRegistration = () => {
     const member = useAtomValue(memberAtom);
     const [preRegistrationList, setPreRegistrationList] = useState([]);
     const [confirmationList, setConfirmationList] = useState([]);
+    const [confirmationCount, setConfirmationCount] = useState({countOfLecture:'', maximumOfCredit:'', wholeCredit:''});
     
     useEffect(() => {
         checkConfirmation();  
@@ -50,6 +51,7 @@ const PreRegistration = () => {
             })
             .then(res => {
                 setConfirmationList([...res.data.confirmationList])
+                setConfirmationCount({...res.data.confirmationCount})
             })
             .catch(err => {
                 console.log(err);
@@ -168,8 +170,15 @@ const PreRegistration = () => {
             <Grid item xs={1}/>
             <Grid item xs={1}/>
             <Grid item xs={10}>
-                <Typography mt={3} mb={2} variant="h6" color="#444444" gutterBottom><b>수강신청 내역</b></Typography>
-                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8 }}>
+                <Typography mt={3} mb={3} variant="h5" color="#444444" gutterBottom><b>수강신청 내역</b></Typography>
+                <div>
+                    <Typography sx={{ float:"left" }}>신청 과목 수 {confirmationCount.countOfLecture}</Typography>
+                    <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
+                    <Typography sx={{ float:"left" }}>신청 가능학점 {confirmationCount.maximumOfCredit}</Typography>
+                    <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
+                    <Typography sx={{ float:"left" }}>신청학점 {confirmationCount.wholeCredit}</Typography>
+                </div>
+                <TableContainer component={Paper} sx={{ marginTop: 8, marginBottom: 8 }}>
                     <Table aria-label="simple table" sx={{overflowY: "scroll"}}>
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>
