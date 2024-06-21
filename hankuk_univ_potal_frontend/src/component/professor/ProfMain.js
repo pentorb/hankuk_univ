@@ -35,6 +35,7 @@ const ProfMain = () => {
     const token = useAtomValue(tokenAtom);
     const [events, setEvents] = useState([]);
     const navigate = useNavigate();
+    const [lectureList, setLectureList] = useState([]);
 
     const daycheck = (info) => {
         var number = document.createElement("a");
@@ -57,9 +58,8 @@ const ProfMain = () => {
         navigate("/")
     }
 
-    useEffect(() => {
-        console.log(member)
-        axios.get(`${url}/calendar?id=${member.id}`)
+    const myCalendar = () => {
+        axios.get(`${url}/calendar?id=${member.id}`, { headers: { Authorization: JSON.stringify(token) } })
             .then(res => {
                 const formattedEvents = res.data.map(event => {
                     return {
@@ -73,12 +73,47 @@ const ProfMain = () => {
                     };
                 });
                 setEvents(formattedEvents);
-                console.log(formattedEvents);
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
             });
-    }, [token]);
+    }
+
+    const myLecture = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1 to get 1-12
+        let semester;
+    
+        if (month >= 1 && month <= 6) {
+            semester = 1;
+        } else {
+            semester = 2;
+        }
+    
+        console.log(year); // year 값을 콘솔에 출력
+    
+        axios.get(`${url}/lectureDashboard?profNo=${member.id}&year=${year}&semester=${semester}`,
+            {
+                headers: { Authorization: JSON.stringify(token) }
+            }
+        )
+        .then(res => {
+            console.log(res);
+            setLectureList([...res.data]);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    };
+    
+
+    useEffect(() => {
+        if(token && member && member.id) {
+            myCalendar();
+            myLecture();
+        }
+    }, [token, member]);
 
 
 
