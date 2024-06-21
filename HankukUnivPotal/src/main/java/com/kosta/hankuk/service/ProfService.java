@@ -14,8 +14,12 @@ import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
+import com.kosta.hankuk.dto.ProfessorDto;
 
 public interface ProfService {
+	Boolean checkPassword(String profNo, String inputPw) throws Exception;
+	
+	void updateProfPw(String profNo, String newPw) throws Exception;
 	
 	List<LectureDto> lectureList(String profNo, Integer year, String div) throws Exception;
 	
@@ -74,6 +78,12 @@ public interface ProfService {
 	List<AbsenceDto> absenceList(String lecNo) throws Exception;
 
 	void absenceModify(AbsenceDto absenceDto) throws Exception;
+
+	void profInfoModify(ProfessorDto professorDto) throws Exception;
+
+	
+
+	
 
 
 	

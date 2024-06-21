@@ -25,7 +25,7 @@ public class CalendarController {
 	@PostMapping("/calInsert")
 	public ResponseEntity<String> calInsert(@ModelAttribute CalendarDto calDto){
 		try {
-			//System.out.println(calDto);
+			System.out.println(calDto);
 			calService.calInsert(calDto);
 			return new ResponseEntity<String>("일정 정상 등록", HttpStatus.OK);
 		} catch(Exception e) {

@@ -109,7 +109,13 @@
 }
 
 
-
+.lectureDashBoard-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 73px;
+  padding: 50px 88px;
+  cursor: pointer;
+}
 .LectDashboard_body{
   width: 1138px;
   margin: 0 auto;

@@ -246,7 +246,7 @@ const LectureWrite = () => {
                                             className="Lecture_Write_Input"
                                             id="time1"
                                             name="time1"
-                                            type="time"
+                                            type="select"
                                             onChange={changeValue}
                                         />
                                     </FormGroup>

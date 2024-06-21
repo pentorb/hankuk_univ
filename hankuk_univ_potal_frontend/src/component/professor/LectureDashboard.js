@@ -46,8 +46,10 @@ const LectureDashboard = () => {
     useEffect(() => {
         const date = new Date();
         const year = date.getFullYear();
+        const month = date.getMonth();
+        const semester = month < 7 ? 1 : 2;
         console.log(year);
-        axios.get(`${url}/lectureDashboard?profNo=${profNo}&year=${year}`,
+        axios.get(`${url}/lectureDashboard?profNo=${profNo}&year=${year}&semester=${semester}`,
             {
                 headers: { Authorization: JSON.stringify(token) }
             }
@@ -87,25 +89,22 @@ const LectureDashboard = () => {
                 </div>
 
                 <Grid >
-                    <div className="LectDashboard_body">
+                    <div className='lectureDashBoard-grid'>
                         {lectureList.map((lecture, i) => (
                             <Card key={i}
-                                className="LectDashboard_Card"
+                                className="lecture"
                                 onClick={() => contents(i)}
                             >
-                                <Label className="LectDashboard_Card_BackColor" />
-
-                                <CardBody className="LectDashboard_CardBody">                                        <CardTitle tag="h5">
-                                    {lecture.subName}
+                                <Label className="lecture-color-card" />
+                                <CardBody style={{ margin: '0px 10px 10px' }}>                                        
+                                <CardTitle  style={{ fontSize: 'larger' }}>
+                                    <b>{lecture.subName}</b>
                                 </CardTitle>
-
-                                    <CardText className="LectDashboard_CardText">
-                                        {lecture.year}년 {lecture.semester}
-                                    </CardText>
-                                    <CardText className="LectDashboard_CardText">
+                                    <CardText  style={{ margin: '0px' }}>
+                                        {lecture.year}년 {lecture.semester}학기<br/>
                                         222{lecture.lecRoom}
                                     </CardText>
-
+                                    
                                 </CardBody>
                             </Card>
                         ))}

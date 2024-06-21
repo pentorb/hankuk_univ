@@ -25,6 +25,7 @@ import InsertCal from '../comm/InsertCal';
 import HomeworkSubmitList from './HomeworkSubmitList';
 import SyllabusFile from './SyllabusFile';
 import ScoreList from './ScoreList';
+import MyPage from './MyPage';
 
 
 const ProfessorDashboard = () => {
@@ -42,6 +43,7 @@ const ProfessorDashboard = () => {
                     <Grid item xs={10} sx={{ backgroundColor: "#DDE1E8" }}>
                         <Routes>
                             <Route path="/" element={<ProfMain/>}></Route>
+                            <Route path="/myPage" element={<MyPage/>}></Route>
                             <Route path="/lectureList" element={<LectureList/>}></Route>
                             <Route path="/lectureWrite" element={<LectureWrite/>}></Route>
                             <Route path="/lectureModify/:lecNo" element={<LectureModify/>}></Route>

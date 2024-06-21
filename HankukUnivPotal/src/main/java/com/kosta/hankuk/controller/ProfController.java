@@ -29,6 +29,8 @@ import com.kosta.hankuk.dto.HomeworkSubmitDto;
 import com.kosta.hankuk.dto.LectureByStdDto;
 import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
+import com.kosta.hankuk.dto.ProfessorDto;
+import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.service.ProfService;
 
 
@@ -36,6 +38,40 @@ import com.kosta.hankuk.service.ProfService;
 public class ProfController {
 	@Autowired
 	private ProfService profService;
+	
+	@GetMapping("/checkProfPw")
+	public ResponseEntity<String> checkProfPw(@RequestParam String profNo, @RequestParam(name="password") String inputPw) {
+		try { 
+			Boolean isCorrect = profService.checkPassword(profNo, inputPw);
+			if (!isCorrect) {
+				return new ResponseEntity<String>("비번 찾기 실패", HttpStatus.BAD_REQUEST);
+			} else {
+				return new ResponseEntity<String>("비번 찾기 성공", HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/updateProfPw") // 비번 재설정
+	public ResponseEntity<String> updateProfPw(@RequestParam String profNo, @RequestParam(name="newPw") String newPw) {
+		try {
+			profService.updateProfPw(profNo, newPw);
+			return new ResponseEntity<String>("비밀번호 변경 성공", HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<String>("비밀번호 변경 실패", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/profInfoModify")
+	public ResponseEntity<String> profInfoModify(@ModelAttribute ProfessorDto professorDto){
+		try {
+			profService.profInfoModify(professorDto);
+			return new ResponseEntity<String>("정보 변경 완료", HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 	@GetMapping("/lectureList")
 	public ResponseEntity<List<LectureDto>> lectureList(
