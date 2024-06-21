@@ -24,6 +24,7 @@ import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.dto.SubjectDto;
 import com.kosta.hankuk.entity.Absence;
 import com.kosta.hankuk.entity.Appeal;
 import com.kosta.hankuk.entity.Attendance;
@@ -36,6 +37,7 @@ import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.LessonData;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.repository.AbsenceRepository;
 import com.kosta.hankuk.repository.AppealRepository;
 import com.kosta.hankuk.repository.AttendanceRepository;
@@ -50,6 +52,7 @@ import com.kosta.hankuk.repository.LessonDataRepository;
 import com.kosta.hankuk.repository.LessonRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
+import com.kosta.hankuk.repository.SubjectRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -73,6 +76,7 @@ public class ProfServiceImpl implements ProfService{
 	private final AppealRepository appealRepository;
 	private final AbsenceRepository absenceRepository;
 	private final StudentRepository studentRepository;
+	private final SubjectRepository subjectRepository;
 	
 	@Override
 	public Boolean checkPassword(String profNo, String inputPw) throws Exception {
@@ -121,6 +125,16 @@ public class ProfServiceImpl implements ProfService{
 			lectureDtoList.add(lecture.toLectureDto());
 		}
 		return lectureDtoList;
+	}
+	
+	@Override
+	public List<SubjectDto> subjectList(String majCd) throws Exception {
+		List<Subject> subjectList = subjectRepository.findByMajor_majCd(majCd);
+		List<SubjectDto> subjectDtoList = new ArrayList<SubjectDto>();
+		for (Subject subject : subjectList) {
+			subjectDtoList.add(subject.toSubjectDto());
+		}
+		return subjectDtoList;
 	}
 	
 	@Override
@@ -395,6 +409,8 @@ public class ProfServiceImpl implements ProfService{
 	public void absenceModify(AbsenceDto absenceDto) throws Exception {
 		absenceRepository.save(absenceDto.toAbsence());
 	}
+
+	
 
 	
 

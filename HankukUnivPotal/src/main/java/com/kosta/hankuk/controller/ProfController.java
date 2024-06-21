@@ -31,6 +31,7 @@ import com.kosta.hankuk.dto.LectureDto;
 import com.kosta.hankuk.dto.LessonDataDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
+import com.kosta.hankuk.dto.SubjectDto;
 import com.kosta.hankuk.service.ProfService;
 
 
@@ -86,6 +87,20 @@ public class ProfController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<List<LectureDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/subjectList")
+	public ResponseEntity<List<SubjectDto>> subjectList(
+			@RequestParam(name = "majCd", required = false) String majCd) {
+		try {
+			System.out.println(majCd);
+			List<SubjectDto> subjectList = profService.subjectList(majCd);
+			System.out.println(subjectList);
+			return new ResponseEntity<List<SubjectDto>>(subjectList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<SubjectDto>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

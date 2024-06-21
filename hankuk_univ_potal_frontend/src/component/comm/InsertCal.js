@@ -130,7 +130,7 @@ const InsertCal = () => {
                 } else if (member.id.substring(0, 1) === "2") {
                     baseUrl = '/student';
                 }
-                navigate(`${baseUrl}/insert-calendar`);
+                navigate(`${baseUrl}/calendar`);
             })
             .catch(err => {
                 console.log(err)
