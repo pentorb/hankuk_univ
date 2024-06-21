@@ -25,7 +25,7 @@ public interface ProfService {
 	
 	String lectureModify(LectureDto lectureDto) throws Exception;
 	
-	List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception;
+	List<LectureDto> lectureDashboard(String profNo, Integer year, Integer semester) throws Exception;
 	
 	Map<String, Object> studentListAndLectureByStdList(String profNo, Integer year, String stdName) throws Exception;
 

@@ -96,10 +96,7 @@ public class ProfController {
 			@RequestParam(name = "year", required = false) String year,
 			@RequestParam(name = "semester", required = false) String semester) {
 		try {
-			System.out.println(profNo);
-			System.out.println(year);
-			List<LectureDto> lectureList = profService.lectureDashboard(profNo, Integer.parseInt(year));
-			System.out.println(lectureList);
+			List<LectureDto> lectureList = profService.lectureDashboard(profNo, Integer.parseInt(year), Integer.parseInt(semester));
 			return new ResponseEntity<List<LectureDto>>(lectureList, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

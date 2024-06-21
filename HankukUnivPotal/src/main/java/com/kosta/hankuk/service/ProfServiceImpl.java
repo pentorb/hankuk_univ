@@ -110,9 +110,9 @@ public class ProfServiceImpl implements ProfService{
 	}
 	
 	@Override
-	public List<LectureDto> lectureDashboard(String profNo, Integer year) throws Exception {
+	public List<LectureDto> lectureDashboard(String profNo, Integer year, Integer semester) throws Exception {
 		
-		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatus(profNo, year, "REQ");
+		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatusAndSemester(profNo, year, "REQ", semester);
 		
 		List<LectureDto> lectureDtoList = new ArrayList<LectureDto>();
 		for (Lecture lecture : lectureList) {
