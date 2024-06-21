@@ -12,6 +12,7 @@ public interface MajorRepository extends JpaRepository<Major, String> {
     Optional<Major> findByName(String name);
     List<Major> findByNameContaining(String name);
     boolean existsByMajCd(String majCd);
+    Optional<Major> findByMajCd(String majCd);
 
 
 

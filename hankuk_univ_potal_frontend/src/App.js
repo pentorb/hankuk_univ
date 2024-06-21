@@ -4,7 +4,7 @@ import StudentDashboard from './component/student/StudentDashboard';
 import ProfessorDashboard from './component/professor/ProfessorDashboard';
 import StaffDashboard from './component/staff/StaffDashboard';
 import Main from './component/comm/Main';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import BoardNav from './component/comm/BoardNav';
 import Login from './component/comm/Login';
 import AccessedMain from './component/comm/AccessedMain';
