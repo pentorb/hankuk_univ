@@ -48,6 +48,11 @@ const NoticeBoard = () => {
             });
     }
 
+    const handleWriteComplete = () => {
+        setShowWrite(false);
+        submit(1); // 글 작성 후 첫 페이지로 이동하여 목록을 갱신합니다.
+    };
+
 
     return (
         <div>
@@ -69,7 +74,7 @@ const NoticeBoard = () => {
             </div>
 
             <div className="tableArea">
-                <Table bordered hover style={{ textAlign: 'center', tableLayout: 'fixed', width: '100%' }}>
+                <Table bordered hover style={{ textAlign: 'center', tableLayout: 'fixed', width: '100%', marginBottom:'20px' }}>
                     <thead style={{ fontSize: '20px' }}>
                         <tr>
                             <th style={{ width: '10%' }}>No.</th>
@@ -102,12 +107,12 @@ const NoticeBoard = () => {
                         ))}
                     </tbody>
                 </Table>
-                <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
+                <Stack spacing={2} alignItems="center" sx={{ marginBottom: 4 }}>
                     <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
                 </Stack>
             </div>
                 </>
-            ) : ( <NoticeWrite/>)}
+            ) : ( <NoticeWrite onWriteComplete={handleWriteComplete} />)}
         </div>
     );
 }
