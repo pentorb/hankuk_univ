@@ -29,7 +29,7 @@ const Toc = () => {
                 <img src="\images\envelope1.png" style={{ width: "50px", height: "auto" }} alt="" /><br />
                 쪽 지
             </Link>
-            <Link to="/TotalBoardlist" className="toc_bnt">
+            <Link to="/noticeBoard" className="toc_bnt">
                 <img src="\images\university2.png" style={{ width: "50px", height: "50px" }} alt="" />
                 <div style={{ paddingTop: "10px" }}>통합 게시판</div>
             </Link>
