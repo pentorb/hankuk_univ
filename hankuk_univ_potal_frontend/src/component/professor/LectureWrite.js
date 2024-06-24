@@ -228,13 +228,13 @@ const LectureWrite = () => {
                                             type="select"
                                             onChange={changeValue}
                                         >
-                                            <option>
+                                            <option value=''>
                                                 온/오프라인선택
                                             </option>
-                                            <option>
+                                            <option value='On'>
                                                 온라인
                                             </option>
-                                            <option>
+                                            <option value='Off'>
                                                 오프라인
                                             </option>
                                         </Input>
@@ -298,8 +298,7 @@ const LectureWrite = () => {
                                         <Label
                                             // style={{marginLeft:'50px'}}
                                             className="Lecture_Write_Label"
-                                            for="start11">
-
+                                            for="start1">
                                         </Label>
                                         <Input
                                             style={{ width: '190px' }}

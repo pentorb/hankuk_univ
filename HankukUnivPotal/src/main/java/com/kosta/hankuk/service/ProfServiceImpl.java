@@ -141,7 +141,9 @@ public class ProfServiceImpl implements ProfService{
 	public String lectureWrite(LectureDto lectureDto) throws Exception {
 		String year = String.valueOf(lectureDto.getYear()).substring(2);
 		List<Lecture> lectureList = lectureRepository.findByLecNoStartsWith(lectureDto.getSubCd()+year);
-		String lectureCnt = lectureList.size()+1 < 10 ? "0"+String.valueOf(lectureList.size()+1) : String.valueOf(lectureList.size()+1);
+		System.out.println(lectureList);
+		System.out.println(lectureList.size());
+		String lectureCnt = lectureList==null ? "01" : lectureList.size()+1 < 10 ? "0"+String.valueOf(lectureList.size()+1) : String.valueOf(lectureList.size()+1);
 		
 		lectureDto.setLecNo(lectureDto.getSubCd()+year+lectureCnt);
 		lectureRepository.save(lectureDto.toLecture());

@@ -44,7 +44,7 @@ export default function StaffSidebar() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh" }}>
+        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh"}}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
             <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(1)} sx={{ color: "white" }} />

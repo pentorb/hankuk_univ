@@ -220,12 +220,9 @@ const ProfMain = () => {
                                     </Card>
                                 ))}
                             </div>        
-
-                           
                         </div>
                     </Grid>
                 </Grid>
-
             </Grid>
         </Grid>
     )

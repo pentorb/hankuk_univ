@@ -70,7 +70,23 @@ const LectureList = ({ direction, ...args }) => {
                 </React.Fragment>
             ));
         } else {
-
+            return lectureList.filter(lecture=>lecture.status===status).map((lec, i) => (
+                <React.Fragment key={i}>
+                    <tr
+                        className="Appeal_Table_Tr"
+                        onClick={() => navigate(`/professor/lectureModify/${lec.lecNo}`)}>
+                        <td className="Appeal_Table_Td Appeal_Table_Td_First">{lec.year}</td>
+                        <td className="Appeal_Table_Td">{lec.semester}</td>
+                        <td className="Appeal_Table_Td">{lec.subName}</td>
+                        <td
+                            className="Appeal_Table_Td Appeal_Table_Td_Last"
+                            style={lec.status === 'REQ' ? { color: 'red' } : lec.status === 'APPR' ? { color: 'blueviolet' } : { color: 'black' }}>
+                            {lec.status === 'REQ' ? '신규' : lec.status === 'APPR' ? '승인' : '반려'}
+                        </td>
+                    </tr>
+                    <tr className="Appeal_Table_spacer"><td colSpan="4"></td></tr>
+                </React.Fragment>
+            ));
         }
 
     };
@@ -134,8 +150,8 @@ const LectureList = ({ direction, ...args }) => {
                         onChange={(e) => setStatus(e.target.value)}
                     >
                         <option value="ALL">상태</option>
-                        <option value="REQ">승인</option>
-                        <option value="APP">신청</option>
+                        <option value="APPR">승인</option>
+                        <option value="REQ">신청</option>
                         <option value="REJ">반려</option>
                     </Input>
 
