@@ -2,7 +2,6 @@ import { useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import '../../config/activeTab.css';
@@ -49,8 +48,6 @@ export default function StudentSidebar() {
               onClick={() => { setActiveTab(2); navigate("/student/lecture"); setSelectedIndex(8); }} sx={{ color: "white" }} />
             <Tab icon={<CalendarMonthIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>캘린더</Typography>} id={3 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(3)} sx={{ color: "white" }} />
-            <Tab icon={<QuestionAnswerIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>쪽지</Typography>} id={4 === activeTab ? "active" : ""}
-              onClick={() => setActiveTab(4)} sx={{ color: "white" }} />
           </Tabs>
         </Grid>
         <Grid item xs={8} backgroundColor={"#FFFFFF"}>
@@ -149,9 +146,6 @@ export default function StudentSidebar() {
                   <ListItemText primary="일정 등록"  sx={{pl:1}}/>
                 </ListItemButton>
               </Link>
-            </>}
-          {activeTab === 4 &&
-            <>
             </>}
           {(activeTab === 5) &&
             <>
