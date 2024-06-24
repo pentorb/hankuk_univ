@@ -179,64 +179,65 @@ const ResSemester = () => {
                             <span style={{ fontSize: 'x-large' }}><b>휴학 신청 현황</b></span>
                         </div>
                         <div style={{ padding: '0px 50px 0px', textAlign: 'center', fontSize: 'larger' }}>
-                            {huebok.length === 0 ? (
-                                <div className="noneData">휴학 신청 내역이 없습니다.</div>
-                            ) : (
-                                <>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        {/* <Input type="select" className="selBox" name="status" onChange={handleStatusChange}> */}
-                                        <Input type="select" className="selBox" name="status" onChange={(e) => setStatus(e.target.value)}>
-                                            <option>처리 현황</option>
-                                            <option value="REQ">신청</option>
-                                            <option value="REJ">반려</option>
-                                            <option value="APP">승인</option>
-                                        </Input>&nbsp;&nbsp;&nbsp;
-                                        <Input type="select" className="selBox" id="type" name="type" onChange={(e) => setType(e.target.value)}>
-                                            <option>구분</option>
-                                            <option value="o">일반 휴학</option>
-                                            {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}
-                                            <option value="p">출산, 임신 휴학</option>
-                                            <option value="s">창업 휴학</option>
-                                            <option value="i">질병 휴학</option>
-                                            <option value="k">육아 복학</option>
-                                        </Input>
-                                    </div>
-                                    <Table className="table" bordered hover>
-                                        <thead>
-                                            <tr>
-                                                <th>휴학 번호</th>
-                                                <th>휴학 유형</th>
-                                                <th>휴학 신청 일자</th>
-                                                <th>휴학 학기</th>
-                                                <th>처리 상태</th>
-                                                <th>상세보기</th>
+
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                {/* <Input type="select" className="selBox" name="status" onChange={handleStatusChange}> */}
+                                <Input type="select" className="selBox" name="status" onChange={(e) => setStatus(e.target.value)}>
+                                    <option>처리 현황</option>
+                                    <option value="REQ">신청</option>
+                                    <option value="REJ">반려</option>
+                                    <option value="APP">승인</option>
+                                </Input>&nbsp;&nbsp;&nbsp;
+                                <Input type="select" className="selBox" id="type" name="type" onChange={(e) => setType(e.target.value)}>
+                                    <option>구분</option>
+                                    <option value="o">일반 휴학</option>
+                                    {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}
+                                    <option value="p">출산, 임신 휴학</option>
+                                    <option value="s">창업 휴학</option>
+                                    <option value="i">질병 휴학</option>
+                                    <option value="k">육아 복학</option>
+                                </Input>
+                            </div>
+
+                            <Table className="table" bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th>휴학 번호</th>
+                                        <th>휴학 유형</th>
+                                        <th>휴학 신청 일자</th>
+                                        <th>휴학 학기</th>
+                                        <th>처리 상태</th>
+                                        <th>상세보기</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {huebok.length === 0 ? (
+                                        <tr><td colspan="6">신청 내역이 없습니다.</td></tr>
+                                    ) : (<>
+                                        {huebok.filter(hue => hue.sect === 'H').map(hue => (
+                                            <tr key={hue.hueNo}>
+                                                <td scope="row">{hue.hueNo}</td>
+                                                <td>{typeMap[hue.type] || hue.type}</td>
+                                                <td>{hue.appDt}</td>
+                                                <td>{parseSemester(hue.hueSem)}</td>
+                                                <td style={getStatusStyle(hue.status)}>
+                                                    {statusMap[hue.status] || hue.status}
+                                                </td>
+                                                {hue.status === 'REJ' ? (
+                                                    <td><Button variant="text" onClick={() => trClick(hue)}>상세보기</Button></td>
+                                                ) : (
+                                                    <td onClick={(e) => setClose(false)}>-</td>
+                                                )
+                                                }
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {huebok.filter(hue => hue.sect === 'H').map(hue => (
-                                                <tr key={hue.hueNo}>
-                                                    <td scope="row">{hue.hueNo}</td>
-                                                    <td>{typeMap[hue.type] || hue.type}</td>
-                                                    <td>{hue.appDt}</td>
-                                                    <td>{parseSemester(hue.hueSem)}</td>
-                                                    <td style={getStatusStyle(hue.status)}>
-                                                        {statusMap[hue.status] || hue.status}
-                                                    </td>
-                                                    {hue.status === 'REJ' ? (
-                                                        <td><Button variant="text" onClick={() => trClick(hue)}>상세보기</Button></td>
-                                                    ) : (
-                                                        <td onClick={(e)=> setClose(false)}>-</td>
-                                                    )
-                                                    }
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </Table>
-                                    <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
-                                        <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
-                                    </Stack>
-                                </>
-                            )}
+                                        ))}
+                                    </>
+                                    )}
+                                </tbody>
+                            </Table>
+                            <Stack spacing={2} alignItems="center" sx={{ marginBottom: 1 }}>
+                                <Pagination count={pageInfo.allPage} page={pageInfo.curPage} onChange={(e, page) => handlePageChange(page)} />
+                            </Stack>
                         </div>
 
                         <Divider sx={{ margin: 3 }} />
@@ -254,107 +255,107 @@ const ResSemester = () => {
                         )}
                         {/* <form onSubmit={submit}> */}
                         <div className="col-12 rejText">
-                                <span>반려사유를 제대로 숙지하고 다시 휴학신청을 해주시기 바랍니다.</span>
-                            </div>
-                            <div style={{ display: 'flex', padding: '10px' }}>
-                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={text} className="col-4">이름</div>
-                                    <div className="col-6">
-                                        <Input type="text" id="name" name="name"
-                                            placeholder={member.name}
-                                            disabled
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={text} className="col-4">학번</div>
-                                    <div className="col-6">
-                                        <Input type="text" id="stdNo" name="stdNo"
-                                            placeholder={member.id}
-                                            disabled
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={text} className="col-4">유형</div>
-                                    <div className="col-6">
-                                        <Input type="select" id="type" name="type"
-                                            value={hueDetail.type} disabled>
-                                            <option>---선택하세요---</option>
-                                            <option value="o">일반 휴학</option>
-                                            {member.gender !== 'F' ?
-                                                (<>
-                                                    <option value="m">군 휴학</option>
-                                                </>
-                                                ) : (<></>)
-                                            }
-                                            <option value="p">출산, 임신 휴학</option>
-                                            <option value="s">창업 휴학</option>
-                                            <option value="i">질병 휴학</option>
-                                            <option value="k">육아 복학</option>
-                                        </Input>
-                                    </div>
+                            <span>반려사유를 제대로 숙지하고 다시 휴학신청을 해주시기 바랍니다.</span>
+                        </div>
+                        <div style={{ display: 'flex', padding: '10px' }}>
+                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={text} className="col-4">이름</div>
+                                <div className="col-6">
+                                    <Input type="text" id="name" name="name"
+                                        placeholder={member.name}
+                                        disabled
+                                    />
                                 </div>
                             </div>
-
-                            <div style={{ display: 'flex', padding: '10px' }}>
-                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={text} className="col-4">휴학년도</div>
-                                    <div className="col-6">
-                                        <Input type="text" id="year" name="year"
-                                            placeholder='2024' value={hueDetail.year} disabled
-                                        />
-                                    </div>
+                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={text} className="col-4">학번</div>
+                                <div className="col-6">
+                                    <Input type="text" id="stdNo" name="stdNo"
+                                        placeholder={member.id}
+                                        disabled
+                                    />
                                 </div>
-
-                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={text} className="col-4">휴학학기</div>
-                                    <div className="col-6">
-                                        <Input type="select" id="sem" name="sem"
-                                            value={hueDetail.sem} disabled >
-                                            <option>학기 선택</option>
-                                            <option value="01">1학기</option>
-                                            <option value="02">2학기</option>
-                                        </Input>
-                                    </div>
+                            </div>
+                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={text} className="col-4">유형</div>
+                                <div className="col-6">
+                                    <Input type="select" id="type" name="type"
+                                        value={hueDetail.type} disabled>
+                                        <option>---선택하세요---</option>
+                                        <option value="o">일반 휴학</option>
+                                        {member.gender !== 'F' ?
+                                            (<>
+                                                <option value="m">군 휴학</option>
+                                            </>
+                                            ) : (<></>)
+                                        }
+                                        <option value="p">출산, 임신 휴학</option>
+                                        <option value="s">창업 휴학</option>
+                                        <option value="i">질병 휴학</option>
+                                        <option value="k">육아 복학</option>
+                                    </Input>
                                 </div>
-                                <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={text} className="col-4">첨부자료</div>
-                                    <div className="col-6">
-                                        <Input type="file" id="files" name="files"
-                                            style={{ width: '100%' }}
-                                            onChange={dataChange}
-                                        />
-                                    </div>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', padding: '10px' }}>
+                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={text} className="col-4">휴학년도</div>
+                                <div className="col-6">
+                                    <Input type="text" id="year" name="year"
+                                        placeholder='2024' value={hueDetail.year} disabled
+                                    />
                                 </div>
                             </div>
 
-                            <div style={{ padding: '10px 0px 50px', display: 'flex' }}>
-                                <div className='col-6'>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <div style={text} className="col-3">휴학 사유</div>
-                                    </div>
-                                    <div style={{ padding: '5px 0px 0px 15px' }}>
-                                        <Input type="textarea" id="reason" name="reason"
-                                            value={hueDetail.reason || ''}
-                                            style={{ width: '98%', padding: '30px' }}
-                                            onChange={dataChange} />
-                                    </div>
-                                </div>
-                                <div className='col-6'>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <div style={text} className="col-3">반려 사유</div>
-
-                                    </div>
-                                    <div style={{ padding: '5px 0px 0px 15px' }}>
-                                        <Input type="textarea" id="reason" name="reason"
-                                            value={hueDetail.rejResult}
-                                            style={{ width: '98%', padding: '30px' }}
-                                            disabled />
-                                    </div>
+                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={text} className="col-4">휴학학기</div>
+                                <div className="col-6">
+                                    <Input type="select" id="sem" name="sem"
+                                        value={hueDetail.sem} disabled >
+                                        <option>학기 선택</option>
+                                        <option value="01">1학기</option>
+                                        <option value="02">2학기</option>
+                                    </Input>
                                 </div>
                             </div>
-                           
+                            <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={text} className="col-4">첨부자료</div>
+                                <div className="col-6">
+                                    <Input type="file" id="files" name="files"
+                                        style={{ width: '100%' }}
+                                        onChange={dataChange}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ padding: '10px 0px 50px', display: 'flex' }}>
+                            <div className='col-6'>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-3">휴학 사유</div>
+                                </div>
+                                <div style={{ padding: '5px 0px 0px 15px' }}>
+                                    <Input type="textarea" id="reason" name="reason"
+                                        value={hueDetail.reason || ''}
+                                        style={{ width: '98%', padding: '30px' }}
+                                        onChange={dataChange} />
+                                </div>
+                            </div>
+                            <div className='col-6'>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={text} className="col-3">반려 사유</div>
+
+                                </div>
+                                <div style={{ padding: '5px 0px 0px 15px' }}>
+                                    <Input type="textarea" id="reason" name="reason"
+                                        value={hueDetail.rejResult}
+                                        style={{ width: '98%', padding: '30px' }}
+                                        disabled />
+                                </div>
+                            </div>
+                        </div>
+
                         {/* </form> */}
 
                     </Grid>

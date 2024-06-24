@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router';
 const MyPage = () => {
     const [member, setMember] = useAtom(memberAtom);
     const token = useAtomValue(tokenAtom);
+    const [modify, setModify] = useState(false);
     const navigate = useNavigate();
     const logout = () => {
         setMember(null);
@@ -33,6 +34,7 @@ const MyPage = () => {
     const dataChange = (e) => {
         const { name, value } = e.target;
         setFormValues({ ...formValues, [name]: value });
+        setModify(true);
     }
 
     const [formValues, setFormValues] = useState({
@@ -264,13 +266,17 @@ const MyPage = () => {
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <div className="col-3 ttext">이메일</div>
-                                        <Input type="text" className='infoD' value={formValues.email} onChange={dataChange} name="email" />
-                                        <Input type="select" className='infoD' value={formValues.emailDo} onChange={dataChange} name="emailDo" >
-                                            <option>{member.emailDo}</option>
-                                            <option>@naver.com</option>
-                                            <option>@gmail.com</option>
-                                            <option>@kakao.com</option>
-                                            <option>@daum.net</option>
+                                        <Input type="text" className='infoD'
+                                            value={!formValues.email || formValues.email === 'null' ? '' : formValues.email} onChange={dataChange}
+                                            name="email" />@
+                                        <Input type="select" className='infoD'
+                                            value={!formValues.emailDo || formValues.emailDo === 'null' ? '' : formValues.emailDo} onChange={dataChange}
+                                            name="emailDo" >
+                                            <option value=''>선택하세요</option>
+                                            <option value='@naver.com'>naver.com</option>
+                                            <option value='@gmail.com'>gmail.com</option>
+                                            <option value='@kakao.com'>kakao.com</option>
+                                            <option value='@daum.net' v>daum.net</option>
                                         </Input>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -296,9 +302,18 @@ const MyPage = () => {
                                     <PersonIcon className='personIcon' style={{ width: '100%', height: '100%' }} />
                                 </div>
                             </div>
-                            <div style={{ margin: '20px 0px 0px 360px' }}>
-                                <Button style={{ backgroundColor: '#1F3468', color: 'white' }} onClick={checkPw}>수 정</Button>
-                            </div>
+                            {modify ? (
+                                <>
+                                    <div style={{ margin: '20px 0px 0px 705px' }} >
+                                        <Button style={{ backgroundColor: '#1F3468', color: 'white' }} onClick={checkPw}>수 정</Button>
+                                    </div>
+                                </>) : (
+                                <>
+                                    <div style={{ margin: '20px 0px 0px 705px' }} >
+                                        &nbsp;
+                                    </div>
+                                </>)}
+
                         </form>
 
 
