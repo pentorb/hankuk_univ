@@ -61,7 +61,7 @@ public class NoticeBoard {
 				.viewCount(viewCount)
 				.isRequired(isRequired)
 				.writeDt(writeDt)
-				.writer(staff.getStfNo())
+				.writer(staff.getName())
 				.build();
 	}
 }

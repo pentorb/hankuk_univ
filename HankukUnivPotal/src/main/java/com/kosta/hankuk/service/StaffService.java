@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.dto.NoticeBoardDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.dto.SubjectDto;
@@ -68,5 +69,8 @@ public interface StaffService {
     List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception;
 //    void huebokInsert(HuehakAndBokhakDto hbDto) throws Exception;
     void huebokModify(HuehakDto hueDto) throws Exception;
+    List<NoticeBoardDto> noticeBrdList(PageInfo pageInfo, String type, String word) throws Exception;
+    List<NoticeBoardDto> requiredBrdLsit() throws Exception;
+    
     
 }

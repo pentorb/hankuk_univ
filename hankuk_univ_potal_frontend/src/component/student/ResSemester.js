@@ -103,15 +103,15 @@ const ResSemester = () => {
         fetchData(page); // 페이지 변경 시 데이터 다시 가져오기
     };
 
-    const handleTypeChange = (e) => {
-        const selectData = e.target.value;
-        setType(selectData);
-    }
+    // const handleTypeChange = (e) => {
+    //     const selectData = e.target.value;
+    //     setType(selectData);
+    // }
 
-    const handleStatusChange = (e) => {
-        const selectData = e.target.value;
-        setStatus(selectData);
-    }
+    // const handleStatusChange = (e) => {
+    //     const selectData = e.target.value;
+    //     setStatus(selectData);
+    // }
 
     const dataChange = (e) => {
         const { name, value } = e.target;
@@ -184,13 +184,14 @@ const ResSemester = () => {
                             ) : (
                                 <>
                                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Input type="select" className="selBox" name="status" onChange={handleStatusChange}>
+                                        {/* <Input type="select" className="selBox" name="status" onChange={handleStatusChange}> */}
+                                        <Input type="select" className="selBox" name="status" onChange={(e) => setStatus(e.target.value)}>
                                             <option>처리 현황</option>
                                             <option value="REQ">신청</option>
                                             <option value="REJ">반려</option>
                                             <option value="APP">승인</option>
                                         </Input>&nbsp;&nbsp;&nbsp;
-                                        <Input type="select" className="selBox" id="type" name="type" onChange={handleTypeChange}>
+                                        <Input type="select" className="selBox" id="type" name="type" onChange={(e) => setType(e.target.value)}>
                                             <option>구분</option>
                                             <option value="o">일반 휴학</option>
                                             {member.gender !== 'F' ? (<><option value="m">군 휴학</option></>) : ''}

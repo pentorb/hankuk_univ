@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.dto.NoticeBoardDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.dto.SubjectDto;
@@ -277,9 +278,7 @@ public class StaffController {
             return ResponseEntity.status(500).body("Failed to upload data: " + e.getMessage());
         }
     }
-    
-    
-    
+ 
     
     @GetMapping("/allHBList")
     public ResponseEntity<Map<String,Object>> allHueList(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
@@ -307,5 +306,25 @@ public class StaffController {
 			e.printStackTrace();
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
+    }
+    
+    @GetMapping("/NoticeBrdList")
+    public ResponseEntity<Map<String, Object>> NoticeBrdList(@RequestParam(name="page", required = false, defaultValue="1") Integer page,
+    		                                                 @RequestParam(name="type", required = false) String type,
+    		                                                 @RequestParam(name="word", required = false) String word) {
+    	Map<String,Object> res = new HashMap<>();
+    	try {
+    		PageInfo pageInfo = PageInfo.builder().curPage(page).build();
+    		List<NoticeBoardDto> nbrdList = staffService.noticeBrdList(pageInfo, type, word);
+    		List<NoticeBoardDto> rbrdList = staffService.requiredBrdLsit();
+    		res.put("nbrdList", nbrdList);
+    		res.put("rbrdList", rbrdList);
+			res.put("pageInfo", pageInfo);
+    		return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+    	}
+    	
     }
 }

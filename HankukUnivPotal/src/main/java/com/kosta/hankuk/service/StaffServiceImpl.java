@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.HuehakDto;
 import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.dto.NoticeBoardDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.dto.SubjectDto;
@@ -35,6 +36,7 @@ import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Major;
+import com.kosta.hankuk.entity.NoticeBoard;
 import com.kosta.hankuk.entity.Professor;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.entity.Subject;
@@ -42,6 +44,7 @@ import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.MajorRepository;
+import com.kosta.hankuk.repository.NoticeBoardRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
 import com.kosta.hankuk.repository.SubjectRepository;
@@ -70,6 +73,9 @@ public class StaffServiceImpl implements StaffService {
     
     @Autowired
     private HueAndBokRepository hbres;
+    
+    @Autowired
+    private NoticeBoardRepository nbres;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -694,10 +700,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
 
-
-
     
-
     // 휴학 신청 내역 리스트 (페이징)
 	@Override
 	public List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception {
@@ -769,5 +772,53 @@ public class StaffServiceImpl implements StaffService {
 		
 		hueres.save(huehak);
 	}
+	
+	@Override // 학사 공지 게시판 전체 출력 (페이징)
+    public List<NoticeBoardDto> noticeBrdList(PageInfo pageInfo, String type, String word) {
+    	PageRequest pageRequest = PageRequest.of(pageInfo.getCurPage()-1, 7, Sort.by(Sort.Direction.DESC, "nbNo"));
+		Page<NoticeBoard> pages = null;
+
+		if (word==null || word.trim().equals("")) { // 목록 조회
+			pages = nbres.findAll(pageRequest);
+		} else { // 검색
+			if (type.equals("title")) {
+				pages = nbres.findByTitleContains(word, pageRequest);
+			} else if (type.equals("content")) {
+				pages = nbres.findByContentContains(word, pageRequest);
+			} else if (type.equals("writer")) {
+				pages = nbres.findByStaffStfNo(word, pageRequest);
+			}
+		}
+		pageInfo.setAllPage(pages.getTotalPages()); // 전체 페이지의 수
+
+		int startPage = (pageInfo.getCurPage()-1)/10*10+1;
+		int endPage = Math.min(startPage+10-1, pageInfo.getAllPage());
+
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+
+		List<NoticeBoardDto> brdDtoList = new ArrayList<>();
+		for (NoticeBoard brd : pages.getContent()) {
+			brdDtoList.add(brd.toNoticeBoardDto()); // 반복문으로 객체에 데이터 넣어주기..
+		}
+
+		return brdDtoList;
+    	
+    }
+	
+	@Override // 필독 게시물
+	public List<NoticeBoardDto> requiredBrdLsit() {
+		List<NoticeBoard> rbrdList = nbres.findTop3ByIsRequiredOrderByWriteDtDesc(true);
+		List<NoticeBoardDto> rbrdDtoList = new ArrayList<>();
+		for (NoticeBoard rbrd : rbrdList) {
+			NoticeBoardDto rbrdDto = rbrd.toNoticeBoardDto();
+			rbrdDtoList.add(rbrdDto);
+		}
+		
+		return rbrdDtoList;
+	}
+
+    
+
 	
 }
