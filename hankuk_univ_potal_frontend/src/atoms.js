@@ -7,6 +7,8 @@ export const initLecture = {lecNo: '', credit: 0, sect: '', time1: '', time2: ''
 
 export const initActiveTab = 0;
 
+export const initOpenIndex = [];
+
 // 공유할 데이터를 분리하여 선언
 export const memberAtom = atomWithStorage(
     'member', // 이름
@@ -46,3 +48,9 @@ export const activeTabAtom = atomWithStorage(
     'initActiveTab',
     createJSONStorage(()=>sessionStorage),
 )
+
+export const openIndexesAtom = atomWithStorage(
+    'openIndexesAtom',
+    initOpenIndex,
+    createJSONStorage(() => sessionStorage),
+);

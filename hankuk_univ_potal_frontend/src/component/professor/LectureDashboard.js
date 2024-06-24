@@ -102,7 +102,7 @@ const LectureDashboard = () => {
                                 </CardTitle>
                                     <CardText  style={{ margin: '0px' }}>
                                         {lecture.year}년 {lecture.semester}학기<br/>
-                                        222{lecture.lecRoom}
+                                        {lecture.time1}, {lecture.lecRoom}
                                     </CardText>
                                     
                                 </CardBody>

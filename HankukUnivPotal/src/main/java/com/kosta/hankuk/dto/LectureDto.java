@@ -49,7 +49,7 @@ public class LectureDto {
 				.files(files)
 				.lecRoom(lecRoom)
 				.status(status)
-				.isScoreChk(isScoreChk)
+				.isScoreChk(isScoreChk)	
 				.year(year)
 				.semester(semester)
 				.subject(Subject.builder().subCd(subCd).build())

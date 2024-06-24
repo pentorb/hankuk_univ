@@ -18,6 +18,15 @@ const MyPage = () => {
     const token = useAtomValue(tokenAtom);
     const navigate = useNavigate();
 
+    const [formValues, setFormValues] = useState({
+        addr: member.addr,
+        detailAddr: member.detailAddr,
+        postCode: member.postCode,
+        tel: member.tel,
+        email: member.email,
+        emailDo: member.emailDo,
+    });
+
     useEffect(() => {
         setFormValues({
             addr: member.addr,
@@ -95,14 +104,7 @@ const MyPage = () => {
             })
     }
 
-    const [formValues, setFormValues] = useState({
-        addr: member.addr,
-        detailAddr: member.detailAddr,
-        postCode: member.postCode,
-        tel: member.tel,
-        email: member.email,
-        emailDo: member.emailDo,
-    });
+    
 
     const updatePw = (e) => {
         Swal.fire({
@@ -256,15 +258,15 @@ const MyPage = () => {
                                         <div className="col-3 ttext">이메일</div>
                                         <Input type="text" className='infoD' 
                                         value={!formValues.email || formValues.email === 'null' ? '' : formValues.email} onChange={dataChange}
-                                         name="email" />
+                                         name="email" />@
                                         <Input type="select" className='infoD' 
                                         value={!formValues.emailDo || formValues.emailDo === 'null' ? '' : formValues.emailDo} onChange={dataChange}
                                          name="emailDo" >
-                                            <option>{member.emailDo}</option>
-                                            <option>@naver.com</option>
-                                            <option>@gmail.com</option>
-                                            <option>@kakao.com</option>
-                                            <option>@daum.net</option>
+                                            <option value=''>선택하세요</option>
+                                            <option value='@naver.com'>naver.com</option>
+                                            <option value='@gmail.com'>gmail.com</option>
+                                            <option value='@kakao.com'>kakao.com</option>
+                                            <option value='@daum.net'v>daum.net</option>
                                         </Input>
                                     </div>
                                     

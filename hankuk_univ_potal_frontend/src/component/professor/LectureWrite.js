@@ -17,7 +17,7 @@ const LectureWrite = () => {
     const [subjectList, setSubjectList] = useState([]);
     const [lecture, setLecture] = useState(
         {
-            lecNo: '', year: 0, semester: '', subName: '', credit: 0,
+            lecNo: '', year: 0, semester: '', lecRoom:'', subCd: '', credit: 0, numOfStd:0,    
             sect: '', day1: '', start1: '', end1: '', day2: '', start2: '', end2: '', profNo: ''
         })
     const navigate = useNavigate();
@@ -51,14 +51,16 @@ const LectureWrite = () => {
     const submit = () => {
         const formData = new FormData();
         formData.append("lecNo", lecture.lecNo);
-        formData.append("year", lecture.year);
+        formData.append("year", currentYear);
         formData.append("semester", lecture.semester);
-        formData.append("subName", lecture.subName);
+        formData.append("lecRoom", lecture.lecRoom);
+        formData.append("subCd", lecture.subCd);
         formData.append("credit", lecture.credit);
         formData.append("sect", lecture.sect);
+        formData.append("numOfStd", lecture.numOfStd);
         formData.append("time1", lecture.day1 + lecture.start1 + '-' + lecture.end1 + '교시');
-        formData.append("time2", lecture.day2 + lecture.start2 + '-' + lecture.end2 + '교시');
-        formData.append("profNo", lecture.profNo);
+        formData.append("time2", time2Check ? lecture.day2 + lecture.start2 + '-' + lecture.end2 + '교시' : '');
+        formData.append("profNo", member.id);
         axios.post(`${url}/lectureWrite`, formData,
             {
                 headers: { Authorization: JSON.stringify(token) }
@@ -126,7 +128,6 @@ const LectureWrite = () => {
                                             name="year"
                                             placeholder="개설년도(숫자만)"
                                             type="text"
-                                            onChange={changeValue}
                                             disabled value={currentYear}
                                         />
                                     </FormGroup>
@@ -177,20 +178,21 @@ const LectureWrite = () => {
                                     <FormGroup className="Lecture_Write_FormGroup left">
                                         <Label
                                             className="Lecture_Write_Label"
-                                            for="subName">
+                                            for="subCd">
                                             과목명
                                         </Label>
                                         <Input
                                             className="Lecture_Write_Input"
-                                            id="subName"
-                                            name="subName"
+                                            id="subCd"
+                                            name="subCd"
                                             type="select"
+                                            onChange={changeValue}
                                         >
                                             <option value=''>
                                                 과목선택
                                             </option>
                                             {subjectList.map((sub, i) => (
-                                                <option key={i}>
+                                                <option key={i} value={sub.subCd}>
                                                     {sub.name}
                                                 </option>
                                             ))}
@@ -237,7 +239,25 @@ const LectureWrite = () => {
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                </div><br />
+                                </div>
+                                <div style={{ width: "100%" }}>
+                                    <FormGroup className="Lecture_Write_FormGroup right">
+                                        <Label
+                                            style={{ marginRight: '20.5px', marginLeft: '17px' }}
+                                            className="Lecture_Write_Label"
+                                            for="numOfStd">
+                                        수강인원
+                                        </Label>
+                                        <Input
+                                            className="Lecture_Write_Input"
+                                            id="numOfStd"
+                                            name="numOfStd"
+                                            type="text"
+                                            onChange={changeValue}
+                                        >
+                                        </Input>
+                                    </FormGroup>
+                                </div><br /><br />
                                 <div style={{ width: "100%" }}>
                                     <FormGroup className="Lecture_Write_FormGroup left" style={{ marginLeft: '402px' }}>
                                         <Label

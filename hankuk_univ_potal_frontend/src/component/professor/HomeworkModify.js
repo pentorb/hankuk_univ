@@ -55,7 +55,7 @@ const HomeworkModify = () => {
         )
             .then(res=>{
                 console.log(res)
-                navigate(`/professor/contents/${homework.lecNo}`);
+                navigate(`/professor/contents`);
             })
             .catch(err=>{
                 console.log(err)
@@ -65,8 +65,7 @@ const HomeworkModify = () => {
     const changeValue = (e) => {
         setHomework({...homework, [e.target.name]:e.target.value})
     }
-
-    console.log(homework)
+    
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom>

@@ -74,7 +74,9 @@
   padding: 0;
 }
 .Lecture_Write_Container{
-  background-color: rgba(194, 194, 194, 0.25);
+  background-color: ghostwhite;
+  box-shadow: 2px 2px 1px -1px rgba(0, 0, 0, 0.2);
+    /* background-color: rgba(194, 194, 194, 0.25); */
   border-radius: 22px;
   margin-top: 15px;
   padding: 40px 0 40px 36.5px;
@@ -149,7 +151,7 @@
 
 
 .Contents_Body{
-  margin: 0 auto 20px;
+  margin: 20px auto 100px;
   width: 1250px;
 }
 .Contents_Top_Buttons{

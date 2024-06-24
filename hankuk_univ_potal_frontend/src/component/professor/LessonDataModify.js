@@ -14,7 +14,7 @@ import { lectureAtom, tokenAtom } from "../../atoms";
 const LessonDataModify = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
-
+    
     const {ldNo} = useParams();
     // private Integer hwNo;
 	// private Date regDt;

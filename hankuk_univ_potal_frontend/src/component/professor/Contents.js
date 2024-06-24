@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
 import { useAtom, useAtomValue } from "jotai";
-import { lectureAtom, tokenAtom } from "../../atoms";
+import { lectureAtom, openIndexesAtom, tokenAtom } from "../../atoms";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 const Contents = () => {
@@ -17,8 +17,8 @@ const Contents = () => {
     const [lessonDataList, setLessonDataList] = useState([]);
     const [homeworkList, setHomeworkList] = useState([]);
     const [lessonList, setLessonList] = useState([]);
-    const [openIndexes, setOpenIndexes] = useState([]);
-
+    // const [openIndexes, setOpenIndexes] = useState([]);
+    const [openIndexes, setOpenIndexes] = useAtom(openIndexesAtom);
     const navigate = useNavigate();
 
     const toggle = (index) => {
@@ -32,7 +32,6 @@ const Contents = () => {
     };
 
     useEffect(() => {
-        console.log(lecture)
         const fetchLessons = async () => {
             try {
                 const response = await axios.get(`${url}/contents?lecNo=${lecture.lecNo}`,
@@ -61,7 +60,6 @@ const Contents = () => {
                     mockData.push({ week: index + 1, lessonData: lessonData, homework: homeworkData });
                 }
                 setLessonList(mockData);
-                console.log(lessonList);
             } catch (error) {
                 console.error("Error fetching lessons", error);
                 // Mock data in case of error
@@ -73,6 +71,14 @@ const Contents = () => {
 
     }, [token, lecture]);
 
+    const scrollToTop = (i) => {
+        if(!openIndexes.includes(i)){
+        window.scrollTo({
+            top: (i+1)*200,
+            behavior: 'smooth'
+        })
+    }    
+    }
 
     return (
         <Grid item xs={12}>
@@ -99,7 +105,7 @@ const Contents = () => {
 
                 <div className="Contents_Body">
                     {lessonList.map((lesson, i) => (
-                        <div key={i} onClick={() => toggle(i)}
+                        <div key={i} onClick={() => {toggle(i);scrollToTop(i);}}
                             className="Contents_Top_Buttons"
                             style={{
                                 backgroundColor: openIndexes.includes(i) ? '#1F3468' : 'white',
@@ -111,28 +117,28 @@ const Contents = () => {
                     ))}
                     {lessonList.map((lesson, i) => (
                         <div key={i}>
-                            <div onClick={() => toggle(i)} style={{ cursor: 'pointer', padding: '10px', borderBottom: '2px solid #ddd' }}>
+                            <div onClick={() => {toggle(i); scrollToTop(i);}} style={{ cursor: 'pointer', padding: '10px', borderBottom: '2px solid #ddd' }}>
                                 <div style={{ display: 'inline-block', fontSize: '20px', margin: '10px 0', fontWeight: 'bold' }}
                                 >{lesson.week}주차</div>
                                 <div style={{ float: 'right', marginTop: '15px' }}>{openIndexes.includes(i) ? '△' : '▽'}</div>
                             </div>
-                            <Collapse isOpen={openIndexes.includes(i)}>
-                                <Card style={{ border: 'none' }}>
-                                    <CardBody style={{ marginLeft:'25px',paddingInline: '25px' }}>
+                            <Collapse isOpen={openIndexes.includes(i)} style={{ borderRadius:'30px', marginTop:'10px'}}>
+                                <Card style={{ border: 'none', borderRadius:'30px' ,backgroundColor:'aliceblue'}}>
+                                    <CardBody style={{ marginLeft:'25px',paddingInline: '25px', borderRadius:'30px' }}>
                                         <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}
-                                                style={{ float: 'right', marginInline: '5px' }}
+                                                style={{ float: 'left', marginInline: '5px', backgroundColor:'#1F3468'}}
                                         >강의자료등록</Button>
                                         <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}
-                                                style={{ float: 'right', marginInline: '5px' }}
+                                                style={{ float: 'left', marginInline: '5px', backgroundColor:'#1F3468' }}
                                         >과제등록</Button>
-                                        <div  style={{ paddingTop: '5px', fontWeight:'bold' }} >1차시</div><hr />
+                                        <div  style={{marginTop:'40px', paddingTop: '5px', fontWeight:'bold' }} >1차시 ({lecture.time1})</div><hr />
                                         {lesson.lessonData.map((data, i) => {
-                                            console.log(data);
                                             if (data.lessonCnt === 1) {
                                                 return (
                                                     <div key={i} className="Contents_Divs">
                                                         ↳<div className="Contents_Divs_Title">{data.title}</div>
                                                         <Button
+                                                            style={{ backgroundColor:'#1F3468'}}
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/lessonDataModify/${data.ldNo}`)}>
                                                             강의자료보기
@@ -143,17 +149,18 @@ const Contents = () => {
                                             return null;
                                         })}
                                         {lesson.homework.map((data, i) => {
-                                            console.log(data);
                                             if (data.lessonCnt === 1) {
                                                 return (
                                                     <div key={i} className="Contents_Divs">
                                                         ↳<div className="Contents_Divs_Title">{data.title}</div>
                                                         <Button
+                                                            style={{ backgroundColor:'#1F3468', marginRight:'10px'}}
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
                                                             과제상세보기
                                                         </Button>
                                                         <Button
+                                                            style={{ backgroundColor:'#1F3468'}}
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkSubmitList/${data.hwNo}/${data.week}/1`)}>
                                                             과제란
@@ -163,14 +170,15 @@ const Contents = () => {
                                             }
                                             return null;
                                         })}
-                                        <div  style={{ fontWeight:'bold' }}>2차시</div><hr />
+                                        {lecture.time2==='' ? 
+                                        (<></>):(<><div  style={{ fontWeight:'bold' }}>2차시 ({lecture.time2})</div><hr /></>)}
                                         {lesson.lessonData.map((data, i) => {
-                                            console.log(data);
                                             if (data.lessonCnt === 2) {
                                                 return (
                                                     <div key={i} className="Contents_Divs">
                                                         ↳<div className="Contents_Divs_Title">{data.title}</div>
                                                         <Button
+                                                            style={{ backgroundColor:'#1F3468', marginRight:'10px'}}
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/lessonDataModify/${data.ldNo}`)}>
                                                             강의자료보기
@@ -181,17 +189,18 @@ const Contents = () => {
                                             return null;
                                         })}
                                         {lesson.homework.map((data, i) => {
-                                            console.log(data);
                                             if (data.lessonCnt === 2) {
                                                 return (
                                                     <div key={i} className="Contents_Divs">
                                                         ↳<div className="Contents_Divs_Title">{data.title}</div>
                                                         <Button
+                                                            style={{ backgroundColor:'#1F3468', marginRight:'10px'}}
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
                                                             과제상세보기
                                                         </Button>
                                                         <Button
+                                                            style={{ backgroundColor:'#1F3468'}}
                                                             className="Contents_Divs_Button"
                                                             onClick={() => navigate(`/professor/homeworkSubmitList/${data.hwNo}/${data.week}/2`)}>
                                                             과제란
@@ -201,6 +210,7 @@ const Contents = () => {
                                             }
                                             return null;
                                         })}
+                                    
                                     </CardBody>
                                 </Card>
                             </Collapse>

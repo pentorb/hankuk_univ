@@ -139,9 +139,12 @@ public class ProfServiceImpl implements ProfService{
 	
 	@Override
 	public String lectureWrite(LectureDto lectureDto) throws Exception {
+		String year = String.valueOf(lectureDto.getYear()).substring(2);
+		List<Lecture> lectureList = lectureRepository.findByLecNoStartsWith(lectureDto.getSubCd()+year);
+		String lectureCnt = lectureList.size()+1 < 10 ? "0"+String.valueOf(lectureList.size()+1) : String.valueOf(lectureList.size()+1);
 		
+		lectureDto.setLecNo(lectureDto.getSubCd()+year+lectureCnt);
 		lectureRepository.save(lectureDto.toLecture());
-		
 		
 		return lectureDto.getLecNo();
 	}
@@ -168,7 +171,7 @@ public class ProfServiceImpl implements ProfService{
 	@Override
 	public List<LectureDto> lectureDashboard(String profNo, Integer year, Integer semester) throws Exception {
 		
-		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatusAndSemester(profNo, year, "REQ", semester);
+		List<Lecture> lectureList = lectureRepository.findByProfessor_profNoAndYearAndStatusAndSemester(profNo, year, "APPR", semester);
 		
 		List<LectureDto> lectureDtoList = new ArrayList<LectureDto>();
 		for (Lecture lecture : lectureList) {
