@@ -43,7 +43,7 @@ const LectureList = () => {
                     <Grid item xs={10}>
                         {lectureList !== null && (lectureList.map(lecture => (
                             <Card key={lecture.lecNo} sx={{ minWidth:250, cursor:"pointer", borderRadius:1, display: "inline-block", marginRight:4, marginBottom:4 }}
-                            onClick={() => {setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5); navigate(`/student/${lecture.lecNo}`);}}>
+                            onClick={() => {setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5); navigate(`/student/${lecture.lecNo}/content`);}}>
                                 <CardContent sx={{ height: 100, backgroundColor:"firstColor.main"  }}>
                                     <Typography variant="h6" component="div" sx={{color:"white", marginTop:3}}>
                                         <b>{lecture.lectureName}</b>

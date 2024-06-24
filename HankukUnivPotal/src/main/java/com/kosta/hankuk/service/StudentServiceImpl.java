@@ -3,6 +3,7 @@ package com.kosta.hankuk.service;
 import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.HuehakAndBokhakDto;
@@ -33,6 +33,7 @@ import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.Lesson;
+import com.kosta.hankuk.entity.LessonData;
 import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
 import com.kosta.hankuk.repository.AbsenceRepository;
@@ -45,6 +46,7 @@ import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
 import com.kosta.hankuk.repository.LectureRepository;
+import com.kosta.hankuk.repository.LessonDataRepository;
 import com.kosta.hankuk.repository.LessonRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.ScoreRepository;
@@ -82,6 +84,8 @@ public class StudentServiceImpl implements StudentService {
 	private AbsenceRepository absenceRepository;
 	@Autowired
 	private LessonRepository lessonRepository;
+	@Autowired
+	private LessonDataRepository lessonDataRepository;
 	@Autowired
     PasswordEncoder passwordEncoder;
 
@@ -250,11 +254,12 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Map<String, Object> checkScore(String stdNo, Integer year, Integer semester) throws Exception {
-		Score score = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
 		Map<String, Object> map = new HashMap<>();
 		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
 				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
-
+		
+		String majCd = sres.findById(stdNo).get().getMajor().getMajCd();
+		Integer finSem = sres.findById(stdNo).get().getFinSem();
 		Integer semesterCredit = 0;
 		Integer majorCredit = 0;
 		for (LectureByStd lectureByStd : lectureByStdGroup) {
@@ -263,14 +268,60 @@ public class StudentServiceImpl implements StudentService {
 				majorCredit += lectureByStd.getLecture().getCredit();
 			}
 		}
-
-		String majCd = sres.findById(stdNo).get().getMajor().getMajCd();
-		Integer finSem = sres.findById(stdNo).get().getFinSem();
+		
 		List<Student> studentList = sres.findByMajor_majCdAndFinSem(majCd, finSem);
-
 		Integer studentCount = studentList.size();
-		Integer rank = score.getRank();
-		Double point = score.getScore();
+		Map<String, Double> scoreMap = new HashMap<>();
+		List<Double> scoreList = new ArrayList<>();
+		
+		for(Student student : studentList) {
+			List<LectureByStd> lectureByStdGroupForOne = lectureByStdRepository
+					.findByStudent_stdNoAndCourYearAndLecture_semester(student.getStdNo(), year, semester);
+			Double wholeScore = 0.0;
+			
+			for(LectureByStd lectureByStd : lectureByStdGroupForOne) {				
+				if(lectureByStd.getGrade().equals("A+")) {
+					wholeScore += 4.5 * lectureByStd.getLecture().getCredit();
+				} else if(lectureByStd.getGrade().equals("A")) {
+					wholeScore += 4.0 * lectureByStd.getLecture().getCredit();
+				} else if(lectureByStd.getGrade().equals("B+")) {
+					wholeScore += 3.5 * lectureByStd.getLecture().getCredit();
+				} else if(lectureByStd.getGrade().equals("B")) {
+					wholeScore += 3.0 * lectureByStd.getLecture().getCredit();
+				} else if(lectureByStd.getGrade().equals("C+")) {
+					wholeScore += 2.5 * lectureByStd.getLecture().getCredit();
+				}
+			}
+			
+			Double score = wholeScore / semesterCredit;
+			scoreMap.put(student.getStdNo(), score);
+			scoreList.add(score);
+		}
+		
+		Collections.sort(scoreList, Collections.reverseOrder());
+		Double point = scoreMap.get(stdNo);
+		Integer rank = scoreList.indexOf(point) + 1;
+		
+		if(!Double.isNaN(point)) {
+			Optional<Score> optionalScore = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
+			if(optionalScore.isEmpty()) {
+				Score newScore = Score.builder()
+						.getCredit(semesterCredit)
+						.rank(rank)
+						.score(point)
+						.year(year)
+						.semester(semester)
+						.student(Student.builder().stdNo(stdNo).build()).build();
+				scoreRepository.save(newScore);
+			} else {
+				Score outdatedScore = optionalScore.get();
+				outdatedScore.setGetCredit(semesterCredit);
+				outdatedScore.setRank(rank);
+				outdatedScore.setScore(point);
+				scoreRepository.save(outdatedScore);
+			}
+		}
+		
 		map.put("majorCredit", majorCredit);
 		map.put("semesterCredit", semesterCredit);
 		map.put("rank", rank);
@@ -451,22 +502,118 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public Map<String, Object> showLectureContent(String lecNo) throws Exception {
-		Optional<Lecture> olecture = lectureRepository.findById(lecNo);
-		if (olecture.isEmpty())
-			throw new Exception("강의번호 오류");
-		Lecture lecture = olecture.get();
+	public List<Map<String, Object>> showLectureContent(String lecNo, String stdNo) throws Exception {
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		Attendance attendance = attendanceRepository.findByLecture_lecNoAndStudent_stdNo(lecNo, stdNo);
+		String wholeStatus = attendance.getStatus();
+		List<Lesson> lessonList = attendance.getLecture().getLessonList();
 
-		String lectureNumber = lecture.getLecNo();
-		String lectureName = lecture.getSubject().getName();
-		List<Lesson> lessonList = lecture.getLessonList();
+		for (int i = 0; i < lessonList.size(); i += 2) {
+			Integer lessonNo = lessonList.get(i).getLessonNo();
+			Integer week = lessonList.get(i).getWeek();
+			Integer count = lessonList.get(i).getLessonCnt();
+			String videoFile = "";
+			String videoName = "";
+			
+			Integer lessonNo2 = lessonList.get(i + 1).getLessonNo();
+			Integer count2 = lessonList.get(i + 1).getLessonCnt();
+			String videoFile2 = "";
+			String videoName2 = "";
+			
+			if(lessonList.get(i).getVideoFile() != null) {
+				videoFile = lessonList.get(i).getVideoFile();
+				videoName = filesRepository.findById(Integer.parseInt(videoFile)).get().getName();
+			}
+			
+			if(lessonList.get(i + 1).getVideoFile() != null) {
+				videoFile2 = lessonList.get(i + 1).getVideoFile();
+				videoName2 = filesRepository.findById(Integer.parseInt(videoFile2)).get().getName();
+			}
+			
+			String status = "";
+			if(wholeStatus.substring(i, i + 1).equals("1")) {
+				status = "출석";
+			} else if(wholeStatus.substring(i, i + 1).equals("2")) {
+				status = "지각";
+			} else if(wholeStatus.substring(i, i + 1).equals("3")) {
+				status = "결석";
+			} else if(wholeStatus.substring(i, i + 1).equals("4")) {
+				status = "공결";
+			}
+			
+			String status2 = "";
+			if(wholeStatus.substring(i + 1, i + 2).equals("1")) {
+				status2 = "출석";
+			} else if(wholeStatus.substring(i + 1, i + 2).equals("2")) {
+				status2 = "지각";
+			} else if(wholeStatus.substring(i + 1, i + 2).equals("3")) {
+				status2 = "결석";
+			} else if(wholeStatus.substring(i + 1, i + 2).equals("4")) {
+				status2 = "공결";
+			}
+			
+			String homeworkTitle = "";
+			String homeworkFile = "";
+			String materialTitle = "";
+			String materialFile = "";
+			
+			Optional<Homework> optionalHomework = homeworkRepository.findByLesson_lessonNo(lessonNo);
+			if(optionalHomework.isPresent()) {
+				homeworkTitle = optionalHomework.get().getTitle();
+				homeworkFile = optionalHomework.get().getFiles();
+			}
+			
+			Optional<LessonData> optionalLessonData = lessonDataRepository.findByLesson_lessonNo(lessonNo);
+			if(optionalLessonData.isPresent()) {
+				materialTitle = optionalLessonData.get().getTitle();
+				materialFile = optionalLessonData.get().getFile();
+			}
+			
+			String homeworkTitle2 = "";
+			String homeworkFile2 = "";
+			String materialTitle2 = "";
+			String materialFile2 = "";
+			
+			Optional<Homework> optionalHomework2 = homeworkRepository.findByLesson_lessonNo(lessonNo2);
+			if(optionalHomework2.isPresent()) {
+				homeworkTitle2 = optionalHomework2.get().getTitle();
+				homeworkFile2 = optionalHomework.get().getFiles();
+			}
+			
+			Optional<LessonData> optionalLessonData2 = lessonDataRepository.findByLesson_lessonNo(lessonNo2);
+			if(optionalLessonData2.isPresent()) {
+				materialTitle2 = optionalLessonData2.get().getTitle();
+				materialFile2 = optionalLessonData2.get().getFile();
+			}
+			
+			
+			
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("lectureNumber", lectureNumber);
-		map.put("lectureName", lectureName);
-		map.put("lessonList", lessonList);
-
-		return map;
+			Map<String, Object> map = new HashMap<>();			
+			map.put("week", week);
+			
+			map.put("lessonNo", lessonNo);
+			map.put("count", count);
+			map.put("videoFile",videoFile);
+			map.put("videoName",videoName);
+			map.put("status", status);
+			map.put("homeworkTitle", homeworkTitle);
+			map.put("homeworkFile", homeworkFile);
+			map.put("materialTitle", materialTitle);
+			map.put("materialFile", materialFile);
+			
+			map.put("lessonNo2", lessonNo2);
+			map.put("count2", count2);
+			map.put("videoFile2",videoFile2);
+			map.put("videoName2",videoName2);
+			map.put("status2", status2);
+			map.put("homeworkTitle2", homeworkTitle2);
+			map.put("homeworkFile2", homeworkFile2);
+			map.put("materialTitle2", materialTitle2);
+			map.put("materialFile2", materialFile2);
+			mapList.add(map);
+		}
+		return mapList;
 	}
 
 	@Override

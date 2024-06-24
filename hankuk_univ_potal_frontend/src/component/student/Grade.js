@@ -51,8 +51,6 @@ const Grade = () => {
             })
             .catch(err => {
                 console.log(err);
-                setGradeList(null)
-                setScore(null)
             })
     }
 
@@ -104,7 +102,7 @@ const Grade = () => {
                                     <MenuItem value={2}>2학기</MenuItem>
                                 </Select>
                             </FormControl>
-                            <Button variant="contained" size="large" onClick={checkGrade} sx={{ margin: "0 auto", backgroundColor: "firstColor.main" }}>조회</Button>
+                            <Button variant="contained" size="medium" onClick={checkGrade} sx={{ margin: "0 auto", backgroundColor: "firstColor.main" }}>조회</Button>
                         </div>
                     </Grid>
                     <Grid item xs={1} />
@@ -123,7 +121,7 @@ const Grade = () => {
                                             <TableCell align="center" sx={{ color: "white" }}>석차</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    {score !== null &&
+                                    {score.semesterCredit !== 0 &&
                                         <TableBody>
                                             <TableRow>
                                                 <TableCell align="center">{score.semesterCredit}</TableCell>
@@ -133,7 +131,7 @@ const Grade = () => {
                                             </TableRow>
                                         </TableBody>
                                     }
-                                    {score === null &&
+                                    {score.semesterCredit === 0 &&
                                         <TableBody>
                                             <TableRow>
                                                 <TableCell align="center" colSpan={4}>데이터가 없습니다</TableCell>
@@ -158,7 +156,7 @@ const Grade = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {gradeList !== null && (gradeList.map(grade => (!grade.isDrop &&
+                                        {gradeList.length !== 0 && (gradeList.map(grade => (!grade.isDrop &&
                                             <TableRow key={grade.lectureName}>
                                                 <TableCell align="center">{grade.lectureName}</TableCell>
                                                 <TableCell align="center">{grade.professorName}</TableCell>
@@ -174,7 +172,7 @@ const Grade = () => {
                                                 </TableCell>
                                             </TableRow>
                                         )))}
-                                        {gradeList === null &&
+                                        {gradeList.length === 0 &&
                                             <TableRow>
                                                 <TableCell align="center" colSpan={5}>데이터가 없습니다</TableCell>
                                             </TableRow>

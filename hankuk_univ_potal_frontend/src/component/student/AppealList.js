@@ -101,7 +101,7 @@ const AppealList = () => {
                                     <MenuItem value={2}>2학기</MenuItem>
                                 </Select>
                             </FormControl>
-                            <Button variant="contained" size="large" onClick={checkAppealList} sx={{ margin: "0 auto", backgroundColor: "firstColor.main" }}>조회</Button>
+                            <Button variant="contained" size="medium" onClick={checkAppealList} sx={{ margin: "0 auto", backgroundColor: "firstColor.main" }}>조회</Button>
                         </div>
                     </Grid>
                     <Grid item xs={1} />

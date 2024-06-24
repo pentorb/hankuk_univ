@@ -1,3 +1,4 @@
-.ListItemButton.Mui-selected{
-    background-color:var(--maincolor);
+.MuiListItemButton-root.Mui-selected{
+    background-color:#1F3468 !important;
+    color:white
 }

@@ -1,6 +1,7 @@
 package com.kosta.hankuk.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +13,5 @@ public interface HomeworkRepository extends JpaRepository<Homework, Integer>{
 
 	Integer countByLecture_lecNo(String lecNo);
 
+	Optional<Homework> findByLesson_lessonNo(Integer lessonNo);
 }

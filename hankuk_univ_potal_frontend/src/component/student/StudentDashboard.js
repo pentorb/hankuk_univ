@@ -48,7 +48,7 @@ const StudentDashboard = () => {
                             <Route path="/appeal-list" element={<AppealList/>}></Route>
                             <Route path="/appeal-detail/:appNo" element={<AppealDetail />} />
                             <Route path="/lecture" element={<LectureList />} />
-                            <Route path="/:lecNo/" element={<Lecture />} />
+                            <Route path="/:lecNo/content" element={<Lecture />} />
                             <Route path="/:lecNo/syllabus" element={<Syllabus />} />
                             <Route path="/:lecNo/attendance" element={<Attendance />} />
                             <Route path="/:lecNo/report-absence" element={<Absence />} />

@@ -51,13 +51,13 @@ export default function CourseRegistrationSidebar() {
             <Typography variant="h7" sx={{marginLeft:4, color:"black"}}>{year}학년도 {information.semester}학기 수강신청</Typography>
           </ListSubheader>
           <Link to="/course-registration" style={{ textDecoration: "none", color: "black" }}>
-            <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleListItemClick(e, 0)} sx={{marginLeft:5}}>
-              <ListItemText primary="수강신청" />
+            <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleListItemClick(e, 0)} sx={{marginLeft:3, borderRadius:10, width:250}}>
+              <ListItemText primary="수강신청" sx={{pl:1}}/>
             </ListItemButton>
           </Link>
           <Link to="/course-registration/pre-registration" style={{ textDecoration: "none", color: "black" }}>
-            <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)} sx={{marginLeft:5}}>
-              <ListItemText primary="예비 수강신청" />
+            <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)} sx={{marginLeft:3, borderRadius:10, width:250}}>
+              <ListItemText primary="예비 수강신청" sx={{pl:1}}/>
             </ListItemButton>
           </Link>
         </Grid>
