@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -349,7 +350,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	public Map<String, Object> checkConfirmationCount(String stdNo) throws Exception {
 		Student student = studentRepository.findById(stdNo).get();
-		Integer finSem = student.getFinSem();
+		Integer finSem = student.getFinSem() - 1;
 		Integer year = (finSem / 2) + 1;
 		Integer semester = (finSem % 2) + 1; 
 		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
@@ -360,9 +361,11 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		Integer wholeCredit = 0;
 		
 		countOfLecture = lectureByStdGroup.size();
-		Score score = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
-		if(score.getScore() >= 3.75) {
-			maximumOfCredit = 24;
+		Optional<Score> optionalScore = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
+		if(optionalScore.isPresent()) {
+			if(optionalScore.get().getScore() >= 3.75) {
+				maximumOfCredit = 24;
+			}
 		} else {
 			maximumOfCredit = 21;
 		}

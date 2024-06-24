@@ -41,7 +41,7 @@ public interface StudentService {
 	void modifyAppeal(Integer appNo, String content, MultipartFile file) throws Exception;
 	
 	List<Map<String, Object>> showLectureList(String stdNo) throws Exception;
-	Map<String, Object> showLectureContent(String lecNo) throws Exception;
+	List<Map<String, Object>> showLectureContent(String lecNo, String stdNo) throws Exception;
 	
 	List<Map<String, Object>> showHomeworkList(String lecNo, String stdNo) throws Exception;
 	Map<String, Object> loadHomeworkInformation(Integer hwNo, String stdNo) throws Exception;
