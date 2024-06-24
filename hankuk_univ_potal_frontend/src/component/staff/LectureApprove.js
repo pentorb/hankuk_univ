@@ -1,18 +1,92 @@
+import { lectureAtom } from '../../atoms';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import Modal from 'react-modal';
+import React, { useState, useEffect } from 'react';
+import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
-import { Paper, Typography } from '@mui/material';
+import { Paper, Typography, Button, Select, MenuItem, Input, Checkbox } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import './staff.css';
+import axios from 'axios';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { tokenAtom } from "../../atoms";
+import { useAtomValue } from 'jotai';
 
 
 const Example = () => {
 
 
+  const [PdfmodalIsOpen, setPdfmodalIsOpen] = useState(false);
+  const [ApprovemodalIsOpen, setApprovemodalIsOpen] = useState(false);
+
+  useEffect(() => {
+    fetchcolleages();
+  }, [token]);
+
+  const fetchcolleages = async () => {
+    try {
+      const response = await axios.get(`${url}/colleagesSearchList`,
+        { headers: { "Authorization": JSON.stringify(token) } }
+      );
+      setColleages(response.data);
+    } catch (error) {
+      console.error("Error fetching colleages:", error);
+    }
+  };
+
+  const fetchMajors = async (colleageName) => {
+    try {
+      const response = await axios.get(`${url}/majorsBycolleage`, {
+        params: {
+          colCd: colleageName,
+        },
+        headers: { "Authorization": JSON.stringify(token) }
+      });
+      setMajors(response.data);
+    } catch (error) {
+      console.error("Error fetching majors:", error);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+        const response = await axios.get(`${url}/searchLecture`, {
+          params: {
+            name: searchType === 'name' ? searchInput : null,
+            colleage: searchType === 'major' ? formData.colleage : null,
+            major: searchType === 'major' ? formData.major : null,
+          },
+          headers: { "Authorization": JSON.stringify(token) }
+        });
+        setStudents(response.data);
+
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
 
 
 
 
 
 
+
+
+
+
+  const openPdfModal = async () => {
+    setPdfmodalIsOpen(true);
+  };
+  const closePdfModal = () => {
+    setPdfmodalIsOpen(false);
+  };
+  const openApproveModal = async () => {
+    setApprovemodalIsOpen(true);
+  };
+  const closeApproveModal = () => {
+    setApproveModalIsOpen(false);
+  };
 
   return (
     <Grid container justifyContent="center">
@@ -84,8 +158,77 @@ const Example = () => {
               <td>수업계획서</td>
               <td>등록</td>
             </tr>
+            {lecture.map((lecture, index) => (
+              <tr key={index}>
 
+              <td>{lecture.subCd}</td>
+              <td>{lecture.subname}</td>
+              <td>{lecture.garde}</td>
+              <td>{lecture.credit}</td>
+              <td>{lecture.prof}</td>
+              <td>{lecture.time1},{lecture.time2}</td>
+              <td>{lecture.lecRoom}</td>
+              <td>
+                <button onClick={openPdfModal}>
+                  <Tab icon={<FileOpenIcon  sx={{ fontSize: 30 }} />} />
+                </button>
+              </td>
+              <td>
+                <button onClick={openApproveModal}>
+                  
+                </button>
+              </td>
+              </tr>
+            ))}
           </table>
+          <Modal
+          isOpen={PdfmodalIsOpen}
+          onRequestClose={closePdfModal}
+          contentLabel="수업계획서"
+          style={{
+            content: {
+              top: 'auto',
+              left: 'auto',
+              right: 'auto',
+              bottom: 'auto',
+              width: 'auto',
+              height: 'auto',
+              padding: '20px',
+            },
+          }}
+          >
+            <button onClick={colosePdfModal}>
+              X
+            </button>
+            <iframe src={syllabusFile} width="100%" height="100%"></iframe>
+          </Modal>
+          <Modal
+          isOpen={ApprovemodalIsOpen}
+          onRequestClose={closeApproveModal}
+          contentLabel="등록 팝업"
+          style={{
+            content: {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-50%',
+              transform: 'translate(-50%, -50%)',
+              width: '400px',
+              height: 'auto',
+              padding: '20px',
+              borderRadius: '10px',
+            },
+          }}
+          >
+            <h2>승인하시겠습니까?</h2>
+            <button onClick={coloseApproveModal}>
+              X
+            </button>
+<button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} >승인</button>
+<button type="b" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} >거절</button>
+
+          </Modal>
         </Paper>
       </Grid>
     </Grid>

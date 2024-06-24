@@ -7,7 +7,7 @@ import { url } from "../../config/config";
 import { tokenAtom } from "../../atoms";
 import { useAtomValue } from 'jotai';
 import { useParams } from 'react-router-dom';
-
+import './staff.css';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import HomeIcon from '@mui/icons-material/Home';
