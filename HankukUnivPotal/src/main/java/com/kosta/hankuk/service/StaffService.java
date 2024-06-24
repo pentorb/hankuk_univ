@@ -71,6 +71,7 @@ public interface StaffService {
     void huebokModify(HuehakDto hueDto) throws Exception;
     List<NoticeBoardDto> noticeBrdList(PageInfo pageInfo, String type, String word) throws Exception;
     List<NoticeBoardDto> requiredBrdLsit() throws Exception;
+    void noticeWrite(NoticeBoardDto nbrdDto) throws Exception;
     
     
 }

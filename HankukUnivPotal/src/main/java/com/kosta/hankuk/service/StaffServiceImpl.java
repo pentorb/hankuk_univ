@@ -817,6 +817,12 @@ public class StaffServiceImpl implements StaffService {
 		
 		return rbrdDtoList;
 	}
+	
+	@Override // 게시물 작성
+	public void noticeWrite(NoticeBoardDto nbrdDto) {
+		NoticeBoard nbrd = nbrdDto.toNoticeBoard();
+		nbres.save(nbrd);
+	}
 
     
 
