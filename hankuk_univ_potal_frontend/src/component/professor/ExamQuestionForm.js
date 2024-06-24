@@ -9,6 +9,7 @@ import axios from "axios";
 import { url } from "../../config/config";
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
+import Swal from "sweetalert2";
 
 const ExamQuestionForm = (args) => {
     const [token, setToken] = useAtom(tokenAtom);
@@ -42,9 +43,9 @@ const ExamQuestionForm = (args) => {
         setQuestionList([...qlist]);
     }
 
-    const handleInputChange = (index, value) => {
+    const handleInputChange = (index, e) => {
         const updatedList = questionList.map((ques, i) =>
-            i === index ? { ...ques, question: value } : ques
+            i === index ? { ...ques, [e.target.name]: e.target.value } : ques
         );
         setQuestionList(updatedList);
     };
@@ -58,6 +59,12 @@ const ExamQuestionForm = (args) => {
             }
         )
             .then(res => {
+                Swal.fire({
+                    title: '시험이 출제되었습니다',
+                    // text: "That thing is still around?",
+                    icon: "success"
+                  })        
+                
                 console.log(res)
             })
             .catch(err => {
@@ -184,11 +191,11 @@ const ExamQuestionForm = (args) => {
                                                 className="ExamQuestionForm_For_Input"
                                                 type="text"
                                                 id={`question-${i}`}
-                                                name={`question-${i}`}
+                                                name='question'
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
                                                     ques.quesNo = i + 1;
-                                                    handleInputChange(i, e.target.value)
+                                                    handleInputChange(i, e)
 
                                                 }} />
                                             <br />
@@ -200,10 +207,10 @@ const ExamQuestionForm = (args) => {
                                                 className="ExamQuestionForm_For_Input"
                                                 type="text"
                                                 id={`question-${i}`}
-                                                name={`question-${i}`}
+                                                name='choice1'
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.choice1 = e.target.value;
+                                                    handleInputChange(i, e);
                                                 }} />
                                             <br />
                                             <Label for={`question-${i}`}>
@@ -213,10 +220,10 @@ const ExamQuestionForm = (args) => {
                                                 className="ExamQuestionForm_For_Input"
                                                 type="text"
                                                 id={`question-${i}`}
-                                                name={`question-${i}`}
+                                                name='choice2'
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.choice2 = e.target.value;
+                                                    handleInputChange(i, e);
                                                 }} />
                                             <br />
                                             <Label for={`question-${i}`}>
@@ -226,10 +233,10 @@ const ExamQuestionForm = (args) => {
                                                 className="ExamQuestionForm_For_Input"
                                                 type="text"
                                                 id={`question-${i}`}
-                                                name={`question-${i}`}
+                                                name='choice3'
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.choice3 = e.target.value;
+                                                    handleInputChange(i, e);
                                                 }} />
                                             <br />
                                             <Label for={`question-${i}`}>
@@ -239,10 +246,10 @@ const ExamQuestionForm = (args) => {
                                                 className="ExamQuestionForm_For_Input"
                                                 type="text"
                                                 id={`question-${i}`}
-                                                name={`question-${i}`}
+                                                name='choice4'
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.choice4 = e.target.value;
+                                                    handleInputChange(i, e);
                                                 }} />
                                             <Label for={`question-${i}`}>
                                                 &nbsp;&nbsp;정답
@@ -251,10 +258,10 @@ const ExamQuestionForm = (args) => {
                                                 className="ExamQuestionForm_For_Input_Answer"
                                                 type="text"
                                                 id={`question-${i}`}
-                                                name={`question-${i}`}
+                                                name='answer'
                                                 placeholder={`${i + 1}번 문제를 입력하세요`}
                                                 onChange={(e) => {
-                                                    ques.answer = e.target.value;
+                                                    handleInputChange(i, e);
                                                 }} />
                                         </div>)
 

@@ -12,6 +12,9 @@ import { url } from "../../config/config";
 const GradeManage = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const lecture = useAtomValue(lectureAtom);
+    const [examResult, setExamResult] = useState({
+        totalScore:0, examNo:0, stdNo:''
+    })
     const [studentList, setStudentList] = useState([]);
     const [attendanceList, setAttendanceList] = useState([]);
     const [examResultList, setExamResultList] = useState([]);
@@ -50,6 +53,7 @@ const GradeManage = () => {
 
     const changevalue = (e, stdNo, sect) => {
         console.log(stdNo)
+        
         const updatedExamResultList = examResultList.map((std, i) => {
             if (std.stdNo === stdNo && std.sect===sect) {
                 return { ...std, totalScore: e.target.value };
@@ -105,6 +109,11 @@ const GradeManage = () => {
             }
         )
         .then((res)=>{
+            Swal.fire({
+                title: res.data,
+                // text: "That thing is still around?",
+                icon: "success"
+              }); 
             console.log(res)
         })
         .catch((err)=>{
@@ -112,19 +121,20 @@ const GradeManage = () => {
         })
     }
 
-    const setgrade = () => {
-        
+    const createResult = (e, stdNo, sect) => {
+        examResultList.push({...examResult, stdNo : stdNo, totalScore : e.target.value, sect:sect, lecNo:lecture.lecNo })
     }
 
     const submitGrade = () => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
+            title: "정말로 등급을 확정하시겠습니까?",
+            // text: "You won't be able to revert this!",
+            icon: "question",
             showCancelButton: true,
+            cancelButtonText: "아니오",
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: "예"
           }).then((result) => {
             if (result.isConfirmed) {
               Swal.fire({
@@ -223,8 +233,8 @@ const GradeManage = () => {
                                                     className="GradeManage_Table_Input"
                                                     id=""
                                                     name=""
-                                                    value={examResultList.find(att => att.stdNo === std.stdNo && att.sect === '중간고사')?.totalScore || 0}
-                                                    onChange={(e)=>changevalue(e,std.stdNo,'중간고사')}
+                                                    value={examResultList.find(att => att.stdNo === std.stdNo && att.sect === '중간고사')? examResultList.find(att => att.stdNo === std.stdNo && att.sect === '중간고사').totalScore : 0}
+                                                    onChange={(e)=> examResultList.find(att => att.stdNo === std.stdNo && att.sect === '중간고사') ? changevalue(e,std.stdNo,'중간고사') : createResult(e, std.stdNo, '중간고사')}
                                                 />
                                                 /100
                                             </td>
@@ -233,8 +243,8 @@ const GradeManage = () => {
                                                     className="GradeManage_Table_Input"
                                                     id=""
                                                     name=""
-                                                    value={examResultList.find(att => att.stdNo === std.stdNo && att.sect === '기말고사')?.totalScore || 0}
-                                                    onChange={(e)=>changevalue(e,std.stdNo,'기말고사')}
+                                                    value={examResultList.find(att => att.stdNo === std.stdNo && att.sect === '기말고사')? examResultList.find(att => att.stdNo === std.stdNo && att.sect === '기말고사').totalScore : 0}
+                                                    onChange={(e)=>examResultList.find(att => att.stdNo === std.stdNo && att.sect === '기말고사') ? changevalue(e,std.stdNo,'기말고사') : createResult(e, std.stdNo, '기말고사')}
                                                 />
                                                 /100
                                             </td>

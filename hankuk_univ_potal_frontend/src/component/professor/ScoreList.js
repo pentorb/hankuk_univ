@@ -87,7 +87,7 @@ const ScoreList = () => {
                 default : break;
             }
         });
-        return totalScore/lectures.filter(lec => lec.grade !== null).length;
+        return (totalScore/lectures.filter(lec => lec.grade !== null).length).toFixed(2);
     }
     return (
         <Grid item xs={12}>
