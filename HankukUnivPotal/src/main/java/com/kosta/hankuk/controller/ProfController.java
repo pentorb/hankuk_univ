@@ -390,6 +390,7 @@ public class ProfController {
 			List<ExamResultDto> examResultDtoList = objectMapper.convertValue(examResultListParam,
 					new TypeReference<List<ExamResultDto>>() {
 					});
+			System.out.println(examResultDtoList);
 			profService.examResultModify(examResultDtoList);
 			return new ResponseEntity<String>("시험점수가 수정되었습니다", HttpStatus.OK);
 		} catch (Exception e) {

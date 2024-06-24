@@ -350,6 +350,9 @@ public class ProfServiceImpl implements ProfService{
 	@Override
 	public void examResultModify(List<ExamResultDto> examResultDtoList) throws Exception {
 		for (ExamResultDto examResultDto : examResultDtoList) {
+			if(examResultDto.getExamNo()==0) {
+				examResultDto.setExamNo(examRepository.findByLecture_lecNoAndSect(examResultDto.getLecNo(), examResultDto.getSect()).get().getExamNo());
+			}
 			examResultRepository.save(examResultDto.toExamResult());
 		}
 	}
