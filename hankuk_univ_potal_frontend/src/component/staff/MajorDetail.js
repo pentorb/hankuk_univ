@@ -152,30 +152,18 @@ const MajorDetail = () => {
 
     const handleSaveSubjects = async () => {
         try {
-            const updatedSubjects = subjects.map(subject => {
-                if (selectedSubjects.includes(subject.subCd)) {
-                    return {
-                        ...subject,
-                        name: subject.name,
-                        year: subject.targetGrd,
-                        courseType: subject.type
-                    };
-                }
-                return subject;
-            }).filter(subject => selectedSubjects.includes(subject.subCd));
-
-            await axios.post(`${url}/updateSubjects`, updatedSubjects, {
-                headers: { "Authorization": JSON.stringify(token) }
-            });
-
-            alert("과목 정보가 성공적으로 저장되었습니다.");
-            setIsEditingSubject(false);
-            setSelectedSubjects([]);
+          const updatedSubjects = subjects.filter(subject => selectedSubjects.includes(subject.subjectCode));
+          await axios.post(`${url}/updateSubjects`, updatedSubjects, {
+            headers: { "Authorization": JSON.stringify(token) }
+          });
+          alert("과목 정보가 성공적으로 저장되었습니다.");
+          setIsEditingSubject(false);  // 편집 모드 비활성화
+          setSelectedSubjects([]);
         } catch (error) {
-            console.error("Error saving subjects:", error);
-            alert("과목 정보를 저장하는 중 오류가 발생했습니다.");
+          console.error("Error saving subjects:", error);
+          alert("과목 정보를 저장하는 중 오류가 발생했습니다.");
         }
-    };
+      };
 
 
     const handleSelectHeadProfessor = async (profNo) => {
