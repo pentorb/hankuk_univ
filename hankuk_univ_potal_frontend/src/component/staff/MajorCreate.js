@@ -59,8 +59,8 @@ const MajorCreate = () => {
   };
 
   const validateMajorCode = async (majorCode) => {
-    if (!/^[A-Za-z]{2,4}$/.test(majorCode)) {
-      setMajorCodeError('영어 2~4자로 완성해주세요');
+    if (!/^[A-Za-z]{3}$/.test(majorCode)) {
+      setMajorCodeError('영어 3자로 완성해주세요');
       return;
     }
 
@@ -134,7 +134,6 @@ const MajorCreate = () => {
                   </Input>
                 </div>
               </div>
-
               <div className="col-6 menuBox">
                 <span className="col-4 categori" >학과명</span>
                 <div className="col-6">

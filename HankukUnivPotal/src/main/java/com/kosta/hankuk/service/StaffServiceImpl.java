@@ -33,6 +33,7 @@ import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
 import com.kosta.hankuk.entity.Lecture;
+import com.kosta.hankuk.entity.Lesson;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.NoticeBoard;
 import com.kosta.hankuk.entity.Professor;
@@ -47,6 +48,7 @@ import com.kosta.hankuk.repository.NoticeBoardRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
 import com.kosta.hankuk.repository.SubjectRepository;
+import com.kosta.hankuk.repository.LessonRepository;
 import com.kosta.hankuk.util.PageInfo;
 
 @Service
@@ -70,6 +72,9 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private LectureRepository lectureRepository;
     
+    @Autowired
+    private LessonRepository lessonRepository;
+
     @Autowired
     private HuehakRepository hueres;
     
@@ -203,7 +208,7 @@ public class StaffServiceImpl implements StaffService {
 							student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 							student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 							student.getProfessor() != null ? student.getProfessor().getName() : null,
-							student.getMajor() != null ? student.getMajor().getName() : null,
+							student.getMajor()!= null ? student.getMajor().getName() : null,
 							student.getMajor() != null ? student.getMajor().getMajCd() : null))
 					.collect(Collectors.toList());
 		} else if (colleage != null && major == null) {
@@ -214,7 +219,7 @@ public class StaffServiceImpl implements StaffService {
 							student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 							student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 							student.getProfessor() != null ? student.getProfessor().getName() : null,
-							student.getMajor() != null ? student.getMajor().getName() : null,
+							student.getMajor()!= null ? student.getMajor().getName() : null,
 							student.getMajor() != null ? student.getMajor().getMajCd() : null))
 					.collect(Collectors.toList());
 		} else if (major != null) {
@@ -227,7 +232,7 @@ public class StaffServiceImpl implements StaffService {
 								student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 								student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 								student.getProfessor() != null ? student.getProfessor().getName() : null,
-								student.getMajor() != null ? student.getMajor().getName() : null,
+								student.getMajor()!= null ? student.getMajor().getName() : null,
 								student.getMajor() != null ? student.getMajor().getMajCd() : null))
 						.collect(Collectors.toList());
 			}
@@ -239,7 +244,7 @@ public class StaffServiceImpl implements StaffService {
 						student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 						student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 						student.getProfessor() != null ? student.getProfessor().getName() : null,
-						student.getMajor() != null ? student.getMajor().getName() : null,
+						student.getMajor()!= null ? student.getMajor().getName() : null,
 						student.getMajor() != null ? student.getMajor().getMajCd() : null))
 				.collect(Collectors.toList());
 	}
@@ -439,7 +444,7 @@ public class StaffServiceImpl implements StaffService {
 							.professor(profCd != null ? Professor.builder().profNo(profCd).build() : null).build();
 					students.add(student);
 				} else if ("professor".equalsIgnoreCase(category)) {
-					Professor professor = Professor.builder().profNo(generateUniqueProfessorId()).name(name).password(passwordEncoder.encode("1234"))
+					Professor professor = Professor.builder().profNo(generateUniqueProfessorId()).name(name).password("1234")
 							.birthday(birthday).email(email).addr(address1).detailAddr(address2)
 							.postCode(postcode).tel(tel).gender(gender)
 							.major(majCd != null ? Major.builder().majCd(majCd).build() : null).build();
@@ -639,8 +644,8 @@ public class StaffServiceImpl implements StaffService {
                         .build();
 
                 subjects.add(subject);
+                subjectRepository.saveAll(subjects);
             }
-            subjectRepository.saveAll(subjects);
         }
     }
     @Override
@@ -761,6 +766,23 @@ public class StaffServiceImpl implements StaffService {
         Lecture lecture = lectureRepository.findById(lecNo).orElseThrow(() -> new RuntimeException("Lecture not found"));
         lecture.setStatus(status);
         lectureRepository.save(lecture);
+        
+        if ("APPR".equals(status)) {
+            createLessonsForLecture(lecture);
+        }
+    }
+	
+    private void createLessonsForLecture(Lecture lecture) {
+        for (int week = 1; week <= 15; week++) {
+            for (int lessonCnt = 1; lessonCnt <= 2; lessonCnt++) {
+                Lesson lesson = Lesson.builder()
+                    .week(week)
+                    .lessonCnt(lessonCnt)
+                    .lecture(lecture)
+                    .build();
+                lessonRepository.save(lesson);
+            }
+        }
     }
     
     
