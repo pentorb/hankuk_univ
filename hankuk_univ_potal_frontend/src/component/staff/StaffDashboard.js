@@ -10,6 +10,7 @@ import Header from '../comm/Header';
 import StaffHuehak from './StaffHuehak';
 import Calendar from '../comm/Calendar';
 import InsertCal from '../comm/InsertCal';
+import LectureApprove from './LectureApprove';
 
 const StaffDashboard = () => {
     return (
@@ -31,6 +32,8 @@ const StaffDashboard = () => {
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/MajorCreate" element={<MajorCreate/>}></Route> 
                             <Route path="/MajorDetail/:majCd" element={<MajorDetail/>}></Route>
+                            <Route path="/LectureApprove" element={<LectureApprove/>}></Route>
+
 
                         </Routes>
                     

@@ -44,7 +44,7 @@ export default function StaffSidebar() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh"}}>
+        <Grid item xs={4} sx={{ backgroundColor: "#435480", height: "120vh" }}>
           <Tabs orientation="vertical" aria-label="icon label tabs example" value={false}>
             <Tab icon={<AccountCircleIcon sx={{ fontSize: 50 }} />} label={<Typography sx={{ fontWeight: 'bold' }}>계정</Typography>} id={1 === activeTab ? "active" : ""}
               onClick={() => setActiveTab(1)} sx={{ color: "white" }} />
@@ -59,7 +59,7 @@ export default function StaffSidebar() {
           </Tabs>
         </Grid>
         <Grid item xs={8} backgroundColor={"#FFFFFF"}>
-        {activeTab === 0 &&
+          {activeTab === 0 &&
             <>
               <Link to="/staff/" style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleListItemClick(e, 0)}>
@@ -69,7 +69,7 @@ export default function StaffSidebar() {
             </>}
           {activeTab === 1 &&
             <>
-             <Link to="/staff/" style={{ textDecoration: "none", color: "black" }}>
+              <Link to="/staff/" style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)}>
                   <ListItemText primary="마이페이지" />
                 </ListItemButton>
@@ -89,7 +89,7 @@ export default function StaffSidebar() {
                   <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 3} onClick={(e) => handleListItemClick(e, 3)}>
                     <ListItemText primary="학과 개설" />
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 4} onClick={(e) => handleListItemClick(e, 4)}> 
+                  <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 4} onClick={(e) => handleListItemClick(e, 4)}>
                     <ListItemText primary="강의 등록" />
                   </ListItemButton>
                   <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 5} onClick={(e) => handleListItemClick(e, 5)}>
@@ -103,19 +103,19 @@ export default function StaffSidebar() {
               </ListItemButton>
               <Collapse in={secondOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <Link to="/staff/MajorManagement" style={{textDecoration: "none", color:"black"}}>
+                  <Link to="/staff/MajorManagement" style={{ textDecoration: "none", color: "black" }}>
                     <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 6} onClick={(e) => handleListItemClick(e, 6)}>
                       <ListItemText primary="전체성적" />
                     </ListItemButton>
                   </Link>
-                  <Link to="/staff/MajorCreate" style={{textDecoration: "none", color:"black"}}>
-                  <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 7} onClick={(e) => handleListItemClick(e, 7)}>
-                    <ListItemText primary="이의신청 내역" />
-                  </ListItemButton>
+                  <Link to="/staff/MajorCreate" style={{ textDecoration: "none", color: "black" }}>
+                    <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 7} onClick={(e) => handleListItemClick(e, 7)}>
+                      <ListItemText primary="이의신청 내역" />
+                    </ListItemButton>
                   </Link>
                 </List>
               </Collapse>
-              
+
             </>}
           {activeTab === 3 &&
             <>
@@ -125,35 +125,37 @@ export default function StaffSidebar() {
               </ListItemButton>
               <Collapse in={firstOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <Link to="/staff/AccountManagement" style={{textDecoration: "none", color:"black"}}>
-                  <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 8} onClick={(e) => handleListItemClick(e, 8)}>
-                    <ListItemText primary="계정 관리" />
-                  </ListItemButton>
+                  <Link to="/staff/AccountManagement" style={{ textDecoration: "none", color: "black" }}>
+                    <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 8} onClick={(e) => handleListItemClick(e, 8)}>
+                      <ListItemText primary="계정 관리" />
+                    </ListItemButton>
                   </Link>
-                  <Link to="/staff/confirmHuehak" style={{textDecoration: "none", color:"black"}}>
-                  <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 9} onClick={(e) => handleListItemClick(e, 9)}>
-                    <ListItemText primary="휴학 관리" />
-                  </ListItemButton>
+                  <Link to="/staff/confirmHuehak" style={{ textDecoration: "none", color: "black" }}>
+                    <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 9} onClick={(e) => handleListItemClick(e, 9)}>
+                      <ListItemText primary="휴학 관리" />
+                    </ListItemButton>
                   </Link>
-                  <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
-                    <ListItemText primary="성적 확정" />
-                  </ListItemButton>
+                  <Link to="/staff/LectureApprove" style={{ textDecoration: "none", color: "black" }}>
+                    <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
+                      <ListItemText primary="성적 확정" />
+                    </ListItemButton>
+                  </Link>
                 </List>
               </Collapse>
             </>}
           {activeTab === 4 &&
-             <>
-             <Link to="/staff/calendar" style={{ textDecoration: "none", color: "black" }}>
-               <ListItemButton selected={selectedIndex === 11} onClick={(e) => handleListItemClick(e, 11)}>
-                 <ListItemText primary="일정 조회" />
-               </ListItemButton>
-             </Link>
-             <Link to="/staff/insert-calendar" style={{ textDecoration: "none", color: "black" }}>
-               <ListItemButton selected={selectedIndex === 12} onClick={(e) => handleListItemClick(e, 12)}>
-                 <ListItemText primary="일정 등록" />
-               </ListItemButton>
-             </Link>
-           </>}
+            <>
+              <Link to="/staff/calendar" style={{ textDecoration: "none", color: "black" }}>
+                <ListItemButton selected={selectedIndex === 11} onClick={(e) => handleListItemClick(e, 11)}>
+                  <ListItemText primary="일정 조회" />
+                </ListItemButton>
+              </Link>
+              <Link to="/staff/insert-calendar" style={{ textDecoration: "none", color: "black" }}>
+                <ListItemButton selected={selectedIndex === 12} onClick={(e) => handleListItemClick(e, 12)}>
+                  <ListItemText primary="일정 등록" />
+                </ListItemButton>
+              </Link>
+            </>}
           {activeTab === 5 &&
             <>
               <ListItemButton>
