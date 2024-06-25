@@ -1,24 +1,37 @@
-import { lectureAtom } from '../../atoms';
-import FileOpenIcon from '@mui/icons-material/FileOpen';
 import Modal from 'react-modal';
-import React, { useState, useEffect } from 'react';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
-import { Paper, Typography, Button, Select, MenuItem, Input, Checkbox } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import './staff.css';
-import axios from 'axios';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { tokenAtom } from "../../atoms";
 import { useAtomValue } from 'jotai';
+import { lectureAtom } from '../../atoms';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import React, { useState, useEffect } from 'react';
+import { Paper, Typography, Button, Select, MenuItem, Input} from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import './staff.css';
+import axios from 'axios';
+import { url } from "../../config/config";
+import Link from '@mui/material/Link';
 
 
-const Example = () => {
 
+const LectureApprove = () => {
 
   const [PdfmodalIsOpen, setPdfmodalIsOpen] = useState(false);
   const [ApprovemodalIsOpen, setApprovemodalIsOpen] = useState(false);
+  const [colleages, setColleages] = useState([]);
+  const [majors, setMajors] = useState([]);
+  const [lectures, setLectures] = useState([]);
+  const token = useAtomValue(tokenAtom);
+  const [pdfModalIsOpen, setPdfModalIsOpen] = useState(false);
+  const [approveModalIsOpen, setApproveModalIsOpen] = useState(false);
+  const [syllabusFile, setSyllabusFile] = useState('');
+  const [selectedLectureNo, setSelectedLectureNo] = useState(null);
+  const [searchType, setSearchType] = useState('major');
+  const [searchInput, setSearchInput] = useState('');
+  const [formData, setFormData] = useState({ colleage: '', major: '' });
 
   useEffect(() => {
     fetchcolleages();
@@ -49,45 +62,83 @@ const Example = () => {
     }
   };
 
+  const handleSearchTypeChange = (e) => {
+    setSearchType(e.target.value);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    if (name === 'colleage') {
+      fetchMajors(value);
+    }
+  };
+
   const handleSearch = async () => {
     try {
-        const response = await axios.get(`${url}/searchLecture`, {
-          params: {
-            name: searchType === 'name' ? searchInput : null,
-            colleage: searchType === 'major' ? formData.colleage : null,
-            major: searchType === 'major' ? formData.major : null,
-          },
-          headers: { "Authorization": JSON.stringify(token) }
-        });
-        setStudents(response.data);
-
+      const response = await axios.get(`${url}/searchREQLecture`, {
+        params: {
+          name: searchType === 'name' ? searchInput : null,
+          colleage: searchType === 'major' ? formData.colleage : null,
+          major: searchType === 'major' ? formData.major : null,
+        },
+        headers: { "Authorization": JSON.stringify(token) }
+      });
+      setLectures(response.data);
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
   };
 
-
-
-
-
-
-
-
-
-
-  const openPdfModal = async () => {
-    setPdfmodalIsOpen(true);
+  const openPdfModal = (file) => {
+    setSyllabusFile(file);
+    setPdfModalIsOpen(true);
   };
+
   const closePdfModal = () => {
-    setPdfmodalIsOpen(false);
+    setPdfModalIsOpen(false);
   };
-  const openApproveModal = async () => {
-    setApprovemodalIsOpen(true);
+
+  const openApproveModal = (lecNo) => {
+    setSelectedLectureNo(lecNo);
+    setApproveModalIsOpen(true);
   };
+
   const closeApproveModal = () => {
     setApproveModalIsOpen(false);
   };
 
+  const handleApproveLecture = async () => {
+    try {
+      await axios.post(`${url}/approveLecture`, { lecNo: selectedLectureNo }, {
+        headers: { "Authorization": JSON.stringify(token) }
+      });
+      alert("강의가 성공적으로 승인되었습니다.");
+      closeApproveModal();
+      handleSearch();
+    } catch (error) {
+      console.error("Error approving lecture:", error);
+      alert("강의를 승인하는 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleRejectLecture = async () => {
+    try {
+      await axios.post(`${url}/rejectLecture`, { lecNo: selectedLectureNo }, {
+        headers: { "Authorization": JSON.stringify(token) }
+      });
+      alert("강의가 성공적으로 거절되었습니다.");
+      closeApproveModal();
+      handleSearch();
+    } catch (error) {
+      console.error("Error rejecting lecture:", error);
+      alert("강의를 거절하는 중 오류가 발생했습니다.");
+    }
+  };
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
@@ -158,76 +209,77 @@ const Example = () => {
               <td>수업계획서</td>
               <td>등록</td>
             </tr>
-            {lecture.map((lecture, index) => (
+            {lectures.map((lecture, index) => (
               <tr key={index}>
 
-              <td>{lecture.subCd}</td>
-              <td>{lecture.subname}</td>
-              <td>{lecture.garde}</td>
-              <td>{lecture.credit}</td>
-              <td>{lecture.prof}</td>
-              <td>{lecture.time1},{lecture.time2}</td>
-              <td>{lecture.lecRoom}</td>
-              <td>
-                <button onClick={openPdfModal}>
-                  <Tab icon={<FileOpenIcon  sx={{ fontSize: 30 }} />} />
-                </button>
-              </td>
-              <td>
-                <button onClick={openApproveModal}>
-                  
-                </button>
-              </td>
+                <td>{lecture.subCd}</td>
+                <td>{lecture.subname}</td>
+                <td>{lecture.grade}</td>
+                <td>{lecture.credit}</td>
+                <td>{lecture.prof}</td>
+                <td>{lecture.time1},{lecture.time2}</td>
+                <td>{lecture.lecRoom}</td>
+                <td>
+                  <button onClick={() => openPdfModal(lecture.file)}>
+                    <Tab icon={<FileOpenIcon sx={{ fontSize: 30 }} />} />
+                  </button>
+                </td>
+                <td>
+                  <button onClick={() => openApproveModal(lecture.lecNo)}>
+                    승인
+                  </button>
+                </td>
               </tr>
             ))}
           </table>
           <Modal
-          isOpen={PdfmodalIsOpen}
-          onRequestClose={closePdfModal}
-          contentLabel="수업계획서"
-          style={{
-            content: {
-              top: 'auto',
-              left: 'auto',
-              right: 'auto',
-              bottom: 'auto',
-              width: 'auto',
-              height: 'auto',
-              padding: '20px',
-            },
-          }}
+            isOpen={pdfModalIsOpen}
+            onRequestClose={closePdfModal}
+            contentLabel="수업계획서"
+            style={{
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                width: '80%',
+                height: '80%',
+                padding: '20px',
+              },
+            }}
           >
-            <button onClick={colosePdfModal}>
+            <button onClick={closePdfModal}>
               X
             </button>
             <iframe src={syllabusFile} width="100%" height="100%"></iframe>
           </Modal>
           <Modal
-          isOpen={ApprovemodalIsOpen}
-          onRequestClose={closeApproveModal}
-          contentLabel="등록 팝업"
-          style={{
-            content: {
-              top: '50%',
-              left: '50%',
-              right: 'auto',
-              bottom: 'auto',
-              marginRight: '-50%',
-              transform: 'translate(-50%, -50%)',
-              width: '400px',
-              height: 'auto',
-              padding: '20px',
-              borderRadius: '10px',
-            },
-          }}
+            isOpen={approveModalIsOpen}
+            onRequestClose={closeApproveModal}
+            contentLabel="등록 팝업"
+            style={{
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                width: '400px',
+                height: 'auto',
+                padding: '20px',
+                borderRadius: '10px',
+              },
+            }}
           >
             <h2>승인하시겠습니까?</h2>
-            <button onClick={coloseApproveModal}>
+            <button onClick={closeApproveModal}>
               X
             </button>
-<button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} >승인</button>
-<button type="b" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} >거절</button>
-
+            <button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleApproveLecture}>승인</button>
+            <button type="button" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} onClick={handleRejectLecture}>거절</button>
           </Modal>
         </Paper>
       </Grid>
@@ -235,4 +287,4 @@ const Example = () => {
   )
 }
 
-export default Example;
+export default LectureApprove;

@@ -18,11 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
@@ -35,6 +32,7 @@ import com.kosta.hankuk.dto.SubjectDto;
 import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
+import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.NoticeBoard;
 import com.kosta.hankuk.entity.Professor;
@@ -43,6 +41,7 @@ import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
+import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.NoticeBoardRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
@@ -67,6 +66,9 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private MajorRepository majorRepository;
+    
+    @Autowired
+    private LectureRepository lectureRepository;
     
     @Autowired
     private HuehakRepository hueres;
@@ -699,7 +701,62 @@ public class StaffServiceImpl implements StaffService {
         professorRepository.save(newHeadProfessor);
     }
 
+    //강의허락
 
+    public List<Map<String, Object>> searchREQLecture(String name, String colleage, String major) {
+        List<Lecture> lectures = new ArrayList<>();
+
+        if (name != null) {
+            List<Subject> subjects = subjectRepository.findByNameContaining(name);
+            for (Subject subject : subjects) {
+                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
+            }
+        } else if (major != null) {
+            List<Subject> subjects = subjectRepository.findByMajorMajCd(major);
+            for (Subject subject : subjects) {
+                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
+            }
+        } else if (colleage != null) {
+            List<Major> majors = majorRepository.findByColleage_ColCd(colleage);
+            for (Major maj : majors) {
+                List<Subject> subjects = subjectRepository.findByMajorMajCd(maj.getMajCd());
+                for (Subject subject : subjects) {
+                    lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
+                }
+            }
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Lecture lecture : lectures) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("lecNo", lecture.getLecNo());
+            map.put("time1", lecture.getTime1());
+            map.put("time2", lecture.getTime2());
+            map.put("lecRoom", lecture.getLecRoom());
+            map.put("credit", lecture.getCredit());
+            map.put("file", lecture.getFiles());
+
+
+            Subject subject = subjectRepository.findById(lecture.getSubject().getSubCd()).orElse(null);
+            if (subject != null) {
+                map.put("subCd", subject.getSubCd());
+                map.put("subName", subject.getName());
+                map.put("grade", subject.getTargetGrd());
+            }
+
+            Professor professor = professorRepository.findById(lecture.getProfessor().getProfNo()).orElse(null);
+            if (professor != null) {
+                map.put("prof", professor.getName());
+            }
+
+            result.add(map);
+        }
+
+        return result;
+    }
+
+    
+    
     
     // 휴학 신청 내역 리스트 (페이징)
 	@Override

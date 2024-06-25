@@ -64,7 +64,7 @@ export default function StaffSidebar() {
           </Tabs>
         </Grid>
         <Grid item xs={8} backgroundColor={"#FFFFFF"}>
-        {activeTab === 0 &&
+          {activeTab === 0 &&
             <>
               <Link to="/staff/" style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 0} onClick={(e) => handleListItemClick(e, 0)}>
@@ -88,15 +88,21 @@ export default function StaffSidebar() {
               </ListItemButton>
               <Collapse in={firstOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 2} onClick={(e) => handleListItemClick(e, 2)}>
+                <Link to="/staff/MajorManagement" style={{textDecoration: "none", color:"black"}}>
+                <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 2} onClick={(e) => handleListItemClick(e, 2)}>
                     <ListItemText primary="학과 관리" />
                   </ListItemButton>
+                  </Link>
+                  <Link to="/staff/MajorCreate" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 3} onClick={(e) => handleListItemClick(e, 3)}>
                     <ListItemText primary="학과 개설" />
                   </ListItemButton>
+                  </Link>
+                  <Link to="/staff/LectureApporve" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 4} onClick={(e) => handleListItemClick(e, 4)}> 
                     <ListItemText primary="강의 등록" />
                   </ListItemButton>
+                  </Link>
                   <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 5} onClick={(e) => handleListItemClick(e, 5)}>
                     <ListItemText primary="수강 신청 현황" />
                   </ListItemButton>
@@ -120,7 +126,7 @@ export default function StaffSidebar() {
                   </Link>
                 </List>
               </Collapse>
-              
+
             </>}
           {activeTab === 3 &&
             <>

@@ -11,5 +11,5 @@ public interface SubjectRepository extends JpaRepository<Subject, String> {
     List<Subject> findByMajorMajCd(String majCd);
 
 	List<Subject> findByMajor_majCd(String majCd);
-
+    List<Subject> findByNameContaining(String name);
 }
