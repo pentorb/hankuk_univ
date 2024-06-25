@@ -41,7 +41,7 @@ const HomeworkDetail = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [token])
 
     const modifyHomework = () => {
         let formData = new FormData();

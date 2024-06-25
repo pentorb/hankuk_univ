@@ -709,19 +709,19 @@ public class StaffServiceImpl implements StaffService {
         if (name != null) {
             List<Subject> subjects = subjectRepository.findByNameContaining(name);
             for (Subject subject : subjects) {
-                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "req"));
+                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
             }
         } else if (major != null) {
             List<Subject> subjects = subjectRepository.findByMajorMajCd(major);
             for (Subject subject : subjects) {
-                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "req"));
+                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
             }
         } else if (colleage != null) {
-            List<Major> majors = majorRepository.findByColleague_ColCd(colleage);
+            List<Major> majors = majorRepository.findByColleage_ColCd(colleage);
             for (Major maj : majors) {
                 List<Subject> subjects = subjectRepository.findByMajorMajCd(maj.getMajCd());
                 for (Subject subject : subjects) {
-                    lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "req"));
+                    lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
                 }
             }
         }

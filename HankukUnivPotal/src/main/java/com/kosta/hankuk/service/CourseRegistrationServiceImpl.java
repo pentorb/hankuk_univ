@@ -120,22 +120,24 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	public void registerForCourse(String stdNo, String lecNo) throws Exception {
 		Integer finSem = studentRepository.findById(stdNo).get().getFinSem();
 		Integer courYear = (finSem / 2) + 1;
-		
-		List<LectureByStd> lectureByStdGroup = lectureByStdRepository.findByLecture_lecNo(lecNo);
-		Integer currentCount = lectureByStdGroup.size();
-		Integer wholeCount = lectureRepository.findById(lecNo).get().getNumOfStd();
-		if(wholeCount > currentCount) {
-			LectureByStd lectureByStd = LectureByStd.builder()
-					.courYear(courYear)
-					.isDrop(false)
-					.student(Student.builder().stdNo(stdNo).build())
-					.lecture(Lecture.builder().lecNo(lecNo).build()).build();
-			lectureByStdRepository.save(lectureByStd);
-			Attendance attendance = Attendance.builder()
-					.student(Student.builder().stdNo(stdNo).build())
-					.lecture(Lecture.builder().lecNo(lecNo).build())
-					.build();
-			attendanceRepository.save(attendance);
+		Optional<LectureByStd> optionalLectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo);
+		if(optionalLectureByStd.isEmpty()) {
+			List<LectureByStd> lectureByStdGroup = lectureByStdRepository.findByLecture_lecNo(lecNo);
+			Integer currentCount = lectureByStdGroup.size();
+			Integer wholeCount = lectureRepository.findById(lecNo).get().getNumOfStd();
+			if(wholeCount > currentCount) {
+				LectureByStd lectureByStd = LectureByStd.builder()
+						.courYear(courYear)
+						.isDrop(false)
+						.student(Student.builder().stdNo(stdNo).build())
+						.lecture(Lecture.builder().lecNo(lecNo).build()).build();
+				lectureByStdRepository.save(lectureByStd);
+				Attendance attendance = Attendance.builder()
+						.student(Student.builder().stdNo(stdNo).build())
+						.lecture(Lecture.builder().lecNo(lecNo).build())
+						.build();
+				attendanceRepository.save(attendance);
+			}
 		}
 	}
 	
@@ -369,18 +371,22 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	public Map<String, Object> checkConfirmationCount(String stdNo) throws Exception {
 		Student student = studentRepository.findById(stdNo).get();
-		Integer finSem = student.getFinSem() - 1;
+		Integer finSem = student.getFinSem();
 		Integer year = (finSem / 2) + 1;
-		Integer semester = (finSem % 2) + 1; 
+		Integer semester = (finSem % 2) + 1;
 		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
 				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
 		
 		Integer countOfLecture = 0;
 		Integer maximumOfCredit = 0;
-		Integer wholeCredit = 0;
-		
+		Integer wholeCredit = 0;		
 		countOfLecture = lectureByStdGroup.size();
-		Optional<Score> optionalScore = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
+		
+		Integer previousFinSem = student.getFinSem() - 1;
+		Integer previousYear = (previousFinSem / 2) + 1;
+		Integer previousSemester = (previousFinSem % 2) + 1;
+		
+		Optional<Score> optionalScore = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, previousYear, previousSemester);
 		if(optionalScore.isPresent()) {
 			if(optionalScore.get().getScore() >= 3.75) {
 				maximumOfCredit = 24;

@@ -42,7 +42,7 @@ const Appeal = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [token])
 
     const makeAppeal = () => {
         let formData = new FormData();

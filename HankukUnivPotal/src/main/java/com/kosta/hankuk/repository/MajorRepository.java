@@ -13,7 +13,7 @@ public interface MajorRepository extends JpaRepository<Major, String> {
     List<Major> findByNameContaining(String name);
     boolean existsByMajCd(String majCd);
     Optional<Major> findByMajCd(String majCd);
-    List<Major> findByColleague_ColCd(String colCd);
+    List<Major> findByColleage_ColCd(String colCd);
 
 
 

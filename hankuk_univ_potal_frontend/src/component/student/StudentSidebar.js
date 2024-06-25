@@ -173,7 +173,7 @@ export default function StudentSidebar() {
           {(activeTab === 5) &&
             <>
               <ListSubheader component="div" id="nested-list-subheader">
-                <Typography fontWeight={"bold"} sx={{ marginTop: 4, marginBottom: 4, color: "#4952A9" }}>{lectureName}</Typography>
+                <Typography fontWeight={"bold"} sx={{ marginTop: 4, marginBottom: 4, color: "#4952A9", fontSize:'20px' }}>{lectureName}</Typography>
               </ListSubheader>
               <Link to={`/student/${lectureNumber}/content`} style={{ textDecoration: "none", color: "black" }}>
                 <ListItemButton selected={selectedIndex === 1} onClick={(e) => handleListItemClick(e, 1)} sx={{ borderRadius: 10, width: 180 }}>
