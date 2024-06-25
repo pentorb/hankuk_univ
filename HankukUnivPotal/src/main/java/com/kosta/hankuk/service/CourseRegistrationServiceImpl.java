@@ -311,13 +311,13 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	public List<Map<String, Object>> searhCourses(String majCd, Integer targetGrd, String searchType, String searchWord, String stdNo, Integer year) throws Exception {
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		Integer finSem = studentRepository.findById(stdNo).get().getFinSem();
+		Integer semester = (finSem % 2) + 1;
 		List<Lecture> lectureList = new ArrayList<>();
 		if(majCd.equals("") && targetGrd == 0) {
-			Integer finSem = studentRepository.findById(stdNo).get().getFinSem();
-			Integer semester = (finSem % 2) + 1;
 			lectureList = lectureRepository.findByYearAndSemester(year, semester);
 		} else {
-			lectureList = lectureRepository.findBySubject_Major_majCdAndSubject_targetGrd(majCd, targetGrd);
+			lectureList = lectureRepository.findBySubject_Major_majCdAndSubject_targetGrdAndYearAndSemester(majCd, targetGrd, year, semester);
 		}		
 		
 		for (Lecture lecture : lectureList) {

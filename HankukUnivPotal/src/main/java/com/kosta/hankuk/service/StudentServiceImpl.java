@@ -293,7 +293,7 @@ public class StudentServiceImpl implements StudentService {
 				}
 			}
 			
-			Double score = wholeScore / semesterCredit;
+			Double score = Math.round((wholeScore / semesterCredit) * 100) / 100.0;
 			scoreMap.put(student.getStdNo(), score);
 			scoreList.add(score);
 		}
