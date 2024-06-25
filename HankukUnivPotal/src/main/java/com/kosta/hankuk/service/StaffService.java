@@ -61,7 +61,8 @@ public interface StaffService {
     void deleteSubjects(List<String> subjectCodes);
     Subject addSubject(Map<String, Object> subjectData) throws Exception;
     //강의개설 허락
-    public List<Map<String, Object>> searchREQLecture(String name, String colleage, String major);    
+    public List<Map<String, Object>> searchREQLecture(String name, String colleage, String major);
+    void updateLectureStatus(String lecNo, String status);
     
     // 교직원 휴학 관리 
     List<HuehakDto> hbListByPage(PageInfo pageInfo, String type) throws Exception;

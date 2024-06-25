@@ -98,7 +98,7 @@ export default function StaffSidebar() {
                     <ListItemText primary="학과 개설" />
                   </ListItemButton>
                   </Link>
-                  <Link to="/staff/LectureApporve" style={{textDecoration: "none", color:"black"}}>
+                  <Link to="/staff/LectureApprove" style={{textDecoration: "none", color:"black"}}>
                   <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 4} onClick={(e) => handleListItemClick(e, 4)}> 
                     <ListItemText primary="강의 등록" />
                   </ListItemButton>
