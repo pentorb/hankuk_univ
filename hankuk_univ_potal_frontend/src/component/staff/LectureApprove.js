@@ -8,13 +8,14 @@ import { useAtomValue } from 'jotai';
 import { lectureAtom } from '../../atoms';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import React, { useState, useEffect } from 'react';
-import { Paper, Typography, Button, Select, MenuItem, Input} from '@mui/material';
+import { Paper, Typography, Select, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import './staff.css';
 import axios from 'axios';
 import { url } from "../../config/config";
 import Link from '@mui/material/Link';
-
+import SearchIcon from '@mui/icons-material/Search';
+import { Input, Button, Table } from 'reactstrap';
 
 
 const LectureApprove = () => {
@@ -143,7 +144,7 @@ const LectureApprove = () => {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
-        <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>계정관리</b></Typography>
+        <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의 등록</b></Typography>
       </Grid>
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
@@ -153,136 +154,150 @@ const LectureApprove = () => {
                 <HomeIcon />
               </Link>
               <Link color="inherit" underline='none'>
-                학사 지원
+                학사 운영
               </Link>
               <Link underline="hover" color="#4952A9">
-                <b>계정 관리</b>
+                <b>강의 등록</b>
               </Link>
             </Breadcrumbs>
           </div>
-          <hr />
-          <table className="search-box">
-            <tr>
-              <td>검색</td>
-              <td>
-                <select onChange={handleSearchTypeChange} className="search-select" defaultValue="major" >
-                  <option value="major">전공별</option>
-                  <option value="name">이름별</option>
-                </select>
-                {searchType === 'major' ? (
-                  <>
-                    <Select value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '120px', marginRight: '5px' }}>
-                      {colleages.map((colleage) => (
-                        <MenuItem key={colleage.colCd} value={colleage.colCd} >{colleage.name}</MenuItem>
-                      ))}
-                    </Select>
-                    <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '230px' }}>
+
+          <div style={{ padding: '30px 150px' }}>
+            <div style={{ paddingBottom: '20px', display: 'flex' }}>
+              <div className='col-6'></div>
+              <div className='col-6' style={{ display: 'flex', justifyContent: 'flex-end' }} >
+                <div className="col-3">
+                  <Input type="select" onChange={handleSearchTypeChange} defaultValue="major" style={{ height: '44px' }} >
+                    <option value="major">전공별</option>
+                    <option value="name">이름별</option>
+                  </Input>
+                </div>
+
+                <div className='col-9' style={{ display: 'flex' }}>
+                  {searchType === 'major' ? (
+                    <>
+                      <Input type="select" value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '150px', marginRight: '5px' }}>
+                        {colleages.map((colleage) => (
+                          <option key={colleage.colCd} value={colleage.colCd} >{colleage.name}</option>
+                        ))}
+                      </Input>
+                      {/* <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '230px' }}>
                       {majors.map((major) => (
                         <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
                       ))}
-                    </Select>
-                  </>
-                ) : (
-                  <Input
-                    className="searchname"
-                    type="text"
-                    placeholder="이름을 입력하세요"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                  />
-                )}
-                <button onClick={handleSearch} variant="contained" className='searchbutton'>조회</button>
-              </td>
-            </tr>
-          </table>
+                    </Select> */}
+                      <Input type="select" value={formData.major} onChange={handleInputChange} name="major" style={{ width: '200px' }}>
+                        {majors.map((major) => (
+                          <option key={major.majCd} value={major.majCd}>{major.name}</option>
+                        ))}
+                      </Input>
+                    </>
+                  ) : (
+                    <Input className="searchname" type="text"
+                      placeholder="이름을 입력하세요" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}/>
+                  )}
+                  <div>
+                    <Button onClick={handleSearch} style={{ backgroundColor: '#1F3468', color: 'white' }}><SearchIcon /></Button>
+                  </div>
+                </div>
 
 
-          <table className='result-box'>
-            <tr>
-              <td>과목코드</td>
-              <td>과목명</td>
-              <td>학년</td>
-              <td>학점</td>
-              <td>담당교수</td>
-              <td>강의시간</td>
-              <td>강의실</td>
-              <td>수강인원</td>
-              <td>수업계획서</td>
-              <td>등록</td>
-            </tr>
-            {lectures.map((lecture, index) => (
-              <tr key={index}>
+              </div>
 
-                <td>{lecture.subCd}</td>
-                <td>{lecture.subName}</td>
-                <td>{lecture.grade}</td>
-                <td>{lecture.credit}</td>
-                <td>{lecture.prof}</td>
-                <td>{lecture.time1},{lecture.time2}</td>
-                <td>{lecture.lecRoom}</td>
-                <td>{lecture.numOfStd}</td>
-                <td>
-                  <button onClick={() => openPdfModal(lecture.file)}>
-                    <Tab icon={<FileOpenIcon sx={{ fontSize: 20 }} />} />
-                  </button>
-                </td>
-                <td>
-                  <button onClick={() => openApproveModal(lecture.lecNo)}>
-                    승인
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </table>
-          <Modal
-            isOpen={pdfModalIsOpen}
-            onRequestClose={closePdfModal}
-            contentLabel="수업계획서"
-            style={{
-              content: {
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                width: '80%',
-                height: '80%',
-                padding: '20px',
-              },
-            }}
-          >
-            <button onClick={closePdfModal}>
-              X
-            </button>
-            <iframe src={syllabusFile} width="100%" height="100%"></iframe>
-          </Modal>
-          <Modal
-            isOpen={approveModalIsOpen}
-            onRequestClose={closeApproveModal}
-            contentLabel="등록 팝업"
-            style={{
-              content: {
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                width: '400px',
-                height: 'auto',
-                padding: '20px',
-                borderRadius: '10px',
-              },
-            }}
-          >
-            <h2>승인하시겠습니까?</h2>
-            <button onClick={closeApproveModal}>
-              X
-            </button>
-            <button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleApproveLecture}>승인</button>
-            <button type="button" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} onClick={handleRejectLecture}>거절</button>
-          </Modal>
+            </div>
+
+
+            <table className='result-box'>
+              <thead>
+                <tr>
+                  <th>과목코드</th>
+                  <th>과목명</th>
+                  <th>학년</th>
+                  <th>학점</th>
+                  <th>담당교수</th>
+                  <th>강의시간</th>
+                  <th>강의실</th>
+                  <th>수강인원</th>
+                  <th>수업계획서</th>
+                  <th>등록</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lectures.map((lecture, index) => (
+                  <tr key={index}>
+                    <td>{lecture.subCd}</td>
+                    <td>{lecture.subName}</td>
+                    <td>{lecture.grade}</td>
+                    <td>{lecture.credit}</td>
+                    <td>{lecture.prof}</td>
+                    <td>{lecture.time1},{lecture.time2}</td>
+                    <td>{lecture.lecRoom}</td>
+                    <td>{lecture.numOfStd}</td>
+                    <td>
+                      <button onClick={() => openPdfModal(lecture.file)}>
+                        <Tab icon={<FileOpenIcon sx={{ fontSize: 20 }} />} />
+                      </button>
+                    </td>
+                    <td>
+                      <button onClick={() => openApproveModal(lecture.lecNo)}>
+                        승인
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+
+              </tbody>
+            </table>
+            <Modal
+              isOpen={pdfModalIsOpen}
+              onRequestClose={closePdfModal}
+              contentLabel="수업계획서"
+              style={{
+                content: {
+                  top: '50%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  marginRight: '-50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '80%',
+                  height: '80%',
+                  padding: '20px',
+                },
+              }}
+            >
+              <button onClick={closePdfModal}>
+                X
+              </button>
+              <iframe src={syllabusFile} width="100%" height="100%"></iframe>
+            </Modal>
+            <Modal
+              isOpen={approveModalIsOpen}
+              onRequestClose={closeApproveModal}
+              contentLabel="등록 팝업"
+              style={{
+                content: {
+                  top: '50%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  marginRight: '-50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '400px',
+                  height: 'auto',
+                  padding: '20px',
+                  borderRadius: '10px',
+                },
+              }}
+            >
+              <h2>승인하시겠습니까?</h2>
+              <button onClick={closeApproveModal}>
+                X
+              </button>
+              <button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleApproveLecture}>승인</button>
+              <button type="button" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} onClick={handleRejectLecture}>거절</button>
+            </Modal>
+          </div>
         </Paper>
       </Grid>
     </Grid>
