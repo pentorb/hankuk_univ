@@ -127,9 +127,9 @@ export default function StaffSidebar() {
                     <ListItemText primary="휴학 관리" />
                   </ListItemButton>
                   </Link>
-                  <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
+                  {/* <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
                     <ListItemText primary="성적 확정" />
-                  </ListItemButton>
+                  </ListItemButton> */}
                 </List>
               </Collapse>
             </>}
