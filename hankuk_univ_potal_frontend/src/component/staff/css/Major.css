@@ -1,0 +1,44 @@
+.majCreate {
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; */
+    padding: 20px 150px 50px;
+}
+
+.major-info-section, .graduation-criteria-section {
+    margin-bottom: 20px;
+}
+
+.majcreateform-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.majcreateform-group {
+    flex: 1 1;
+    margin-right: 10px;
+}
+
+.actions {
+    display: flex;
+    justify-content: right;
+}
+
+.categori {
+    text-align: center;
+    font-size: larger;
+    font-weight: 600;
+}
+
+.menuBox{
+    display:flex;
+    align-items: center;
+}
+
+.ttitle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
