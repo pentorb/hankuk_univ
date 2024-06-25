@@ -348,7 +348,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Map<String, Object> loadLectureInformation(String stdNo, String lecNo) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		LectureByStd lectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo);
+		LectureByStd lectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo).get();
 
 		String lectureName = lectureByStd.getLecture().getSubject().getName();
 		String professorName = lectureByStd.getLecture().getProfessor().getName();
@@ -395,7 +395,7 @@ public class StudentServiceImpl implements StudentService {
 			String lectureName = selectedAppeal.getLecture().getSubject().getName();
 			String professorName = selectedAppeal.getLecture().getProfessor().getName();
 			String grade = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(
-					selectedAppeal.getStudent().getStdNo(), selectedAppeal.getLecture().getLecNo()).getGrade();
+					selectedAppeal.getStudent().getStdNo(), selectedAppeal.getLecture().getLecNo()).get().getGrade();
 			Integer credit = selectedAppeal.getLecture().getCredit();
 			Date reqDt = selectedAppeal.getReqDt();
 			String status = selectedAppeal.getStatus();
@@ -424,7 +424,7 @@ public class StudentServiceImpl implements StudentService {
 		String lectureName = appeal.getLecture().getSubject().getName();
 		String professorName = appeal.getLecture().getProfessor().getName();
 		String grade = lectureByStdRepository
-				.findByStudent_stdNoAndLecture_lecNo(appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo())
+				.findByStudent_stdNoAndLecture_lecNo(appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo()).get()
 				.getGrade();
 		appealRepository.save(appeal);
 
