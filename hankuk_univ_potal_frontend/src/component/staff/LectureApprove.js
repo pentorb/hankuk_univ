@@ -139,6 +139,7 @@ const LectureApprove = () => {
       alert("강의를 거절하는 중 오류가 발생했습니다.");
     }
   };
+
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
@@ -219,9 +220,10 @@ const LectureApprove = () => {
                 <td>{lecture.prof}</td>
                 <td>{lecture.time1},{lecture.time2}</td>
                 <td>{lecture.lecRoom}</td>
+                <td>{lecture.numOfStd}</td>
                 <td>
                   <button onClick={() => openPdfModal(lecture.file)}>
-                    <Tab icon={<FileOpenIcon sx={{ fontSize: 30 }} />} />
+                    <Tab icon={<FileOpenIcon sx={{ fontSize: 20 }} />} />
                   </button>
                 </td>
                 <td>

@@ -709,19 +709,20 @@ public class StaffServiceImpl implements StaffService {
         if (name != null) {
             List<Subject> subjects = subjectRepository.findByNameContaining(name);
             for (Subject subject : subjects) {
-                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
+                lectures.addAll(lectureRepository.findBySubjectSubCdAndStatus(subject.getSubCd(), "req"));
             }
         } else if (major != null) {
             List<Subject> subjects = subjectRepository.findByMajorMajCd(major);
             for (Subject subject : subjects) {
-                lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
+                lectures.addAll(lectureRepository.findBySubjectSubCdAndStatus(subject.getSubCd(), "req"));
             }
         } else if (colleage != null) {
-            List<Major> majors = majorRepository.findByColleage_ColCd(colleage);
+            List<Major> majors = majorRepository.findByColleageColCd(colleage);
             for (Major maj : majors) {
                 List<Subject> subjects = subjectRepository.findByMajorMajCd(maj.getMajCd());
+                System.out.println("Subjects found by major for colleage: " + subjects);
                 for (Subject subject : subjects) {
-                    lectures.addAll(lectureRepository.findBySubjectAndStatus(subject.getSubCd(), "REQ"));
+                    lectures.addAll(lectureRepository.findBySubjectSubCdAndStatus(subject.getSubCd(), "req"));
                 }
             }
         }
@@ -733,9 +734,9 @@ public class StaffServiceImpl implements StaffService {
             map.put("time1", lecture.getTime1());
             map.put("time2", lecture.getTime2());
             map.put("lecRoom", lecture.getLecRoom());
+            map.put("numOfStd", lecture.getNumOfStd());
             map.put("credit", lecture.getCredit());
             map.put("file", lecture.getFiles());
-
 
             Subject subject = subjectRepository.findById(lecture.getSubject().getSubCd()).orElse(null);
             if (subject != null) {
@@ -755,6 +756,12 @@ public class StaffServiceImpl implements StaffService {
         return result;
     }
 
+	@Override
+    public void updateLectureStatus(String lecNo, String status) {
+        Lecture lecture = lectureRepository.findById(lecNo).orElseThrow(() -> new RuntimeException("Lecture not found"));
+        lecture.setStatus(status);
+        lectureRepository.save(lecture);
+    }
     
     
     
