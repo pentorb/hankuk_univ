@@ -371,18 +371,22 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	public Map<String, Object> checkConfirmationCount(String stdNo) throws Exception {
 		Student student = studentRepository.findById(stdNo).get();
-		Integer finSem = student.getFinSem() - 1;
+		Integer finSem = student.getFinSem();
 		Integer year = (finSem / 2) + 1;
-		Integer semester = (finSem % 2) + 1; 
+		Integer semester = (finSem % 2) + 1;
 		List<LectureByStd> lectureByStdGroup = lectureByStdRepository
 				.findByStudent_stdNoAndCourYearAndLecture_semester(stdNo, year, semester);
 		
 		Integer countOfLecture = 0;
 		Integer maximumOfCredit = 0;
-		Integer wholeCredit = 0;
-		
+		Integer wholeCredit = 0;		
 		countOfLecture = lectureByStdGroup.size();
-		Optional<Score> optionalScore = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, year, semester);
+		
+		Integer previousFinSem = student.getFinSem() - 1;
+		Integer previousYear = (previousFinSem / 2) + 1;
+		Integer previousSemester = (previousFinSem % 2) + 1;
+		
+		Optional<Score> optionalScore = scoreRepository.findByStudent_stdNoAndYearAndSemester(stdNo, previousYear, previousSemester);
 		if(optionalScore.isPresent()) {
 			if(optionalScore.get().getScore() >= 3.75) {
 				maximumOfCredit = 24;
