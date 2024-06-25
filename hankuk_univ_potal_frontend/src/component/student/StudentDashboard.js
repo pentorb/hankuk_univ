@@ -25,6 +25,7 @@ import Attendance from './Attendance';
 import Absence from './Absence';
 import AbsenceDetail from './AbsenceDetail';
 import MyPage from './MyPage';
+import LectureVideo from './LectureVideo';
 
 const StudentDashboard = () => {
     return (
@@ -56,6 +57,7 @@ const StudentDashboard = () => {
                             <Route path="/:lecNo/homework" element={<HomeworkList />} />
                             <Route path="/:lecNo/sumbit-homework" element={<Homework/>} />
                             <Route path="/:lecNo/homework/:hwNo" element={<HomeworkDetail/>}/>
+                            <Route path="/:lecNo/content/video" element={<LectureVideo />} />
                             <Route path="/insert-calendar" element={<InsertCal/>}></Route>
                             <Route path="/calendar" element={<Calendar/>}></Route>
                             <Route path="/my-grade" element={<AllmyGrades/>}></Route>

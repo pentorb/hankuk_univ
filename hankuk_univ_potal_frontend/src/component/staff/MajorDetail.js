@@ -94,17 +94,17 @@ const MajorDetail = () => {
 
     const handleSelectAll = (e) => {
         if (e.target.checked) {
-            setSelectedSubjects(subjects.map((subject) => subject.subjectCode));
+            setSelectedSubjects(subjects.map((subject) => subject.subCd));
         } else {
             setSelectedSubjects([]);
         }
     };
 
-    const handleCheckboxChange = (e, subjectCode) => {
+    const handleCheckboxChange = (e, subCd) => {
         if (e.target.checked) {
-            setSelectedSubjects([...selectedSubjects, subjectCode]);
+            setSelectedSubjects([...selectedSubjects, subCd]);
         } else {
-            setSelectedSubjects(selectedSubjects.filter((code) => code !== subjectCode));
+            setSelectedSubjects(selectedSubjects.filter((code) => code !== subCd));
         }
     };
 
@@ -428,17 +428,15 @@ const MajorDetail = () => {
                         <table className='result-box'>
                             <thead>
                                 <th>
-                                    <Checkbox
-                                        onChange={handleSelectAll}
-                                        checked={selectedSubjects.length === subjects.length && subjects.length > 0}
-                                    />
+                                <Checkbox
+    onChange={handleSelectAll}
+    checked={selectedSubjects.length === subjects.length && subjects.length > 0}
+/>
                                 </th>
                                 <th>과목코드</th>
                                 <th>학년</th>
                                 <th>이수 구분</th>
                                 <th>과목명</th>
-
-
                             </thead>
                             <tbody>
                                 {subjects.map((subject, index) => (
@@ -450,18 +448,7 @@ const MajorDetail = () => {
                                             />
                                         </td>
                                         <td>{subject.subCd}</td>
-                                        <td>
-                                            <Select
-                                                value={subject.targetGrd}
-                                                onChange={(e) => handleSubjectFieldChange(e, subject.subCd, 'targetGrd')}
-                                                disabled={!isEditingSubject || !selectedSubjects.includes(subject.subCd)}
-                                            >
-                                                <MenuItem value="1">1</MenuItem>
-                                                <MenuItem value="2">2</MenuItem>
-                                                <MenuItem value="3">3</MenuItem>
-                                                <MenuItem value="4">4</MenuItem>
-                                            </Select>
-                                        </td>
+                                        <td>{subject.targetGrd}</td>
                                         <td>
                                             <Select
                                                 value={subject.type}

@@ -103,30 +103,11 @@ export default function StaffSidebar() {
                     <ListItemText primary="강의 등록" />
                   </ListItemButton>
                   </Link>
-                  <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 5} onClick={(e) => handleListItemClick(e, 5)}>
+                  {/* <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 5} onClick={(e) => handleListItemClick(e, 5)}>
                     <ListItemText primary="수강 신청 현황" />
-                  </ListItemButton>
+                  </ListItemButton> */}
                 </List>
               </Collapse>
-              <ListItemButton onClick={handleSecondClick}>
-                <ListItemText primary="성적" />
-                {secondOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={secondOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <Link to="/staff/MajorManagement" style={{textDecoration: "none", color:"black"}}>
-                    <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 6} onClick={(e) => handleListItemClick(e, 6)}>
-                      <ListItemText primary="전체성적" />
-                    </ListItemButton>
-                  </Link>
-                  <Link to="/staff/MajorCreate" style={{textDecoration: "none", color:"black"}}>
-                  <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 7} onClick={(e) => handleListItemClick(e, 7)}>
-                    <ListItemText primary="이의신청 내역" />
-                  </ListItemButton>
-                  </Link>
-                </List>
-              </Collapse>
-
             </>}
           {activeTab === 3 &&
             <>
@@ -146,9 +127,9 @@ export default function StaffSidebar() {
                     <ListItemText primary="휴학 관리" />
                   </ListItemButton>
                   </Link>
-                  <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
+                  {/* <ListItemButton sx={{ pl: 3, borderRadius: 10, width: 180 }} selected={selectedIndex === 10} onClick={(e) => handleListItemClick(e, 10)}>
                     <ListItemText primary="성적 확정" />
-                  </ListItemButton>
+                  </ListItemButton> */}
                 </List>
               </Collapse>
             </>}
