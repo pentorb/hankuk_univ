@@ -117,7 +117,7 @@ const MajorCreate = () => {
             </Breadcrumbs>
           </div>
 
-          <div className="majCreate">
+          <div className="ccontainer">
             <div className="ttitle">
               <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
               <span style={{ fontSize: 'x-large' }}><b>학과정보입력</b></span>

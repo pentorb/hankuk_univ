@@ -1,24 +1,5 @@
-.majCreate {
-    /* display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px; */
+.ccontainer {
     padding: 20px 150px 50px;
-}
-
-.major-info-section, .graduation-criteria-section {
-    margin-bottom: 20px;
-}
-
-.majcreateform-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.majcreateform-group {
-    flex: 1 1;
-    margin-right: 10px;
 }
 
 .actions {
@@ -42,3 +23,26 @@
     align-items: center;
     margin-bottom: 20px;
 }
+
+.majorTable {
+    padding: 10px;
+    border-color: gray;
+}
+
+.majorTable th {
+    background-color: #1F3468;
+    color: #ffffff;
+}
+
+.majorTable td{
+    background-color: #EAECF1;
+    align-content: center;
+    height:50px;
+}
+
+.majorTable td,
+.majorTable th {
+    padding: 15px;
+    /* 간격을 늘리기 위해 패딩 값을 조정합니다 */
+}
+  
