@@ -44,7 +44,6 @@ const Attendance = () => {
                 setAttendanceList(null)
             })
     }, [member.id, lectureNumber, token]);
-
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>출결 현황</b></Typography>

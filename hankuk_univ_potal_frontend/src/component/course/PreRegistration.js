@@ -21,7 +21,7 @@ const PreRegistration = () => {
     useEffect(() => {
         checkConfirmation();  
         checkPreRegistration();        
-    }, [])
+    }, [token])
 
     const checkPreRegistration = () => {
         let formData = new FormData();
