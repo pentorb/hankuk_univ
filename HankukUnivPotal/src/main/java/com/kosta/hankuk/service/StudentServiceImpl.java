@@ -293,7 +293,7 @@ public class StudentServiceImpl implements StudentService {
 				}
 			}
 			
-			Double score = wholeScore / semesterCredit;
+			Double score = Math.round((wholeScore / semesterCredit) * 100) / 100.0;
 			scoreMap.put(student.getStdNo(), score);
 			scoreList.add(score);
 		}
@@ -348,7 +348,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Map<String, Object> loadLectureInformation(String stdNo, String lecNo) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		LectureByStd lectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo);
+		LectureByStd lectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lecNo).get();
 
 		String lectureName = lectureByStd.getLecture().getSubject().getName();
 		String professorName = lectureByStd.getLecture().getProfessor().getName();
@@ -395,7 +395,7 @@ public class StudentServiceImpl implements StudentService {
 			String lectureName = selectedAppeal.getLecture().getSubject().getName();
 			String professorName = selectedAppeal.getLecture().getProfessor().getName();
 			String grade = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(
-					selectedAppeal.getStudent().getStdNo(), selectedAppeal.getLecture().getLecNo()).getGrade();
+					selectedAppeal.getStudent().getStdNo(), selectedAppeal.getLecture().getLecNo()).get().getGrade();
 			Integer credit = selectedAppeal.getLecture().getCredit();
 			Date reqDt = selectedAppeal.getReqDt();
 			String status = selectedAppeal.getStatus();
@@ -424,7 +424,7 @@ public class StudentServiceImpl implements StudentService {
 		String lectureName = appeal.getLecture().getSubject().getName();
 		String professorName = appeal.getLecture().getProfessor().getName();
 		String grade = lectureByStdRepository
-				.findByStudent_stdNoAndLecture_lecNo(appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo())
+				.findByStudent_stdNoAndLecture_lecNo(appeal.getStudent().getStdNo(), appeal.getLecture().getLecNo()).get()
 				.getGrade();
 		appealRepository.save(appeal);
 
@@ -508,9 +508,14 @@ public class StudentServiceImpl implements StudentService {
 		String wholeStatus = attendance.getStatus();
 		List<Lesson> lessonList = attendance.getLecture().getLessonList();
 
-		for (int i = 0; i < lessonList.size(); i += 2) {
+		for (int i = 0; i < lessonList.size() - 2; i += 2) {
 			Integer lessonNo = lessonList.get(i).getLessonNo();
 			Integer week = lessonList.get(i).getWeek();
+			String twoCharacterWeek = String.valueOf(lessonList.get(i).getWeek());
+			if(twoCharacterWeek.length() == 1) {
+				twoCharacterWeek = '0' + twoCharacterWeek;
+			}
+			
 			Integer count = lessonList.get(i).getLessonCnt();
 			String videoFile = "";
 			String videoName = "";
@@ -591,6 +596,7 @@ public class StudentServiceImpl implements StudentService {
 
 			Map<String, Object> map = new HashMap<>();			
 			map.put("week", week);
+			map.put("twoCharacterWeek", twoCharacterWeek);
 			
 			map.put("lessonNo", lessonNo);
 			map.put("count", count);
@@ -721,7 +727,7 @@ public class StudentServiceImpl implements StudentService {
 		String wholeStatus = attendance.getStatus();
 		List<Lesson> lessonList = attendance.getLecture().getLessonList();
 
-		for (int i = 0; i < lessonList.size(); i++) {
+		for (int i = 0; i < lessonList.size() - 2; i++) {
 			Integer lessonNo = lessonList.get(i).getLessonNo();
 			Integer week = lessonList.get(i).getWeek();
 			Integer count = lessonList.get(i).getLessonCnt();
@@ -774,7 +780,7 @@ public class StudentServiceImpl implements StudentService {
 		Integer absence = 0;
 		Integer approvedAbsence = 0;
 
-		for (int i = 0; i < lessonList.size(); i++) {
+		for (int i = 0; i < lessonList.size() - 2; i++) {
 			if(wholeStatus.substring(i, i + 1).equals("1")) {
 				presence++;
 			} else if(wholeStatus.substring(i, i + 1).equals("2")) {

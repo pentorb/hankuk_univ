@@ -42,14 +42,19 @@ const AccountManagement = () => {
   
   const fetchcolleages = async () => {
     try {
-      const response = await axios.get(`${url}/colleagesSearchList`,
-        { headers: { "Authorization": JSON.stringify(token) } }
-      );
-      setColleages(response.data);
+      const response = await axios.get(`${url}/colleagesSearchList`, {
+        headers: { "Authorization": JSON.stringify(token) }
+      });
+      if (Array.isArray(response.data)) {
+        setColleages(response.data);
+      } else {
+        console.error("Expected an array response for colleages.");
+      }
     } catch (error) {
       console.error("Error fetching colleages:", error);
     }
   };
+  
 
   const fetchMajors = async (colleageName) => {
     try {
@@ -456,7 +461,7 @@ const AccountManagement = () => {
                           onChange={(e) => handleFieldChange(e, student.id, 'name')}
                         />
                       </td>
-                      <td>{student.majCd}</td>
+                      <td>{student.majName}</td>
                       <td>
                         <Input
                           value={student.tel}

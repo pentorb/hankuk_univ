@@ -39,7 +39,7 @@ const AppealDetail = () => {
             .catch(err=> {
                 console.log(err)
             })
-    }, [])
+    }, [token])
 
     const modifyAppeal = () => {
         let formData = new FormData();

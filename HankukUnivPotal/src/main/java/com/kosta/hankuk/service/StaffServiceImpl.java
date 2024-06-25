@@ -18,11 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.hankuk.dto.ColleageDto;
@@ -35,6 +32,8 @@ import com.kosta.hankuk.dto.SubjectDto;
 import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Huehak;
 import com.kosta.hankuk.entity.HuehakAndBokhak;
+import com.kosta.hankuk.entity.Lecture;
+import com.kosta.hankuk.entity.Lesson;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.NoticeBoard;
 import com.kosta.hankuk.entity.Professor;
@@ -43,11 +42,13 @@ import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.HueAndBokRepository;
 import com.kosta.hankuk.repository.HuehakRepository;
+import com.kosta.hankuk.repository.LectureRepository;
 import com.kosta.hankuk.repository.MajorRepository;
 import com.kosta.hankuk.repository.NoticeBoardRepository;
 import com.kosta.hankuk.repository.ProfessorRepository;
 import com.kosta.hankuk.repository.StudentRepository;
 import com.kosta.hankuk.repository.SubjectRepository;
+import com.kosta.hankuk.repository.LessonRepository;
 import com.kosta.hankuk.util.PageInfo;
 
 @Service
@@ -68,6 +69,12 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private MajorRepository majorRepository;
     
+    @Autowired
+    private LectureRepository lectureRepository;
+    
+    @Autowired
+    private LessonRepository lessonRepository;
+
     @Autowired
     private HuehakRepository hueres;
     
@@ -201,7 +208,7 @@ public class StaffServiceImpl implements StaffService {
 							student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 							student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 							student.getProfessor() != null ? student.getProfessor().getName() : null,
-							student.getMajor() != null ? student.getMajor().getName() : null,
+							student.getMajor()!= null ? student.getMajor().getName() : null,
 							student.getMajor() != null ? student.getMajor().getMajCd() : null))
 					.collect(Collectors.toList());
 		} else if (colleage != null && major == null) {
@@ -212,7 +219,7 @@ public class StaffServiceImpl implements StaffService {
 							student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 							student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 							student.getProfessor() != null ? student.getProfessor().getName() : null,
-							student.getMajor() != null ? student.getMajor().getName() : null,
+							student.getMajor()!= null ? student.getMajor().getName() : null,
 							student.getMajor() != null ? student.getMajor().getMajCd() : null))
 					.collect(Collectors.toList());
 		} else if (major != null) {
@@ -225,7 +232,7 @@ public class StaffServiceImpl implements StaffService {
 								student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 								student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 								student.getProfessor() != null ? student.getProfessor().getName() : null,
-								student.getMajor() != null ? student.getMajor().getName() : null,
+								student.getMajor()!= null ? student.getMajor().getName() : null,
 								student.getMajor() != null ? student.getMajor().getMajCd() : null))
 						.collect(Collectors.toList());
 			}
@@ -237,7 +244,7 @@ public class StaffServiceImpl implements StaffService {
 						student.getStatus(), student.getProfile(), student.getFinCredit(), student.getFinSem(),
 						student.getProfessor() != null ? student.getProfessor().getProfNo() : null,
 						student.getProfessor() != null ? student.getProfessor().getName() : null,
-						student.getMajor() != null ? student.getMajor().getName() : null,
+						student.getMajor()!= null ? student.getMajor().getName() : null,
 						student.getMajor() != null ? student.getMajor().getMajCd() : null))
 				.collect(Collectors.toList());
 	}
@@ -437,7 +444,7 @@ public class StaffServiceImpl implements StaffService {
 							.professor(profCd != null ? Professor.builder().profNo(profCd).build() : null).build();
 					students.add(student);
 				} else if ("professor".equalsIgnoreCase(category)) {
-					Professor professor = Professor.builder().profNo(generateUniqueProfessorId()).name(name).password(passwordEncoder.encode("1234"))
+					Professor professor = Professor.builder().profNo(generateUniqueProfessorId()).name(name).password("1234")
 							.birthday(birthday).email(email).addr(address1).detailAddr(address2)
 							.postCode(postcode).tel(tel).gender(gender)
 							.major(majCd != null ? Major.builder().majCd(majCd).build() : null).build();
@@ -637,8 +644,8 @@ public class StaffServiceImpl implements StaffService {
                         .build();
 
                 subjects.add(subject);
+                subjectRepository.saveAll(subjects);
             }
-            subjectRepository.saveAll(subjects);
         }
     }
     @Override
@@ -699,7 +706,86 @@ public class StaffServiceImpl implements StaffService {
         professorRepository.save(newHeadProfessor);
     }
 
+    //강의허락
 
+    public List<Map<String, Object>> searchREQLecture(String name, String colleage, String major) {
+        List<Lecture> lectures = new ArrayList<>();
+
+        if (name != null) {
+            List<Subject> subjects = subjectRepository.findByNameContaining(name);
+            for (Subject subject : subjects) {
+                lectures.addAll(lectureRepository.findBySubjectSubCdAndStatus(subject.getSubCd(), "req"));
+            }
+        } else if (major != null) {
+            List<Subject> subjects = subjectRepository.findByMajorMajCd(major);
+            for (Subject subject : subjects) {
+                lectures.addAll(lectureRepository.findBySubjectSubCdAndStatus(subject.getSubCd(), "req"));
+            }
+        } else if (colleage != null) {
+            List<Major> majors = majorRepository.findByColleageColCd(colleage);
+            for (Major maj : majors) {
+                List<Subject> subjects = subjectRepository.findByMajorMajCd(maj.getMajCd());
+                System.out.println("Subjects found by major for colleage: " + subjects);
+                for (Subject subject : subjects) {
+                    lectures.addAll(lectureRepository.findBySubjectSubCdAndStatus(subject.getSubCd(), "req"));
+                }
+            }
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Lecture lecture : lectures) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("lecNo", lecture.getLecNo());
+            map.put("time1", lecture.getTime1());
+            map.put("time2", lecture.getTime2());
+            map.put("lecRoom", lecture.getLecRoom());
+            map.put("numOfStd", lecture.getNumOfStd());
+            map.put("credit", lecture.getCredit());
+            map.put("file", lecture.getFiles());
+
+            Subject subject = subjectRepository.findById(lecture.getSubject().getSubCd()).orElse(null);
+            if (subject != null) {
+                map.put("subCd", subject.getSubCd());
+                map.put("subName", subject.getName());
+                map.put("grade", subject.getTargetGrd());
+            }
+
+            Professor professor = professorRepository.findById(lecture.getProfessor().getProfNo()).orElse(null);
+            if (professor != null) {
+                map.put("prof", professor.getName());
+            }
+
+            result.add(map);
+        }
+
+        return result;
+    }
+
+	@Override
+    public void updateLectureStatus(String lecNo, String status) {
+        Lecture lecture = lectureRepository.findById(lecNo).orElseThrow(() -> new RuntimeException("Lecture not found"));
+        lecture.setStatus(status);
+        lectureRepository.save(lecture);
+        
+        if ("APPR".equals(status)) {
+            createLessonsForLecture(lecture);
+        }
+    }
+	
+    private void createLessonsForLecture(Lecture lecture) {
+        for (int week = 1; week <= 15; week++) {
+            for (int lessonCnt = 1; lessonCnt <= 2; lessonCnt++) {
+                Lesson lesson = Lesson.builder()
+                    .week(week)
+                    .lessonCnt(lessonCnt)
+                    .lecture(lecture)
+                    .build();
+                lessonRepository.save(lesson);
+            }
+        }
+    }
+    
+    
     
     // 휴학 신청 내역 리스트 (페이징)
 	@Override

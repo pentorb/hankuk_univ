@@ -201,7 +201,7 @@ const HuehakInsert = () => {
                                             <option value="p">출산, 임신 휴학</option>
                                             <option value="s">창업 휴학</option>
                                             <option value="i">질병 휴학</option>
-                                            <option value="k">육아 복학</option>
+                                            <option value="k">육아 휴학</option>
                                         </Input>
                                     </div>
                                 </div>
@@ -212,7 +212,7 @@ const HuehakInsert = () => {
                                     <div style={text} className="col-4">휴학년도</div>
                                     <div className="col-6">
                                         <Input type="text" id="year" name="year"
-                                            placeholder='2024'
+                                            placeholder='2024' 
                                             onChange={dataChange}
                                         />
                                     </div>

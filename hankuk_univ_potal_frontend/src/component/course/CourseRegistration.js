@@ -32,17 +32,24 @@ const CourseRegistration = () => {
     const [searchType, setSearchType] = useState();
     const [searchWord, setSearchWord] = useState();
     const [confirmationCount, setConfirmationCount] = useState({countOfLecture:'', maximumOfCredit:'', wholeCredit:''});
-    
+    let today = new Date();
+    let year = today.getFullYear();
+
+
     useEffect(() => {
         loadWholeCourses();
         checkConfirmation();
         loadCollege();
-    }, [])
+    }, [token])
 
     const loadWholeCourses = () => {
+        let formData = new FormData();
+        formData.append("year", year);
+        formData.append("stdNo", member.id);
+
         const initialCourseRegistrationUrl = `${url}/whole-courses`;
         console.log(initialCourseRegistrationUrl);
-        axios.post(initialCourseRegistrationUrl, null, {
+        axios.post(initialCourseRegistrationUrl, formData, {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
@@ -105,6 +112,8 @@ const CourseRegistration = () => {
 
     const loadCoursesBySearchCondition = () => {
         let formData = new FormData();
+        formData.append("year", year);
+        formData.append("stdNo", member.id);
         formData.append("majCd", majorCode);
         formData.append("targetGrd", targetGrade);
         formData.append("searchType", searchType);
@@ -126,6 +135,8 @@ const CourseRegistration = () => {
 
     const checkCourseRegistration = () => {
         let formData = new FormData();
+        formData.append("year", year);
+        formData.append("stdNo", member.id);
         formData.append("majCd", majorCode);
         formData.append("targetGrd", targetGrade);
 

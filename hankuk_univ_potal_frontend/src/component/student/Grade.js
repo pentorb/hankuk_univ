@@ -32,7 +32,7 @@ const Grade = () => {
     
     useEffect(() => {
         checkGrade();
-    }, [])
+    }, [token])
 
     const checkGrade = () => {
         let formData = new FormData();
@@ -152,7 +152,6 @@ const Grade = () => {
                                             <TableCell align="center" sx={{ color: "white" }}>교수명</TableCell>
                                             <TableCell align="center" sx={{ color: "white" }}>성적</TableCell>
                                             <TableCell align="center" sx={{ color: "white" }}>이의신청</TableCell>
-                                            <TableCell align="center" sx={{ color: "white" }}>학점포기</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -166,9 +165,6 @@ const Grade = () => {
                                                     size="medium"
                                                     onClick={()=>{setSelectedNumber(grade.lectureNumber); navigate("/student/make-appeal")}}
                                                     sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3 }}>이의신청</Button>
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Button variant="contained" size="medium" sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3 }}>학점포기</Button>
                                                 </TableCell>
                                             </TableRow>
                                         )))}

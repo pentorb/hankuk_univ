@@ -40,7 +40,7 @@ const Homework = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [token])
 
     const submitHomework = () => {
         let formData = new FormData();

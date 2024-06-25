@@ -9,10 +9,6 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-<<<<<<< Updated upstream
-//				.allowedOrigins("http://3.27.240.208:3000")
-=======
->>>>>>> Stashed changes
 				.allowedOrigins("http://localhost:3000")
 				.allowedMethods("GET", "POST", "PUT", "DELETE");
 				

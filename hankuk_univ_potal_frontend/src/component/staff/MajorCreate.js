@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid';
 import HomeIcon from '@mui/icons-material/Home';
 import React, { useState, useEffect } from 'react';
-import { Paper, Typography, Button, Select, MenuItem, Input, FormHelperText } from '@mui/material';
+import { Paper, Typography, Button, Select, MenuItem, FormHelperText } from '@mui/material';
 import axios from 'axios';
 import { url } from "../../config/config";
 import { tokenAtom } from "../../atoms";
@@ -10,6 +10,9 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
+import './css/Major.css';
+import StopRoundedIcon from '@mui/icons-material/StopRounded';
+import { Input } from 'reactstrap';
 
 
 
@@ -27,7 +30,7 @@ const MajorCreate = () => {
   const [majorCodeError, setMajorCodeError] = useState('');
   const token = useAtomValue(tokenAtom);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     fetchColleages();
   }, [token]);
@@ -56,8 +59,8 @@ const MajorCreate = () => {
   };
 
   const validateMajorCode = async (majorCode) => {
-    if (!/^[A-Za-z]{2,4}$/.test(majorCode)) {
-      setMajorCodeError('영어 2~4자로 완성해주세요');
+    if (!/^[A-Za-z]{3}$/.test(majorCode)) {
+      setMajorCodeError('영어 3자로 완성해주세요');
       return;
     }
 
@@ -96,7 +99,7 @@ const MajorCreate = () => {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
-        <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>계정관리</b></Typography>
+        <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>학과 개설</b></Typography>
       </Grid>
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
@@ -106,97 +109,86 @@ const MajorCreate = () => {
                 <HomeIcon />
               </Link>
               <Link color="inherit" underline='none'>
-                학사 지원
+                학사 운영
               </Link>
               <Link underline="hover" color="#4952A9">
-                <b>계정 관리</b>
+                <b>학과 개설</b>
               </Link>
             </Breadcrumbs>
           </div>
-          <hr />
-          <div className="major-create-container">
-            <div className="major-info-section">
-              <h2>학과 정보</h2>
-              <div className="majcreateform-row">
-                <div className="majcreateform-group">
-                  <Input
-                    placeholder="학과명"
-                    name="majorName"
-                    value={formData.majorName}
-                    onChange={handleInputChange}
-                    fullWidth
-                  />
-                </div>
-                <div className="majcreateform-group">
-                  <Select
-                    placeholder="단과"
-                    name="colleage"
-                    value={formData.colleage}
-                    onChange={handleInputChange}
-                    fullWidth
-                  >
+
+          <div className="ccontainer">
+            <div className="ttitle">
+              <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
+              <span style={{ fontSize: 'x-large' }}><b>학과정보입력</b></span>
+            </div>
+            <div className="col-12" style={{ display: 'flex' }}>
+              <div className="col-6 menuBox" >
+                <span className="col-4 categori">단과</span>
+                <div className="col-6">
+                  <Input type="select" name="colleage" value={formData.colleage} onChange={handleInputChange}>
+                    <option>선택하세요</option>
                     {colleages.map(colleage => (
-                      <MenuItem key={colleage.colCd} value={colleage.colCd}>{colleage.name}</MenuItem>
+                      <option key={colleage.colCd} value={colleage.colCd}>{colleage.name}</option>
                     ))}
-                  </Select>
+                  </Input>
                 </div>
               </div>
-              <div className="majcreateform-row">
-                <div className="majcreateform-group">
-                  <Input
-                    placeholder="학과 코드 (영어 2~4자)"
-                    name="majorCode"
-                    value={formData.majorCode}
-                    onChange={handleInputChange}
-                    error={!!majorCodeError}
-                    fullWidth
-                  />
+              <div className="col-6 menuBox">
+                <span className="col-4 categori" >학과명</span>
+                <div className="col-6">
+                  <Input type="text" placeholder='학과명' name="majorName" value={formData.majorName} onChange={handleInputChange} />
+                </div>
+              </div>
+            </div>
+
+            <div className="col-12" style={{ display: 'flex', marginBottom: '30px', height: '75px' }}>
+              <div className="col-6 menuBox">
+                <span className="col-4 categori" >학과 코드</span>
+                <div className="col-6" style={{ padding: '30px 0px' }}>
+                  <Input placeholder="학과 코드 (영어 2~4자)" name="majorCode" value={formData.majorCode} onChange={handleInputChange} error={!!majorCodeError} />
                   {majorCodeError && <FormHelperText error>{majorCodeError}</FormHelperText>}
                 </div>
-                <div className="majcreateform-group">
-                  <Input
-                    placeholder="학과 번호"
-                    name="majorNumber"
-                    value={formData.majorNumber}
-                    onChange={handleInputChange}
-                    fullWidth
-                  />
+              </div>
+              <div className='col-6 menuBox'>
+                <span className="col-4 categori" >학과 번호</span>
+                <div className='col-6'>
+                  <Input placeholder="학과 번호" name="majorNumber" value={formData.majorNumber} onChange={handleInputChange} />
                 </div>
               </div>
             </div>
-            <div className="graduation-criteria-section">
-              <h2>졸업기준 설정</h2>
-              <div className="majcreateform-row">
-                <div className="majcreateform-group">
-                  <Input
-                    placeholder="전체학점"
-                    name="totalCredits"
-                    value={formData.totalCredits}
-                    onChange={handleInputChange}
-                    fullWidth
-                  />
-                </div>
-                <div className="majcreateform-group">
-                  <Input
-                    placeholder="전공"
-                    name="majorCredits"
-                    value={formData.majorCredits}
-                    onChange={handleInputChange}
-                    fullWidth
-                  />
-                </div>
-                <div className="majcreateform-group">
-                  <Input
-                    placeholder="교양"
-                    name="generalEducationCredits"
-                    value={formData.generalEducationCredits}
-                    onChange={handleInputChange}
-                    fullWidth
-                  />
+
+            <div className="ttitle">
+              <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
+              <span style={{ fontSize: 'x-large' }}><b>졸업기준 설정</b></span>
+            </div>
+
+            <div className="col-12" style={{ display: 'flex', marginBottom: '30px', height: '75px' }}>
+
+              <div className="col-4 menuBox">
+                <span className="col-4 categori" >전체 학점</span>
+                <div className="col-6">
+                  <Input placeholder="전체학점" name="majorCredits" value={formData.majorCredits} onChange={handleInputChange}/>
                 </div>
               </div>
+
+              <div className="col-4 menuBox">
+                <span className="col-4 categori" >전공 학점</span>
+                <div className="col-6">
+                  <Input placeholder="전공학점" name="totalCredits" value={formData.totalCredits} onChange={handleInputChange}/>
+                </div>
+              </div>
+
+              <div className="col-4 menuBox">
+                <span className="col-4 categori" >교양 학점</span>
+                <div className="col-6">
+                  <Input placeholder="교양학점" name="generalEducationCredits" value={formData.generalEducationCredits} onChange={handleInputChange}/>
+                </div>
+              </div>
+
             </div>
-            <div className="actions">
+
+            <div className="col-12" style={{justifyContent:'center', display:'flex'}}>
               <Button
                 variant="contained"
                 style={{ color: 'white', backgroundColor: '#1F3468', marginRight: '10px' }}
@@ -213,9 +205,10 @@ const MajorCreate = () => {
               </Button>
             </div>
           </div>
+
         </Paper>
       </Grid>
-    </Grid>
+    </Grid >
   )
 }
 

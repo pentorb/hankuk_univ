@@ -279,6 +279,42 @@ public class StaffController {
         }
     }
  
+    @GetMapping("/searchREQLecture")
+    public ResponseEntity<List<Map<String, Object>>> searchREQLecture(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String colleage,
+        @RequestParam(required = false) String major
+    ) {
+        try {
+            List<Map<String, Object>> lectures = staffService.searchREQLecture(name, colleage, major);
+            return ResponseEntity.ok(lectures);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @PostMapping("/approveLecture")
+    public ResponseEntity<String> approveLecture(@RequestBody Map<String, String> request) {
+        String lecNo = request.get("lecNo");
+        try {
+            staffService.updateLectureStatus(lecNo, "APPR");
+            return ResponseEntity.ok("Lecture approved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to approve lecture: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/rejectLecture")
+    public ResponseEntity<String> rejectLecture(@RequestBody Map<String, String> request) {
+        String lecNo = request.get("lecNo");
+        try {
+            staffService.updateLectureStatus(lecNo, "REJ");
+            return ResponseEntity.ok("Lecture rejected successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reject lecture: " + e.getMessage());
+        }
+    }
+    
     
     @GetMapping("/allHBList")
     public ResponseEntity<Map<String,Object>> allHueList(@RequestParam(name="page", required = false, defaultValue="1") Integer page,

@@ -41,7 +41,7 @@ const HomeworkList = () => {
                 console.log(err);
                 setHomeworkList(null)
             })
-    }, [])
+    }, [token])
 
     return (
         <Grid item xs={12}>
