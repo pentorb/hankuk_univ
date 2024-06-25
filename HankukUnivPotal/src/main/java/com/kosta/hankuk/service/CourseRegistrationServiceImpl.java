@@ -8,9 +8,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.MajorDto;
+import com.kosta.hankuk.entity.Attendance;
 import com.kosta.hankuk.entity.Colleage;
 import com.kosta.hankuk.entity.Lecture;
 import com.kosta.hankuk.entity.LectureBasket;
@@ -18,6 +20,7 @@ import com.kosta.hankuk.entity.LectureByStd;
 import com.kosta.hankuk.entity.Major;
 import com.kosta.hankuk.entity.Score;
 import com.kosta.hankuk.entity.Student;
+import com.kosta.hankuk.repository.AttendanceRepository;
 import com.kosta.hankuk.repository.ColleageRepository;
 import com.kosta.hankuk.repository.LectureBasketRepository;
 import com.kosta.hankuk.repository.LectureByStdRepository;
@@ -49,6 +52,9 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 	
 	@Autowired
 	private ScoreRepository scoreRepository;
+	
+	@Autowired
+	private AttendanceRepository attendanceRepository;
 
 	@Override
 	public Map<String, Object> loadStudentInformation(String stdNo) throws Exception {
@@ -67,11 +73,14 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		return map;
 	}
 	
-	public List<Map<String, Object>> showCourseRegistration(String majCd, Integer targetGrd) throws Exception {
-		List<Lecture> lectureList = lectureRepository.findBySubject_Major_majCdAndSubject_targetGrd(majCd, targetGrd);
+	public List<Map<String, Object>> showCourseRegistration(String majCd, Integer targetGrd, Integer year, String stdNo) throws Exception {
+		Integer finSem = studentRepository.findById(stdNo).get().getFinSem();
+		Integer semester = (finSem % 2) + 1;
+		List<Lecture> lectureList = lectureRepository.findBySubject_Major_majCdAndSubject_targetGrdAndYearAndSemester(majCd, targetGrd, year, semester);
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
-		for (Lecture lecture : lectureList) {			
+		for (Lecture lecture : lectureList) {
+			if(lecture.getStatus().equals("REQ")) continue;
 			String lectureName = lecture.getSubject().getName();
 			String professorName = lecture.getProfessor().getName();
 			String lectureNumber = lecture.getLecNo();
@@ -122,6 +131,11 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 					.student(Student.builder().stdNo(stdNo).build())
 					.lecture(Lecture.builder().lecNo(lecNo).build()).build();
 			lectureByStdRepository.save(lectureByStd);
+			Attendance attendance = Attendance.builder()
+					.student(Student.builder().stdNo(stdNo).build())
+					.lecture(Lecture.builder().lecNo(lecNo).build())
+					.build();
+			attendanceRepository.save(attendance);
 		}
 	}
 	
@@ -251,11 +265,14 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		return majorList;
 	}
 	
-	public List<Map<String, Object>> showWholeCourses() throws Exception {
-		List<Lecture> lectureList = lectureRepository.findAll();
+	public List<Map<String, Object>> showWholeCourses(String stdNo, Integer year) throws Exception {
+		Integer finSem = studentRepository.findById(stdNo).get().getFinSem();
+		Integer semester = (finSem % 2) + 1;
+		List<Lecture> lectureList = lectureRepository.findByYearAndSemester(year, semester);
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
-		for (Lecture lecture : lectureList) {			
+		for (Lecture lecture : lectureList) {
+			if(lecture.getStatus().equals("REQ")) continue;			
 			String lectureName = lecture.getSubject().getName();
 			String professorName = lecture.getProfessor().getName();
 			String lectureNumber = lecture.getLecNo();
@@ -292,11 +309,13 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		return mapList;
 	}
 	
-	public List<Map<String, Object>> searhCourses(String majCd, Integer targetGrd, String searchType, String searchWord) throws Exception {
+	public List<Map<String, Object>> searhCourses(String majCd, Integer targetGrd, String searchType, String searchWord, String stdNo, Integer year) throws Exception {
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 		List<Lecture> lectureList = new ArrayList<>();
 		if(majCd.equals("") && targetGrd == 0) {
-			lectureList = lectureRepository.findAll();
+			Integer finSem = studentRepository.findById(stdNo).get().getFinSem();
+			Integer semester = (finSem % 2) + 1;
+			lectureList = lectureRepository.findByYearAndSemester(year, semester);
 		} else {
 			lectureList = lectureRepository.findBySubject_Major_majCdAndSubject_targetGrd(majCd, targetGrd);
 		}		

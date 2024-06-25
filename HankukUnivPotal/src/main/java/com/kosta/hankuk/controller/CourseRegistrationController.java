@@ -35,10 +35,11 @@ public class CourseRegistrationController {
 	}
 	
 	@PostMapping("/course-registration")
-	public ResponseEntity<Map<String, Object>> showCourseRegistration(@RequestParam String majCd, @RequestParam Integer targetGrd){		
+	public ResponseEntity<Map<String, Object>> showCourseRegistration(@RequestParam String majCd, @RequestParam Integer targetGrd,
+			@RequestParam Integer year, @RequestParam String stdNo){		
 		try {
 			Map<String, Object> res = new HashMap<>();
-			List<Map<String, Object>> courseList = courseRegistrationService.showCourseRegistration(majCd, targetGrd);
+			List<Map<String, Object>> courseList = courseRegistrationService.showCourseRegistration(majCd, targetGrd, year, stdNo);
 			res.put("courseList", courseList);
 			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
 		}	catch(Exception e) {
@@ -146,10 +147,10 @@ public class CourseRegistrationController {
 	}
 	
 	@PostMapping("/whole-courses")
-	public ResponseEntity<Map<String, Object>> showWholeCourses(){		
+	public ResponseEntity<Map<String, Object>> showWholeCourses(@RequestParam String stdNo, @RequestParam Integer year){		
 		try {
 			Map<String, Object> res = new HashMap<>();
-			List<Map<String, Object>> courseList = courseRegistrationService.showWholeCourses();
+			List<Map<String, Object>> courseList = courseRegistrationService.showWholeCourses(stdNo, year);
 			res.put("courseList", courseList);
 			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
 		}	catch(Exception e) {
@@ -160,10 +161,10 @@ public class CourseRegistrationController {
 	
 	@PostMapping("/course-search")
 	public ResponseEntity<Map<String, Object>> searhCourses(@RequestParam String majCd, @RequestParam Integer targetGrd,
-			@RequestParam String searchType, @RequestParam String searchWord){		
+			@RequestParam String searchType, @RequestParam String searchWord, @RequestParam String stdNo, @RequestParam Integer year){		
 		try {
 			Map<String, Object> res = new HashMap<>();
-			List<Map<String, Object>> courseList = courseRegistrationService.searhCourses(majCd, targetGrd, searchType, searchWord);
+			List<Map<String, Object>> courseList = courseRegistrationService.searhCourses(majCd, targetGrd, searchType, searchWord, stdNo, year);
 			res.put("courseList", courseList);
 			return new ResponseEntity<Map<String, Object>> (res, HttpStatus.OK);
 		}	catch(Exception e) {
