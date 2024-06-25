@@ -40,7 +40,7 @@ const Absence = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [token])
 
     const reportAbsence = () => {
         let formData = new FormData();

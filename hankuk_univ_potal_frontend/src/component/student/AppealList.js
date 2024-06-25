@@ -31,7 +31,7 @@ const AppealList = () => {
     
     useEffect(() => {
         checkAppealList();
-    }, [])
+    }, [token])
 
     const checkAppealList = () => {
         let formData = new FormData();

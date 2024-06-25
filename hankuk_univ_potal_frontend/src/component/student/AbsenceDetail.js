@@ -41,7 +41,7 @@ const AbsenceDetail = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [token])
 
     const modifyAbsence = () => {
         let formData = new FormData();

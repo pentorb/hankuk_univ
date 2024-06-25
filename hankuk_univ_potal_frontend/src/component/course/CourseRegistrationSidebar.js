@@ -28,7 +28,7 @@ export default function CourseRegistrationSidebar() {
         .catch(err => {
             console.log(err);
         })
-  }, [])
+  }, [token])
 
   const handleListItemClick = (e, index) => {
     setSelectedIndex(index);

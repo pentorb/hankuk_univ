@@ -44,7 +44,7 @@ const Attendance = () => {
                 console.log(err);
                 setAttendanceList(null)
             })
-    }, [])
+    }, [token])
 
     return (
         <Grid item xs={12}>

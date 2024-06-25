@@ -30,7 +30,7 @@ const LectureList = () => {
                 console.log(err);
                 setLectureList(null)
             })
-    }, [])
+    }, [token])
 
     return (
         <Grid item xs={12}>
