@@ -103,7 +103,7 @@
 
 .tocDiv{
     position: absolute;
-    bottom: 30px;
+    bottom: -30px;
     right: 20px;
     width: 100px;
     height: 400px;
