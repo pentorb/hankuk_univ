@@ -323,7 +323,7 @@ const MyPage = () => {
                                 <span style={{ fontSize: 'x-large' }}><b>비밀번호 변경</b></span>
                             </div>
                             <div style={{ padding: '22px 50px', fontSize: 'larger' }}>
-                                비밀번호를 변경하시려면 <b onClick={updatePw} style={{ color: 'blue', textDecoration: 'underline' }}>여기</b>를 클릭하시오
+                                비밀번호를 변경하시려면 <b onClick={updatePw} style={{ color: 'blue', textDecoration: 'underline', cursor:'pointer'  }}>여기</b>를 클릭하시오
                             </div>
                         </div>
 
