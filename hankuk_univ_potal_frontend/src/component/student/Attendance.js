@@ -22,10 +22,10 @@ const Attendance = () => {
     const lectureName = useAtomValue(lectureNameAtom);
     const lectureNumber = useAtomValue(lectureNumberAtom);
     const [attendanceList, setAttendanceList] = useState([]);
-    const [attendanceCount, setAttendanceCount] = useState({presence:'', lateness:'', absence:'', approvedAbsence:''});
+    const [attendanceCount, setAttendanceCount] = useState({ presence: '', lateness: '', absence: '', approvedAbsence: '' });
     const setSelectedNumber = useSetAtom(selectedNumberAtom);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         let formData = new FormData();
         formData.append("stdNo", member.id);
@@ -37,18 +37,19 @@ const Attendance = () => {
         })
             .then(res => {
                 setAttendanceList([...res.data.attendanceList])
-                setAttendanceCount({...res.data.attendanceCount})
+                setAttendanceCount({ ...res.data.attendanceCount })
             })
             .catch(err => {
                 console.log(err);
                 setAttendanceList(null)
             })
     }, [member.id, lectureNumber, token]);
+    
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>출결 현황</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-                <div id="breadCrumb" style={{ margin:'24px 40px 32px'}}>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
                         <Link underline="none" color="inherit" href="/student">
                             <HomeIcon />
@@ -65,17 +66,17 @@ const Attendance = () => {
                     </Breadcrumbs>
                 </div>
                 <Grid item container>
-                    <Grid item xs={12} sx={{ height:50}}/>
+                    <Grid item xs={12} sx={{ height: 50 }} />
                     <Grid item xs={1} />
                     <Grid item xs={10}>
                         <div>
-                            <Typography sx={{ float:"left", color:"blue" }}>출석 {attendanceCount.presence}</Typography>
-                            <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
-                            <Typography sx={{ float:"left", color:"orange" }}>지각 {attendanceCount.lateness}</Typography>
-                            <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
-                            <Typography sx={{ float:"left", color:"red" }}>결석 {attendanceCount.absence}</Typography>
-                            <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
-                            <Typography sx={{ float:"left", color:"blue" }}>공결 {attendanceCount.approvedAbsence}</Typography>
+                            <Typography sx={{ float: "left", color: "blue" }}>출석 {attendanceCount.presence}</Typography>
+                            <Typography sx={{ float: "left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
+                            <Typography sx={{ float: "left", color: "orange" }}>지각 {attendanceCount.lateness}</Typography>
+                            <Typography sx={{ float: "left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
+                            <Typography sx={{ float: "left", color: "red" }}>결석 {attendanceCount.absence}</Typography>
+                            <Typography sx={{ float: "left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
+                            <Typography sx={{ float: "left", color: "blue" }}>공결 {attendanceCount.approvedAbsence}</Typography>
                         </div>
                         <TableContainer component={Paper} sx={{ marginTop: 5, marginBottom: 10 }}>
                             <Table aria-label="simple table">
@@ -92,27 +93,27 @@ const Attendance = () => {
                                         attendanceList.map(attendance => (
                                             <TableRow key={attendance.number}>
                                                 {attendance.count === 1
-                                                ? <TableCell align="center" rowSpan={2} sx={{ width: "20%" }}>{attendance.week}</TableCell>
-                                                : null
+                                                    ? <TableCell align="center" rowSpan={2} sx={{ width: "20%" }}>{attendance.week}</TableCell>
+                                                    : null
                                                 }
                                                 <TableCell align="center" sx={{ width: "20%" }}>{attendance.count}</TableCell>
-                                                {attendance.status === "결석" ? <TableCell align="center" sx={{ width: "30%", color:"#FF0000" }}>{attendance.status}</TableCell>
-                                                : attendance.status === "지각" ? <TableCell align="center" sx={{ width: "30%", color:"#FFA500" }}>{attendance.status}</TableCell>
-                                                : <TableCell align="center" sx={{ width: "30%" }}>{attendance.status}</TableCell>
-                                                }                                            
-                                                <TableCell align="center" sx={{ width: "30%", paddingTop:0, paddingBottom:0 }}>
+                                                {attendance.status === "결석" ? <TableCell align="center" sx={{ width: "30%", color: "#FF0000" }}>{attendance.status}</TableCell>
+                                                    : attendance.status === "지각" ? <TableCell align="center" sx={{ width: "30%", color: "#FFA500" }}>{attendance.status}</TableCell>
+                                                        : <TableCell align="center" sx={{ width: "30%" }}>{attendance.status}</TableCell>
+                                                }
+                                                <TableCell align="center" sx={{ width: "30%", paddingTop: 0, paddingBottom: 0 }}>
                                                     {(attendance.possibilityOfReport === true && attendance.report === true) &&
                                                         <Button variant="contained"
-                                                        size="small"
-                                                        onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/absence/${attendance.absNo}`);}}
-                                                        sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
+                                                            size="small"
+                                                            onClick={() => { setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/absence/${attendance.absNo}`); }}
+                                                            sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 90 }}>보기</Button>
                                                     }
                                                     {(attendance.possibilityOfReport === true && attendance.report === false) &&
                                                         <Button variant="contained"
-                                                        size="small"
-                                                        onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/report-absence`);}}
-                                                        sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>신청</Button>
-                                                    }                                                           
+                                                            size="small"
+                                                            onClick={() => { setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/report-absence`); }}
+                                                            sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 90 }}>신청</Button>
+                                                    }
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -127,7 +128,7 @@ const Attendance = () => {
                     </Grid>
                     <Grid item xs={1} />
                 </Grid>
-                <br/>
+                <br />
             </Paper>
         </Grid>
     )
