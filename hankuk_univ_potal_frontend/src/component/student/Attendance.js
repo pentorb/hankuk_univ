@@ -9,7 +9,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { tokenAtom, memberAtom,lectureNameAtom, lectureNumberAtom, selectedNumberAtom } from '../../atoms';
+import { tokenAtom, memberAtom, lectureNameAtom, lectureNumberAtom, selectedNumberAtom } from '../../atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
@@ -32,7 +32,6 @@ const Attendance = () => {
         formData.append("lecNo", lectureNumber);
 
         const attendanceUrl = `${url}/attendance`;
-        console.log(attendanceUrl);
         axios.post(attendanceUrl, formData, {
             headers: { Authorization: JSON.stringify(token) }
         })
@@ -44,7 +43,7 @@ const Attendance = () => {
                 console.log(err);
                 setAttendanceList(null)
             })
-    }, [])
+    }, [member.id, lectureNumber, token]);
 
     return (
         <Grid item xs={12}>
@@ -66,9 +65,8 @@ const Attendance = () => {
                         </Link>
                     </Breadcrumbs>
                 </div>
-                {/* ------Your content start------! */}                
-                <Grid container>
-                    <Grid xs={12} sx={{ height:50}}/>
+                <Grid item container>
+                    <Grid item xs={12} sx={{ height:50}}/>
                     <Grid item xs={1} />
                     <Grid item xs={10}>
                         <div>
@@ -91,46 +89,45 @@ const Attendance = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {attendanceList.length !== 0 && (attendanceList.map(attendance => (
-                                        <TableRow key={attendance.number}>
-                                            {attendance.count === 1
-                                            ? <TableCell align="center" rowSpan={2} sx={{ width: "20%" }}>{attendance.week}</TableCell>
-                                            : <></>
-                                            }
-                                            <TableCell align="center" sx={{ width: "20%" }}>{attendance.count}</TableCell>
-                                            {attendance.status === "결석" ? <TableCell align="center" sx={{ width: "30%", color:"#FF0000" }}>{attendance.status}</TableCell>
-                                            : attendance.status === "지각" ? <TableCell align="center" sx={{ width: "30%", color:"#FFA500" }}>{attendance.status}</TableCell>
-                                            : <TableCell align="center" sx={{ width: "30%" }}>{attendance.status}</TableCell>
-                                            }                                            
-                                            
-                                            <TableCell align="center" sx={{ width: "30%", paddingTop:0, paddingBottom:0 }}>
-                                                {(attendance.possibilityOfReport === true && attendance.report === true) &&
-                                                    <Button variant="contained"
-                                                    size="small"
-                                                    onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/absence/${attendance.absNo}`);}}
-                                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
+                                    {attendanceList && attendanceList.length > 0 ? (
+                                        attendanceList.map(attendance => (
+                                            <TableRow key={attendance.number}>
+                                                {attendance.count === 1
+                                                ? <TableCell align="center" rowSpan={2} sx={{ width: "20%" }}>{attendance.week}</TableCell>
+                                                : null
                                                 }
-                                                {(attendance.possibilityOfReport === true && attendance.report === false) &&
-                                                    <Button variant="contained"
-                                                    size="small"
-                                                    onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/report-absence`);}}
-                                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>신청</Button>
-                                                }                                                           
-                                            </TableCell>
-                                        </TableRow>
-                                    )))}
-                                    {attendanceList.length === 0 &&
+                                                <TableCell align="center" sx={{ width: "20%" }}>{attendance.count}</TableCell>
+                                                {attendance.status === "결석" ? <TableCell align="center" sx={{ width: "30%", color:"#FF0000" }}>{attendance.status}</TableCell>
+                                                : attendance.status === "지각" ? <TableCell align="center" sx={{ width: "30%", color:"#FFA500" }}>{attendance.status}</TableCell>
+                                                : <TableCell align="center" sx={{ width: "30%" }}>{attendance.status}</TableCell>
+                                                }                                            
+                                                <TableCell align="center" sx={{ width: "30%", paddingTop:0, paddingBottom:0 }}>
+                                                    {(attendance.possibilityOfReport === true && attendance.report === true) &&
+                                                        <Button variant="contained"
+                                                        size="small"
+                                                        onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/absence/${attendance.absNo}`);}}
+                                                        sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>보기</Button>
+                                                    }
+                                                    {(attendance.possibilityOfReport === true && attendance.report === false) &&
+                                                        <Button variant="contained"
+                                                        size="small"
+                                                        onClick={()=>{setSelectedNumber(attendance.lessonNo); navigate(`/student/${lectureNumber}/report-absence`);}}
+                                                        sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:90 }}>신청</Button>
+                                                    }                                                           
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
                                         <TableRow>
-                                            <TableCell align="center" colSpan={7}>출석 현황이 없습니다</TableCell>
+                                            <TableCell align="center" colSpan={4}>출석 현황이 없습니다</TableCell>
                                         </TableRow>
-                                    }
+                                    )}
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </Grid>
                     <Grid item xs={1} />
                 </Grid>
-                {/* ------Your content end------! */}
                 <br/>
             </Paper>
         </Grid>

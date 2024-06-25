@@ -6,6 +6,7 @@ import { tokenAtom, memberAtom, lectureNumberAtom, lectureNameAtom, activeTabAto
 import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
+import { CardBody, CardText, CardTitle, Label } from 'reactstrap';
 
 const LectureList = () => {
     const member = useAtomValue(memberAtom);
@@ -38,27 +39,32 @@ const LectureList = () => {
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 {/* ------Your content start------! */}
                 <Grid container>
-                    <Grid item xs={12} sx={{height:100}}/>
-                    <Grid item xs={1}/>
+                    <Grid item xs={12} sx={{ height: 100 }} />
+                    <Grid item xs={1} />
                     <Grid item xs={10}>
+                        <div style={{textAlign:'center'}}>
                         {lectureList !== null && (lectureList.map(lecture => (
-                            <Card key={lecture.lecNo} sx={{ minWidth:250, cursor:"pointer", borderRadius:1, display: "inline-block", marginRight:4, marginBottom:4 }}
-                            onClick={() => {setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5); navigate(`/student/${lecture.lecNo}/content`);}}>
-                                <CardContent sx={{ height: 100, backgroundColor:"firstColor.main"  }}>
-                                    <Typography variant="h6" component="div" sx={{color:"white", marginTop:3}}>
+                            <Card key={lecture.lecNo} className="lecture-card" style={{ width: '300px', margin:'20px', textAlign:'left' }}
+                            onClick={() => {
+                                setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5);
+                                navigate(`/student/${lecture.lecNo}/content`);}}>
+                                <Label className="lecture-color-card" style={{height:'130px'}} />
+                                <CardBody style={{ margin: '0px 10px 10px' }}>
+                                    <CardTitle style={{ fontSize: 'larger' }}>
                                         <b>{lecture.lectureName}</b>
-                                    </Typography>
-                                </CardContent>
-                                <CardContent>
-                                    <Typography variant="body2" color="black">
-                                        {lecture.professorName}<br/>
+                                    </CardTitle>
+
+                                    <CardText style={{ margin: '0px' }}>
+                                        {lecture.now}<br />
+                                        {lecture.time1} {lecture.time2} <br />
                                         {lecture.lectureRoom}
-                                    </Typography>
-                                </CardContent>
-                            </Card>       
-                        )))}                        
+                                    </CardText>
+                                </CardBody>
+                            </Card>
+                        )))}
+                        </div>
                     </Grid>
-                    <Grid xs={1}/>
+                    <Grid item xs={1} />
                 </Grid>
                 <br /><br />
                 {/* ------Your content end------! */}
