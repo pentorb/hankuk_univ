@@ -56,8 +56,8 @@ const MajorCreate = () => {
   };
 
   const validateMajorCode = async (majorCode) => {
-    if (!/^[A-Za-z]{2,4}$/.test(majorCode)) {
-      setMajorCodeError('영어 2~4자로 완성해주세요');
+    if (!/^[A-Za-z]{3}$/.test(majorCode)) {
+      setMajorCodeError('영어 3자로 완성해주세요');
       return;
     }
 
@@ -144,7 +144,7 @@ const MajorCreate = () => {
               <div className="majcreateform-row">
                 <div className="majcreateform-group">
                   <Input
-                    placeholder="학과 코드 (영어 2~4자)"
+                    placeholder="학과 코드 (영어 3자)"
                     name="majorCode"
                     value={formData.majorCode}
                     onChange={handleInputChange}

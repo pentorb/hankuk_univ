@@ -210,12 +210,13 @@ const MajorDetail = () => {
     };
 
     const handleAddSubject = async () => {
+        console.log(token);
         try {
             const subjectToAdd = {
                 name: newSubject.subjectName,
                 type: newSubject.courseType,
                 targetGrd: newSubject.year,
-                majCd // major code를 포함
+                majCd
             };
     
             console.log("Sending subject data to server:", subjectToAdd);
@@ -467,8 +468,8 @@ const MajorDetail = () => {
                                                 onChange={(e) => handleSubjectFieldChange(e, subject.subCd, 'type')}
                                                 disabled={!isEditingSubject || !selectedSubjects.includes(subject.subCd)}
                                             >
-                                                <MenuItem value="필수">필수</MenuItem>
-                                                <MenuItem value="선택">선택</MenuItem>
+                                                <MenuItem value="P">필수</MenuItem>
+                                                <MenuItem value="S">선택</MenuItem>
                                             </Select>
                                         </td>
                                         <td>
@@ -503,8 +504,8 @@ const MajorDetail = () => {
                                             onChange={handleNewSubjectChange}
                                             fullWidth
                                         >
-                                            <MenuItem value="필수">필수</MenuItem>
-                                            <MenuItem value="선택">선택</MenuItem>
+                                            <MenuItem value="P">필수</MenuItem>
+                                            <MenuItem value="S">선택</MenuItem>
                                         </Select>
                                     </td>
                                     <td>

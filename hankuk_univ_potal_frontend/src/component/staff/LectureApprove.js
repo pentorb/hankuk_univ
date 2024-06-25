@@ -214,7 +214,7 @@ const LectureApprove = () => {
               <tr key={index}>
 
                 <td>{lecture.subCd}</td>
-                <td>{lecture.subname}</td>
+                <td>{lecture.subName}</td>
                 <td>{lecture.grade}</td>
                 <td>{lecture.credit}</td>
                 <td>{lecture.prof}</td>
