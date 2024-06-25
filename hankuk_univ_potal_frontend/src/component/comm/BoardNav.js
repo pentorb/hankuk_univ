@@ -5,6 +5,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Header from './Header';
 import UnivCal from './UnivCal';
 import NoticeBoard from './NoticeBoard';
+import { Route, Routes } from 'react-router';
+import NoticeWrite from '../NoticeWrite';
 
 
 const linkStyle = {
@@ -52,9 +54,9 @@ function BoardNav() {
                 <div className="main-image"></div>
             </div>
 
-            <div style={{ width: '1500px', height: 'auto', margin: '0 auto', backgroundColor: 'white' }}>
+            <div style={{ width: '1300px', height: 'auto', margin: '0 auto', backgroundColor: 'white' }}>
                 <Header />
-                <Navbar style={{ backgroundColor: "var(--maincolor)", height: '85px', width: '1500px', margin: '0 auto' }} data-bs-theme="dark">
+                <Navbar style={{ backgroundColor: "var(--maincolor)", height: '85px', width: '1300px', margin: '0 auto' }} data-bs-theme="dark">
                     <Container style={{ margin: '0 305px', textAlign: 'center' }}>
                         <Nav activeKey={activeKey} onSelect={handleSelect}>
                             <Nav.Link eventKey="/Main" href="/" style={activeKey === '/Main' ? { ...linkStyle, ...activeLinkStyle } : linkStyle}>Home</Nav.Link>
@@ -88,6 +90,10 @@ function BoardNav() {
                 {subActiveKey === '/schedule' && (
                     <UnivCal/>
                 )}
+
+                {/* <Routes>
+                    <Route exact path="/noticeWrite" element={<NoticeWrite/>}/>
+                </Routes> */}
             </div >
         </>
     );

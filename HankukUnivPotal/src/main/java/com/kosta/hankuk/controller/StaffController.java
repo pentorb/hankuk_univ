@@ -342,4 +342,16 @@ public class StaffController {
     	}
     	
     }
+
+    
+    @PostMapping("/NoticeWrite")
+    public ResponseEntity<String> noticeWrite(@ModelAttribute NoticeBoardDto nbrdDto) {
+    	try {
+    		staffService.noticeWrite(nbrdDto);
+			return new ResponseEntity<String>("학사공지 작성 완료", HttpStatus.OK);
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+    	}
+    }
 }

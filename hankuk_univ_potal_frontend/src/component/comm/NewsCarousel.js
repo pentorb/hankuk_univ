@@ -32,14 +32,14 @@ const items = [
                     <div className="col-4 newsImg" style={{ backgroundImage: 'url(/images/news3.png)' }} />
                     <div className="col-8 newsContent">
                         <div className="headLine">한국대학교 ‘천원의 식샤’ <br/>캠페인 아너월 제막식 개최</div>
-                        <div className="newsText">한국대학교발전재단(이사장 유홍림 총장, 이하 재단)은 3월 13일(수) 관악캠퍼스 학생회관 1층 식당에서 유홍림 총장과 기부자, 교내 보직교수들이 참석한 가운데 한국대학교 천원의 식사를 위한 모금 사업인 ‘천원의 식샤’ 아너월(Wall of Honor) 제막식 개최. </div>
+                        <div className="newsText">한국대학교발전재단(이사장 유홍림 총장, 이하 재단)은 3월 13일(수) 관악캠퍼스 학생회관 1층 식당에서 유홍림 총장과 기부자, 교내 보직교수들이 참석한 가운데 한국대학교 천원의 식사를 위한 모금 사업인 ‘천원의 식샤’ 아너 ... </div>
                     </div>
                 </div>
                 <div className="newsBox" style={{ display: 'flex' }}>
                     <div className="col-4 newsImg" style={{ backgroundImage: 'url(/images/news4.png)' }} />
                     <div className="col-8 newsContent">
-                        <div className="headLine">제4회 ‘On the Lounge: 총장과의 대화’, <br/>학생생활관에서 생활과 배움을 논하다</div>
-                        <div className="newsText">'On the Lounge: 총장과의 대화'(이하 온더라운지) 네 번째 행사가 관악학생생활관 920동 사랑채에서 열렸다. 이번 행사의 주제는 ‘관악학생생활관 그리고 LnL’로,</div>
+                        <div className="headLine">‘On the Lounge: 총장과의 대화’, <br/>학생생활관에서 생활과 배움을 논하다</div>
+                        <div className="newsText">'On the Lounge: 총장과의 대화'(이하 온더라운지) 네 번째 행사가 관악학생생활관 920동 사랑채에서 열렸다. 이번 행사의 주제는 ‘관악학생생 ...</div>
                     </div>
                 </div>
             </span>

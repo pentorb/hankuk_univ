@@ -25,10 +25,6 @@ const Toc = () => {
                 <img src="\images\student.png" style={{ width: "50px", height: "50px" }} alt="" />
                 <div style={{ paddingTop: "10px" }}>마이 포탈</div>
             </div>
-            <Link to="/쪽지" className="toc_bnt">
-                <img src="\images\envelope1.png" style={{ width: "50px", height: "auto" }} alt="" /><br />
-                쪽 지
-            </Link>
             <Link to="/noticeBoard" className="toc_bnt">
                 <img src="\images\university2.png" style={{ width: "50px", height: "50px" }} alt="" />
                 <div style={{ paddingTop: "10px" }}>통합 게시판</div>

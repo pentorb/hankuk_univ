@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { initLecture, lectureAtom, tokenAtom } from "../../atoms";
+import { initLecture, lectureAtom, memberAtom, tokenAtom } from "../../atoms";
 
 const LectureDashboard = () => {
     const [token, setToken] = useAtom(tokenAtom);
     const setLectureAtom = useSetAtom(lectureAtom);
-    const [profNo, setProfNo] = useState("P1001");
+    const [member, setMember] = useAtom(memberAtom);
 
     // private String lecNo;
     // private Integer credit;
@@ -49,7 +49,7 @@ const LectureDashboard = () => {
         const month = date.getMonth();
         const semester = month < 7 ? 1 : 2;
         console.log(year);
-        axios.get(`${url}/lectureDashboard?profNo=${profNo}&year=${year}&semester=${semester}`,
+        axios.get(`${url}/lectureDashboard?profNo=${member.id}&year=${year}&semester=${semester}`,
             {
                 headers: { Authorization: JSON.stringify(token) }
             }

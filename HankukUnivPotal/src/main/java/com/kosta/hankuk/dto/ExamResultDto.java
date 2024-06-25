@@ -23,6 +23,7 @@ public class ExamResultDto {
 	private Integer examNo;
 	private String sect;
 	private String stdNo;
+	private String lecNo;
 	
 	public ExamResult toExamResult() {
 		return ExamResult.builder()

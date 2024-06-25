@@ -9,9 +9,19 @@ import NewsCarousel from "./NewsCarousel";
 import { memberAtom } from "../../atoms";
 import { useAtom } from "jotai";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useEffect, useState } from "react";
 
 const Main = () => {
     const [member, setMember] = useAtom(memberAtom);
+    const [isMemberLoaded, setIsMemberLoaded] = useState(false);
+
+    useEffect(() => {
+        // member가 업데이트된 후에 isMemberLoaded를 true로 설정
+        if (member !== undefined) {
+            setIsMemberLoaded(true);
+        }
+    }, [member]);
+
 
     const logout = () => {
         setMember(null);
@@ -43,7 +53,7 @@ const Main = () => {
                             <span style={{ fontSize: '22px', color: 'white', margin: '13px 3px' }}> / 종합학사포탈</span>
                         </div>
                         <div>
-                            {member ? (
+                            {member && member.id ? (
                                 <>
                                     {member.id.substring(0, 1) === "S" ? (
                                         <span style={{ fontSize: '22px', color: 'white', margin: '13px 3px' }}>
@@ -63,25 +73,23 @@ const Main = () => {
                     </div>
 
                     {/* 본문 시작 */}
-                    <div >
+                    <div>
                         <div style={{ bottom: 0, left: 0 }}>
                             <div className="slogan">
                                 끝없는 도전으로 새로운 길을 개척하는 힘
                             </div>
                         </div>
-                        {member ? (
-                            <>
-                                <div className="loginBtn" style={{ fontSize: '25px', fontWeight: '700' }} onClick={logout}>로그아웃(Login)</div>
-                            </>
+                        {member && member.id ? (
+                            <div className="loginBtn" style={{ fontSize: '25px', fontWeight: '700' }} onClick={logout}>
+                                로그아웃(Login)
+                            </div>
                         ) : (
-                            <>
-
-                                <Link to="/login" className="loginBtn">
-                                    <div style={{ fontSize: '25px', fontWeight: '700' }}>로그인(Login)</div>
-                                </Link>
-                            </>
+                            <Link to="/login" className="loginBtn">
+                                <div style={{ fontSize: '25px', fontWeight: '700' }}>
+                                    로그인(Login)
+                                </div>
+                            </Link>
                         )}
-
                     </div>
                     <div className="tocDiv">
                         <Toc />
