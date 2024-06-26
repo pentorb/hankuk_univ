@@ -437,9 +437,9 @@ const AccountManagement = () => {
                   </tr>
                 </thead>
               </table>
+
               <div style={{ maxHeight: '550px', overflowY: 'auto' }}>
                 <table className='result-box'>
-
                   <tbody>
                     {searchCategory === 'student' && students.map((student, index) => (
                       <tr key={index}>
