@@ -279,18 +279,20 @@ public class StudentServiceImpl implements StudentService {
 					.findByStudent_stdNoAndCourYearAndLecture_semester(student.getStdNo(), year, semester);
 			Double wholeScore = 0.0;
 			
-			for(LectureByStd lectureByStd : lectureByStdGroupForOne) {				
-				if(lectureByStd.getGrade().equals("A+")) {
-					wholeScore += 4.5 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("A")) {
-					wholeScore += 4.0 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("B+")) {
-					wholeScore += 3.5 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("B")) {
-					wholeScore += 3.0 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("C+")) {
-					wholeScore += 2.5 * lectureByStd.getLecture().getCredit();
-				}
+			for(LectureByStd lectureByStd : lectureByStdGroupForOne) {
+				if(lectureByStd.getGrade() != null){
+					if(lectureByStd.getGrade().equals("A+")) {
+						wholeScore += 4.5 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("A")) {
+						wholeScore += 4.0 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("B+")) {
+						wholeScore += 3.5 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("B")) {
+						wholeScore += 3.0 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("C+")) {
+						wholeScore += 2.5 * lectureByStd.getLecture().getCredit();
+					}
+				}				
 			}
 			
 			Double score = Math.round((wholeScore / semesterCredit) * 100) / 100.0;
