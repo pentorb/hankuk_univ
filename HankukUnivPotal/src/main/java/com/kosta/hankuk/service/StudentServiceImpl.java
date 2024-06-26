@@ -280,7 +280,7 @@ public class StudentServiceImpl implements StudentService {
 			Double wholeScore = 0.0;
 			
 			for(LectureByStd lectureByStd : lectureByStdGroupForOne) {
-				if(!(lectureByStd.getGrade().equals("") || lectureByStd.getGrade() == null)) {
+				if(lectureByStd.getGrade() != null){
 					if(lectureByStd.getGrade().equals("A+")) {
 						wholeScore += 4.5 * lectureByStd.getLecture().getCredit();
 					} else if(lectureByStd.getGrade().equals("A")) {
