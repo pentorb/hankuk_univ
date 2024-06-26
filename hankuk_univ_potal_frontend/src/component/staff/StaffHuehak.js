@@ -172,12 +172,8 @@ const StaffHuehak = () => {
                                             <td>{typeMap[hb.type] || hb.type}</td>
                                             <td>{parseSemester(hb.hueSem)}</td>
                                             <td>{formatDate(hb.appDt)}</td>
-                                            <td style={getStatusStyle(hb.status)}>
-                                                {/* <Button style={{backgroundColor: "#1F3468"}}>  */}
-                                                {/* <span onClick={<HueModalByStf />}> */}
+                                            <td style={{ ...getStatusStyle(hb.status), cursor: 'pointer' }}>
                                                     {statusMap[hb.status] || hb.status}
-                                                {/* </span> */}
-                                                {/* </Button> */}
                                             </td>
                                         </tr>
                                     ))}
