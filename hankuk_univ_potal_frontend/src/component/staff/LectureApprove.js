@@ -1,4 +1,3 @@
-import Modal from 'react-modal';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -6,7 +5,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { tokenAtom } from "../../atoms";
 import { useAtomValue } from 'jotai';
 import { lectureAtom } from '../../atoms';
-import FileOpenIcon from '@mui/icons-material/FileOpen';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import React, { useState, useEffect } from 'react';
 import { Paper, Typography, Select, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -15,7 +14,9 @@ import axios from 'axios';
 import { url } from "../../config/config";
 import Link from '@mui/material/Link';
 import SearchIcon from '@mui/icons-material/Search';
-import { Input, Button, Table } from 'reactstrap';
+import syllabusFile from '../../assets/test.pdf';
+import { Input, Button, Table, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
+import Swal from 'sweetalert2';
 
 
 const LectureApprove = () => {
@@ -27,12 +28,10 @@ const LectureApprove = () => {
   const [lectures, setLectures] = useState([]);
   const token = useAtomValue(tokenAtom);
   const [pdfModalIsOpen, setPdfModalIsOpen] = useState(false);
-  const [approveModalIsOpen, setApproveModalIsOpen] = useState(false);
-  const [syllabusFile, setSyllabusFile] = useState('');
-  const [selectedLectureNo, setSelectedLectureNo] = useState(null);
   const [searchType, setSearchType] = useState('major');
   const [searchInput, setSearchInput] = useState('');
   const [formData, setFormData] = useState({ colleage: '', major: '' });
+  const toggle = () => setPdfModalIsOpen(!pdfModalIsOpen);
 
   useEffect(() => {
     fetchcolleages();
@@ -95,51 +94,47 @@ const LectureApprove = () => {
     }
   };
 
-  const openPdfModal = (file) => {
-    setSyllabusFile(file);
+  const openPdfModal = (file, name) => {
+    // setSyllabusFile(file);
     setPdfModalIsOpen(true);
   };
 
-  const closePdfModal = () => {
-    setPdfModalIsOpen(false);
-  };
 
-  const openApproveModal = (lecNo) => {
-    setSelectedLectureNo(lecNo);
-    setApproveModalIsOpen(true);
-  };
+const alert = (lecture) => {
+  Swal.fire({
+      title: '강의 개설을 승인하시겠습니까?',
+      icon: "question",
+      showDenyButton: true,
+      confirmButtonText: "승인",
+      denyButtonText: `반려`
+  }).then((result) => {
+      if (result.isConfirmed) {
+        axios.post(`${url}/approveLecture`, { lecNo: lecture.lecNo }, {
+          headers: { "Authorization": JSON.stringify(token) }
+        })
+        .then(res => {
+          Swal.fire('승인되었습니다.', '', 'success');
+        })
+        .catch(err => {
+          console.error("Error approving lecture:", err);
+          Swal.fire("강의를 승인하는 중 오류가 발생했습니다.", err.message, "error");
+        });
+      } else if (result.isDenied) {
+        axios.post(`${url}/rejectLecture`, { lecNo: lecture.lecNo }, {
+          headers: { "Authorization": JSON.stringify(token) }
+        })
+        .then(res => {
+          Swal.fire('반려되었습니다.', '', 'warning');
+        })
+        .catch(err => {
+          console.error("Error rejecting lecture:", err);
+          Swal.fire("강의를 반려하는 중 오류가 발생했습니다.", err.message, "error");
+        });
+      }
+  });
+};
 
-  const closeApproveModal = () => {
-    setApproveModalIsOpen(false);
-  };
 
-  const handleApproveLecture = async () => {
-    try {
-      await axios.post(`${url}/approveLecture`, { lecNo: selectedLectureNo }, {
-        headers: { "Authorization": JSON.stringify(token) }
-      });
-      alert("강의가 성공적으로 승인되었습니다.");
-      closeApproveModal();
-      handleSearch();
-    } catch (error) {
-      console.error("Error approving lecture:", error);
-      alert("강의를 승인하는 중 오류가 발생했습니다.");
-    }
-  };
-
-  const handleRejectLecture = async () => {
-    try {
-      await axios.post(`${url}/rejectLecture`, { lecNo: selectedLectureNo }, {
-        headers: { "Authorization": JSON.stringify(token) }
-      });
-      alert("강의가 성공적으로 거절되었습니다.");
-      closeApproveModal();
-      handleSearch();
-    } catch (error) {
-      console.error("Error rejecting lecture:", error);
-      alert("강의를 거절하는 중 오류가 발생했습니다.");
-    }
-  };
 
   return (
     <Grid container justifyContent="center">
@@ -194,108 +189,70 @@ const LectureApprove = () => {
                     </>
                   ) : (
                     <Input className="searchname" type="text"
-                      placeholder="이름을 입력하세요" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}/>
+                      placeholder="이름을 입력하세요" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
                   )}
                   <div>
                     <Button onClick={handleSearch} style={{ backgroundColor: '#1F3468', color: 'white' }}><SearchIcon /></Button>
                   </div>
                 </div>
-
-
               </div>
-
             </div>
 
 
             <table className='result-box'>
-              <thead>
+              <thead style={{ backgroundColor: '#191964', color: 'white' }}>
                 <tr>
                   <th>과목코드</th>
                   <th>과목명</th>
                   <th>학년</th>
                   <th>학점</th>
                   <th>담당교수</th>
-                  <th>강의시간</th>
+                  <th style={{ width: '226.33px' }}>강의시간</th>
                   <th>강의실</th>
                   <th>수강인원</th>
                   <th>수업계획서</th>
                   <th>등록</th>
                 </tr>
               </thead>
-              <tbody>
-                {lectures.map((lecture, index) => (
-                  <tr key={index}>
-                    <td>{lecture.subCd}</td>
-                    <td>{lecture.subName}</td>
-                    <td>{lecture.grade}</td>
-                    <td>{lecture.credit}</td>
-                    <td>{lecture.prof}</td>
-                    <td>{lecture.time1},{lecture.time2}</td>
-                    <td>{lecture.lecRoom}</td>
-                    <td>{lecture.numOfStd}</td>
-                    <td>
-                      <button onClick={() => openPdfModal(lecture.file)}>
-                        <Tab icon={<FileOpenIcon sx={{ fontSize: 20 }} />} />
-                      </button>
-                    </td>
-                    <td>
-                      <button onClick={() => openApproveModal(lecture.lecNo)}>
-                        승인
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-
+              <tbody style={{ backgroundColor: '#d9dee3' }}>
+                {lectures.length === 0 ? (<>
+                  <tr style={{height:'55px'}}><td colSpan="10">신청 내역이 없습니다.</td></tr>
+                  </>) : ( <>
+                    {lectures.map((lecture, index) => (
+                      <tr key={index}>
+                        <td>{lecture.subCd}</td>
+                        <td>{lecture.subName}</td>
+                        <td>{lecture.grade}학년</td>
+                        <td>{lecture.credit}학점</td>
+                        <td>{lecture.prof}</td>
+                        <td>{lecture.time1},{lecture.time2}</td>
+                        <td>{lecture.lecRoom}</td>
+                        <td>{lecture.numOfStd}</td>
+                        <td>
+                          <div onClick={() => openPdfModal(lecture.file, lecture.name)}>
+                            <PictureAsPdfIcon style={{ color: '#7e7e7e' }} />
+                          </div>
+                        </td>
+                        <td>
+                          <Button onClick={()=>alert(lecture)}>승인</Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
               </tbody>
             </table>
-            <Modal
-              isOpen={pdfModalIsOpen}
-              onRequestClose={closePdfModal}
-              contentLabel="수업계획서"
-              style={{
-                content: {
-                  top: '50%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  marginRight: '-50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '80%',
-                  height: '80%',
-                  padding: '20px',
-                },
-              }}
-            >
-              <button onClick={closePdfModal}>
-                X
-              </button>
-              <iframe src={syllabusFile} width="100%" height="100%"></iframe>
-            </Modal>
-            <Modal
-              isOpen={approveModalIsOpen}
-              onRequestClose={closeApproveModal}
-              contentLabel="등록 팝업"
-              style={{
-                content: {
-                  top: '50%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  marginRight: '-50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '400px',
-                  height: 'auto',
-                  padding: '20px',
-                  borderRadius: '10px',
-                },
-              }}
-            >
-              <h2>승인하시겠습니까?</h2>
-              <button onClick={closeApproveModal}>
-                X
-              </button>
-              <button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleApproveLecture}>승인</button>
-              <button type="button" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} onClick={handleRejectLecture}>거절</button>
+
+            <Modal isOpen={pdfModalIsOpen} toggle={toggle} >
+              <ModalHeader toggle={toggle} isOpen={pdfModalIsOpen} >수업 계획서</ModalHeader>
+              <ModalBody>
+                <iframe src= {syllabusFile} width="100%" height="600"></iframe>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={toggle}>
+                  닫기
+                </Button>
+              </ModalFooter>
             </Modal>
           </div>
         </Paper>
