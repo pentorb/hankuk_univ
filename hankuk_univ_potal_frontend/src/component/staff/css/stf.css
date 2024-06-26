@@ -45,4 +45,21 @@
     padding: 15px;
     /* 간격을 늘리기 위해 패딩 값을 조정합니다 */
 }
-  
+
+.typetable {
+    padding: 15px;
+}
+
+.typetable td {
+    background-color: #EAECF1;
+}
+
+.typetable th{
+    background-color: #0a17605e;
+    width: 100px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 15px;
+    border: solid 1px lightgray;
+}

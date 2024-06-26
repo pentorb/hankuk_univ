@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import { Paper, Typography, Select, MenuItem, Checkbox, Box } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import { url } from "../../config/config";
-import './css/Major.css';
+import './css/stf.css';
 import axios from 'axios';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
