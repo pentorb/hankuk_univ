@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
-import { Paper, Typography, Button, Select, MenuItem, Input, Checkbox } from '@mui/material';
+import { Paper, Typography, Select, MenuItem, Checkbox } from '@mui/material';
+import { Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import HomeIcon from '@mui/icons-material/Home';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import Modal from 'react-modal';
-import './staff.css';
+import './css/stf.css';
 import axios from 'axios';
 import { url } from "../../config/config";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import SearchIcon from '@mui/icons-material/Search';
 import { tokenAtom } from "../../atoms";
 import { useAtomValue } from 'jotai';
+import Swal from 'sweetalert2';
 
 const AccountManagement = () => {
   const [students, setStudents] = useState([]);
@@ -20,6 +22,7 @@ const AccountManagement = () => {
   const [searchType, setSearchType] = useState('major');
   const [searchInput, setSearchInput] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const toggle = () => setModalIsOpen(!modalIsOpen);
   const [formData, setFormData] = useState({
     category: '',
     id: '',
@@ -39,7 +42,7 @@ const AccountManagement = () => {
   useEffect(() => {
     fetchcolleages();
   }, [token]);
-  
+
   const fetchcolleages = async () => {
     try {
       const response = await axios.get(`${url}/colleagesSearchList`, {
@@ -54,7 +57,7 @@ const AccountManagement = () => {
       console.error("Error fetching colleages:", error);
     }
   };
-  
+
 
   const fetchMajors = async (colleageName) => {
     try {
@@ -132,11 +135,11 @@ const AccountManagement = () => {
           "Authorization": JSON.stringify(token)
         }
       });
-      alert("Data uploaded successfully");
+      Swal.fire('데이터를 성공적으로 업로드 되었습니다.', '', 'success');
       handleSearch();
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("파일 업로드 중 오류가 발생했습니다.");
+      Swal.fire('파일 업로드 중 오류가 발생했습니다.', '', 'error');
     }
   };
 
@@ -166,7 +169,7 @@ const AccountManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.category) {
-      alert("구분을 선택해주세요.");
+      Swal.fire('구분을 선택해주세요.', '', 'question');
       return;
     }
 
@@ -182,15 +185,15 @@ const AccountManagement = () => {
 
       if (formData.category === 'student') {
         await axios.post(`${url}/registerStudent`, payload, { headers: { "Authorization": JSON.stringify(token) } });
-        alert("학생이 성공적으로 등록되었습니다.");
+        Swal.fire('학생이 성공적으로 등록되었습니다.', '', 'success');
       } else if (formData.category === 'professor') {
         await axios.post(`${url}/registerProfessor`, payload, { headers: { "Authorization": JSON.stringify(token) } });
-        alert("교수가 성공적으로 등록되었습니다.");
+        Swal.fire('교수가 성공적으로 등록되었습니다.', '', 'success');
         await fetchProfessor(formData.major);
       }
     } catch (error) {
       console.error("Error registering:", error);
-      alert("등록 중 오류가 발생했습니다.");
+      Swal.fire('등록 중 오류가 발생했습니다.', '', 'error');
     }
     closeModal();
   };
@@ -302,13 +305,12 @@ const AccountManagement = () => {
           headers: { "Authorization": JSON.stringify(token) }
         });
       }
-
-      alert("수정이 완료되었습니다.");
+      Swal.fire('수정이 완료되었습니다.', '', 'success');
       setEditMode(false);
       setSelectedIds([]);
     } catch (error) {
+      Swal.fire('수정 중 오류가 발생했습니다.', '', 'error');
       console.error("Error saving records:", error);
-      alert("수정 중 오류가 발생했습니다.");
     }
   };
 
@@ -322,17 +324,17 @@ const AccountManagement = () => {
         await axios.post(`${url}/deleteProfessors`, selectedIds, { headers: { "Authorization": JSON.stringify(token) } });
         setProfessors(professors.filter(professor => !selectedIds.includes(professor.id)));
       }
-      alert("삭제가 완료되었습니다.");
+      Swal.fire('삭제가 완료되었습니다.', '', 'success');
       setSelectedIds([]);
     } catch (error) {
+      Swal.fire('삭제 중 오류가 발생했습니다.', '', 'error');
       console.error("Error deleting records:", error);
-      alert("삭제 중 오류가 발생했습니다.");
     }
   };
 
   const handleEdit = () => {
     if (selectedIds.length === 0) {
-      alert("수정할 항목을 선택하세요.");
+      Swal.fire('수정할 항목을 선택하세요.', '', 'warning');
       return;
     }
     setEditMode(true);
@@ -357,7 +359,7 @@ const AccountManagement = () => {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
-        <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>계정관리</b></Typography>
+        <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>계정 관리</b></Typography>
       </Grid>
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
@@ -367,65 +369,50 @@ const AccountManagement = () => {
                 <HomeIcon />
               </Link>
               <Link color="inherit" underline='none'>
-                학사 지원
+                학생 지원
               </Link>
               <Link underline="hover" color="#4952A9">
                 <b>계정 관리</b>
               </Link>
             </Breadcrumbs>
           </div>
-          <hr />
-          <div className="container">
-            <h2>계정검색</h2>
-            <br />
-            <div className="search-section">
-              <div className="search-bar">
-                <table className="search-box">
-                  <tr>
-                    <td>구분</td>
-                    <td>
-                      <select name="searchCategory" value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} className="search-select">
-                        <option value="student">학생</option>
-                        <option value="professor">교수</option>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>검색</td>
-                    <td>
-                      <select onChange={handleSearchTypeChange} className="search-select" defaultValue="major" >
-                        <option value="major">전공별</option>
-                        <option value="name">이름별</option>
-                      </select>
-                      {searchType === 'major' ? (
-                        <>
-                          <Select value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '120px', marginRight: '5px' }}>
-                            {colleages.map((colleage) => (
-                              <MenuItem key={colleage.colCd} value={colleage.colCd} >{colleage.name}</MenuItem>
-                            ))}
-                          </Select>
-                          <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '230px' }}>
-                            {majors.map((major) => (
-                              <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
-                            ))}
-                          </Select>
-                        </>
-                      ) : (
-                        <Input
-                          className="searchname"
-                          type="text"
-                          placeholder="이름을 입력하세요"
-                          value={searchInput}
-                          onChange={(e) => setSearchInput(e.target.value)}
-                        />
-                      )}
-                      <button onClick={handleSearch} variant="contained" className='searchbutton'>조회</button>
-                    </td>
-                  </tr>
-                </table>
+
+          <div className="ccontainer">
+            <div style={{ display: 'flex', padding: '30px 30px 15px', justifyContent: 'space-between' }}>
+              <div >
+                <Input type="select" name="searchCategory" value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} style={{ width: '200px' }}>
+                  <option value="student">학생</option>
+                  <option value="professor">교수</option>
+                </Input>
+              </div>
+
+              <div style={{ display: 'flex' }}>
+                <Input type="select" onChange={handleSearchTypeChange} defaultValue="major" style={{ width: '120px' }} >
+                  <option value="major">전공별</option>
+                  <option value="name">이름별</option>
+                </Input>
+                {searchType === 'major' ? (
+                  <>
+                    <Input type="select" value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '150px' }}>
+                      {colleages.map((colleage) => (
+                        <option key={colleage.colCd} value={colleage.colCd} >{colleage.name}</option>
+                      ))}
+                    </Input>
+                    <Input type="select" value={formData.major} onChange={handleInputChange} name="major" style={{ width: '250px' }}>
+                      {majors.map((major) => (
+                        <option key={major.majCd} value={major.majCd}>{major.name}</option>
+                      ))}
+                    </Input>
+                  </>
+                ) : (
+                  <Input type="text" placeholder="이름을 입력하세요" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+                )}
+                <div>
+                  <Button onClick={handleSearch} style={{ backgroundColor: '#1F3468', color: 'white' }}><SearchIcon /></Button>
+                </div>
               </div>
             </div>
-            <br />
+
             <div className="upload-section">
               <input
                 type="file"
@@ -434,66 +421,69 @@ const AccountManagement = () => {
                 onChange={handleFileChange}
               />
               <label htmlFor="file-upload">
-                .excel 파일을 첨부해 업로드가 가능합니다
-                <Tab icon={<DriveFolderUploadIcon sx={{ fontSize: 30 }} />} />
+                <DriveFolderUploadIcon sx={{ fontSize: 30 }} /> .excel 파일을 첨부해 업로드가 가능합니다
               </label>
             </div>
-            <div className='resultdiv'>
+
+            <div style={{ marginBottom: '15px' }}>
               <table className='result-box'>
-                <thead>
+                <thead style={{ height: '75px', fontSize: '20px' }}>
                   <tr>
-                    <th><input type="checkbox" onChange={handleSelectAll} /></th>
-                    <th>아이디(학번/교번)</th>
-                    <th>이름</th>
-                    <th>전공</th>
-                    <th>번호</th>
+                    <th style={{ width: '95.98px' }}><input type="checkbox" onChange={handleSelectAll} /></th>
+                    <th style={{ width: '214.28px' }}>아이디(학번/교번)</th>
+                    <th style={{ width: '250px' }}>이름</th>
+                    <th style={{ width: '240.73px' }}>전공</th>
+                    <th style={{ width: '250px' }}>번호</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {searchCategory === 'student' && students.map((student, index) => (
-                    <tr key={index}>
-                      <td><Checkbox checked={selectedIds.includes(student.id)} onChange={(e) => handleCheckboxChange(e, student.id)} /></td>
-                      <td>{student.id}</td>
-                      <td>
-                        <Input
-                          value={student.name}
-                          readOnly={!editMode || !selectedIds.includes(student.id)}
-                          onChange={(e) => handleFieldChange(e, student.id, 'name')}
-                        />
-                      </td>
-                      <td>{student.majName}</td>
-                      <td>
-                        <Input
-                          value={student.tel}
-                          readOnly={!editMode || !selectedIds.includes(student.id)}
-                          onChange={(e) => handleFieldChange(e, student.id, 'tel')}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                  {searchCategory === 'professor' && professors.map((professor, index) => (
-                    <tr key={index}>
-                      <td><Checkbox checked={selectedIds.includes(professor.id)} onChange={(e) => handleCheckboxChange(e, professor.id)} /></td>
-                      <td>{professor.id}</td>
-                      <td>
-                        <Input
-                          value={professor.name}
-                          readOnly={!editMode || !selectedIds.includes(professor.id)}
-                          onChange={(e) => handleFieldChange(e, professor.id, 'name')}
-                        />
-                      </td>
-                      <td>{professor.majCd}</td>
-                      <td>
-                        <Input
-                          value={professor.tell}
-                          readOnly={!editMode || !selectedIds.includes(professor.id)}
-                          onChange={(e) => handleFieldChange(e, professor.id, 'tell')}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
               </table>
+              <div style={{ maxHeight: '550px', overflowY: 'auto' }}>
+                <table className='result-box'>
+
+                  <tbody>
+                    {searchCategory === 'student' && students.map((student, index) => (
+                      <tr key={index}>
+                        <td><input type="checkbox" style={{ padding: '15px' }} checked={selectedIds.includes(student.id)} onChange={(e) => handleCheckboxChange(e, student.id)} /></td>
+                        <td>{student.id}</td>
+                        <td style={{ width: "250px" }}>
+                          <Input value={student.name} readOnly={!editMode || !selectedIds.includes(student.id)}
+                            onChange={(e) => handleFieldChange(e, student.id, 'name')}
+                          />
+                        </td>
+                        <td>{student.majName}</td>
+                        <td style={{ width: "250px" }}>
+                          <Input
+                            value={student.tel}
+                            readOnly={!editMode || !selectedIds.includes(student.id)}
+                            onChange={(e) => handleFieldChange(e, student.id, 'tel')}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                    {searchCategory === 'professor' && professors.map((professor, index) => (
+                      <tr key={index}>
+                        <td><Checkbox checked={selectedIds.includes(professor.id)} onChange={(e) => handleCheckboxChange(e, professor.id)} /></td>
+                        <td>{professor.id}</td>
+                        <td>
+                          <Input
+                            value={professor.name}
+                            readOnly={!editMode || !selectedIds.includes(professor.id)}
+                            onChange={(e) => handleFieldChange(e, professor.id, 'name')}
+                          />
+                        </td>
+                        <td>{professor.majCd}</td>
+                        <td>
+                          <Input
+                            value={professor.tell}
+                            readOnly={!editMode || !selectedIds.includes(professor.id)}
+                            onChange={(e) => handleFieldChange(e, professor.id, 'tell')}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div className="actions">
               <button style={{ color: '#1F3468', backgroundColor: 'white' }} onClick={openModal}>등록</button>
@@ -508,91 +498,88 @@ const AccountManagement = () => {
           </div>
         </Paper>
 
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="등록 팝업"
-          style={{
-            content: {
-              top: '50%',
-              left: '50%',
-              right: 'auto',
-              bottom: 'auto',
-              marginRight: '-50%',
-              transform: 'translate(-50%, -50%)',
-              width: '400px',
-              height: 'auto',
-              padding: '20px',
-              borderRadius: '10px',
-            },
-          }}
-        >
-          <h2>등록</h2>
-          <hr />
-          <form onSubmit={handleSubmit}>
-            <table className='AccountForm'>
-              <tr>
-                <th><label>구분</label></th>
-                <th><select name="category" value={formData.category} onChange={handleInputChange} style={{ width: '100%', height: '30px' }}>
-                  <option value="">선택하세요</option>
-                  <option value="student">학생</option>
-                  <option value="professor">교수</option>
-                </select></th>
-              </tr>
-              <tr>
-                <th><label>아이디(교번)</label></th>
-                <th><input type="text" name="id" value={formData.id} onChange={handleInputChange} readOnly /></th>
-              </tr>
-              <tr>
-                <th><label>소속</label></th>
-                <th>
-                  <Select value={formData.colleage} onChange={handleInputChange} name="colleage" style={{ width: '100%', height: '30px' }}>
-                    {colleages.map((colleage) => (
-                      <MenuItem key={colleage.colCd} value={colleage.colCd} >{colleage.name}</MenuItem>
-                    ))}
-                  </Select>
-                </th>
-              </tr>
-              <tr>
-                <th></th>
-                <th>
-                  <Select value={formData.major} onChange={handleInputChange} name="major" style={{ width: '100%', height: '30px' }}>
-                    {majors.map((major) => (
-                      <MenuItem key={major.majCd} value={major.majCd}>{major.name}</MenuItem>
-                    ))}
-                  </Select>
-                </th>
-              </tr>
-              <tr>
-              </tr>
-              {formData.category === 'student' && (
-                <tr>
-                  <th><label>담당교수</label></th>
-                  <th>
-                    <Select value={formData.professor} onChange={handleInputChange} name="professor" style={{ width: '100%', height: '30px' }}>
-                      {professors.map((professor) => (
-                        <MenuItem key={professor.profNo} value={professor.profNo}>{professor.name}</MenuItem>
-                      ))}
-                    </Select>
-                  </th>
-                </tr>
-              )}
-              <tr>
-                <th><label>이름</label></th>
-                <th><input type="text" name="name" value={formData.name} onChange={handleInputChange} /></th>
-              </tr>
-              <tr>
-                <th><label>비밀번호</label></th>
-                <th><input type="text" name="password" value={formData.password} readOnly /></th>
-              </tr>
-            </table>
-            <br />
-            <div className='actions2'>
-              <button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} >등록</button>
-              <button type="button" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} onClick={closeModal}>취소</button>
-            </div>
-          </form>
+        <Modal isOpen={modalIsOpen} toggle={toggle} onRequestClose={closeModal} >
+          <ModalHeader toggle={toggle} isOpen={modalIsOpen}>
+            <span style={{ fontSize: '22px' }}><b>학생 등록</b></span>
+          </ModalHeader>
+          <ModalBody>
+            <form onSubmit={handleSubmit}>
+              <table className='AccountForm'>
+                <tbody>
+                  <tr>
+                    <th><label>구분</label></th>
+                    <td>
+                      <Input type="select" name="category" value={formData.category} onChange={handleInputChange} >
+                        <option value="">선택하세요</option>
+                          <option value="student">학생</option>
+                          <option value="professor">교수</option>
+                      </Input>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th><label>아이디(교번)</label></th>
+                    <td><Input type="text" name="id" value={formData.id} onChange={handleInputChange} disabled /></td>
+                  </tr>
+
+                  <tr>
+                    <th><label>소속</label></th>
+                    <td>
+                      <Input type="select" value={formData.colleage} onChange={handleInputChange} name="colleage">
+                        {colleages.map((colleage) => (
+                          <option key={colleage.colCd} value={colleage.colCd} >{colleage.name}</option>
+                        ))}
+                      </Input>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <td>
+                      <Input type="select" value={formData.major} onChange={handleInputChange} name="major">
+                        {majors.map((major) => (
+                          <option key={major.majCd} value={major.majCd}>{major.name}</option>
+                        ))}
+                      </Input>
+                    </td>
+                  </tr>
+
+                  {formData.category === 'student' && (
+                    <tr>
+                      <th><label>담당교수</label></th>
+                      <td>
+                        <Input type="select" value={formData.professor} onChange={handleInputChange} name="professor">
+                            <option>선택하시오</option>
+                          {professors.map((professor) => (
+                            <option key={professor.profNo} value={professor.profNo}>{professor.name}</option>
+                          ))}
+                        </Input>
+                      </td>
+                    </tr>
+                  )}
+
+                  <tr>
+                    <th><label>이름</label></th>
+                    <td><Input type="text" name="name" value={formData.name} onChange={handleInputChange} /></td>
+                  </tr>
+
+                  <tr>
+                    <th><label>비밀번호</label></th>
+                    <td><Input type="text" name="password" value={formData.password} readOnly /></td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <hr />
+              <div className='actions2' style={{paddingTop:'10px'}}>
+                <Button type="submit" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} >등록</Button>
+                <Button type="button" style={{ color: 'white', backgroundColor: '#D9D9D9', border: 'none' }} onClick={closeModal}>취소</Button>
+              </div>
+            </form>
+          </ModalBody>
         </Modal>
+
+
+
       </Grid>
     </Grid>
   );

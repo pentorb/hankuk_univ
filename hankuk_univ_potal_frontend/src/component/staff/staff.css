@@ -1,4 +1,4 @@
-.container {
+ection.container {
   width: 80%;
   height: 100%;
 }
@@ -101,7 +101,14 @@ h1 {
   border-collapse: collapse;
   text-align: center;
   width: 100%;
-  font-size:18px
+  font-size:18px;
+  background-color: #606f9329;
+}
+
+.result-box thead{
+  background-color: #606f93ad;
+  height: 63px;
+  color:#303030;
 }
 
 .result-box tr{
@@ -109,11 +116,11 @@ h1 {
 }
 
 .result-box tr, .result-box td{
-  padding: 10px 0;
+  padding: 15px;
 }
 
 .result-box thead th, .result-box tbody td { 
-  padding: 10px 0;
+  padding: 15px;
 }
 
 .resultdiv{
@@ -121,12 +128,30 @@ h1 {
   border-radius: 15px;
 }
 .upload-section{
-  text-align: right;
+  padding: 10px;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .AccountForm{
   border-collapse: separate;
   border-spacing: 10px 10px;
+  padding: 10px;
+  margin: 0 auto;
+  height: 30px;
+}
+
+.AccountForm th{
+  width: 150px;
+  /* text-align: center; */
+  font-size: larger;
+}
+
+.AccountForm td{
+  width: 250px;
+  height: 50px;
 }
 
 .major-create-container {
