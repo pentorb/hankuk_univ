@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.MajorDto;
@@ -80,7 +79,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		for (Lecture lecture : lectureList) {
-			if(lecture.getStatus().equals("REQ")) continue;
+			if(lecture.getStatus().equals("REQ") || lecture.getStatus().equals("REJ")) continue;
 			String lectureName = lecture.getSubject().getName();
 			String professorName = lecture.getProfessor().getName();
 			String lectureNumber = lecture.getLecNo();
@@ -281,7 +280,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		for (Lecture lecture : lectureList) {
-			if(lecture.getStatus().equals("REQ")) continue;			
+			if(lecture.getStatus().equals("REQ") || lecture.getStatus().equals("REJ")) continue;			
 			String lectureName = lecture.getSubject().getName();
 			String professorName = lecture.getProfessor().getName();
 			String lectureNumber = lecture.getLecNo();
