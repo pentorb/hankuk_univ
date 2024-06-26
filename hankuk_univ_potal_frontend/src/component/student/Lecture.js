@@ -4,8 +4,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import axios from 'axios';
-import { tokenAtom, memberAtom, lectureNameAtom, lectureNumberAtom } from '../../atoms';
-import { useAtomValue } from 'jotai';
+import { tokenAtom, memberAtom, lectureNameAtom, lectureNumberAtom, selectedNumberAtom } from '../../atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -54,6 +54,7 @@ const Lecture = () => {
     const token = useAtomValue(tokenAtom);
     const lectureName = useAtomValue(lectureNameAtom);
     const lectureNumber = useAtomValue(lectureNumberAtom);
+    const setSelectedNumber = useSetAtom(selectedNumberAtom);
     const [contentList, setContentList] = useState([]);
     const navigate = useNavigate();
     const [expanded, setExpanded] = useState('');
@@ -147,7 +148,7 @@ const Lecture = () => {
                                             size="small"
                                             sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>{content.status}</Button>
                                     </AccordionDetails>
-                                    {content.videoFile &&
+                                    {content.videoName &&
                                         <AccordionDetails sx={{ display: "flex", height:70 }}>
                                             <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.videoName}</Typography>
                                             <Button variant="contained"
@@ -156,7 +157,7 @@ const Lecture = () => {
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>학습하기</Button>
                                         </AccordionDetails>
                                     }
-                                    {content.materialFile &&
+                                    {content.materialTitle &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
                                             <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.materialTitle}</Typography>
                                             <Button variant="contained"
@@ -164,11 +165,12 @@ const Lecture = () => {
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>다운로드</Button>
                                         </AccordionDetails>
                                     }
-                                    {content.homeworkFile &&
+                                    {content.homeworkTitle &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
                                             <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.homeworkTitle}</Typography>
                                             <Button variant="contained"
                                                 size="small"
+                                                onClick={()=>{setSelectedNumber(content.homeworkNumber); navigate(`/student/${lectureNumber}/sumbit-homework`);}}
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>제출</Button>
                                         </AccordionDetails>
                                     }
@@ -181,15 +183,16 @@ const Lecture = () => {
                                             size="small"
                                             sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>{content.status2}</Button>
                                     </AccordionDetails>
-                                    {content.videoFile2 &&
+                                    {content.videoName2 &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
                                             <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.videoName2}</Typography>
                                             <Button variant="contained"
                                                 size="small"
+                                                onClick={() => navigate(`video`)}
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>학습하기</Button>
                                         </AccordionDetails>
                                     }
-                                    {content.materialFile2 &&
+                                    {content.materialTitle2 &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
                                             <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.materialTitle2}</Typography>
                                             <Button variant="contained"
@@ -197,11 +200,12 @@ const Lecture = () => {
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>다운로드</Button>
                                         </AccordionDetails>
                                     }
-                                    {content.homeworkFile2 &&
+                                    {content.homeworkTitle2 &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
                                             <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.homeworkTitle2}</Typography>
                                             <Button variant="contained"
                                                 size="small"
+                                                onClick={()=>{setSelectedNumber(content.homeworkNumber2); navigate(`/student/${lectureNumber}/sumbit-homework`);}}
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>제출</Button>
                                         </AccordionDetails>
                                     }
