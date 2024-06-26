@@ -45,6 +45,7 @@ const CourseRegistration = () => {
 
     const registerForCourseWithAlert = (e) => {
         let randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
+        let answer = randomFourDigitNumber.toString();
         Swal.fire({
             title: '화면의 숫자를 입력해주세요',
             text: `${randomFourDigitNumber}`,
@@ -58,12 +59,18 @@ const CourseRegistration = () => {
                 autocorrect: "off"
             }
         }).then((result) => {
-            if (result.isConfirmed) {
+            console.log(result)
+            if(result.value == answer){
                 Swal.fire({
                     icon: 'success',
                     title: '신청되었습니다.'
                 });
                 registerForCourse(e);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '잘못된 번호입니다.'
+                });
             }
         });
     }

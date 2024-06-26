@@ -61,6 +61,8 @@ const Lecture = () => {
 
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
+        const page = +panel.substr(5,1);
+        setSelectedWeek(page);
     };
 
     const changeSelectedWeek = (e) => {
@@ -121,7 +123,10 @@ const Lecture = () => {
                                     gap={4}
                                     p={2}
                                     id={(content.week == selectedWeek ) ? "selectedWeek" : ""}
-                                    onClick={() => setSelectedWeek(`${content.week}`)}
+                                    onClick={() => {
+                                        setSelectedWeek(`${content.week}`)
+                                        setExpanded(`panel${content.week}`);
+                                    }}
                                     sx={{ border: '5px solid #1F3468', marginRight: 2, padding:0, margin:"0 auto", color:"#1F3468", cursor:"pointer" }}>
                                     <Typography variant='h6' sx={{ margin: "0 auto" }}>{content.twoCharacterWeek}</Typography>
                                 </Box>
@@ -131,20 +136,20 @@ const Lecture = () => {
                             {contentList.length !== 0 && (contentList.map(content => (
                                 <Accordion expanded={expanded === `panel${content.week}`} onChange={handleChange(`panel${content.week}`)}>
                                     <AccordionSummary aria-controls={`panel${content.week}d-content`} id={`panel${content.week}d-header`} sx={{height:70, border:0}}>
-                                        <Typography>{content.week}주차</Typography>
+                                        <Typography sx={{fontSize:22}}>{content.week}주차</Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails sx={{height:70}}>
-                                        <Typography><b>{content.count}차시</b></Typography>
+                                    <AccordionDetails sx={{ display: "flex", height:70 }}>
+                                        <Typography sx={{ margin: "auto", marginLeft: 0, fontSize:18 }}><b>{content.count}차시</b></Typography>
                                     </AccordionDetails>
                                     <AccordionDetails sx={{ display: "flex", height:70 }}>
-                                        <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.count}차시</Typography>
+                                        <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.count}차시</Typography>
                                         <Button variant="contained"
                                             size="small"
                                             sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>{content.status}</Button>
                                     </AccordionDetails>
                                     {content.videoFile &&
                                         <AccordionDetails sx={{ display: "flex", height:70 }}>
-                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.videoName}</Typography>
+                                            <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.videoName}</Typography>
                                             <Button variant="contained"
                                                 size="small"
                                                 onClick={() => navigate(`video`)}
@@ -153,7 +158,7 @@ const Lecture = () => {
                                     }
                                     {content.materialFile &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
-                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.materialTitle}</Typography>
+                                            <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.materialTitle}</Typography>
                                             <Button variant="contained"
                                                 size="small"
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>다운로드</Button>
@@ -161,24 +166,24 @@ const Lecture = () => {
                                     }
                                     {content.homeworkFile &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
-                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.homeworkTitle}</Typography>
+                                            <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.homeworkTitle}</Typography>
                                             <Button variant="contained"
                                                 size="small"
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>제출</Button>
                                         </AccordionDetails>
                                     }
                                     <AccordionDetails>
-                                        <Typography><b>{content.count2}차시</b></Typography>
+                                        <Typography sx={{ margin: "auto", marginLeft: 0, fontSize:18 }}><b>{content.count2}차시</b></Typography>
                                     </AccordionDetails>
                                     <AccordionDetails sx={{ display: "flex", height: 70 }}>
-                                        <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.count2}차시</Typography>
+                                        <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.count2}차시</Typography>
                                         <Button variant="contained"
                                             size="small"
                                             sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>{content.status2}</Button>
                                     </AccordionDetails>
                                     {content.videoFile2 &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
-                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.videoName2}</Typography>
+                                            <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.videoName2}</Typography>
                                             <Button variant="contained"
                                                 size="small"
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>학습하기</Button>
@@ -186,7 +191,7 @@ const Lecture = () => {
                                     }
                                     {content.materialFile2 &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
-                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.materialTitle2}</Typography>
+                                            <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.materialTitle2}</Typography>
                                             <Button variant="contained"
                                                 size="small"
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>다운로드</Button>
@@ -194,7 +199,7 @@ const Lecture = () => {
                                     }
                                     {content.homeworkFile2 &&
                                         <AccordionDetails sx={{ display: "flex", height: 70 }}>
-                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.homeworkTitle2}</Typography>
+                                            <Typography sx={{ margin: "auto", marginLeft: 2, fontSize:18 }}>{content.homeworkTitle2}</Typography>
                                             <Button variant="contained"
                                                 size="small"
                                                 sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>제출</Button>
