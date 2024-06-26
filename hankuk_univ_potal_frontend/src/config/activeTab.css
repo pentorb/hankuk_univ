@@ -2,3 +2,8 @@
     background-color: white;
     color: #435480;
 }
+
+#selectedWeek {
+    background-color: #1F3468;
+    color: white;
+}

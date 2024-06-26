@@ -100,6 +100,12 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			} else if(lectureType.equals("S")) {
 				type = "전선";
 			}
+			
+			Boolean unvaildLecture = false;
+			Optional<LectureByStd> optionalLectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lectureNumber);
+			if(optionalLectureByStd.isPresent()) {
+				unvaildLecture = true;
+			}
 
 			Map<String, Object> map = new HashMap<>();
 			map.put("lectureName", lectureName);
@@ -112,6 +118,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			map.put("countOfStudent", countOfStudent);
 			map.put("numOfStd", numOfStd);
 			map.put("type", type);
+			map.put("unvaildLecture", unvaildLecture);
 			mapList.add(map);
 		}
 		return mapList;
@@ -294,6 +301,12 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			} else if(lectureType.equals("S")) {
 				type = "전선";
 			}
+			
+			Boolean unvaildLecture = false;
+			Optional<LectureByStd> optionalLectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lectureNumber);
+			if(optionalLectureByStd.isPresent()) {
+				unvaildLecture = true;
+			}
 
 			Map<String, Object> map = new HashMap<>();
 			map.put("lectureName", lectureName);
@@ -306,6 +319,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			map.put("countOfStudent", countOfStudent);
 			map.put("numOfStd", numOfStd);
 			map.put("type", type);
+			map.put("unvaildLecture", unvaildLecture);
 			mapList.add(map);
 		}
 		return mapList;

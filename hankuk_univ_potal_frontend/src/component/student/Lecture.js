@@ -2,7 +2,7 @@ import { Typography, Paper, Button, Grid } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import axios from 'axios';
 import { tokenAtom, memberAtom, lectureNameAtom, lectureNumberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
@@ -15,6 +15,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import '../../config/activeTab.css';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -55,12 +56,18 @@ const Lecture = () => {
     const lectureNumber = useAtomValue(lectureNumberAtom);
     const [contentList, setContentList] = useState([]);
     const navigate = useNavigate();
-    const [expanded, setExpanded] = useState('panel1');
+    const [expanded, setExpanded] = useState('');
+    const [selectedWeek, setSelectedWeek] = useState()
 
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
 
+    const changeSelectedWeek = (e) => {
+        let originData = e.target.value;
+        let data = originData.substring(5);
+        setSelectedWeek(data);
+    }
     useEffect(() => {
         let formData = new FormData();
         formData.append("stdNo", member.id);
@@ -99,84 +106,108 @@ const Lecture = () => {
                     </Breadcrumbs>
                 </div>
                 {/* ------Your content start------! */}
-                <div>
+                <Grid container>
+                    <Grid item xs={12} sx={{ height: 30 }} />
+                    <Grid item xs={1} />
+                    <Grid item xs={10}>
+                        <div style={{ display: "flex", marginBottom:60 }}>
+                            {contentList.length !== 0 && (contentList.map(content => (
+                                <Box
+                                    height={65}
+                                    width={65}
+                                    my={4}
+                                    display="flex"
+                                    alignItems="center"
+                                    gap={4}
+                                    p={2}
+                                    id={(content.week == selectedWeek ) ? "selectedWeek" : ""}
+                                    onClick={() => setSelectedWeek(`${content.week}`)}
+                                    sx={{ border: '5px solid #1F3468', marginRight: 2, padding:0, margin:"0 auto", color:"#1F3468", cursor:"pointer" }}>
+                                    <Typography variant='h6' sx={{ margin: "0 auto" }}>{content.twoCharacterWeek}</Typography>
+                                </Box>
+                            )))}
+                        </div>
+                        <div>
+                            {contentList.length !== 0 && (contentList.map(content => (
+                                <Accordion expanded={expanded === `panel${content.week}`} onChange={handleChange(`panel${content.week}`)}>
+                                    <AccordionSummary aria-controls={`panel${content.week}d-content`} id={`panel${content.week}d-header`} sx={{height:70, border:0}}>
+                                        <Typography>{content.week}주차</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails sx={{height:70}}>
+                                        <Typography><b>{content.count}차시</b></Typography>
+                                    </AccordionDetails>
+                                    <AccordionDetails sx={{ display: "flex", height:70 }}>
+                                        <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.count}차시</Typography>
+                                        <Button variant="contained"
+                                            size="small"
+                                            sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>{content.status}</Button>
+                                    </AccordionDetails>
+                                    {content.videoFile &&
+                                        <AccordionDetails sx={{ display: "flex", height:70 }}>
+                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.videoName}</Typography>
+                                            <Button variant="contained"
+                                                size="small"
+                                                onClick={() => navigate(`video`)}
+                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>학습하기</Button>
+                                        </AccordionDetails>
+                                    }
+                                    {content.materialFile &&
+                                        <AccordionDetails sx={{ display: "flex", height: 70 }}>
+                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.materialTitle}</Typography>
+                                            <Button variant="contained"
+                                                size="small"
+                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>다운로드</Button>
+                                        </AccordionDetails>
+                                    }
+                                    {content.homeworkFile &&
+                                        <AccordionDetails sx={{ display: "flex", height: 70 }}>
+                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.homeworkTitle}</Typography>
+                                            <Button variant="contained"
+                                                size="small"
+                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>제출</Button>
+                                        </AccordionDetails>
+                                    }
+                                    <AccordionDetails>
+                                        <Typography><b>{content.count2}차시</b></Typography>
+                                    </AccordionDetails>
+                                    <AccordionDetails sx={{ display: "flex", height: 70 }}>
+                                        <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.count2}차시</Typography>
+                                        <Button variant="contained"
+                                            size="small"
+                                            sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>{content.status2}</Button>
+                                    </AccordionDetails>
+                                    {content.videoFile2 &&
+                                        <AccordionDetails sx={{ display: "flex", height: 70 }}>
+                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.videoName2}</Typography>
+                                            <Button variant="contained"
+                                                size="small"
+                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>학습하기</Button>
+                                        </AccordionDetails>
+                                    }
+                                    {content.materialFile2 &&
+                                        <AccordionDetails sx={{ display: "flex", height: 70 }}>
+                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.materialTitle2}</Typography>
+                                            <Button variant="contained"
+                                                size="small"
+                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>다운로드</Button>
+                                        </AccordionDetails>
+                                    }
+                                    {content.homeworkFile2 &&
+                                        <AccordionDetails sx={{ display: "flex", height: 70 }}>
+                                            <Typography variant='h7' sx={{ margin: "auto", marginLeft: 2 }}>{content.homeworkTitle2}</Typography>
+                                            <Button variant="contained"
+                                                size="small"
+                                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width: 80, verticalAlign: "middle", float: "right", marginRight: 4 }}>제출</Button>
+                                        </AccordionDetails>
+                                    }
+                                </Accordion>
+                            )))}
+                        </div>
+                    </Grid>
+                    <Grid item xs={1} />
+                </Grid>
 
-                </div>
-                <div>
-                    {contentList.length !== 0 && (contentList.map(content => (
-                        <Accordion expanded={expanded === `panel${content.week}`} onChange={handleChange(`panel${content.week}`)}>
-                            <AccordionSummary aria-controls={`panel${content.week}d-content`} id={`panel${content.week}d-header`}>
-                                <Typography>{content.week}주차</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Typography><b>{content.count}차시</b></Typography>
-                            </AccordionDetails>
-                            <AccordionDetails sx={{display: "flex", height:63}}>
-                                <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.count}차시</Typography>
-                                <Button variant="contained"
-                                size="small"
-                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>{content.status}</Button>
-                            </AccordionDetails>
-                            {content.videoFile &&
-                                <AccordionDetails sx={{display: "flex"}}>
-                                    <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.videoName}</Typography>
-                                    <Button variant="contained"
-                                    size="small"
-                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>학습하기</Button>
-                                </AccordionDetails>
-                            }
-                            {content.materialFile &&
-                                <AccordionDetails sx={{display: "flex", height:63}}>
-                                    <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.materialTitle}</Typography>
-                                    <Button variant="contained"
-                                    size="small"
-                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>다운로드</Button>
-                                </AccordionDetails>
-                            }
-                            {content.homeworkFile &&
-                                <AccordionDetails sx={{display: "flex", height:63}}>
-                                    <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.homeworkTitle}</Typography>
-                                    <Button variant="contained"
-                                    size="small"
-                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>제출</Button>
-                                </AccordionDetails>
-                            }
-                            <AccordionDetails>
-                                <Typography><b>{content.count2}차시</b></Typography>
-                            </AccordionDetails>
-                            <AccordionDetails sx={{display: "flex", height:63}}>
-                                <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.count2}차시</Typography>
-                                <Button variant="contained"
-                                size="small"
-                                sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>{content.status2}</Button>
-                            </AccordionDetails>
-                            {content.videoFile2 &&
-                                <AccordionDetails  sx={{display: "flex", height:63}}>
-                                    <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.videoName2}</Typography>
-                                    <Button variant="contained"
-                                    size="small"
-                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>학습하기</Button>
-                                </AccordionDetails>
-                            }
-                            {content.materialFile2 &&
-                                <AccordionDetails  sx={{display: "flex", height:63}}>
-                                    <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.materialTitle2}</Typography>
-                                    <Button variant="contained"
-                                    size="small"
-                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>다운로드</Button>
-                                </AccordionDetails>
-                            }
-                            {content.homeworkFile2 &&
-                                <AccordionDetails sx={{display: "flex", height:63}}>
-                                    <Typography variant='h7' sx={{margin:"auto", marginLeft:2}}>{content.homeworkTitle2}</Typography>
-                                    <Button variant="contained"
-                                    size="small"
-                                    sx={{ margin: "0 auto", backgroundColor: "firstColor.main", borderRadius: 10, width:80, verticalAlign:"middle", float:"right", marginRight:4 }}>제출</Button>
-                                </AccordionDetails>
-                            }
-                        </Accordion>
-                    )))}
-                </div>
+
                 {/* ------Your content end------! */}
                 <br />
             </Paper>

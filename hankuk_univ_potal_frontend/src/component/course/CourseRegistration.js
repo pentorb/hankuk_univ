@@ -13,6 +13,7 @@ import axios from 'axios';
 import { tokenAtom, memberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
+import Swal from "sweetalert2";
 
 const FormGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -41,6 +42,31 @@ const CourseRegistration = () => {
         checkConfirmation();
         loadCollege();
     }, [token])
+
+    const registerForCourseWithAlert = (e) => {
+        let randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
+        Swal.fire({
+            title: '화면의 숫자를 입력해주세요',
+            text: `${randomFourDigitNumber}`,
+            input: "text",
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            showLoaderOnConfirm: true,
+            inputAttributes: {
+                maxlength: "4",
+                autocapitalize: "off",
+                autocorrect: "off"
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '신청되었습니다.'
+                });
+                registerForCourse(e);
+            }
+        });
+    }
 
     const loadWholeCourses = () => {
         let formData = new FormData();
@@ -316,13 +342,13 @@ const CourseRegistration = () => {
                                     }                                    
                                     <TableCell align="center">{course.LectureRoom}</TableCell>
                                     <TableCell align="center" sx={{paddingTop:0, paddingBottom:0}}>
-                                        {course.countOfStudent === course.numOfStd
+                                        {(course.countOfStudent === course.numOfStd || course.unvaildLecture === true)
                                             ? <Button variant="contained"
                                                 size="small"                                                
                                                 sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }} disabled>신청</Button>
                                             : <Button variant="contained"
                                                 size="small"
-                                                onClick={()=>registerForCourse(course)}
+                                                onClick={()=>registerForCourseWithAlert(course)}
                                                 sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }}>신청</Button>                                            
                                         }                            
                                     </TableCell>
