@@ -1,0 +1,43 @@
+.tttt {
+    padding: 10px;
+    border-color: gray;
+    width: 100%;
+    border: solid 1px lightgrey;
+  }
+  
+  .tttt th {
+    background-color: #1F3468;
+    color: #ffffff;
+  }
+  
+  .tttt td{
+    background-color: #e2e6f145;
+  }
+  .tttt tr{
+    border:solid 1px lightgrey;
+  }
+  
+  .tttt td,
+  .tttt th {
+    padding: 15px;
+  }
+
+  .weekBox {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 2px solid rgb(221, 221, 221);
+    display: flex;
+    align-items: center;
+    height: 75px;
+  }
+
+  .timeBox{
+    font-weight: bold;
+    font-size: 23px;
+    padding: 10px;
+    height: 65px;
+    align-items: center;
+    display: flex;
+    margin-left: 10px;
+    border-bottom: solid 1px lightgray;
+  }

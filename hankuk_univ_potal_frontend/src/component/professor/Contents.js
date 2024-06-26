@@ -9,6 +9,9 @@ import { url } from "../../config/config";
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, openIndexesAtom, tokenAtom } from "../../atoms";
 import { useLocation, useNavigate, useParams } from "react-router";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import './css/proff.css';
 
 const Contents = () => {
     const [token, setToken] = useAtom(tokenAtom);
@@ -72,12 +75,12 @@ const Contents = () => {
     }, [token, lecture]);
 
     const scrollToTop = (i) => {
-        if(!openIndexes.includes(i)){
-        window.scrollTo({
-            top: (i+1)*200,
-            behavior: 'smooth'
-        })
-    }    
+        if (!openIndexes.includes(i)) {
+            window.scrollTo({
+                top: (i + 1) * 200,
+                behavior: 'smooth'
+            })
+        }
     }
 
     return (
@@ -104,26 +107,122 @@ const Contents = () => {
                 </div>
 
                 <div className="Contents_Body">
-                    {lessonList.map((lesson, i) => (
-                        <div key={i} onClick={() => {toggle(i);scrollToTop(i);}}
-                            className="Contents_Top_Buttons"
-                            style={{
-                                backgroundColor: openIndexes.includes(i) ? '#1F3468' : 'white',
-                                color: openIndexes.includes(i) ? 'white' : '#1F3468'
-                            }}>
-                            {i + 1}
-                        </div>
-
-                    ))}
-                    {lessonList.map((lesson, i) => (
-                        <div key={i}>
-                            <div onClick={() => {toggle(i); scrollToTop(i);}} style={{ cursor: 'pointer', padding: '10px', borderBottom: '2px solid #ddd' }}>
-                                <div style={{ display: 'inline-block', fontSize: '20px', margin: '10px 0', fontWeight: 'bold' }}
-                                >{lesson.week}주차</div>
-                                <div style={{ float: 'right', marginTop: '15px' }}>{openIndexes.includes(i) ? '△' : '▽'}</div>
+                    {/* 주차 확인  */}
+                    <div style={{ marginBottom: '15px' }}>
+                        {lessonList.map((lesson, i) => (
+                            <div key={i} onClick={() => { toggle(i); scrollToTop(i); }}
+                                className="Contents_Top_Buttons"
+                                style={{
+                                    backgroundColor: openIndexes.includes(i) ? '#1F3468' : 'white',
+                                    color: openIndexes.includes(i) ? 'white' : '#1F3468'
+                                }}>
+                                {i + 1}
                             </div>
-                            <Collapse isOpen={openIndexes.includes(i)} style={{ borderRadius:'30px', marginTop:'10px'}}>
-                                <Card style={{ border: 'none', borderRadius:'30px' ,backgroundColor:'aliceblue'}}>
+                        ))}
+                    </div>
+
+                    {lessonList.map((lesson, i) => (
+                        <div key={i} style={{ backgroundColor: '#a2b2d93d' }}>
+
+                            <div onClick={() => { toggle(i); scrollToTop(i); }} className="weekBox">
+                                <div style={{ margin: '0px 10px' }}>{openIndexes.includes(i) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</div>
+                                <div style={{ fontSize: '22px', fontWeight: 'bold' }}>{lesson.week}주차</div>
+                            </div>
+
+                            <Collapse isOpen={openIndexes.includes(i)}>
+                                <div style={{ border: 'none', backgroundColor: 'white', margin: '20px 20px 0px;' }}>
+                                    <div>
+
+                                    </div>
+
+                                    <div className="timeBox">1차시 ({lecture.time1})</div>
+                                    {lesson.lessonData.map((data, i) => {
+                                        if (data.lessonCnt === 1) {
+                                            return (
+                                                <div key={i} className="Contents_Divs">
+                                                    ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                    <Button
+                                                        style={{ backgroundColor: '#1F3468' }}
+                                                        className="Contents_Divs_Button"
+                                                        onClick={() => navigate(`/professor/lessonDataModify/${data.ldNo}`)}>
+                                                        강의자료보기
+                                                    </Button>
+                                                </div>
+                                            )
+                                        }
+                                        return null;
+                                    })}
+                                    {lesson.homework.map((data, i) => {
+                                        if (data.lessonCnt === 1) {
+                                            return (
+                                                <div key={i} className="Contents_Divs">
+                                                    ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                    <Button
+                                                        style={{ backgroundColor: '#1F3468', marginRight: '10px' }}
+                                                        className="Contents_Divs_Button"
+                                                        onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
+                                                        과제상세보기
+                                                    </Button>
+                                                    <Button
+                                                        style={{ backgroundColor: '#1F3468' }}
+                                                        className="Contents_Divs_Button"
+                                                        onClick={() => navigate(`/professor/homeworkSubmitList/${data.hwNo}/${data.week}/1`)}>
+                                                        과제란
+                                                    </Button>
+                                                </div>
+                                            )
+                                        }
+                                        return null;
+                                    })}
+                                    {lecture.time2 === '' ?
+                                        (<></>) : (<><div style={{ fontWeight: 'bold' }}>2차시 ({lecture.time2})</div><hr /></>)}
+                                    {lesson.lessonData.map((data, i) => {
+                                        if (data.lessonCnt === 2) {
+                                            return (
+                                                <div key={i} className="Contents_Divs">
+                                                    ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                    <Button
+                                                        style={{ backgroundColor: '#1F3468', marginRight: '10px' }}
+                                                        className="Contents_Divs_Button"
+                                                        onClick={() => navigate(`/professor/lessonDataModify/${data.ldNo}`)}>
+                                                        강의자료보기
+                                                    </Button>
+                                                </div>
+                                            )
+                                        }
+                                        return null;
+                                    })}
+                                    {lesson.homework.map((data, i) => {
+                                        if (data.lessonCnt === 2) {
+                                            return (
+                                                <div key={i} className="Contents_Divs">
+                                                    ↳<div className="Contents_Divs_Title">{data.title}</div>
+                                                    <Button
+                                                        style={{ backgroundColor: '#1F3468', marginRight: '10px' }}
+                                                        className="Contents_Divs_Button"
+                                                        onClick={() => navigate(`/professor/homeworkModify/${data.hwNo}`)}>
+                                                        과제상세보기
+                                                    </Button>
+                                                    <Button
+                                                        style={{ backgroundColor: '#1F3468' }}
+                                                        className="Contents_Divs_Button"
+                                                        onClick={() => navigate(`/professor/homeworkSubmitList/${data.hwNo}/${data.week}/2`)}>
+                                                        과제란
+                                                    </Button>
+                                                </div>
+                                            )
+                                        }
+                                        return null;
+                                    })}
+
+                                    <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}
+                                        style={{backgroundColor: '#1F3468' }}
+                                    >강의자료등록</Button>
+                                    <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}
+                                        style={{backgroundColor: '#1F3468' }}
+                                    >과제등록</Button>
+                                </div>
+                                {/* <Card style={{ border: 'none', borderRadius:'30px' ,backgroundColor:'aliceblue'}}>
                                     <CardBody style={{ marginLeft:'25px',paddingInline: '25px', borderRadius:'30px' }}>
                                         <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}
                                                 style={{ float: 'left', marginInline: '5px', backgroundColor:'#1F3468'}}
@@ -211,8 +310,8 @@ const Contents = () => {
                                             return null;
                                         })}
                                     
-                                    </CardBody>
-                                </Card>
+                                    </CardBody> */}
+                                {/* </Card> */}
                             </Collapse>
                         </div>
                     ))}

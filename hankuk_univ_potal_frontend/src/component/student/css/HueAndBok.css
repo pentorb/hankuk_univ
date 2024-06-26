@@ -45,7 +45,7 @@
     width: 150px;
     margin-bottom: 10px;
 }
-
+/* 
 .table {
     padding: 10px;
     border-color: gray;
@@ -65,8 +65,8 @@
 .table td,
 .table th {
     padding: 15px;
-    /* 간격을 늘리기 위해 패딩 값을 조정합니다 */
-}
+    
+} */
 
 .noneData{
     padding: 30px;
