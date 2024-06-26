@@ -63,3 +63,13 @@
     padding: 15px;
     border: solid 1px lightgray;
 }
+
+
+.hahatable{
+    width:100%;
+    padding: 15px;
+}
+
+.hahatable tbody {
+    background-color: #7082af1c;
+}
