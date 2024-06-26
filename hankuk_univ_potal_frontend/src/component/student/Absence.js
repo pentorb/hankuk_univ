@@ -11,6 +11,7 @@ import { styled } from '@mui/system';
 import { useNavigate } from 'react-router';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
+import Swal from "sweetalert2";
 
 const FormGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -41,6 +42,26 @@ const Absence = () => {
                 console.log(err);
             })
     }, [token])
+
+    const reportAbsenceWithAlert = (e) => {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'question',
+            title: '신청하시겠습니까?',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            showLoaderOnConfirm: true,
+            
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '신청되었습니다.'
+                });
+                reportAbsence(e);
+            }
+        });
+    }
 
     const reportAbsence = () => {
         let formData = new FormData();
@@ -99,7 +120,7 @@ const Absence = () => {
                     <FormGrid item xs={5} sx={{ display: "block" }}>
                         <Typography sx={{ display: "inline-block", marginLeft:5 }}><b>구&nbsp;&nbsp;&nbsp;분</b></Typography>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <Select name="type" defaultValue={"01"} onChange={changeValue} sx={{ borderRadius: 5, width:400 }}>
+                        <Select name="type" onChange={changeValue} sx={{ borderRadius: 5, width:400 }}>
                             <MenuItem value={"01"}>일반</MenuItem>
                             <MenuItem value={"02"}>병결</MenuItem>
                             <MenuItem value={"44"}>여학생공결</MenuItem>
@@ -163,7 +184,7 @@ const Absence = () => {
                     <FormGrid item xs={12} sx={{ height: 60 }} />
                 </Grid>
                 <div>
-                    <Button variant="contained" size="large" onClick={reportAbsence} sx={{ float:"right", backgroundColor: "firstColor.main", marginRight:20 }}>신청</Button>
+                    <Button variant="contained" size="large" onClick={reportAbsenceWithAlert} sx={{ float:"right", backgroundColor: "firstColor.main", marginRight:20 }}>신청</Button>
                     <Button variant="contained" size="large" onClick={() => document.getElementById('file').click()} sx={{ float:"right", backgroundColor: "firstColor.main", marginRight:2 }}>첨부</Button>
                 </div>
                 <br/><br/>
