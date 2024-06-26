@@ -32,7 +32,7 @@ const Grade = () => {
     
     useEffect(() => {
         checkGrade();
-    }, [token])
+    }, [token, year])
 
     const checkGrade = () => {
         let formData = new FormData();
