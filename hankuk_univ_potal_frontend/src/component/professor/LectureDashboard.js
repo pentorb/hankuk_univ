@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../../config/config";
+import './css/proff.css';
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { initLecture, lectureAtom, memberAtom, tokenAtom } from "../../atoms";
 
@@ -72,7 +73,7 @@ const LectureDashboard = () => {
 
     return (
         <Grid item xs={12}>
-            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>강의대시보드</b></Typography>
+            <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>나의 강의</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                 <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
@@ -89,17 +90,16 @@ const LectureDashboard = () => {
                 </div>
 
                 <Grid >
-                    <div className='lectureDashBoard-grid'>
-                        {lectureList.map((lecture, i) => (
-                            <Card key={i}
-                                className="lecture"
+                    <div style={{textAlign:'center'}}>
+                        {lectureList !== null && lectureList.map((lecture, i) => (
+                            <Card key={i} style={{ width: '300px', margin:'20px', textAlign:'left' }} className="lecture-card"
                                 onClick={() => contents(i)}
                             >
-                                <Label className="lecture-color-card" />
+                                <Label className="lecture-color-card" style={{height:'130px'}} />
                                 <CardBody style={{ margin: '0px 10px 10px' }}>                                        
-                                <CardTitle  style={{ fontSize: 'larger' }}>
-                                    <b>{lecture.subName}</b>
-                                </CardTitle>
+                                    <CardTitle  style={{ fontSize: 'larger' }}>
+                                        <b>{lecture.subName}</b>
+                                    </CardTitle>
                                     <CardText  style={{ margin: '0px' }}>
                                         {lecture.year}년 {lecture.semester}학기<br/>
                                         {lecture.time1}, {lecture.lecRoom}
