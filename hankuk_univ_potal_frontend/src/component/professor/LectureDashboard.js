@@ -84,13 +84,13 @@ const LectureDashboard = () => {
                             마이페이지
                         </Link>
                         <Link underline="hover" color="#4952A9">
-                            <b>강의대시보드</b>
+                            <b>강의 대시보드</b>
                         </Link>
                     </Breadcrumbs>
                 </div>
 
                 <Grid >
-                    <div style={{textAlign:'center'}}>
+                    <div style={{padding:'0px 100px', marginLeft:'80px'}}>
                         {lectureList !== null && lectureList.map((lecture, i) => (
                             <Card key={i} style={{ width: '300px', margin:'20px', textAlign:'left' }} className="lecture-card"
                                 onClick={() => contents(i)}

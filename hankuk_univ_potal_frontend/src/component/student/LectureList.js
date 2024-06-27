@@ -7,7 +7,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
 import { CardBody, CardText, CardTitle, Label } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 
@@ -41,8 +41,7 @@ const LectureList = () => {
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom><b>나의 강의</b></Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
                
-               {/* breadcrumb 적용이 왜 안되지?  */}
-                {/* <div id="breadCrumb" style={{ margin: '24px 40px 32px', color:'black' }}>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px', color:'black' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
                         <Link underline="none" color="inherit" href="/student">
                             <HomeIcon />
@@ -54,10 +53,10 @@ const LectureList = () => {
                             <b>강의 대시보드</b>
                         </Link>
                     </Breadcrumbs>
-                </div> */}
+                </div>
 
                 <Grid>
-                <div style={{textAlign:'center'}}>
+                <div style={{padding:'0px 100px', marginLeft:'80px'}}>
                         {lectureList !== null && (lectureList.map(lecture => (
                             <Card key={lecture.lecNo} className="lecture-card" style={{ width: '300px', margin:'20px', textAlign:'left' }}
                             onClick={() => {

@@ -103,9 +103,7 @@ const HomeworkSubmitList = () => {
 
                 <div className="AttendManage_Body">
                     <div className="AttendManage_Header">
-                        <Button className="AttendManage_Header_Button"
-                        onMouseUp={() => {  submitScore(); }}
-                        >
+                        <Button className="AttendManage_Header_Button" onMouseUp={() => {  submitScore(); }} >
                             점수저장
                         </Button>
                     </div>

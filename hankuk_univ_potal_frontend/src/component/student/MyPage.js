@@ -346,7 +346,14 @@ const MyPage = () => {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td scope="row">2020.03.01</td>
+                                            <td scope="row">2023.02.16</td>
+                                            <td>컴퓨터공학과</td>
+                                            <td>241001</td>
+                                            <td>3학년</td>
+                                            <td>군 휴학</td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row">2021.03.01</td>
                                             <td>컴퓨터공학과</td>
                                             <td>241001</td>
                                             <td>1학년</td>

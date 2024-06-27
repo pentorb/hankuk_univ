@@ -130,7 +130,7 @@ const StaffHuehak = () => {
                 <Grid container>
                     <Grid item xs={1}></Grid>
 
-                    <Grid item xs={10} >
+                    <Grid item xs={10} style={{marginBottom:'30px'}}>
                         <div className="categori">
                             <StopRoundedIcon fontSize='small' /> &nbsp;&nbsp;
                             <span style={{ fontSize: 'x-large' }}><b>휴학 신청 현황</b></span>
@@ -147,7 +147,7 @@ const StaffHuehak = () => {
                                     <option value="k">육아 복학</option>
                                 </Input>
                             </div>
-                            <Table className="table" bordered>
+                            <Table className="table" bordered hover>
                                 <thead>
                                     <tr>
                                         <th>신청 번호</th>

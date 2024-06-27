@@ -153,7 +153,7 @@ const ProfMain = () => {
                         </Grid>
                         <Grid item xs={3} style={{ textAlign: 'center', marginTop: '45px' }}>
                             <div style={{ paddingBottom: '15px' }}><h4><b>{member.name}</b> 님, 환영합니다.</h4></div>
-                            <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | {member.position} | {member.email}{member.emailDo}</h5></div>
+                            <div style={{ paddingBottom: '15px' }}><h5>{member.majName} | 정교수 | improf23@kosta.com</h5></div>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div className="iconBtn" ><CreateOutlinedIcon style={{ height: '30px', width: '30px' }} /></div>&nbsp;&nbsp;&nbsp;
                                 <div className="iconBtn" ><LogoutOutlinedIcon style={{ height: '30px', width: '30px' }} onClick={logout} /></div>

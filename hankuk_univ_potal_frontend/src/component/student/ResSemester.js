@@ -224,7 +224,8 @@ const ResSemester = () => {
                                                     {statusMap[hue.status] || hue.status}
                                                 </td>
                                                 {hue.status === 'REJ' ? (
-                                                    <td><Button variant="text" onClick={() => trClick(hue)}>상세보기</Button></td>
+                                                    // <td><Button variant="text" onClick={() => trClick(hue)}>상세보기</Button></td>
+                                                    <td><div style={{cursor:'pointer', color:"navy"}} onClick={() => trClick(hue)}>상세보기</div></td>
                                                 ) : (
                                                     <td onClick={(e) => setClose(false)}>-</td>
                                                 )

@@ -39,6 +39,18 @@ const HomeworkWrite = () => {
                 console.log(err)
             })
     }
+
+    const setSampleValues = () => {
+        setHomework({
+            ...homework,
+            title: '재료거동학 15주차 과제',
+            content: 'chapter 8. 연습문제 풀이 후 사진 찍어서 제출하시오.',
+            startDt:'2024-06-27',
+            endDt:'2024-06-28',
+            lessonCnt:'1'
+        });
+    }
+
     return (
         <Grid item xs={12}>
             <Typography ml={18} mt={10} mb={3} variant="h4" color="#444444" gutterBottom>
@@ -68,35 +80,35 @@ const HomeworkWrite = () => {
                 <div className="Homework_body">
                     <div className="Homework_Form">
                         <Form>
-                            <FormGroup>
+                            <FormGroup className="col-12">
                                 <Label
                                     style={{ marginRight: "23px" }}
                                     className="Homework_Write_Label"
                                     for="title"
                                 >
-                                    제목
+                                    <b>제목</b>
                                 </Label>
                                 <Input
                                     style={{ width: '789px' }}
                                     className="Homework_Write_Input"
                                     id="title"
                                     name="title"
-                                    placeholder=""
+                                    value={homework.title} 
                                     type="text"
                                     onChange={changeValue}
                                 />
                             </FormGroup>
-                            <div style={{ width: '860px' }}>
-                                <FormGroup className="Homework_FormGrop " style={{ marginRight: '16px' }}>
+                            <div className="col-12" style={{ display:'flex' }}>
+                                <FormGroup className="Homework_FormGrop col-6" style={{ display:'flex', justifyContent:'space-between', padding:'0px 15px  0px 0px' }}>
                                     <Label
 
                                         className="Homework_Write_Label"
                                         for="week"
                                     >
-                                        주차
+                                        <b>주차</b>
                                     </Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <Input
-                                        style={{ width: '350px' }}
+                                        style={{ width: '250px' }}
                                         className="Homework_Write_Input"
                                         id="week"
                                         name="week"
@@ -105,58 +117,54 @@ const HomeworkWrite = () => {
                                         type="text"
                                     />
                                 </FormGroup>
-                                <FormGroup className="Homework_FormGrop">
+                                <FormGroup className="Homework_FormGrop col-6" style={{ display:'flex', justifyContent:'space-between', padding:'0px 15px' }}>
                                     <Label
 
                                         className="Homework_Write_Label"
                                         for="lessonCnt"
                                     >
-                                        차시
+                                        <b>차시</b>
                                     </Label>&nbsp;&nbsp;&nbsp;
                                     <Input
-                                        style={{ width: '350px' }}
+                                        style={{ width: '250px' }}
                                         className="Homework_Write_Input"
                                         id="lessonCnt"
                                         name="lessonCnt"
-                                        placeholder=""
+                                        value={homework.lessonCnt}
                                         type="text"
                                         onChange={changeValue}
                                     />
                                 </FormGroup>
                             </div>
-                            <div style={{ width: "860px" }}>
-                                <FormGroup className="Homework_FormGrop " style={{ marginRight: '13px' }}>
-                                    <Label
-
-                                        className="Homework_Write_Label"
-                                        for="startDt"
-                                    >
-                                        시작&nbsp;&nbsp;&nbsp;
+                            <div className="col-12" style={{ display:'flex' }}>
+                                <FormGroup className="Homework_FormGrop col-6" style={{ display:'flex', justifyContent:'space-between', padding:'0px 15px  0px 0px' }}>
+                                    <Label className="Homework_Write_Label" for="startDt" >
+                                        <b>시작</b>
                                     </Label>
                                     <Input
-                                        style={{ width: '350px' }}
+                                        style={{ width: '300px' }}
                                         className="Homework_Write_Input"
                                         id="startDt"
                                         name="startDt"
-                                        placeholder=""
+                                        value={homework.startDt}
                                         type="date"
                                         onChange={changeValue}
-                                    />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    />
                                 </FormGroup>
-                                <FormGroup className="Homework_FormGrop ">
+                                <FormGroup className="Homework_FormGrop col-6" style={{ display:'flex', justifyContent:'space-between', padding:'0px 15px' }}>
                                     <Label
 
                                         className="Homework_Write_Label"
                                         for="endDt"
                                     >
-                                        마감&nbsp;&nbsp;&nbsp;
+                                        <b>마감</b>
                                     </Label>
                                     <Input
-                                        style={{ width: '350px' }}
+                                        style={{ width: '300px' }}
                                         className="Homework_Write_Input"
                                         id="endDt"
                                         name="endDt"
-                                        placeholder=""
+                                        value={homework.endDt}
                                         type="date"
                                         onChange={changeValue}
                                     />
@@ -168,7 +176,7 @@ const HomeworkWrite = () => {
                                     className="Homework_Write_Label"
                                     for="content"
                                 >
-                                    내용
+                                    <b>내용</b>
                                 </Label>
                                 <Input
                                     style={{
@@ -178,7 +186,7 @@ const HomeworkWrite = () => {
                                     className="Homework_Write_Input"
                                     id="content"
                                     name="content"
-                                    placeholder=""
+                                    value={homework.content}
                                     type="textarea"
                                     onChange={changeValue}
                                 />
@@ -189,6 +197,13 @@ const HomeworkWrite = () => {
                             onClick={submit}
                         >
                             등록
+                        </Button>
+                        {/* 새로운 버튼 추가 */}
+                        <Button 
+                            onClick={setSampleValues}
+                            style={{ marginLeft: '10px' }}
+                        >
+                            데이터입력
                         </Button>
                     </div>
                 </div>
