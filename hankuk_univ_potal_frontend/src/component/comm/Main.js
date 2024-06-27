@@ -151,45 +151,51 @@ const Main = () => {
                                 <div style={{ padding: '50px 30px', backgroundColor: '#F5F9FA' }}>
 
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
+                                        <div className="col-10"><li>한국대학교 의예과 신설 안내</li></div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-27</div>
+                                    </div>
+                                    <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024-2학기, 복학, 휴학, 유급 신청 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-06-25</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"> <li>졸업예정자 대상 이수구분 변경 신청, 졸업 확정 신고 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-06-21</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024-여름계절제 국내대학 학점교류 신청 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-06-20</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024학년도 여름계절학기 등록금 납부 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-06-04</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024학년도 휴학생 여름계절제 수강신청 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-29</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024학년도 여름계절제 수업 일정 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-24</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024-1학기 소그룹채플 안내 사항</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-15</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024학년도 1학기 조기취업자 출석 및 성적 인정 처리 지침 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-01</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024년도 1학기 온라인강좌 기말고사 일정 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-04-28</div>
                                     </div>
                                     <div style={{ display: 'flex' }}>
-                                        <div className="col-10"><li>2024학년도 신(편)입생 학생증 체크카드 발급방법 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-02-08</div>
+                                        <div className="col-10"><li>2024학년도 휴학 신청 누락자 대처 안내</li></div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-01</div>
                                     </div>
+                                    
+                                    
                                 </div>
                             </div>
 
