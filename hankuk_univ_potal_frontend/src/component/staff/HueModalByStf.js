@@ -1,12 +1,13 @@
 import { Divider, Radio } from '@mui/material';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { url } from '../../config/config';
 import { useNavigate } from 'react-router';
 import { tokenAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import Swal from "sweetalert2";
+import hueFile from "../../assets/huehak.pdf"
 
 const text = {
     display: "flex",
@@ -27,11 +28,17 @@ const typeMap = {
 
 const HueModalByStf = ({ isOpen, toggle, data }) => {
     const token = useAtomValue(tokenAtom);
+    const [isPdfOpen, setIsPdfOpen] = useState(false);
+    const togggle = () => setIsPdfOpen(!isPdfOpen);
     const [selectedValue, setSelectedValue] = React.useState('APP');
     const [values, setValues] = React.useState({
         rejResult: '',
         status: 'APP'
     });
+
+    const hueOpen = () => {
+        setIsPdfOpen(true);
+    }
 
     const navigate = useNavigate();
 
@@ -123,6 +130,11 @@ const HueModalByStf = ({ isOpen, toggle, data }) => {
                             </div>
                         </div>
                         <Divider sx={{ margin: 3, borderColor: 'black' }} />
+                        <div className="col-12" style={{ marginLeft: '10px', display:'flex', justifyContent:'space-between' }}>
+                            <div style={text}>첨부 파일</div>
+                            <div onClick={hueOpen} style={{textDecoration:'underline', padding:'15px 15px 0px 0px'}}>김공돌_휴학신청서.pdf</div>
+                        </div>
+
                         <div className="col-12" style={{ marginLeft: '10px' }}>
                             <div style={text}>휴학 사유</div>
                             <div style={{ margin: '10px 30px 20px 10px', padding: '10px', height: '110px', border: '1px solid lightgrey', borderRadius: '10px' }}>{data.reason}</div>
@@ -158,6 +170,18 @@ const HueModalByStf = ({ isOpen, toggle, data }) => {
                         </ModalFooter>
                     </form>
                 </ModalBody>
+            </Modal>
+
+            <Modal isOpen={isPdfOpen} toggle={togggle} >
+              <ModalHeader toggle={togggle} isOpen={isPdfOpen} >수업 계획서</ModalHeader>
+              <ModalBody>
+                <iframe src= {hueFile} width="100%" height="600"></iframe>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={togggle}>
+                  닫기
+                </Button>
+              </ModalFooter>
             </Modal>
         </div>
     );
