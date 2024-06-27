@@ -6,13 +6,17 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 // import NoticeBoard from "./NoticeBoard";
 import NewsCarousel from "./NewsCarousel";
-import { memberAtom } from "../../atoms";
-import { useAtom } from "jotai";
+import { memberAtom, tokenAtom } from "../../atoms";
+import { useAtom, useAtomValue } from "jotai";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { url } from '../../config/config';
 
 const Main = () => {
     const [member, setMember] = useAtom(memberAtom);
+    const token = useAtomValue(tokenAtom);
+    const [events, setEvents] = useState([]);
     const [isMemberLoaded, setIsMemberLoaded] = useState(false);
 
     useEffect(() => {
@@ -20,6 +24,7 @@ const Main = () => {
         if (member !== undefined) {
             setIsMemberLoaded(true);
         }
+        myCalendar();
     }, [member]);
 
 
@@ -29,6 +34,27 @@ const Main = () => {
         sessionStorage.removeItem("refresh_token");
         // window.location.reload(); 
         // 페이지 새로고침
+    }
+
+    const myCalendar = () => {
+        axios.get(`${url}/calendar?id=S241234`, { headers: { Authorization: JSON.stringify(token) } })
+            .then(res => {
+                const formattedEvents = res.data.map(event => {
+                    return {
+                        title: event.title,
+                        start: new Date(event.start),
+                        end: new Date(event.end),
+                        backgroundColor: event.bgColor,
+                        textColor: '#000000',
+                        borderColor: event.bgColor,
+                        allDay: event.allDay,
+                    };
+                });
+                setEvents(formattedEvents);
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
     }
 
     return (
@@ -109,7 +135,7 @@ const Main = () => {
                                     // locale={'ko'}
                                     // dayCellContent={daycheck}
                                     plugins={[dayGridPlugin, interactionPlugin]}
-                                    // events={events}
+                                    events={events}
                                     // eventContent={renderEventContent}
                                     dayMaxEventRows={true}
                                     dayMaxEvents={2}
