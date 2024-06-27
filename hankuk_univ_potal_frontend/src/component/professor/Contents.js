@@ -197,7 +197,7 @@ const Contents = () => {
                                 </div>
 
                                 {/* 2차시가 없을 땐 보이지 않음 */}
-                                {lecture.time2 === null ? (
+                                {lecture.time2 !== null ? (
                                     <>
                                         <div className="contentBox">
                                             <div className="timeBox" style={{ justifyContent: 'space-between' }}>
