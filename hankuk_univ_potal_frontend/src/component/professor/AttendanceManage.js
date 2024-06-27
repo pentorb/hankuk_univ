@@ -67,7 +67,7 @@ const AttendanceManage = () => {
         .then((res)=>{
             console.log(res)
             Swal.fire({
-                title: res.data,
+                title: "출결 현황이 변경되었습니다.",
                 // text: "That thing is still around?",
                 icon: "success"
               });        

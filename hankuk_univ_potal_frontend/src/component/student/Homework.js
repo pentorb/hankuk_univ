@@ -47,7 +47,7 @@ const Homework = () => {
         e.preventDefault();
         Swal.fire({
             icon: 'question',
-            title: '신청하시겠습니까?',
+            title: '제출하시겠습니까?',
             showCancelButton: true,
             confirmButtonText: '확인',
             showLoaderOnConfirm: true,
@@ -56,7 +56,7 @@ const Homework = () => {
             if (result.isConfirmed) {
                 Swal.fire({
                     icon: 'success',
-                    title: '신청되었습니다.'
+                    title: '제출되었습니다.'
                 });
                 submitHomework(e);
             }
@@ -67,7 +67,7 @@ const Homework = () => {
         let formData = new FormData();
         formData.append("stdNo", member.id);
         formData.append("hwNo", hwNo);
-        formData.append("files", files);
+        // formData.append("files", files);
 
         const homeworkUrl = `${url}/sumbit-homework`;
         console.log(homeworkUrl);
@@ -75,7 +75,7 @@ const Homework = () => {
             headers: { Authorization: JSON.stringify(token) }
         })
             .then(res => {
-                navigate("/student/:lecNo/homework")
+                navigate("/student/:lecNo/content")
             })
             .catch(err => {
                 console.log(err);

@@ -43,6 +43,7 @@ const AbsenceDetail = () => {
                     // text: "That thing is still around?",
                     icon: "success"
                 });
+                navigate("/professor/absenceList")
 
             })
             .catch(err => {
@@ -133,7 +134,7 @@ const AbsenceDetail = () => {
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', padding: '10px' }}>
+                    {/* <div style={{ display: 'flex', padding: '10px' }}>
                         <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={text} className="col-4">첨부자료</div>
                             <div className="col-6">
@@ -143,7 +144,7 @@ const AbsenceDetail = () => {
                                 />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div style={{ padding: '10px' }}>
                         <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={text} className="col-3">이의내용</div>

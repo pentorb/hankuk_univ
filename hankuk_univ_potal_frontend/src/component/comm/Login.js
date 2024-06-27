@@ -77,21 +77,15 @@ export default function Login() {
             preConfirm: async () => {
                 const stdNo = document.getElementById('stdNo').value;
                 const stdTel = formatPhoneNumber(document.getElementById('stdTel').value);
-
                 if (!stdNo || !stdTel) {
                     Swal.showValidationMessage('모든 필드를 채워주세요.');
                     return;
                 }
 
                 try {
-                    console.log(stdTel);
-                    const response = await axios.get(`${url}/resetPw`, {
-                        params: {
-                            stdNo: stdNo,
-                            stdTel: stdTel
-                        },
-                        headers: {Authorization: JSON.stringify(token)}
-                    });
+                    const response = await axios.get(`${url}/resetPassword?stdNo=${stdNo}&stdTel=${stdTel}`, 
+                       { headers: {Authorization: JSON.stringify(token)}}
+                    );
                     if (response.status === 200) {
                         Swal.fire({
                             icon: 'success',

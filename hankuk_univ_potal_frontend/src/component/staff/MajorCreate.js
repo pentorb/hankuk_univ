@@ -13,6 +13,7 @@ import Link from '@mui/material/Link';
 import './css/stf.css';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
 import { Input } from 'reactstrap';
+import Swal from 'sweetalert2';
 
 
 
@@ -88,11 +89,11 @@ const MajorCreate = () => {
       await axios.post(`${url}/createMajor`, payload, {
         headers: { "Authorization": JSON.stringify(token) }
       });
-      alert("학과가 성공적으로 개설되었습니다.");
+      Swal.fire('학과가 성공적으로 개설되었습니다.', '', 'success');
       navigate(`/staff/majordetail/${formData.majorCode}`);
     } catch (error) {
       console.error("Error creating major:", error);
-      alert("학과 개설 중 오류가 발생했습니다.");
+      Swal.fire('학과 개설 중 오류가 발생했습니다.', '', 'error');
     }
   };
 

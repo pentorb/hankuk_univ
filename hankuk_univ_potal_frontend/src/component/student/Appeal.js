@@ -33,7 +33,7 @@ const Appeal = () => {
         e.preventDefault();
         Swal.fire({
             icon: 'question',
-            title: '신청하시겠습니까?',
+            title: '이의 신청하시겠습니까?',
             showCancelButton: true,
             confirmButtonText: '확인',
             showLoaderOnConfirm: true,
@@ -42,7 +42,7 @@ const Appeal = () => {
             if (result.isConfirmed) {
                 Swal.fire({
                     icon: 'success',
-                    title: '신청되었습니다.'
+                    title: '이의 신청되었습니다.'
                 });
                 makeAppeal(e);
             }
@@ -70,7 +70,7 @@ const Appeal = () => {
         formData.append("stdNo", member.id);
         formData.append("lecNo", lectureNumber);
         formData.append("content", content);
-        formData.append("files", files);
+        // formData.append("files", files);
 
         const appealUrl = `${url}/make-appeal`;
         console.log(appealUrl);

@@ -48,6 +48,7 @@ const MajorDetail = () => {
     const token = useAtomValue(tokenAtom);
 
     useEffect(() => {
+        if(token == null || token =='') return;
         fetchMajorDetail();
         fetchSubjects();
         fetchProfessors();
@@ -321,7 +322,7 @@ const MajorDetail = () => {
                                 <div className="col-3" style={{ display: 'flex', padding: '20px', alignItems: 'center' }}>
                                     <div className="col-4 categori">단과</div>
                                     <div className='col-8'>
-                                        <Input placeholder="단과" name="colCd" value={major.colCd}
+                                        <Input placeholder="단과" name="colCd" value="생명나노대학"
                                             onChange={(e) => handleFieldChange(e, 'colCd')} readOnly />
                                     </div>
                                 </div>
@@ -371,7 +372,7 @@ const MajorDetail = () => {
                                 <div className="col-3" style={{ display: 'flex', padding: '20px', alignItems: 'center' }}>
                                     <div className="col-5 categori">학과장</div>
                                     <div className='col-7'>
-                                        <Input type="select" value={headProfessor} onChange={handleSelectHeadProfessor}>
+                                        <Input type="select" value={headProfessor} onChange={handleSelectHeadProfessor} onClick={fetchProfessors}>
                                             {professors.map((professor) => (
                                                 <option key={professor.profNo} value={professor.profNo}>
                                                     {professor.name}

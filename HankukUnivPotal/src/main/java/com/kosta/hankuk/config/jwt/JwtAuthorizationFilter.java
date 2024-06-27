@@ -92,6 +92,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 						.asString();
 				
 				User user = userRepository.identify(username);
+				System.out.println(user);
 				if(user == null) throw new Exception(); // 사용자가 없을 때
 				
 				// token 다시 보내기
@@ -105,12 +106,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 				response.addHeader(JwtProperties.HEADER_STRING, reToken);
 				response.setContentType("application/json; charset=utf-8");
 			} catch (Exception e2){ // refresh_token 기간 만료
-				e2.printStackTrace();
+				//e2.printStackTrace();
+				System.out.println("ERR");
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 필요");
+				return;
 			}			
 		} catch(Exception e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 오류");
+			System.out.println("AA");
+//			e.printStackTrace();
+//			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 오류");
+			return;
 		}		
 	}
 }

@@ -86,7 +86,7 @@ const Lecture = () => {
             .catch(err => {
                 console.log(err)
             })
-    }, [token])
+    }, [token, lectureName, lectureNumber, member])
 
     return (
         <Grid item xs={12}>

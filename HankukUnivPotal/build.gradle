@@ -40,9 +40,9 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	
-	// https://mvnrepository.com/artifact/javax.servlet/jstl
-	implementation 'javax.servlet:jstl:1.2'
-	
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+
       	
    	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation 'org.modelmapper:modelmapper:2.4.4'
