@@ -486,7 +486,7 @@ const AccountManagement = () => {
               </div>
             </div>
             <div className="actions">
-              <button style={{ color: '#1F3468', backgroundColor: 'white' }} onClick={openModal}>등록</button>
+              <button style={{ color: '#1F3468', backgroundColor: 'white' }} onClick={openModal}>계정 생성</button>
               {!editMode && (
                 <Button variant="contained" style={{ color: 'white', backgroundColor: '#1F3468', border: 'none' }} onClick={handleEdit}>수정</Button>
               )}

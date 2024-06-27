@@ -36,6 +36,7 @@ export default function Login() {
     const changeValue = (e) => {
         setMember({ ...member, [e.target.name]: e.target.value });
     }
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         let formData = new FormData();
