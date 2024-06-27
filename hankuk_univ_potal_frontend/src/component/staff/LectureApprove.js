@@ -14,14 +14,13 @@ import axios from 'axios';
 import { url } from "../../config/config";
 import Link from '@mui/material/Link';
 import SearchIcon from '@mui/icons-material/Search';
-import syllabusFile from '../../assets/test.pdf';
+import syllabusFile from '../../assets/newEnergySyllabus.pdf';
 import { Input, Button, Table, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
 import Swal from 'sweetalert2';
 
 
 const LectureApprove = () => {
 
-  const [PdfmodalIsOpen, setPdfmodalIsOpen] = useState(false);
   const [ApprovemodalIsOpen, setApprovemodalIsOpen] = useState(false);
   const [colleages, setColleages] = useState([]);
   const [majors, setMajors] = useState([]);

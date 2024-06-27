@@ -7,8 +7,9 @@ import { url } from "../../config/config";
 import { useNavigate, useParams } from "react-router";
 import { useAtom, useAtomValue } from "jotai";
 import { lectureAtom, tokenAtom } from "../../atoms";
-import { Button, Input, Table } from 'reactstrap';
+import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table } from 'reactstrap';
 import Swal from 'sweetalert2';
+import homework from '../../assets/220072_homework.pdf';
 
 const HomeworkSubmitList = () => {
     const [token, setToken] = useAtom(tokenAtom);
@@ -16,11 +17,18 @@ const HomeworkSubmitList = () => {
     const { hwNo, week, lessonCnt } = useParams();
     const [homeworkSubmitList, setHomeworkSubmitList] = useState([]);
 
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(!isOpen);
+
     useEffect(() => {
 
         // let profNo = JSON.parse(sessionStorage.getItem("prof"));
         submit(1);
     }, [token, lecture])
+
+    const hwOpen = () => {
+        setIsOpen(true);
+    }
 
     const submit = () => {
         axios.get(`${url}/homeworkSubmitList?hwNo=${hwNo}`,
@@ -73,7 +81,7 @@ const HomeworkSubmitList = () => {
                 <b>과제란</b>
             </Typography>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: "auto", overflow: "hidden", width: 1400, margin: "0 auto", borderRadius: 5 }}>
-            <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
+                <div id="breadCrumb" style={{ margin: '24px 40px 32px' }}>
                     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
                         <Link underline="none" color="inherit" href="/professor/">
                             <HomeIcon />
@@ -101,8 +109,7 @@ const HomeworkSubmitList = () => {
                             점수저장
                         </Button>
                     </div>
-                    <div className="AttendManage_Table">
-                        <Table bordered hover>
+                        <Table bordered hover style={{fontSize:'20px', textAlign:'center'}}>
                             <thead >
                                 <tr >
                                     {/* <th className="AttendManage_Table_thead">
@@ -125,8 +132,8 @@ const HomeworkSubmitList = () => {
                                             <td>
                                                 {sub.stdNo}
                                             </td>
-                                            <td>
-                                                첨부파일
+                                            <td onClick={hwOpen}>
+                                                <span style={{textDecoration:'underline', cursor:'pointer'}}>220072김공돌_과제제출.pdf</span>
                                             </td>
                                             <td>
                                                 {sub.submitDt}
@@ -148,7 +155,17 @@ const HomeworkSubmitList = () => {
                             </tbody>
                             
                         </Table>
-                    </div>
+                        <Modal isOpen={isOpen} toggle={toggle} >
+                        <ModalHeader toggle={toggle} isOpen={isOpen} >과제 확인</ModalHeader>
+                        <ModalBody>
+                            <iframe src={homework} width="100%" height="600"></iframe>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={toggle}>
+                            닫기
+                            </Button>
+                        </ModalFooter>
+                        </Modal>
                 </div>
 
                 </Paper>

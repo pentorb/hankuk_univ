@@ -8,10 +8,10 @@ const items = [
         content: (
             <span style={{ display: 'flex', margin: '0 80px', justifyContent: 'space-around' }}>
                 <div className="newsBox" style={{ display: 'flex' }}>
-                    <div className="col-4 newsImg" style={{ backgroundImage: 'url(/images/news1.png)' }} />
+                    <div className="col-4 newsImg" style={{ backgroundImage: 'url(/images/medi.png)' }} />
                     <div className="col-8 newsContent">
-                        <div className="headLine">인문대학 신임교수 강연, <br />문화적 시야를 넓히는 시간</div>
-                        <div className="newsText">인문대학 및 인문학연구원의 공동 주최로 “2024 인문학 신임교수에게 듣는다 (1)”이 지난 5월 1일(수) 인문대학 7동 국제회의실(308호)에서 진행됐다. </div>
+                        <div className="headLine">의과대학 증원 정책에 따라 <br />한국대학교 의예과 신설된다 </div>
+                        <div className="newsText">최근 정부에서 내세운 의과대학 정원 증가 정책을 발판으로 한국대학교에서 의예과를 신설한다. 한국대학교 의예과는 2025년 수학능력시험 응시자부터 ...</div>
                     </div>
                 </div>
                 <div className="newsBox" style={{ display: 'flex' }}>
