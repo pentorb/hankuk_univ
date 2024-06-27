@@ -21,7 +21,6 @@ import Swal from 'sweetalert2';
 
 const LectureApprove = () => {
 
-  const [PdfmodalIsOpen, setPdfmodalIsOpen] = useState(false);
   const [ApprovemodalIsOpen, setApprovemodalIsOpen] = useState(false);
   const [colleages, setColleages] = useState([]);
   const [majors, setMajors] = useState([]);
