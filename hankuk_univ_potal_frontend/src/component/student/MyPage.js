@@ -101,6 +101,7 @@ const MyPage = () => {
             email: member.email,
             emailDo: member.emailDo
         });
+        console.log(member)
     }, [member]);
 
     const submit = (e) => {
@@ -238,7 +239,7 @@ const MyPage = () => {
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <div className="col-3 ttext">생년월일</div>
-                                        <Input type="text" disabled className='infoD' value={member.birthday} />
+                                        <Input type="text" disabled className='infoD'  value={new Date(member.birthday).toISOString().split('T')[0]}/>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <div className="col-3 ttext">학과</div>

@@ -24,7 +24,6 @@ import com.kosta.hankuk.dto.NoticeBoardDto;
 import com.kosta.hankuk.dto.ProfessorDto;
 import com.kosta.hankuk.dto.StudentDto;
 import com.kosta.hankuk.dto.SubjectDto;
-import com.kosta.hankuk.entity.Subject;
 import com.kosta.hankuk.service.StaffService;
 import com.kosta.hankuk.util.PageInfo;
 
@@ -46,11 +45,10 @@ public class StaffController {
 
             
             staffService.registerStudentByOne(stdNo, name, tel, password, majorId, profId);
-            
-            return ResponseEntity.ok("학생이 성공적으로 등록되었습니다.");
+            return new ResponseEntity<String>("학생이 성공적으로 등록되었습니다.", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("학생 등록 중 오류가 발생했습니다: " + e.getMessage());
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -64,11 +62,11 @@ public class StaffController {
             String majorId = String.valueOf(payload.get("major"));
             
             staffService.registerProfessorByOne(profNo, name, tel, password, majorId);
-            
-            return ResponseEntity.ok("학생이 성공적으로 등록되었습니다.");
+            return new ResponseEntity<String>("학생이 성공적으로 등록되었습니다.",HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("학생 등록 중 오류가 발생했습니다: " + e.getMessage());
+            return new ResponseEntity<String>("학생 등록 중 오류가 발생했습니다: "+e.getMessage(),
+            		HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -76,10 +74,11 @@ public class StaffController {
     public ResponseEntity<String> updateStudents(@RequestBody List<Map<String, Object>> students) {
         try {
             staffService.updateStudents(students);
-            return ResponseEntity.ok("학생이 성공적으로 업데이트 되었습니다");
+            return new ResponseEntity<String>("학생이 성공적으로 업데이트 되었습니다", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error updating students: " + e.getMessage());
+            return new ResponseEntity<String>("Error updating students: "+e.getMessage(),
+            		HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -90,38 +89,38 @@ public class StaffController {
             return ResponseEntity.ok("학생이 성공적으로 업데이트 되었습니다");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error updating students: " + e.getMessage());
+            return new ResponseEntity<String>("Error updating students: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/createStudentId")
     public ResponseEntity<String> createStudentId() {
         String newStudentId = staffService.generateUniqueStudentId();
-        return ResponseEntity.ok(newStudentId);
+        return new ResponseEntity<String>(newStudentId,HttpStatus.OK);
     }
 
     @GetMapping("/createProfessorId")
     public ResponseEntity<String> createProfessorId() {
         String newProfessorId = staffService.generateUniqueProfessorId();
-        return ResponseEntity.ok(newProfessorId);
+        return new ResponseEntity<String>(newProfessorId,HttpStatus.OK);
     }
 
     @GetMapping("/colleagesSearchList")
     public ResponseEntity<List<ColleageDto>> getcolleagesSearchList() {
         List<ColleageDto> colleages = staffService.getAllColleages();
-        return ResponseEntity.ok(colleages);
+        return new ResponseEntity<List<ColleageDto>>(colleages,HttpStatus.OK);
     }
 
     @GetMapping("/majorsBycolleage")
     public ResponseEntity<List<MajorDto>> getMajorsByColleage(@RequestParam String colCd) {
         List<MajorDto> majors = staffService.getMajorsByColleage(colCd);
-        return ResponseEntity.ok(majors);
+        return new ResponseEntity<List<MajorDto>>(majors,HttpStatus.OK);
     }
     
     @GetMapping("/professorsByMajor")
     public ResponseEntity<List<Map<String, String>>> getProfessorsByMajor(@RequestParam String majCd) {
         List<Map<String, String>> professors = staffService.getProfessorsByMajor(majCd);
-        return ResponseEntity.ok(professors);
+        return new ResponseEntity<List<Map<String, String>>>(professors,HttpStatus.OK);
     }
     
     @GetMapping("/searchStudents")
@@ -130,7 +129,7 @@ public class StaffController {
             @RequestParam(required = false) String colleage,
             @RequestParam(required = false) String major) {
         List<StudentDto> students = staffService.searchStudents(name, colleage, major);
-        return ResponseEntity.ok(students);
+        return new ResponseEntity<List<StudentDto>>(students, HttpStatus.OK);
     }
 
     @GetMapping("/searchProfessors")
@@ -139,28 +138,28 @@ public class StaffController {
             @RequestParam(required = false) String colleage,
             @RequestParam(required = false) String major) {
         List<ProfessorDto> professors = staffService.searchProfessors(name, colleage, major);
-        return ResponseEntity.ok(professors);
+        return new ResponseEntity<List<ProfessorDto>>(professors, HttpStatus.OK);
     }
 
     @PostMapping("/deleteStudents")
     public ResponseEntity<String> deleteStudents(@RequestBody List<String> studentIds) {
         staffService.deleteStudents(studentIds);
-        return ResponseEntity.ok("Students deleted successfully");
+        return new ResponseEntity<String>("Students deleted successfully", HttpStatus.OK);
     }
 
     @PostMapping("/deleteProfessors")
     public ResponseEntity<String> deleteProfessors(@RequestBody List<String> professorIds) {
         staffService.deleteProfessors(professorIds);
-        return ResponseEntity.ok("Professors deleted successfully");
+        return new ResponseEntity<String>("Professors deleted successfully", HttpStatus.OK);
     }
 
     @PostMapping("/createMajor")
     public ResponseEntity<String> createMajor(@RequestBody Map<String, Object> majorData) {
         try {
             staffService.createMajor(majorData);
-            return ResponseEntity.ok("학과가 성공적으로 개설되었습니다.");
+            return new ResponseEntity<String>("학과가 성공적으로 개설되었습니다.", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("학과 개설 중 오류가 발생했습니다.");
+            return new ResponseEntity<String>("학과 개설 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -168,10 +167,10 @@ public class StaffController {
     public ResponseEntity<String> uploadExcel(@RequestParam("category") String category, @RequestParam("file") MultipartFile file) {
         try {
             staffService.saveDataFromExcel(category, file);
-            return ResponseEntity.ok("Data uploaded and saved successfully");
+            return new ResponseEntity<String>("Data uploaded and saved successfully", HttpStatus.OK);
         } catch (Exception e) {
 			e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to upload data: " + e.getMessage());
+            return new ResponseEntity<String>("Failed to upload data: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -180,14 +179,14 @@ public class StaffController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String colleage) {
         List<Map<String, Object>> majors = staffService.searchMajors(name, colleage);
-        return ResponseEntity.ok(majors);
+        return new ResponseEntity<List<Map<String, Object>>>(majors, HttpStatus.OK);
     }
     
     
     @GetMapping("/checkMajorCode")
     public ResponseEntity<Boolean> checkMajorCode(@RequestParam String majCd) {
         boolean exists = staffService.checkMajorCode(majCd);
-        return ResponseEntity.ok(exists);
+        return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
     
     @GetMapping("/createMajor")
@@ -195,7 +194,7 @@ public class StaffController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String colleage) {
         List<Map<String, Object>> majors = staffService.searchMajors(name, colleage);
-        return ResponseEntity.ok(majors);
+        return new ResponseEntity<List<Map<String, Object>>>(majors, HttpStatus.OK);
     }
     
     
@@ -206,9 +205,9 @@ public class StaffController {
         MajorDto major = staffService.getMajorByCode(majCd);
         
         if (major != null) {
-            return ResponseEntity.ok(major);
+            return new ResponseEntity<MajorDto>(major, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<MajorDto>(HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -216,10 +215,10 @@ public class StaffController {
     public ResponseEntity<List<SubjectDto>> getSubjectsByMajor(@RequestParam("majCd") String majCd) {
         try {
             List<SubjectDto> subjects = staffService.findSubjectsByMajor(majCd);
-            return ResponseEntity.ok(subjects);
+            return new ResponseEntity<List<SubjectDto>>(subjects, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return new ResponseEntity<List<SubjectDto>>(HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -229,20 +228,19 @@ public class StaffController {
         @PathVariable String majCd,
         @RequestBody MajorDto majorDto) {
             staffService.updateMajor(majCd, majorDto);
-            return ResponseEntity.ok("학과 정보가 성공적으로 업데이트되었습니다.");
-
+            return new ResponseEntity<String>("학과 정보가 성공적으로 업데이트되었습니다.", HttpStatus.OK);
     }
     
     @PostMapping("/addSubject")
-    public ResponseEntity<Subject> addSubject(@RequestBody Map<String, Object> subjectData) {
+    public ResponseEntity<Boolean> addSubject(@RequestBody Map<String, Object> subjectData) {
         try {
             System.out.println("Received subject data: " + subjectData);
 
-            Subject createdSubject = staffService.addSubject(subjectData);
-            return ResponseEntity.ok(createdSubject);
+            staffService.addSubject(subjectData);
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -250,10 +248,10 @@ public class StaffController {
     public ResponseEntity<String> updateHeadProfessor(@RequestParam String majCd, @RequestParam String profNo) {
         try {
             staffService.updateHeadProfessor(majCd, profNo);
-            return ResponseEntity.ok("Head professor updated successfully");
+            return new ResponseEntity<String>("Head professor updated successfully", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to update head professor: " + e.getMessage());
+            return new ResponseEntity<String>("Failed to update head professor: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -261,10 +259,10 @@ public class StaffController {
     public ResponseEntity<String> deleteSubjects(@RequestBody List<String> subjectCodes) {
         try {
             staffService.deleteSubjects(subjectCodes);
-            return ResponseEntity.ok("Subjects successfully deleted.");
+            return new ResponseEntity<String>("Subjects successfully deleted.", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to delete subjects: " + e.getMessage());
+            return new ResponseEntity<String>("Failed to delete subjects: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -272,10 +270,10 @@ public class StaffController {
     public ResponseEntity<String> uploadSubjectExcel(@RequestParam("majCd") String majCd, @RequestParam("file") MultipartFile file) {
         try {
             staffService.saveSubjectFromExcel(majCd, file);
-            return ResponseEntity.ok("Data uploaded and saved successfully");
+            return new ResponseEntity<String>("Data uploaded and saved successfully", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to upload data: " + e.getMessage());
+            return new ResponseEntity<String>("Failed to upload data: " + e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
  
@@ -287,9 +285,9 @@ public class StaffController {
     ) {
         try {
             List<Map<String, Object>> lectures = staffService.searchREQLecture(name, colleage, major);
-            return ResponseEntity.ok(lectures);
+            return new ResponseEntity<List<Map<String, Object>>>(lectures, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return new ResponseEntity<List<Map<String, Object>>>(HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -298,9 +296,9 @@ public class StaffController {
         String lecNo = request.get("lecNo");
         try {
             staffService.updateLectureStatus(lecNo, "APPR");
-            return ResponseEntity.ok("Lecture approved successfully");
+            return new ResponseEntity<String>("Lecture approved successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to approve lecture: " + e.getMessage());
+            return new ResponseEntity<String>("Failed to approve lecture: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -309,9 +307,9 @@ public class StaffController {
         String lecNo = request.get("lecNo");
         try {
             staffService.updateLectureStatus(lecNo, "REJ");
-            return ResponseEntity.ok("Lecture rejected successfully");
+            return new ResponseEntity<String>("Lecture rejected successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reject lecture: " + e.getMessage());
+            return new ResponseEntity<String>("Failed to reject lecture: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     

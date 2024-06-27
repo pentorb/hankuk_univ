@@ -500,7 +500,7 @@ const AccountManagement = () => {
 
         <Modal isOpen={modalIsOpen} toggle={toggle} onRequestClose={closeModal} >
           <ModalHeader toggle={toggle} isOpen={modalIsOpen}>
-            <span style={{ fontSize: '22px' }}><b>학생 등록</b></span>
+            <span style={{ fontSize: '22px' }}><b>신규 계정 생성</b></span>
           </ModalHeader>
           <ModalBody>
             <form onSubmit={handleSubmit}>
