@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kosta.hankuk.dto.ColleageDto;
 import com.kosta.hankuk.dto.MajorDto;
@@ -80,7 +79,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		for (Lecture lecture : lectureList) {
-			if(lecture.getStatus().equals("REQ")) continue;
+			if(lecture.getStatus().equals("REQ") || lecture.getStatus().equals("REJ")) continue;
 			String lectureName = lecture.getSubject().getName();
 			String professorName = lecture.getProfessor().getName();
 			String lectureNumber = lecture.getLecNo();
@@ -95,16 +94,25 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			
 			String type = "";
 			String lectureType = lecture.getSubject().getType();
-			if(lectureType.equals("P")) {
-				type = "전필";
-			} else if(lectureType.equals("S")) {
-				type = "전선";
+			String majorCode = lecture.getSubject().getMajor().getMajCd();
+			if (majorCode == "BLS") {
+				if (lectureType.equals("P")) {
+					type = "교필";
+				} else if (lectureType.equals("S")) {
+					type = "교선";
+				}
+			} else {
+				if (lectureType.equals("P")) {
+					type = "전필";
+				} else if (lectureType.equals("S")) {
+					type = "전선";
+				}
 			}
 			
-			Boolean unvaildLecture = false;
+			Boolean unvalidLecture = false;
 			Optional<LectureByStd> optionalLectureByStd = lectureByStdRepository.findByStudent_stdNoAndLecture_lecNo(stdNo, lectureNumber);
 			if(optionalLectureByStd.isPresent()) {
-				unvaildLecture = true;
+				unvalidLecture = true;
 			}
 
 			Map<String, Object> map = new HashMap<>();
@@ -118,7 +126,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			map.put("countOfStudent", countOfStudent);
 			map.put("numOfStd", numOfStd);
 			map.put("type", type);
-			map.put("unvaildLecture", unvaildLecture);
+			map.put("unvalidLecture", unvalidLecture);
 			mapList.add(map);
 		}
 		return mapList;
@@ -172,10 +180,19 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			
 			String type = "";
 			String lectureType = lecture.getSubject().getType();
-			if(lectureType.equals("P")) {
-				type = "전필";
-			} else if(lectureType.equals("S")) {
-				type = "전선";
+			String majorCode = lecture.getSubject().getMajor().getMajCd();
+			if (majorCode == "BLS") {
+				if (lectureType.equals("P")) {
+					type = "교필";
+				} else if (lectureType.equals("S")) {
+					type = "교선";
+				}
+			} else {
+				if (lectureType.equals("P")) {
+					type = "전필";
+				} else if (lectureType.equals("S")) {
+					type = "전선";
+				}
 			}
 			
 			Map<String, Object> map = new HashMap<>();
@@ -220,10 +237,19 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			
 			String type = "";
 			String lectureType = lecture.getSubject().getType();
-			if(lectureType.equals("P")) {
-				type = "전필";
-			} else if(lectureType.equals("S")) {
-				type = "전선";
+			String majorCode = lecture.getSubject().getMajor().getMajCd();
+			if (majorCode == "BLS") {
+				if (lectureType.equals("P")) {
+					type = "교필";
+				} else if (lectureType.equals("S")) {
+					type = "교선";
+				}
+			} else {
+				if (lectureType.equals("P")) {
+					type = "전필";
+				} else if (lectureType.equals("S")) {
+					type = "전선";
+				}
 			}
 			
 			Map<String, Object> map = new HashMap<>();
@@ -281,7 +307,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		for (Lecture lecture : lectureList) {
-			if(lecture.getStatus().equals("REQ")) continue;			
+			if(lecture.getStatus().equals("REQ") || lecture.getStatus().equals("REJ")) continue;			
 			String lectureName = lecture.getSubject().getName();
 			String professorName = lecture.getProfessor().getName();
 			String lectureNumber = lecture.getLecNo();
@@ -296,10 +322,19 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			
 			String type = "";
 			String lectureType = lecture.getSubject().getType();
-			if(lectureType.equals("P")) {
-				type = "전필";
-			} else if(lectureType.equals("S")) {
-				type = "전선";
+			String majorCode = lecture.getSubject().getMajor().getMajCd();
+			if (majorCode == "BLS") {
+				if (lectureType.equals("P")) {
+					type = "교필";
+				} else if (lectureType.equals("S")) {
+					type = "교선";
+				}
+			} else {
+				if (lectureType.equals("P")) {
+					type = "전필";
+				} else if (lectureType.equals("S")) {
+					type = "전선";
+				}
 			}
 			
 			Boolean unvaildLecture = false;
@@ -361,10 +396,19 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
 			
 			String type = "";
 			String lectureType = lecture.getSubject().getType();
-			if(lectureType.equals("P")) {
-				type = "전필";
-			} else if(lectureType.equals("S")) {
-				type = "전선";
+			String majorCode = lecture.getSubject().getMajor().getMajCd();
+			if (majorCode == "BLS") {
+				if (lectureType.equals("P")) {
+					type = "교필";
+				} else if (lectureType.equals("S")) {
+					type = "교선";
+				}
+			} else {
+				if (lectureType.equals("P")) {
+					type = "전필";
+				} else if (lectureType.equals("S")) {
+					type = "전선";
+				}
 			}
 
 			Map<String, Object> map = new HashMap<>();

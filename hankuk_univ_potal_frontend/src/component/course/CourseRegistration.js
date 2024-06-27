@@ -349,7 +349,7 @@ const CourseRegistration = () => {
                                     }                                    
                                     <TableCell align="center">{course.LectureRoom}</TableCell>
                                     <TableCell align="center" sx={{paddingTop:0, paddingBottom:0}}>
-                                        {(course.countOfStudent === course.numOfStd || course.unvaildLecture === true)
+                                        {(course.countOfStudent === course.numOfStd || course.unvalidLecture === true)
                                             ? <Button variant="contained"
                                                 size="small"                                                
                                                 sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }} disabled>신청</Button>

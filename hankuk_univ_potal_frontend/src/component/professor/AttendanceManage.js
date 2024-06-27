@@ -139,9 +139,9 @@ const AttendanceManage = () => {
                                             <React.Fragment key={i}>
                                             <td key={i} className="AttendManage_Table_td">
                                                 <select
-                                                    value={att.status.substr(i, 1) === '1' ? '출석' : att.status.substr(i, 1) === '2' ? '지각' : '결석'}
-                                                    style={att.status.substr(i, 1) === '1' ? {color:'black'} : att.status.substr(i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
-                                                    onChange={(e) => handleStatusChange(e, index, i, 0)}
+                                                    value={att.status.substr((i)*2, 1) === '1' ? '출석' : att.status.substr((i)*2, 1) === '2' ? '지각' : '결석'}
+                                                    style={att.status.substr((i)*2, 1) === '1' ? {color:'black'} : att.status.substr((i)*2, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
+                                                    onChange={(e) => handleStatusChange(e, index, (i)*2, 0)}
                                                     className="AttendManage_Select"
                                                 >
                                                     <option value="출석" style={{color:'black'}}>출석</option>
@@ -162,9 +162,9 @@ const AttendanceManage = () => {
                                             </td>
                                             <td className="AttendManage_Table_td">
                                             <select
-                                                value={att.status.substr(15+i, 1) === '1' ? '출석' : att.status.substr(15+i, 1) === '2' ? '지각' : '결석'}
-                                                style={att.status.substr(15+i, 1) === '1' ? {color:'black'} : att.status.substr(15+i, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
-                                                onChange={(e) => handleStatusChange(e, index, i, 15)}
+                                                value={att.status.substr((i)*2+1, 1) === '1' ? '출석' : att.status.substr((i)*2+1, 1) === '2' ? '지각' : '결석'}
+                                                style={att.status.substr((i)*2+1, 1) === '1' ? {color:'black'} : att.status.substr((i)*2+1, 1) === '2' ? {color:'blueviolet'} : {color:'red'}}
+                                                onChange={(e) => handleStatusChange(e, index, (i)*2+1, 0)}
                                                 className="AttendManage_Select"
                                             >
                                                 <option value="출석" style={{color:'black'}}>출석</option>

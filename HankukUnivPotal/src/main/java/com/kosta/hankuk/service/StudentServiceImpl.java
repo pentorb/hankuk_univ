@@ -279,18 +279,20 @@ public class StudentServiceImpl implements StudentService {
 					.findByStudent_stdNoAndCourYearAndLecture_semester(student.getStdNo(), year, semester);
 			Double wholeScore = 0.0;
 			
-			for(LectureByStd lectureByStd : lectureByStdGroupForOne) {				
-				if(lectureByStd.getGrade().equals("A+")) {
-					wholeScore += 4.5 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("A")) {
-					wholeScore += 4.0 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("B+")) {
-					wholeScore += 3.5 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("B")) {
-					wholeScore += 3.0 * lectureByStd.getLecture().getCredit();
-				} else if(lectureByStd.getGrade().equals("C+")) {
-					wholeScore += 2.5 * lectureByStd.getLecture().getCredit();
-				}
+			for(LectureByStd lectureByStd : lectureByStdGroupForOne) {
+				if(lectureByStd.getGrade() != null){
+					if(lectureByStd.getGrade().equals("A+")) {
+						wholeScore += 4.5 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("A")) {
+						wholeScore += 4.0 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("B+")) {
+						wholeScore += 3.5 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("B")) {
+						wholeScore += 3.0 * lectureByStd.getLecture().getCredit();
+					} else if(lectureByStd.getGrade().equals("C+")) {
+						wholeScore += 2.5 * lectureByStd.getLecture().getCredit();
+					}
+				}				
 			}
 			
 			Double score = Math.round((wholeScore / semesterCredit) * 100) / 100.0;
@@ -561,11 +563,13 @@ public class StudentServiceImpl implements StudentService {
 			String homeworkFile = "";
 			String materialTitle = "";
 			String materialFile = "";
+			Integer homeworkNumber = 0;
 			
 			Optional<Homework> optionalHomework = homeworkRepository.findByLesson_lessonNo(lessonNo);
 			if(optionalHomework.isPresent()) {
 				homeworkTitle = optionalHomework.get().getTitle();
 				homeworkFile = optionalHomework.get().getFiles();
+				homeworkNumber = optionalHomework.get().getHwNo();
 			}
 			
 			Optional<LessonData> optionalLessonData = lessonDataRepository.findByLesson_lessonNo(lessonNo);
@@ -578,11 +582,13 @@ public class StudentServiceImpl implements StudentService {
 			String homeworkFile2 = "";
 			String materialTitle2 = "";
 			String materialFile2 = "";
+			Integer homeworkNumber2 = 0;
 			
 			Optional<Homework> optionalHomework2 = homeworkRepository.findByLesson_lessonNo(lessonNo2);
 			if(optionalHomework2.isPresent()) {
 				homeworkTitle2 = optionalHomework2.get().getTitle();
-				homeworkFile2 = optionalHomework.get().getFiles();
+				homeworkFile2 = optionalHomework2.get().getFiles();
+				homeworkNumber2 = optionalHomework2.get().getHwNo();
 			}
 			
 			Optional<LessonData> optionalLessonData2 = lessonDataRepository.findByLesson_lessonNo(lessonNo2);
@@ -605,6 +611,7 @@ public class StudentServiceImpl implements StudentService {
 			map.put("status", status);
 			map.put("homeworkTitle", homeworkTitle);
 			map.put("homeworkFile", homeworkFile);
+			map.put("homeworkNumber", homeworkNumber);
 			map.put("materialTitle", materialTitle);
 			map.put("materialFile", materialFile);
 			
@@ -615,6 +622,7 @@ public class StudentServiceImpl implements StudentService {
 			map.put("status2", status2);
 			map.put("homeworkTitle2", homeworkTitle2);
 			map.put("homeworkFile2", homeworkFile2);
+			map.put("homeworkNumber2", homeworkNumber2);
 			map.put("materialTitle2", materialTitle2);
 			map.put("materialFile2", materialFile2);
 			mapList.add(map);

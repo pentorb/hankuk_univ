@@ -10,6 +10,7 @@ import axios from 'axios';
 import { tokenAtom, memberAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { url } from '../../config/config';
+import Swal from "sweetalert2";
 
 const PreRegistration = () => {
     const token = useAtomValue(tokenAtom);
@@ -22,6 +23,38 @@ const PreRegistration = () => {
         checkConfirmation();  
         checkPreRegistration();        
     }, [token])
+
+    const registerForCourseWithAlert = (e) => {
+        let randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
+        let answer = randomFourDigitNumber.toString();
+        Swal.fire({
+            title: '화면의 숫자를 입력해주세요',
+            text: `${randomFourDigitNumber}`,
+            input: "text",
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            showLoaderOnConfirm: true,
+            inputAttributes: {
+                maxlength: "4",
+                autocapitalize: "off",
+                autocorrect: "off"
+            }
+        }).then((result) => {
+            console.log(result)
+            if(result.value == answer){
+                Swal.fire({
+                    icon: 'success',
+                    title: '신청되었습니다.'
+                });
+                registerForCourse(e);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '잘못된 번호입니다.'
+                });
+            }
+        });
+    }
 
     const checkPreRegistration = () => {
         let formData = new FormData();
@@ -147,7 +180,7 @@ const PreRegistration = () => {
                                     <TableCell align="center" sx={{paddingTop:0, paddingBottom:0}}>
                                         <Button variant="contained"
                                             size="small"
-                                            onClick={()=>{registerForCourse(preRegistration)}}
+                                            onClick={()=>{registerForCourseWithAlert(preRegistration)}}
                                             sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }}>신청</Button>                                            
                                     </TableCell>
                                     <TableCell align="center" sx={{paddingTop:0, paddingBottom:0}}>

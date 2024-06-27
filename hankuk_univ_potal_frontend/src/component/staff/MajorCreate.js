@@ -10,7 +10,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-import './css/Major.css';
+import './css/stf.css';
 import StopRoundedIcon from '@mui/icons-material/StopRounded';
 import { Input } from 'reactstrap';
 

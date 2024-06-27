@@ -32,7 +32,7 @@ const Grade = () => {
     
     useEffect(() => {
         checkGrade();
-    }, [token])
+    }, [token, year])
 
     const checkGrade = () => {
         let formData = new FormData();
@@ -121,7 +121,7 @@ const Grade = () => {
                                             <TableCell align="center" sx={{ color: "white" }}>석차</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    {score.semesterCredit !== 0 &&
+                                    {score.point !== 0 &&
                                         <TableBody>
                                             <TableRow>
                                                 <TableCell align="center">{score.semesterCredit}</TableCell>
@@ -131,7 +131,7 @@ const Grade = () => {
                                             </TableRow>
                                         </TableBody>
                                     }
-                                    {score.semesterCredit === 0 &&
+                                    {score.point === 0 &&
                                         <TableBody>
                                             <TableRow>
                                                 <TableCell align="center" colSpan={4}>데이터가 없습니다</TableCell>

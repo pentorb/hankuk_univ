@@ -502,7 +502,7 @@
 }
 
 .ScoreList_Lecture_Body{
-  display: inline-block;
+  /* display: inline-block; */
   margin: 10px 0;
   border-radius: 10px;
   padding: 20px 20px;
