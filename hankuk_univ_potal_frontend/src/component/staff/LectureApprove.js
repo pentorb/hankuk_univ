@@ -114,6 +114,7 @@ const alert = (lecture) => {
         })
         .then(res => {
           Swal.fire('승인되었습니다.', '', 'success');
+          handleSearch();
         })
         .catch(err => {
           console.error("Error approving lecture:", err);
@@ -157,7 +158,7 @@ const alert = (lecture) => {
             </Breadcrumbs>
           </div>
 
-          <div style={{ padding: '30px 150px' }}>
+          <div style={{ padding: '30px 130px' }}>
             <div style={{ paddingBottom: '20px', display: 'flex' }}>
               <div className='col-6'></div>
               <div className='col-6' style={{ display: 'flex', justifyContent: 'flex-end' }} >

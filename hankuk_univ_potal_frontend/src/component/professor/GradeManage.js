@@ -138,8 +138,7 @@ const GradeManage = () => {
           }).then((result) => {
             if (result.isConfirmed) {
               Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
+                title: "성적이 확정되었습니다.",
                 icon: "success"
               });
               const updatedStudentList = studentList.map((std,i) => ({
@@ -190,7 +189,7 @@ const GradeManage = () => {
                         <Button className="AttendManage_Header_Button"
                         onClick={modifyExamResult}
                         >
-                            시험수정
+                            성적수정
                         </Button>
                         <Button className="AttendManage_Header_Button"
                         onMouseUp={() => {  submitGrade(); }}>

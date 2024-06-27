@@ -24,6 +24,7 @@ const LectureWrite = () => {
     const [time2Check, setTime2Check] = useState(false);
 
     useEffect(() => {
+        console.log(member);
         const currentDate = new Date();
         setCurrentYear(currentDate.getFullYear());
         getSubject();
@@ -480,6 +481,7 @@ const LectureWrite = () => {
                                             name="email"
                                             placeholder="이메일"
                                             type="email"
+                                            value={member.email+member.emailDo} disabled
                                         />
                                     </FormGroup>
                                 </div>

@@ -43,6 +43,7 @@ const AppealDetail = () => {
                     // text: "That thing is still around?",
                     icon: "success"
                 });
+                navigate("/professor/appealList")
 
             })
             .catch(err => {
@@ -103,7 +104,7 @@ const AppealDetail = () => {
                     <div style={{ display: 'flex', padding: '10px' }}>
 
 
-                        <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
+                        {/* <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={text} className="col-4">첨부자료</div>
                             <div className="col-6">
                                 <Input type="file" id="files" name="files"
@@ -111,7 +112,7 @@ const AppealDetail = () => {
 
                                 />
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="col-4" style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={text} className="col-4">상태</div>

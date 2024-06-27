@@ -58,6 +58,7 @@ const HueModalByStf = ({ isOpen, toggle, data }) => {
         }).then((result) => {
             if (result.isConfirmed) {
                 toggle();
+                navigate('/staff/confirmHuehak');
             }
         });
     }

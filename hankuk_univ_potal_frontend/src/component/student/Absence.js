@@ -47,7 +47,7 @@ const Absence = () => {
         e.preventDefault();
         Swal.fire({
             icon: 'question',
-            title: '신청하시겠습니까?',
+            title: '공결 신청하시겠습니까?',
             showCancelButton: true,
             confirmButtonText: '확인',
             showLoaderOnConfirm: true,
@@ -56,7 +56,7 @@ const Absence = () => {
             if (result.isConfirmed) {
                 Swal.fire({
                     icon: 'success',
-                    title: '신청되었습니다.'
+                    title: '공결 신청되었습니다.'
                 });
                 reportAbsence(e);
             }
@@ -69,7 +69,7 @@ const Absence = () => {
         formData.append("lessonNo", lessonNo);
         formData.append("content", information.content);
         formData.append("type", information.type);
-        formData.append("files", files);
+        // formData.append("files", files);
 
         const absenceUrl = `${url}/report-absence`;
         axios.post(absenceUrl, formData, {
