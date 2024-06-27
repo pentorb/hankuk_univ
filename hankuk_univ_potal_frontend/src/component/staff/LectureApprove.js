@@ -157,7 +157,7 @@ const alert = (lecture) => {
             </Breadcrumbs>
           </div>
 
-          <div style={{ padding: '30px 150px' }}>
+          <div style={{ padding: '30px 130px' }}>
             <div style={{ paddingBottom: '20px', display: 'flex' }}>
               <div className='col-6'></div>
               <div className='col-6' style={{ display: 'flex', justifyContent: 'flex-end' }} >
