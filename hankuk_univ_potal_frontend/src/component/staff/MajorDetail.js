@@ -44,6 +44,7 @@ const MajorDetail = () => {
     const token = useAtomValue(tokenAtom);
 
     useEffect(() => {
+        if(token == null || token =='') return;
         fetchMajorDetail();
         fetchSubjects();
         fetchProfessors();
@@ -225,6 +226,7 @@ const MajorDetail = () => {
             alert("과목이 성공적으로 추가되었습니다.");
         } catch (error) {
             console.error("Error adding subject:", error.response || error.message);
+            console.log(error)
             alert("과목 추가 중 오류가 발생했습니다.");
         }
     };
