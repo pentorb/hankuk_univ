@@ -141,7 +141,7 @@ const MajorManagement = () => {
                                             <tr key={index} onClick={() => navigate(`/staff/majordetail/${major.majCd}`)}>
                                                 <td>{major.majCd}</td>
                                                 <td>{major.colleage}</td>
-                                                <td>{major.name}</td>
+                                                <td style={{textDecoration:'underline', cursor:'pointer'}}>{major.name}</td>
                                                 <td>{major.professor}</td>
                                             </tr>
                                         ))}
