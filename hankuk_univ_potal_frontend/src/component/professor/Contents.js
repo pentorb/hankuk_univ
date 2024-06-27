@@ -143,12 +143,7 @@ const Contents = () => {
                                             <div style={{ fontSize: '19px', textDecoration: 'underline', color: '#1f3468', cursor: 'pointer' }} onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}>
                                                 과제 등록
                                             </div>
-                                            <Button onClick={() => navigate(`/professor/lessonDataWrite/${lesson.week}/${lecture.lecNo}`)}
-                                                style={{ backgroundColor: '#1F3468' }}
-                                            >강의자료등록</Button>
-                                            <Button onClick={() => navigate(`/professor/homeworkWrite/${lesson.week}/${lecture.lecNo}`)}
-                                                style={{ backgroundColor: '#1F3468' }}
-                                            >과제등록</Button>
+                                            
                                         </div>
                                     </div>
                                     {/* 강의자료와 과제가 모두 업로드 되지 않았을 때  */}
