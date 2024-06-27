@@ -10,7 +10,7 @@ const Toc = () => {
         if (member?.id?.substring(0, 1) === "P") {
             navigate("/professor");
         } else if (member?.id?.substring(0, 1) === "S") {
-            navigate("/staff");
+            navigate("/staff/MajorCreate");
         } else if (member?.id?.substring(0, 1) === "2") {
             navigate("/student");
         }
