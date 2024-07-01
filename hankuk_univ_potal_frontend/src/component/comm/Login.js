@@ -84,7 +84,7 @@ export default function Login() {
                 }
 
                 try {
-                    const response = await axios.get(`${url}/resetPassword?stdNo=${stdNo}&stdTel=${stdTel}`, 
+                    const response = await axios.get(`${url}/resetPw?stdNo=${stdNo}&stdTel=${stdTel}`, 
                        { headers: {Authorization: JSON.stringify(token)}}
                     );
                     if (response.status === 200) {

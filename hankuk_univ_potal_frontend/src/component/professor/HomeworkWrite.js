@@ -43,7 +43,7 @@ const HomeworkWrite = () => {
     const setSampleValues = () => {
         setHomework({
             ...homework,
-            title: '재료거동학 15주차 과제',
+            title: '재료거동학 14주차 과제',
             content: 'chapter 8. 연습문제 풀이 후 사진 찍어서 제출하시오.',
             startDt:'2024-06-27',
             endDt:'2024-06-28',

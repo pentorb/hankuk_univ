@@ -60,7 +60,7 @@ public class StudentController {
 		}
 	}
 	
-	@GetMapping("/resetPassword") // 비번 초기ㅗ하
+	@GetMapping("/resetPw") // 비번 초기ㅗ하
 	public ResponseEntity<String> resetPw(@RequestParam String stdNo, @RequestParam(name="stdTel") String tel) {
 		try {
 			stdService.resetPW(stdNo, tel);
