@@ -226,7 +226,7 @@ const StudentMain = () => {
                                 {lectureList !== null && (lectureList.map(lecture => (
                                     <Card key={lecture.lecNo} className="lecture-card"
                                         onClick={() => { setLectureNumber(lecture.lecNo); setLectureName(lecture.lectureName); setActiveTab(5); 
-                                        navigate(`/student/${lecture.lecNo}`); }}>
+                                        navigate(`/student/${lecture.lecNo}/content`); }}>
                                         <Label className="lecture-color-card" />
                                         <CardBody style={{ margin: '0px 10px 10px' }}>
                                             <CardTitle style={{ fontSize: 'larger' }}>
