@@ -360,10 +360,15 @@ const CourseRegistration = () => {
                                         }                            
                                     </TableCell>
                                     <TableCell align="center" sx={{paddingTop:0, paddingBottom:0}}>
-                                            <Button variant="contained"
-                                            size="small"
-                                            onClick={()=>preRegister(course)}
-                                            sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }}>신청</Button>
+                                        {(course.countOfStudent === course.numOfStd || course.unvalidLecture === true)
+                                            ? <Button variant="contained"
+                                                size="small"                                                
+                                                sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }} disabled>신청</Button>
+                                            : <Button variant="contained"
+                                                size="small"
+                                                onClick={()=>preRegister(course)}
+                                                sx={{ margin: "0 auto", backgroundColor: "secondColor.main", borderRadius: 3, width:70 }}>신청</Button>                                            
+                                        }                            
                                     </TableCell>
                                 </TableRow>
                             )))}
