@@ -165,15 +165,9 @@ const StudentMain = () => {
                                     <BoltIcon style={{ height: '50px', width: '50px', color: '#403E98' }} /> <h4 style={{ marginBottom: '0px', fontWeight: '700' }}>To Do List</h4>
                                 </div>
                                 <div style={{ paddingTop: '10px' }}>
-                                    <List style={{ fontSize: 'larger', textAlign: 'left' }}>
-                                        <li style={{ paddingBottom: '5px' }}>
-                                            게임프로그래밍 기말대체과제 제출
-                                        </li>
+                                    <List style={{ fontSize: 'larger', textAlign: 'left' }}>                                        
                                         <li style={{ paddingBottom: '5px' }}>
                                             6시 반 헬스장 갔다오기
-                                        </li>
-                                        <li style={{ paddingBottom: '5px' }}>
-                                            자바의 정석 챕터 3 요약
                                         </li>
                                         <li style={{ paddingBottom: '5px' }}>
                                             휴학 신청하기
