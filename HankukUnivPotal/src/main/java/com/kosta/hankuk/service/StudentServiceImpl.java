@@ -510,7 +510,7 @@ public class StudentServiceImpl implements StudentService {
 		String wholeStatus = attendance.getStatus();
 		List<Lesson> lessonList = attendance.getLecture().getLessonList();
 
-		for (int i = 0; i < lessonList.size() - 2; i += 2) {
+		for (int i = 0; i < lessonList.size(); i += 2) {
 			Integer lessonNo = lessonList.get(i).getLessonNo();
 			Integer week = lessonList.get(i).getWeek();
 			String twoCharacterWeek = String.valueOf(lessonList.get(i).getWeek());
@@ -735,7 +735,7 @@ public class StudentServiceImpl implements StudentService {
 		String wholeStatus = attendance.getStatus();
 		List<Lesson> lessonList = attendance.getLecture().getLessonList();
 
-		for (int i = 0; i < lessonList.size() - 2; i++) {
+		for (int i = 0; i < lessonList.size(); i++) {
 			Integer lessonNo = lessonList.get(i).getLessonNo();
 			Integer week = lessonList.get(i).getWeek();
 			Integer count = lessonList.get(i).getLessonCnt();
@@ -788,7 +788,7 @@ public class StudentServiceImpl implements StudentService {
 		Integer absence = 0;
 		Integer approvedAbsence = 0;
 
-		for (int i = 0; i < lessonList.size() - 2; i++) {
+		for (int i = 0; i < lessonList.size(); i++) {
 			if(wholeStatus.substring(i, i + 1).equals("1")) {
 				presence++;
 			} else if(wholeStatus.substring(i, i + 1).equals("2")) {
