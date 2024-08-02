@@ -28,7 +28,7 @@ const MyPage = () => {
 
     // 이수 학기로 학년 구하기 
     const finSem = (finSem) => {
-        const grade = Math.floor((finSem - 1) / 2 + 1);
+        const grade = Math.floor(finSem / 2 + 1);
         return `${grade}학년`;
     }
     const dataChange = (e) => {
