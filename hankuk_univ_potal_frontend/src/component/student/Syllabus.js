@@ -35,7 +35,7 @@ const Syllabus = () => {
                 <Grid xs={12} sx={{ height:70}}/>
                 <Grid xs={1}/>
                 <Grid xs={10}>
-                    <iframe src={syllabusFile} width="100%" height="900"></iframe>
+                    <iframe src={syllabusFile} width="100%" height="800"></iframe>
                 </Grid>
                 <Grid xs={1}/>
                 </Grid>

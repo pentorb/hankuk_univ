@@ -315,7 +315,7 @@ const CourseRegistration = () => {
                         <Button variant="contained" size="medium" onClick={loadCoursesBySearchCondition} sx={{ margin: "0 auto", backgroundColor: "firstColor.main", verticalAlign:"middle" }}>검색</Button>
                     </FormGrid>
                 </div>
-                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8, height:600, overflow: "auto" }}>
+                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8, height:480, overflow: "auto" }}>
                     <Table aria-label="simple table">
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>
@@ -387,7 +387,7 @@ const CourseRegistration = () => {
                     <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
                     <Typography sx={{ float:"left" }}>신청학점 {confirmationCount.wholeCredit}</Typography>
                 </div>
-                <TableContainer component={Paper} sx={{ marginTop: 8, marginBottom: 10 }}>
+                <TableContainer component={Paper} sx={{ marginTop: 8, marginBottom: 10, maxHeight:240, overflow: "auto" }}>
                     <Table aria-label="simple table" sx={{overflowY: "scroll"}}>
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>

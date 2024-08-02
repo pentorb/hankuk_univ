@@ -133,7 +133,7 @@ const Lecture = () => {
                                 </Box>
                             )))}
                         </div>
-                        <div>
+                        <div style={{height:700, overflow: "auto"}}>
                             {contentList.length !== 0 && (contentList.map(content => (
                                 <Accordion expanded={expanded === `panel${content.week}`} onChange={handleChange(`panel${content.week}`)}>
                                     <AccordionSummary aria-controls={`panel${content.week}d-content`} id={`panel${content.week}d-header`} sx={{height:70, border:0}}>

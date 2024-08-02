@@ -78,7 +78,7 @@ const Attendance = () => {
                             <Typography sx={{ float: "left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
                             <Typography sx={{ float: "left", color: "blue" }}>공결 {attendanceCount.approvedAbsence}</Typography>
                         </div>
-                        <TableContainer component={Paper} sx={{ marginTop: 5, marginBottom: 10 }}>
+                        <TableContainer component={Paper} sx={{ marginTop: 5, marginBottom: 10, height:700, overflow: "auto" }}>
                             <Table aria-label="simple table">
                                 <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                                     <TableRow>
