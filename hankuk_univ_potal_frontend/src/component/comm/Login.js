@@ -30,7 +30,7 @@ export default function Login() {
     const [member, setMember] = useState({ username: '', password: '' })
     const token = useAtomValue(tokenAtom);
     const setToken = useSetAtom(tokenAtom);
-    const setMemberAtom = useSetAtom(memberAtom)
+    const setMemberAtom = useSetAtom(memberAtom);
     const navigate = useNavigate();
 
     const changeValue = (e) => {
