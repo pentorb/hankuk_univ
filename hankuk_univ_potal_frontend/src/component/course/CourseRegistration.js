@@ -44,6 +44,13 @@ const CourseRegistration = () => {
     }, [token])
 
     const registerForCourseWithAlert = (e) => {
+        if(confirmationCount.wholeCredit + e.credit > confirmationCount.maximumOfCredit){
+            Swal.fire({
+                icon: 'warning',
+                title: '신청 가능학점을 초과합니다.'
+            });
+            return;
+        }
         let randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
         let answer = randomFourDigitNumber.toString();
         Swal.fire({
