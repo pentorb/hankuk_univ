@@ -1,16 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { memberAtom, activeTabAtom, tokenAtom } from '../../atoms';
+import { useNavigate } from "react-router-dom";
+import { memberAtom, activeTabAtom } from '../../atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { url } from '../../config/config';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = () => {
     const navigate = useNavigate();
     const setActiveTab = useSetAtom(activeTabAtom);
     const member = useAtomValue(memberAtom);
-    // const [token, setToken] = useAtom(tokenAtom);
 
     const goPotal = () => {
         if (member.id.substring(0, 1) === "P") {
@@ -21,26 +17,6 @@ const Header = () => {
             navigate("/student");
         }
     }
-
-    // useEffect(() => {
-    //     // console.log(token);
-    //     axios.get(`${url}/user`,
-    //         {
-    //             headers: { Authorization: JSON.stringify(token) }
-    //         }
-    //     )
-    //         .then(res => {
-    //             console.log(res);
-    //             if (res.headers.authorization != null) {
-    //                 setToken(JSON.parse(res.headers.authorization));
-    //             } else {
-    //                 setMember({ ...res.data })
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         })
-    // }, [])
 
     return (
         <div style={{ display: 'flex' }}>

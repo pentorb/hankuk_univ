@@ -4,7 +4,6 @@ import '../comm/css/Main.css';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-// import NoticeBoard from "./NoticeBoard";
 import NewsCarousel from "./NewsCarousel";
 import { memberAtom, tokenAtom } from "../../atoms";
 import { useAtom, useAtomValue } from "jotai";
@@ -97,7 +96,6 @@ const Main = () => {
                             )}
                         </div>
                     </div>
-
                     {/* 본문 시작 */}
                     <div>
                         <div style={{ bottom: 0, left: 0 }}>
@@ -120,7 +118,6 @@ const Main = () => {
                     <div className="tocDiv">
                         <Toc />
                     </div>
-
                     <span style={{ display: 'flex' }}>
                         <div className="calDiv">
                             <div className="ttt" style={{ color: 'white', padding: '30px 0px 20px' }}>교내 일정</div>
@@ -132,11 +129,8 @@ const Main = () => {
                                         right: "",
                                     }}
                                     defaultView="dayGridMonth"
-                                    // locale={'ko'}
-                                    // dayCellContent={daycheck}
                                     plugins={[dayGridPlugin, interactionPlugin]}
                                     events={events}
-                                    // eventContent={renderEventContent}
                                     dayMaxEventRows={true}
                                     dayMaxEvents={2}
                                     contentHeight={400}
@@ -194,13 +188,9 @@ const Main = () => {
                                         <div className="col-10"><li>2024학년도 휴학 신청 누락자 대처 안내</li></div>
                                         <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-01</div>
                                     </div>
-                                    
-                                    
                                 </div>
                             </div>
-
                         </div>
-
                     </span>
                     <div>
                         <div style={{ margin: '50px 0 0 60px', }}>
