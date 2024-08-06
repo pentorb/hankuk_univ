@@ -152,7 +152,7 @@ const Main = () => {
 
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>한국대학교 의예과 신설 안내</li></div>
-                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-05-27</div>
+                                        <div className="col-2" style={{ justifyContent: 'right', display: 'flex' }}>2024-06-27</div>
                                     </div>
                                     <div style={{ display: 'flex', paddingBottom: '10px' }}>
                                         <div className="col-10"><li>2024-2학기, 복학, 휴학, 유급 신청 안내</li></div>
