@@ -315,7 +315,7 @@ const CourseRegistration = () => {
                         <Button variant="contained" size="medium" onClick={loadCoursesBySearchCondition} sx={{ margin: "0 auto", backgroundColor: "firstColor.main", verticalAlign:"middle" }}>검색</Button>
                     </FormGrid>
                 </div>
-                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8, height:480, overflow: "auto" }}>
+                <TableContainer component={Paper} sx={{ marginTop: 4, marginBottom: 8, maxHeight:480, overflow: "auto" }}>
                     <Table aria-label="simple table">
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>

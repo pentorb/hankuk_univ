@@ -211,7 +211,7 @@ const PreRegistration = () => {
                     <Typography sx={{ float:"left" }}>&nbsp;&nbsp;/&nbsp;&nbsp;</Typography>
                     <Typography sx={{ float:"left" }}>신청학점 {confirmationCount.wholeCredit}</Typography>
                 </div>
-                <TableContainer component={Paper} sx={{ marginTop: 8, marginBottom: 8 }}>
+                <TableContainer component={Paper} sx={{ marginTop: 8, marginBottom: 8, maxHeight:480, overflow: "auto" }}>
                     <Table aria-label="simple table" sx={{overflowY: "scroll"}}>
                         <TableHead sx={{ backgroundColor: "firstColor.main", color: "white" }}>
                             <TableRow>
