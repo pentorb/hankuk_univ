@@ -53,8 +53,7 @@ KOSTA 최종 프로젝트 (2024.05 - 2024.06)
 <img src="https://img.shields.io/badge/Amazon%20EC2-FF9900.svg?style=for-the-badge&logo=Amazon-EC2&logoColor=white"><br><br>
 
 ## 🌐 시스템 아키텍처
-<br>
-<img src="https://github.com/user-attachments/assets/40b2fc38-9cae-4bc4-be8c-d87ff3f0401d" width="600"/><br><br><br>
+<img src="https://github.com/user-attachments/assets/7b863548-9b94-41d6-8592-cf68bc455be8" width="800"/><br>
 
 ## 🏃‍♂️ 팀원 소개
 |<img src="https://avatars.githubusercontent.com/u/83358018?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/133846559?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/106696354?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/130119947?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/145124127?v=4" width="100" height="100"/>|
